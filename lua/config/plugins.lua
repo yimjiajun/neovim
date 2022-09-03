@@ -7,7 +7,7 @@ return require('packer').startup(function()
 	use 'wbthomason/packer.nvim' -- Package manager
 	use 'neovim/nvim-lspconfig' -- Configurations for Nvim LSP
 	-- use 'williamboman/nvim-lsp-installer'
---	use 'preservim/nerdtree'
+	--	use 'preservim/nerdtree'
 	use 'feline-nvim/feline.nvim'
 	use 'preservim/tagbar'
 
@@ -21,20 +21,21 @@ return require('packer').startup(function()
 	use 'haorenW1025/completion-nvim'
 
 	use { "williamboman/mason.nvim",
-		requires = { {'williamboman/mason-lspconfig.nvim'},
-			{'neovim/nvim-lspconfig'}
+		requires = { { 'williamboman/mason-lspconfig.nvim' },
+			{ 'neovim/nvim-lspconfig' }
 		}
 	}
 
 	use { 'nvim-telescope/telescope.nvim',
 		tag = '0.1.0',
-		requires = { {'nvim-lua/plenary.nvim'} }
+		requires = { { 'nvim-lua/plenary.nvim' } }
 	}
 
 	use { 'Shatur/neovim-session-manager',
 		requires = {
-			{'nvim-lua/plenary.nvim'},
-			{'kyazdani42/nvim-tree.lua'} }
+			{ 'nvim-lua/plenary.nvim' },
+			{ 'kyazdani42/nvim-tree.lua' }
+		}
 	}
 
 	use { 'kyazdani42/nvim-tree.lua',
@@ -44,7 +45,7 @@ return require('packer').startup(function()
 		tag = 'nightly' -- optional, updated every week. (see issue #1193)
 	}
 
-	use {'akinsho/bufferline.nvim',
+	use { 'akinsho/bufferline.nvim',
 		tag = "v2.*",
 		requires = 'kyazdani42/nvim-web-devicons'
 	}
@@ -79,8 +80,15 @@ return require('packer').startup(function()
 	}
 
 	use { 'goolord/alpha-nvim',
-		config = function ()
-			require'alpha'.setup(require'alpha.themes.dashboard'.config)
+		config = function()
+			require 'alpha'.setup(require 'alpha.themes.dashboard'.config)
+		end
+	}
+
+	use { 'rmagatti/goto-preview',
+		config = function()
+			require('goto-preview').setup {}
+			require('setup.goto_preview')
 		end
 	}
 
@@ -92,7 +100,7 @@ return require('packer').startup(function()
 	-- use 'sainnhe/gruvbox-material'
 
 	use { 'navarasu/onedark.nvim',
-		config = function ()
+		config = function()
 			require('onedark').setup {
 				style = 'warmer'
 			}
