@@ -87,6 +87,11 @@ local Terminal  = require('toggleterm.terminal').Terminal
 		function _ncdu_toggle()
 		  ncdu:toggle()
 		end
+	local ranger = Terminal:new({ cmd = "ranger", direction = "float", hidden = true })
+		function _ranger_toggle()
+		  ranger:toggle()
+		end
+
 wk.register({
 	f = {
 		name = "Find", -- optional group name
@@ -117,6 +122,8 @@ wk.register({
 		h = { "<cmd> ToggleTerm direction=horizontal <CR>", "terminal(h)" },
 		s = { "<cmd>lua _htop_toggle()<CR>", "system view" },
 		d = { "<cmd>lua _ncdu_toggle()<CR>", "disk view" },
+		r = { "<cmd>lua _ranger_toggle()<CR>", "ranger" },
+		O = "onedark theme swap",
 	},
 	s = {
 		name = "Session",
