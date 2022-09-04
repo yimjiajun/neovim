@@ -95,10 +95,14 @@ local Terminal  = require('toggleterm.terminal').Terminal
 wk.register({
 	f = {
 		name = "Find", -- optional group name
-		a = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.*'})<CR>", "live grep"},
+		g = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.*'})<CR>", "live grep"},
 		s = { "<cmd> lua require('telescope.builtin').grep_string()<CR>", "string"},
 		F = { "<cmd> lua require('telescope.builtin').find_files({hiddne=true}, {no_ignore=true})<CR>", "FILES"},
 		f = { "<cmd> lua require('telescope.builtin').find_files()<CR>", "files"},
+		h = { "<cmd> lua require('telescope.builtin').oldfiles()<CR>", "recently opened"},
+		H = { "<cmd> lua require('telescope.builtin').search_history()<CR>", "search histroy"},
+		m = { "<cmd> lua require('telescope.builtin').marks()<CR>", "marks"},
+		r = { "<cmd> lua require('telescope.builtin').registers()<CR>", "registers"},
 		S = {
 			name = "Specific",
 			c = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.c'})<CR>", "c"},
@@ -112,6 +116,11 @@ wk.register({
 	g = {
 		name = "git",
 		t = { "<cmd>lua _lazygit_toggle()<CR>", "lazygit" },
+		s = { "<cmd>lua require('telescope.builtin').gitstatus()<CR>", "status" },
+		l = {
+			name = "Log",
+			l = { "<cmd>lua require('telescope.builtin').git_commits()<CR>", "messages" },
+		},
 	},
 	T = { "<cmd>TagbarToggle<CR>", "tag bar" },
 	t = {
@@ -132,6 +141,23 @@ wk.register({
 		L = { "<cmd> SessionManager load_session<CR>", "load session" },
 		D = { "<cmd> SessionManager delete_session<CR>", "delete session" },
 		s = { "<cmd> SessionManager save_current_session<CR>", "save session" },
+	},
+	v = {
+		name = "view",
+		s = { "<cmd> lua require('telescope.builtin').spell_suggest()<CR>", "spell suggest"},
+		r = { "<cmd> lua require('telescope.builtin').registers()<CR>", "registers"},
+		k = { "<cmd> lua require('telescope.builtin').keymaps()<CR>", "keymaps"},
+		h = { "<cmd> lua require('telescope.builtin').highlights()<CR>", "highlights"},
+		a = { "<cmd> lua require('telescope.builtin').autocommands()<CR>", "autocommands"},
+		q = { "<cmd> lua require('telescope.builtin').quickfix()<CR>", "quickfix"},
+		Q = { "<cmd> lua require('telescope.builtin').quickfixhistory()<CR>", "quickfix history"},
+		c = { "<cmd> lua require('telescope.builtin').command_history()<CR>", "command history"},
+		C = { "<cmd> lua require('telescope.builtin').commands()<CR>", "command"},
+		m = { "<cmd> lua require('telescope.builtin').man_pages()<CR>", "man pages"},
+		b = { "<cmd> lua require('telescope.builtin').buffers()<CR>", "buffers"},
+		f = { "<cmd> lua require('telescope.builtin').filetypes()<CR>", "setup filetype"},
+		t = { "<cmd> lua require('telescope.builtin').tags()<CR>", "ctags"},
+		j = { "<cmd> lua require('telescope.builtin').jumplist()<CR>", "jumplist"},
 	},
 	l = {
 		name = "Lsp",
