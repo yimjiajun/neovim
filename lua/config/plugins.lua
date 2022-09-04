@@ -5,25 +5,45 @@ vim.cmd [[packadd packer.nvim]]
 return require('packer').startup(function()
 
 	use 'wbthomason/packer.nvim' -- Package manager
-	use 'neovim/nvim-lspconfig' -- Configurations for Nvim LSP
+	use { 'neovim/nvim-lspconfig',
+		config = function()
+			require('setup.lspconfig')
+		end
+	}
 	-- use 'williamboman/nvim-lsp-installer'
 	--	use 'preservim/nerdtree'
-	use 'feline-nvim/feline.nvim'
+	use { 'feline-nvim/feline.nvim',
+		config = function()
+			require('setup.feline')
+		end
+	}
 	use 'preservim/tagbar'
 
-	use 'hrsh7th/cmp-nvim-lsp'
-	use 'hrsh7th/cmp-buffer'
-	use 'hrsh7th/cmp-path'
-	use 'hrsh7th/cmp-cmdline'
-	use 'hrsh7th/nvim-cmp'
-	use 'hrsh7th/cmp-vsnip'
-	use 'hrsh7th/vim-vsnip'
+	use { 'hrsh7th/nvim-cmp',
+		opt = true,
+		requires = {
+			{ 'hrsh7th/cmp-nvim-lsp' },
+			{ 'hrsh7th/cmp-buffer' },
+			{ 'hrsh7th/cmp-path' },
+			{ 'hrsh7th/cmp-cmdline' },
+			{ 'hrsh7th/nvim-cmp' },
+			{ 'hrsh7th/cmp-vsnip', opt = true },
+			{ 'hrsh7th/vim-vsnip', opt = true },
+		},
+		config = function()
+			require('setup.cmp')
+		end
+	}
 	use 'haorenW1025/completion-nvim'
 
 	use { "williamboman/mason.nvim",
-		requires = { { 'williamboman/mason-lspconfig.nvim' },
-			{ 'neovim/nvim-lspconfig' }
-		}
+		requires = {
+			{ 'williamboman/mason-lspconfig.nvim' },
+			{ 'neovim/nvim-lspconfig' },
+		},
+		config = function()
+			require('setup.mason')
+		end
 	}
 
 	use { 'nvim-telescope/telescope.nvim',
@@ -34,33 +54,49 @@ return require('packer').startup(function()
 	use { 'Shatur/neovim-session-manager',
 		requires = {
 			{ 'nvim-lua/plenary.nvim' },
-			{ 'kyazdani42/nvim-tree.lua' }
-		}
+			{ 'kyazdani42/nvim-tree.lua' },
+		},
+		config = function()
+			require('setup.session_manager')
+		end
 	}
 
 	use { 'kyazdani42/nvim-tree.lua',
 		requires = {
 			'kyazdani42/nvim-web-devicons', -- optional, for file icons
 		},
-		tag = 'nightly' -- optional, updated every week. (see issue #1193)
+		tag = 'nightly', -- optional, updated every week. (see issue #1193)
+		config = function()
+			require('setup.nvim_tree')
+		end
 	}
 
 	use { 'akinsho/bufferline.nvim',
 		tag = "v2.*",
-		requires = 'kyazdani42/nvim-web-devicons'
+		requires = 'kyazdani42/nvim-web-devicons',
+		config = function()
+			require('setup.bufferline')
+		end
 	}
 
 	use { "akinsho/toggleterm.nvim",
 		tag = 'v2.*',
+		-- lazygit is not installed. Manual Install : https://github.com/jesseduffield/lazygit#ubuntu
+		run = "sudo apt install ripgrep fzf",
 		config = function()
 			require("toggleterm").setup()
 		end
 	}
 
-	use { 'nvim-treesitter/nvim-treesitter',
-		run = ':TSUpdate',
-		config = function() require "setup.treesitter" end,
-	}
+	if (vim.fn.has('Darwin')) then
+	else
+		use { 'nvim-treesitter/nvim-treesitter',
+			run = ':TSUpdate',
+			config = function()
+				require "setup.treesitter"
+			end,
+		}
+	end
 
 	use {
 		'numToStr/Comment.nvim',
@@ -77,6 +113,11 @@ return require('packer').startup(function()
 		-- 		-- refer to the configuration section below
 		-- 	}
 		-- end,
+		--
+		requires = 'akinsho/toggleterm.nvim',
+		config = function()
+			require('setup.whichkey')
+		end
 	}
 
 	use { 'goolord/alpha-nvim',
@@ -99,7 +140,6 @@ return require('packer').startup(function()
 			-- require('setup.markdown_preview')
 		end,
 		ft = { "markdown" },
-
 	}
 
 	-- use 'sainnhe/gruvbox-material'
@@ -110,6 +150,7 @@ return require('packer').startup(function()
 				style = 'warmer'
 			}
 			require('onedark').load()
+			require('setup.onedark')
 		end
 	}
 
