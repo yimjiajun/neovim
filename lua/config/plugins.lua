@@ -48,7 +48,10 @@ return require('packer').startup(function()
 
 	use { 'nvim-telescope/telescope.nvim',
 		tag = '0.1.0',
-		requires = { { 'nvim-lua/plenary.nvim' } }
+		requires = { { 'nvim-lua/plenary.nvim' } },
+		config = function()
+			require('setup.telescope')
+		end,
 	}
 
 	use { 'Shatur/neovim-session-manager',
@@ -142,6 +145,22 @@ return require('packer').startup(function()
 		ft = { "markdown" },
 	}
 
+	use { 'phaazon/hop.nvim',
+		branch = 'v2', -- optional but strongly recommended
+		config = function()
+			-- you can configure Hop the way you like here; see :h hop-config
+			require('hop').setup {
+				keys = 'etovxqpdygfblzhckisuran',
+			}
+		end
+	}
+
+	use { 'norcalli/nvim-colorizer.lua',
+		config = function()
+			require('colorizer').setup()
+			require('setup.colorizer')
+		end,
+	}
 	-- use 'sainnhe/gruvbox-material'
 
 	use { 'navarasu/onedark.nvim',
