@@ -88,13 +88,13 @@ return require('packer').startup(function()
 		end
 	}
 
-	if (vim.fn.has('Darwin')) then
+	if (vim.fn.has('Darwin') == 1) then
 	else
 		use { 'nvim-treesitter/nvim-treesitter',
-			run = ':TSUpdate',
 			config = function()
 				require "setup.treesitter"
 			end,
+			run = ':TSUpdate',
 		}
 	end
 
