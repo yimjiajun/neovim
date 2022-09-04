@@ -64,16 +64,6 @@
 		},
 }
 
-local wk = require("which-key")
--- As an example, we will create the following mappings:
---  * <leader>ff find files
---  * <leader>fr show recent files
---  * <leader>fb Foobar
--- we'll document:
---  * <leader>fn new file
---  * <leader>fe edit file
--- and hide <leader>1
-
 local Terminal  = require('toggleterm.terminal').Terminal
 	local lazygit = Terminal:new({ cmd = "lazygit", direction = "float", hidden = true })
 		function _lazygit_toggle()
@@ -91,6 +81,16 @@ local Terminal  = require('toggleterm.terminal').Terminal
 		function _ranger_toggle()
 		  ranger:toggle()
 		end
+
+local wk = require("which-key")
+-- As an example, we will create the following mappings:
+--  * <leader>ff find files
+--  * <leader>fr show recent files
+--  * <leader>fb Foobar
+-- we'll document:
+--  * <leader>fn new file
+--  * <leader>fe edit file
+-- and hide <leader>1
 
 wk.register({
 	f = {
@@ -116,7 +116,7 @@ wk.register({
 	g = {
 		name = "git",
 		t = { "<cmd>lua _lazygit_toggle()<CR>", "lazygit" },
-		s = { "<cmd>lua require('telescope.builtin').gitstatus()<CR>", "status" },
+		s = { "<cmd>lua require('telescope.builtin').git_status()<CR>", "status" },
 		l = {
 			name = "Log",
 			l = { "<cmd>lua require('telescope.builtin').git_commits()<CR>", "messages" },
@@ -126,12 +126,15 @@ wk.register({
 	t = {
 		name = "Toggle",
 		f = { "<cmd> ToggleTerm direction=float <CR>", "terminal" },
-		v = { "<cmd> ToggleTerm direction=vertical size=50<CR>", "terminal(v)" },
 		t = { "<cmd> ToggleTerm direction=tab <CR>", "terminal(t)" },
+		v = { "<cmd> ToggleTerm direction=vertical size=50<CR>", "terminal(v)" },
 		h = { "<cmd> ToggleTerm direction=horizontal <CR>", "terminal(h)" },
-		s = { "<cmd>lua _htop_toggle()<CR>", "system view" },
-		d = { "<cmd>lua _ncdu_toggle()<CR>", "disk view" },
-		r = { "<cmd>lua _ranger_toggle()<CR>", "ranger" },
+		s = { "<cmd>set hlsearch!<CR>", "highlight" },
+		N = { "<cmd>set nu!<CR>", "number line" },
+		n = { "<cmd>set rnu!<CR>", "relative number" },
+		S = { "<cmd>lua _htop_toggle()<CR>", "system view" },
+		D = { "<cmd>lua _ncdu_toggle()<CR>", "disk view" },
+		R = { "<cmd>lua _ranger_toggle()<CR>", "ranger" },
 		O = "onedark theme swap",
 	},
 	s = {
@@ -158,6 +161,14 @@ wk.register({
 		f = { "<cmd> lua require('telescope.builtin').filetypes()<CR>", "setup filetype"},
 		t = { "<cmd> lua require('telescope.builtin').tags()<CR>", "ctags"},
 		j = { "<cmd> lua require('telescope.builtin').jumplist()<CR>", "jumplist"},
+	},
+	["<leader>"] = {
+		name = "EasyMotion",
+		w = { "<cmd>lua require'hop'.hint_words({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR})<cr>", "word"},
+		a = { "<cmd>lua require'hop'.hint_words()<cr>", "all"},
+		l = { "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", "line"},
+		F = { "<cmd>lua require'hop'.hint_patterns()<cr>", "patterns (all)"},
+		f = { "<cmd>lua require'hop'.hint_patterns({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", "patterns"},
 	},
 	l = {
 		name = "Lsp",
