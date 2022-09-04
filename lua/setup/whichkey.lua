@@ -128,4 +128,26 @@ wk.register({
 		D = { "<cmd> SessionManager delete_session<CR>", "delete session" },
 		s = { "<cmd> SessionManager save_current_session<CR>", "save session" },
 	},
+	l = {
+		name = "Lsp",
+		e = "diagnostic open float",
+		q = "diagnostic setloclist",
+		w = {
+			name = "workspace folder",
+			a = "add",
+			r = "remove",
+			l = "list",
+		},
+		D = "type defination",
+		r = {
+			name = "Rename",
+			n = "buffer",
+		},
+		c = {
+			name = "code",
+			a = "action",
+		},
+		f = "formatting",
+	},
+
 }, { prefix = "<leader>" })
