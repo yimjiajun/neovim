@@ -149,8 +149,8 @@ return require('packer').startup(function()
 			require('onedark').setup {
 				style = 'warmer'
 			}
-			require('onedark').load()
 			require('setup.onedark')
+			require('onedark').load()
 		end
 	}
 
