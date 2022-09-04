@@ -93,8 +93,13 @@ return require('packer').startup(function()
 	}
 
 	use { 'iamcco/markdown-preview.nvim',
-		run = 'cd app && yarn install',
-		cmd = 'MarkdownPreview'
+		run = "cd app && npm install",
+		setup = function()
+			vim.g.mkdp_filetypes = { "markdown" }
+			-- require('setup.markdown_preview')
+		end,
+		ft = { "markdown" },
+
 	}
 
 	-- use 'sainnhe/gruvbox-material'
