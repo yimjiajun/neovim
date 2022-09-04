@@ -154,5 +154,15 @@ wk.register({
 		},
 		f = "formatting",
 	},
-
 }, { prefix = "<leader>" })
+
+wk.register({
+	d = "lsp definition",
+	D = "lsp decalaration",
+}, { prefix = "]" })
+
+wk.register({
+	r = "lsp firmatting",
+	D = "lsp decalaration",
+	d = "lsp difinition",
+}, { prefix = "g" })
