@@ -152,7 +152,7 @@ return require('packer').startup(function()
 	use { 'norcalli/nvim-colorizer.lua',
 		config = function()
 			require('colorizer').setup()
-			require('setup.colorizer')
+			require('setup.colorizers')
 		end,
 	}
 	-- use 'sainnhe/gruvbox-material'
@@ -162,9 +162,8 @@ return require('packer').startup(function()
 			require('onedark').setup {
 				style = 'warmer'
 			}
-			require('setup.onedark')
+			require('setup.onedarks')
 			require('onedark').load()
 		end
 	}
-
 end)
