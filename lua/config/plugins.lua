@@ -91,7 +91,7 @@ return require('packer').startup(function()
 		end
 	}
 
-	if (vim.fn.has('Darwin') == 1) then
+	if (vim.bo.fileformat:upper() == 'MAC') then
 	else
 		use { 'nvim-treesitter/nvim-treesitter',
 			config = function()
