@@ -2,8 +2,6 @@
 -- window
 vim.api.nvim_set_keymap('n', '<S-h>', '<C-w>h', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<S-l>', '<C-w>l', { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<S-j>', '<C-w>j', { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<S-k>', '<C-w>k', { noremap = true, silent = true})
 -- buffer
 vim.api.nvim_set_keymap('n', '<S-Tab>', '<cmd>bprevious<CR>', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<Tab>', '<cmd>bNext<CR>', { noremap = true, silent = true})
