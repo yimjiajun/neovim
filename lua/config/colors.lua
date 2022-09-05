@@ -1,6 +1,7 @@
-local gruvbox = {
+vim.g.color_gruvbox = {
     fg = '#928374',
-    bg = '#1F2223',
+    -- bg = '#1F2223',
+    bg = '#000000',
     black ='#1B1B1B',
     skyblue = '#458588',
     cyan = '#83a597',
@@ -14,9 +15,10 @@ local gruvbox = {
     yellow = '#d79921',
 }
 
-local molokai = {
+vim.g.color_molokai = {
     fg = '#928374',
-    bg = '#1F2223',
+    -- bg = '#1F2223',
+    bg = '#000000',
     base1 = '#272a30',
     base2 = '#26292C',
     base3 = '#2E323C',
@@ -41,3 +43,29 @@ local molokai = {
     diff_change = '#27406b',
     diff_text = '#23324d',
 }
+
+vim.g.color_gruvbox_custom = {
+	base1 = '#272a30',
+	base2 = '#26292C',
+	base3 = '#2E323C',
+	base4 = '#333842',
+	base5 = '#4d5154',
+	base6 = '#9ca0a4',
+	base7 = '#b1b1b1',
+	border = '#a1b5b1',
+	fg = '#b1b1b1',
+	bg = '#000000',
+	black ='#1B1B1B',
+	skyblue = '#458588',
+	cyan = '#83a597',
+	green = '#a6e22e',
+	oceanblue = '#1d2021',
+	magenta = '#fb4934',
+	orange = '#fabd2f',
+	red = '#cc241d',
+	violet = '#b16286',
+	white = '#ebdbb2',
+}
+-- return as molokai when another lua calle
+local M = vim.g.color_gruvbox
+return M

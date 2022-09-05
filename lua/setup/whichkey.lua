@@ -1,3 +1,6 @@
+-- background color : black
+vim.cmd('highlight WhichKeyFloat cterm=bold ctermbg=12 ctermfg=7')
+
  require("which-key").setup {
 		plugins = {
 			marks = true, -- shows a list of your marks on ' and `
