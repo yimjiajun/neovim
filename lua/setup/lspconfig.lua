@@ -65,7 +65,16 @@ require('lspconfig')['cmake'].setup{
 require('lspconfig')['sumneko_lua'].setup{
     on_attach = on_attach,
     flags = lsp_flags,
+	settings = {
+		Lua = {
+			diagnostics = {
+				-- ignore undefined global vim.x.xx
+				globals = { 'vim' }
+			}
+		}
+	},
 }
+
 require('lspconfig')['zk'].setup{
     on_attach = on_attach,
     flags = lsp_flags,
