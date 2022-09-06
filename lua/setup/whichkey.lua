@@ -141,6 +141,7 @@ wk.register({
 		S = { "<cmd>lua _HTOP_TOGGLE()<CR>", "system view" },
 		D = { "<cmd>lua _NCDU_TOGGLE()<CR>", "disk view" },
 		R = { "<cmd>lua _RANGER_TOGGLE()<CR>", "ranger" },
+		i = { "<cmd> IndentBlanklineToggle<CR>", "indent" },
 		O = "onedark theme swap",
 	},
 	s = {

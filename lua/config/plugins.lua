@@ -163,6 +163,12 @@ return require('packer').startup(function()
 		end
 	}
 
+	use { 'lukas-reineke/indent-blankline.nvim',
+		config = function()
+			require('setup.indent_blankline')
+		end,
+	}
+
 	use { 'norcalli/nvim-colorizer.lua',
 		config = function()
 			require('colorizer').setup()
