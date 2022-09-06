@@ -117,6 +117,23 @@ wk.register({
 			name = "Log",
 			l = { "<cmd>lua require('telescope.builtin').git_commits()<CR>", "messages" },
 		},
+		g = {
+			name = "GitSigns",
+			s = "stage hunk",
+			r = "reset hunk",
+			S = "stage buffer",
+			u = "undo stage hunk",
+			R = "reset buffer",
+			p = "preview hunk",
+			b = "blame line",
+			t = {
+				name = "Toggle",
+				b = "current blame line",
+				d = "delete",
+			},
+			d = "diff this",
+			D = "diff previous",
+		},
 	},
 	T = { "<cmd>TagbarToggle<CR>", "tag bar" },
 	t = {
