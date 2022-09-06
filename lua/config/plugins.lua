@@ -175,6 +175,13 @@ return require('packer').startup(function()
 			require('setup.colorizers')
 		end,
 	}
+
+	use { 'karb94/neoscroll.nvim',
+		config = function()
+			require('neoscroll').setup()
+			require('setup.neoscrolls')
+		end,
+	}
 	-- use 'sainnhe/gruvbox-material'
 
 	use { 'navarasu/onedark.nvim',
