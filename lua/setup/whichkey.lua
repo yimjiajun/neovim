@@ -300,3 +300,4 @@ wk.register({
 
 -- background color : black
 vim.cmd('highlight WhichKeyFloat cterm=bold ctermbg=12 ctermfg=7')
+vim.cmd('highlight WhichKeyBorder cterm=bold ctermbg=12 ctermfg=7')
