@@ -188,6 +188,7 @@ wk.register({
 		t = { "<cmd> lua require('telescope.builtin').tags()<CR>", "ctags"},
 		j = { "<cmd> lua require('telescope.builtin').jumplist()<CR>", "jumplist"},
 		n = { "<cmd> lua require('telescope').extensions.notify.notify()<CR>", "notify history"},
+		['.'] = { "<cmd> lua require('notify')('Welcome to Neovim !')<CR>", "notify ami EC"},
 	},
 	["<leader>"] = {
 		name = "EasyMotion",
