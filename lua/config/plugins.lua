@@ -146,11 +146,9 @@ return require('packer').startup(function()
 		run = "cd app && npm install",
 		setup = function()
 			vim.g.mkdp_filetypes = { "markdown" }
+			vim.g.mkdp_browser = 'firefox'
 		end,
 		ft = { "markdown" },
-		config = function()
-			 require('setup.markdown_preview')
-		end,
 	}
 
 	use { 'phaazon/hop.nvim',
