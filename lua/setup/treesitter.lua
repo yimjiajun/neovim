@@ -36,3 +36,10 @@ require'nvim-treesitter.configs'.setup {
     additional_vim_regex_highlighting = false,
   },
 }
+
+-- Indentation based on treesitter
+require'nvim-treesitter.configs'.setup {
+  indent = {
+    enable = true
+  }
+}
