@@ -93,8 +93,7 @@ return require('packer').startup(function()
 		end
 	}
 
-	if (vim.bo.fileformat:upper() == 'MAC') then
-	else
+	if (vim.bo.fileformat:upper() == 'UNIX') then
 		use {
 			'nvim-treesitter/nvim-treesitter',
 			run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
