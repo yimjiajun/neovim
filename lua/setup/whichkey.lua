@@ -98,6 +98,7 @@ wk.register({
 		H = { "<cmd> lua require('telescope.builtin').search_history()<CR>", "search histroy"},
 		m = { "<cmd> lua require('telescope.builtin').marks()<CR>", "marks"},
 		r = { "<cmd> lua require('telescope.builtin').registers()<CR>", "registers"},
+		j = { "<cmd> lua require('telescope.builtin').jumplist()<CR>", "jumplist"},
 		S = {
 			name = "Specific",
 			c = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.c'})<CR>", "c"},
