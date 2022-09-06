@@ -1,89 +1,82 @@
--- background color : black
-vim.cmd('highlight WhichKeyFloat cterm=bold ctermbg=12 ctermfg=7')
+local function _get_event_name(evt)
+	local notify_title = ''
+	if (evt == 'ranger') then
+		notify_title = 'ranger - visual file manager'
+	elseif (evt == 'lazygit') then
+		notify_title = 'lazygit'
+	elseif (evt == 'htop') then
+		notify_title = 'htop - interactive process viewer'
+	elseif (evt == 'ncdu') then
+		notify_title = 'ncdu - NCurese disk usage'
+	else
+		notify_title = 'UNKNOW'
+	end
 
- require("which-key").setup {
-		plugins = {
-			marks = true, -- shows a list of your marks on ' and `
-			registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
-			spelling = {
-				enabled = false, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
-				suggestions = 20, -- how many suggestions should be shown in the list?
-			},
-			-- the presets plugin, adds help for a bunch of default keybindings in Neovim
-			-- No actual key bindings are created
-			presets = {
-				operators = true, -- adds help for operators like d, y, ... and registers them for motion / text object completion
-				motions = true, -- adds help for motions
-				text_objects = true, -- help for text objects triggered after entering an operator
-				windows = true, -- default bindings on <c-w>
-				nav = true, -- misc bindings to work with windows
-				z = true, -- bindings for folds, spelling and others prefixed with z
-				g = true, -- bindings for prefixed with g
-			},
-		},
-		-- add operators that will trigger motion and text object completion
-		-- to enable all native operators, set the preset / operators plugin above
-		operators = { gc = "Comments" },
-		key_labels = {
-		-- override the label used to display some keys. It doesn't effect WK in any other way.
-		-- For example:
-		-- ["<space>"] = "SPC",
-		-- ["<cr>"] = "RET",
-		-- ["<tab>"] = "TAB",
-		},
-		icons = {
-			breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
-			separator = "|", -- symbol used between a key and it's label
-			group = "+", -- symbol prepended to a group
-		},
-		popup_mappings = {
-			scroll_down = '<c-d>', -- binding to scroll down inside the popup
-			scroll_up = '<c-u>', -- binding to scroll up inside the popup
-		},
-		window = {
-			border = "single", -- none, single, double, shadow
-			position = "bottom", -- bottom, top
-			margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
-			padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]
-			winblend = 0
-		},
-		layout = {
-			height = { min = 4, max = 25 }, -- min and max height of the columns
-			width = { min = 20, max = 50 }, -- min and max width of the columns
-			spacing = 25, -- spacing between columns
-			align = "center", -- align columns left, center or right
-		},
-		ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
-		hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ "}, -- hide mapping boilerplate
-		show_help = true, -- show help message on the command line when the popup is visible
-		triggers = "auto", -- automatically setup triggers
-		-- triggers = {"<leader>"} -- or specify a list manually
-		triggers_blacklist = {
-			-- list of mode / prefixes that should never be hooked by WhichKey
-			-- this is mostly relevant for key maps that start with a native binding
-			-- most people should not need to change this
-			i = { "j", "k" },
-			v = { "j", "k" },
-		},
-}
+	return notify_title
+end
+
+local function _get_log_lvl_name(lvl)
+	local lvl_name
+	if (lvl == 'ERROR') then
+		lvl_name = vim.log.levels.ERROR
+	elseif (lvl == 'WARN') then
+		lvl_name = vim.log.levels.WARN
+	elseif (lvl == 'INFO') then
+		lvl_name = vim.log.levels.INFO
+	elseif (lvl == 'TRACE') then
+		lvl_name = vim.log.levels.TRACE
+	else
+		lvl_name = vim.log.levels.DEBUG
+	end
+
+	return lvl_name
+end
+
+local function _notify_wk(lvl, evt)
+	 require('notify')(
+	 	"\tNot available.\n\tOnly supported in UNIX",
+		_get_log_lvl_name(lvl),
+		{ title = _get_event_name(evt)}
+	)
+end
 
 local Terminal  = require('toggleterm.terminal').Terminal
-	local lazygit = Terminal:new({ cmd = "lazygit", direction = "float", hidden = true })
-		function _lazygit_toggle()
-		  lazygit:toggle()
-		end
-	local htop = Terminal:new({ cmd = "htop", direction = "float", hidden = true })
-		function _htop_toggle()
-		  htop:toggle()
-		end
-	local ncdu = Terminal:new({ cmd = "ncdu", direction = "float", hidden = true })
-		function _ncdu_toggle()
-		  ncdu:toggle()
-		end
-	local ranger = Terminal:new({ cmd = "ranger", direction = "float", hidden = true })
-		function _ranger_toggle()
-		  ranger:toggle()
-		end
+local lazygit = Terminal:new({ cmd = "lazygit", direction = "float", hidden = true })
+local htop = Terminal:new({ cmd = "htop", direction = "float", hidden = true })
+local ncdu = Terminal:new({ cmd = "ncdu", direction = "float", hidden = true })
+local ranger = Terminal:new({ cmd = "ranger", direction = "float", hidden = true })
+
+function _LAZYGIT_TOGGLE()
+	if (vim.bo.fileformat:upper() == 'UNIX') then
+		lazygit:toggle()
+	else
+		_notify_wk('ERROR', 'lazygit')
+	end
+end
+
+function _HTOP_TOGGLE()
+	if (vim.bo.fileformat:upper() == 'UNIX') then
+		htop:toggle()
+	else
+		_notify_wk('ERROR', 'htop')
+	end
+end
+
+function _NCDU_TOGGLE()
+	if (vim.bo.fileformat:upper() == 'UNIX') then
+		ncdu:toggle()
+	else
+		_notify_wk('ERROR', 'ncdu')
+	end
+end
+
+function _RANGER_TOGGLE()
+	if (vim.bo.fileformat:upper() == 'UNIX') then
+		ranger:toggle()
+	else
+		_notify_wk('ERROR', 'ranger')
+	end
+end
 
 local wk = require("which-key")
 
@@ -111,7 +104,7 @@ wk.register({
 	E = { "<cmd> NvimTreeFindFile <CR>", "file location" },
 	g = {
 		name = "git",
-		t = { "<cmd>lua _lazygit_toggle()<CR>", "lazygit" },
+		t = { "<cmd>lua _LAZYGIT_TOGGLE()<CR>", "lazygit" },
 		s = { "<cmd>lua require('telescope.builtin').git_status()<CR>", "status" },
 		l = {
 			name = "Log",
@@ -145,9 +138,9 @@ wk.register({
 		s = { "<cmd>set hlsearch!<CR>", "highlight" },
 		N = { "<cmd>set nu!<CR>", "number line" },
 		n = { "<cmd>set rnu!<CR>", "relative number" },
-		S = { "<cmd>lua _htop_toggle()<CR>", "system view" },
-		D = { "<cmd>lua _ncdu_toggle()<CR>", "disk view" },
-		R = { "<cmd>lua _ranger_toggle()<CR>", "ranger" },
+		S = { "<cmd>lua _HTOP_TOGGLE()<CR>", "system view" },
+		D = { "<cmd>lua _NCDU_TOGGLE()<CR>", "disk view" },
+		R = { "<cmd>lua _RANGER_TOGGLE()<CR>", "ranger" },
 		O = "onedark theme swap",
 	},
 	s = {
@@ -237,3 +230,73 @@ wk.register({
 	D = "lsp decalaration",
 	d = "lsp difinition",
 }, { prefix = "g" })
+
+
+ require("which-key").setup {
+	plugins = {
+		marks = true, -- shows a list of your marks on ' and `
+		registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
+		spelling = {
+			enabled = false, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
+			suggestions = 20, -- how many suggestions should be shown in the list?
+		},
+		-- the presets plugin, adds help for a bunch of default keybindings in Neovim
+		-- No actual key bindings are created
+		presets = {
+			operators = true, -- adds help for operators like d, y, ... and registers them for motion / text object completion
+			motions = true, -- adds help for motions
+			text_objects = true, -- help for text objects triggered after entering an operator
+			windows = true, -- default bindings on <c-w>
+			nav = true, -- misc bindings to work with windows
+			z = true, -- bindings for folds, spelling and others prefixed with z
+			g = true, -- bindings for prefixed with g
+		},
+	},
+	-- add operators that will trigger motion and text object completion
+	-- to enable all native operators, set the preset / operators plugin above
+	operators = { gc = "Comments" },
+	key_labels = {
+	-- override the label used to display some keys. It doesn't effect WK in any other way.
+	-- For example:
+	-- ["<space>"] = "SPC",
+	-- ["<cr>"] = "RET",
+	-- ["<tab>"] = "TAB",
+	},
+	icons = {
+		breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
+		separator = "|", -- symbol used between a key and it's label
+		group = "+", -- symbol prepended to a group
+	},
+	popup_mappings = {
+		scroll_down = '<c-d>', -- binding to scroll down inside the popup
+		scroll_up = '<c-u>', -- binding to scroll up inside the popup
+	},
+	window = {
+		border = "single", -- none, single, double, shadow
+		position = "bottom", -- bottom, top
+		margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
+		padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]
+		winblend = 0
+	},
+	layout = {
+		height = { min = 4, max = 25 }, -- min and max height of the columns
+		width = { min = 20, max = 50 }, -- min and max width of the columns
+		spacing = 25, -- spacing between columns
+		align = "center", -- align columns left, center or right
+	},
+	ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
+	hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ "}, -- hide mapping boilerplate
+	show_help = true, -- show help message on the command line when the popup is visible
+	triggers = "auto", -- automatically setup triggers
+	-- triggers = {"<leader>"} -- or specify a list manually
+	triggers_blacklist = {
+		-- list of mode / prefixes that should never be hooked by WhichKey
+		-- this is mostly relevant for key maps that start with a native binding
+		-- most people should not need to change this
+		i = { "j", "k" },
+		v = { "j", "k" },
+	},
+}
+
+-- background color : black
+vim.cmd('highlight WhichKeyFloat cterm=bold ctermbg=12 ctermfg=7')
