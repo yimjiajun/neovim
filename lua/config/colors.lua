@@ -44,7 +44,7 @@ vim.g.color_molokai = {
     diff_text = '#23324d',
 }
 
-vim.g.color_gruvbox_custom = {
+vim.g.color_default = {
 	base1 = '#272a30',
 	base2 = '#26292C',
 	base3 = '#2E323C',
@@ -65,7 +65,12 @@ vim.g.color_gruvbox_custom = {
 	red = '#cc241d',
 	violet = '#b16286',
 	white = '#ebdbb2',
+	yellow = '#d79921',
+	diff_add = '#262626',
+	diff_change = '#121212',
+	diff_remove= '#5f0000',
+	diff_text = '#000000',
 }
 -- return as molokai when another lua calle
-local M = vim.g.color_gruvbox
+local M = vim.g.color_default
 return M
