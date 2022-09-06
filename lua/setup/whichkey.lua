@@ -177,6 +177,7 @@ wk.register({
 		f = { "<cmd> lua require('telescope.builtin').filetypes()<CR>", "setup filetype"},
 		t = { "<cmd> lua require('telescope.builtin').tags()<CR>", "ctags"},
 		j = { "<cmd> lua require('telescope.builtin').jumplist()<CR>", "jumplist"},
+		n = { "<cmd> lua require('telescope').extensions.notify.notify()<CR>", "notify history"},
 	},
 	["<leader>"] = {
 		name = "EasyMotion",

@@ -123,6 +123,12 @@ return require('packer').startup(function()
 		end
 	}
 
+	use { 'rcarriga/nvim-notify',
+		config = function()
+			require('setup.notify')
+		end
+	}
+
 	use { 'rmagatti/goto-preview',
 		config = function()
 			require('goto-preview').setup {}
