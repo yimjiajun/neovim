@@ -148,6 +148,26 @@ wk.register({
 		D = { "<cmd> SessionManager delete_session<CR>", "delete session" },
 		s = { "<cmd> SessionManager save_current_session<CR>", "save session" },
 	},
+	b = {
+		name = "Buffer",
+		g = { ":BufferLineGoToBuffer ", "goto" },
+		p = { "<cmd>BufferLineTogglePin<CR>", "pin" },
+		t = { "<cmd>BufferLinePick<CR>", "pick" },
+		d = { "<cmd>BufferLinePickClose<CR>", "delete (choose)" },
+		c = { "<cmd>bdelete<CR>", "close" },
+		s = {
+			name = "Sort",
+			d = { "<cmd>BufferLineSortByDirectory<CR>", "directory" },
+			e = { "<cmd>BufferLineSortByExtension<CR>", "extension" },
+			r = { "<cmd>BufferLineSortByRelativeDirectory<CR>", "relative directory" },
+			t = { "<cmd>BufferLineSortByTabs<CR>", "tabs" },
+		},
+		C = {
+			name = "Close(s)",
+			l = { "<cmd>BufferLineCloseRight<CR>", "right" },
+			h = { "<cmd>BufferLineCloseLeft<CR>", "left" },
+		},
+	},
 	v = {
 		name = "view",
 		s = { "<cmd> lua require('telescope.builtin').spell_suggest()<CR>", "spell suggest"},
