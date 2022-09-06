@@ -142,13 +142,15 @@ return require('packer').startup(function()
 		end
 	}
 
-	use { 'iamcco/markdown-preview.nvim',
+	use{ "iamcco/markdown-preview.nvim",
 		run = "cd app && npm install",
 		setup = function()
 			vim.g.mkdp_filetypes = { "markdown" }
-			-- require('setup.markdown_preview')
 		end,
 		ft = { "markdown" },
+		config = function()
+			 require('setup.markdown_preview')
+		end,
 	}
 
 	use { 'phaazon/hop.nvim',
