@@ -300,6 +300,11 @@ wk.register({
 	},
 }
 
--- background color : black
-vim.cmd('highlight WhichKeyFloat cterm=bold ctermbg=12 ctermfg=7')
-vim.cmd('highlight WhichKeyBorder cterm=bold ctermbg=12 ctermfg=7')
+vim.api.nvim_create_autocmd( "VimEnter", {
+	desc = "Which key board with black color",
+	pattern = "*",
+	callback = function()
+		vim.cmd('highlight WhichKeyFloat cterm=bold ctermbg=12 ctermfg=7')
+		vim.cmd('highlight WhichKeyBorder cterm=bold ctermbg=12 ctermfg=7')
+	end,
+})
