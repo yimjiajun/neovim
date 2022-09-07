@@ -93,15 +93,13 @@ return require('packer').startup(function()
 		end
 	}
 
-	if (vim.bo.fileformat:upper() == 'UNIX') then
-		use {
-			'nvim-treesitter/nvim-treesitter',
-			run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
-			config = function()
-				require "setup.treesitter"
-			end,
-		}
-	end
+	use {
+		'nvim-treesitter/nvim-treesitter',
+		run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
+		config = function()
+			require "setup.treesitter"
+		end,
+	}
 
 	use {
 		'numToStr/Comment.nvim',
