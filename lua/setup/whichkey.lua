@@ -33,11 +33,96 @@ local function _get_log_lvl_name(lvl)
 end
 
 local function _notify_wk(lvl, evt)
-	 require('notify')(
+	vim.notify(
 	 	"\tNot available.\n\tOnly supported in UNIX",
 		_get_log_lvl_name(lvl),
 		{ title = _get_event_name(evt)}
 	)
+end
+
+function _NOTIFY_SAMPLE()
+	local plugin = "R - Info"
+	vim.notify([[
+      __       ___      ___   __-    _______   ______
+     /""\     |"  \    /"  | |" \   /"     "| /" _  "\
+    /    \     \   \  //   | ||  | (: ______)(: ( \___)
+   /' /\  \    /\\  \/.    | |:  |  \/    |   \/ \
+  //  __'  \  |: \.        | |.  |  // ___)_  //  \ _
+ /   /  \\  \ |.  \    /:  | /\  |\(:      "|(:   _) \
+(___/    \___)|___|\__/|___|(__\_|_)\_______) \_______)
+		]], "error", {
+			title = plugin,
+			on_open = function()
+				vim.notify([[
+ ███████╗  ██╗  ██████╗ ██╗     ██╗  ██████╗  ███████╗  ███████╗
+ ██╔═══██╗ ██║ ██╔════╝ ██║     ██║ ██╔═══██╗ ██╔═══██╗ ██╔═══██╗
+ ████████║ ██║ ██║      ██████████║ ████████║ ████████║ ██║   ██║
+ ██╔═██╔═╝ ██║ ██║      ██╔═════██║ ██╔═══██║ ██╔═██╔═╝ ██║   ██║
+ ██║ ████╗ ██║ ╚██████╗ ██║     ██║ ██║   ██║ ██║ ████╗ ███████╔╝
+ ╚═╝ ╚═══╝ ╚═╝  ╚═════╝ ╚═╝     ╚═╝ ╚═╝   ╚═╝ ╚═╝ ╚═══╝ ╚══════╝
+					]], vim.log.levels.WARN, {
+					title = plugin,
+				})
+				local timer = vim.loop.new_timer()
+				timer:start(2000, 0, function()
+				vim.notify( [[
+ ____    ____                      _     _
+ \ \ \  / ___|  ___  __ _ _ __ ___| |__ (_)_ __   __ _
+  \ \ \ \___ \ / _ \/ _` | '__/ __| '_ \| | '_ \ / _` |
+  / / /  ___) |  __/ (_| | | | (__| | | | | | | | (_| |  _   _   _   _   _
+ /_/_/  |____/ \___|\__,_|_|  \___|_| |_|_|_| |_|\__, | (_) (_) (_) (_) (_)
+                                                 |___/
+					]] , "info", {
+						title = plugin,
+						timeout = 3000,
+						on_close = function()
+							local os_name
+							if (vim.bo.fileformat:upper() == 'UNIX') then
+								os_name =[[
+:::    :::      ::::    :::      :::::::::::      :::    :::
+:+:    :+:      :+:+:   :+:          :+:          :+:    :+:
++:+    +:+      :+:+:+  +:+          +:+           +:+  +:+
++#+    +:+      +#+ +:+ +#+          +#+            +#++:+
++#+    +#+      +#+  +#+#+#          +#+           +#+  +#+
+#+#    #+#      #+#   #+#+#          #+#          #+#    #+#
+ ########       ###    ####      ###########      ###    ### ]]
+							elseif (vim.bo.fileformat:upper() == 'MAC') then
+								os_name = [[
+::::    ::::           :::           ::::::::
++:+:+: :+:+:+        :+: :+:        :+:    :+:
++:+ +:+:+ +:+       +:+   +:+       +:+
++#+  +:+  +#+      +#++:++#++:      +#+
++#+       +#+      +#+     +#+      +#+
+#+#       #+#      #+#     #+#      #+#    #+#
+###       ###      ###     ###       ########  ]]
+							else
+								os_name = [[
+:::::::::        ::::::::        ::::::::
+:+:    :+:      :+:    :+:      :+:    :+:
++:+    +:+      +:+    +:+      +:+
++#+    +:+      +#+    +:+      +#++:++#++
++#+    +#+      +#+    +#+             +#+
+#+#    #+#      #+#    #+#      #+#    #+#
+#########        ########        ########  ]]
+							end
+							vim.notify(os_name, nil, { title = 'Oh My OS',})
+							vim.notify([[
+		 ▄▄▄▄ ▓██   ██▓▄▄▄█████▓▓█████
+		▓█████▄▒██  ██▒▓  ██▒ ▓▒▓█   ▀
+		▒██▒ ▄██▒██ ██░▒ ▓██░ ▒░▒███
+		▒██░█▀  ░ ▐██▓░░ ▓██▓ ░ ▒▓█  ▄
+		░▓█  ▀█▓░ ██▒▓░  ▒██▒ ░ ░▒████▒
+		░▒▓███▀▒ ██▒▒▒   ▒ ░░   ░░ ▒░ ░
+		▒░▒   ░▓██ ░▒░     ░     ░ ░  ░
+		 ░    ░▒ ▒ ░░    ░         ░
+		 ░     ░ ░                 ░  ░
+			  ░░ ░
+									]], 1, { title = 'See Ya' })
+						end,
+		  })
+		end)
+	  end,
+})
 end
 
 local Terminal  = require('toggleterm.terminal').Terminal
@@ -205,7 +290,7 @@ wk.register({
 		t = { "<cmd> lua require('telescope.builtin').tags()<CR>", "ctags"},
 		j = { "<cmd> lua require('telescope.builtin').jumplist()<CR>", "jumplist"},
 		n = { "<cmd> lua require('telescope').extensions.notify.notify()<CR>", "notify history"},
-		['.'] = { "<cmd> lua require('notify')('Welcome to Neovim !')<CR>", "notify ami EC"},
+		['.'] = { "<cmd> lua _NOTIFY_SAMPLE()<CR>", "notify ami EC"},
 	},
 	["<leader>"] = {
 		name = "EasyMotion",
