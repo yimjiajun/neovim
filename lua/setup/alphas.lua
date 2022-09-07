@@ -94,7 +94,6 @@ local buttons = {
         button("SPC f g", "  Find word"),
         button("SPC f m", "  Jump to bookmarks"),
         button("SPC s l", "  Open last session"),
-        button("SPC s L", "勒 Load session"),
         button("SPC s d", "  Load current directory session"),
         button("SPC g s", "  Git Status"),
         button("SPC g l l", "  Git logs"),
