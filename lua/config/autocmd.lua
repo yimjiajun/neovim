@@ -84,3 +84,9 @@ vim.api.nvim_create_augroup( "highlight", { clear = true })
 			vim.cmd([[syn match ExtraWhitespace /\s\+$\| \+\ze\t/]])
 		end,
 	})
+
+if (vim.fn.has('cscope')) then
+	if (vim.fn.filereadable('cscope.out') == 1) then
+		vim.cmd('cs add cscope.out')
+	end
+end
