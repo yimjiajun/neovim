@@ -87,13 +87,20 @@ end
 local buttons = {
     type = "group",
     val = {
-        button("e", "  New file", "<cmd>ene <CR>"),
+        button("e", "  Configuration", "<cmd>e $MYVIMRC<CR>"),
         button("SPC f f", "  Find file"),
         button("SPC f h", "  Recently opened files"),
         button("SPC f j", "  Frecency/MRU"),
         button("SPC f g", "  Find word"),
         button("SPC f m", "  Jump to bookmarks"),
         button("SPC s l", "  Open last session"),
+        button("SPC s L", "勒 Load session"),
+        button("SPC s d", "  Load current directory session"),
+        button("SPC g s", "  Git Status"),
+        button("SPC g l l", "  Git logs"),
+        button("SPC t C t", "  Create ctags"),
+        button("SPC t C c", "  Create cscope"),
+        button("SPC t S", "  View process system"),
     },
     opts = {
         spacing = 1,
