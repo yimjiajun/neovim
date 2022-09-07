@@ -16,3 +16,5 @@ require('notify').setup({
 	top_down = true,
 })
 
+-- replace vim notify by using notify plugin
+vim.notify = require("notify")
