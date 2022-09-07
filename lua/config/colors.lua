@@ -1,3 +1,5 @@
+-- 256 xtern color - http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html
+
 vim.g.color_gruvbox = {
     fg = '#928374',
     -- bg = '#1F2223',
