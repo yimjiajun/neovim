@@ -14,7 +14,7 @@ vim.api.nvim_set_keymap('i', '<C-h>', '<Left>', { noremap = true, silent = true}
 vim.api.nvim_set_keymap('i', '<C-j>', '<Down>', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('i', '<C-k>', '<Up>', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('i', '<C-l>', '<Right>', { noremap = true, silent = true})
-vim.api.nvim_set_keymap('i', 'jk', '<ESC>', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', 'lkj', '<ESC>', { noremap = true, silent = true})
 -- TERMINAL
 vim.api.nvim_set_keymap('t', 'jk', '<C-\\><C-n>', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('t', '\\][', '<C-c> exit<CR>', { noremap = true, silent = true})
