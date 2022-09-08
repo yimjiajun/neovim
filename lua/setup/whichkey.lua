@@ -324,14 +324,22 @@ wk.register({
 }, { prefix = "<leader>" })
 
 wk.register({
-	d = "lsp definition",
-	D = "lsp decalaration",
+	d = "lsp next diagnostic",
+	D = "lsp previous diagnostic",
 }, { prefix = "]" })
 
 wk.register({
-	r = "lsp firmatting",
+	r = "lsp reference",
 	D = "lsp decalaration",
-	d = "lsp difinition",
+	d = "lsp definition",
+	p = {
+		name = "LSP Preview",
+			r = "lsp reference",
+			d = "lsp definition",
+			D = "lsp decalaration",
+			t = "lsp type definition",
+	},
+	P = "close lsp preview",
 }, { prefix = "g" })
 
 
