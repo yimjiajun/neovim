@@ -1,45 +1,3 @@
-local function _get_event_name(evt)
-	local notify_title = ''
-	if (evt == 'ranger') then
-		notify_title = 'ranger - visual file manager'
-	elseif (evt == 'lazygit') then
-		notify_title = 'lazygit'
-	elseif (evt == 'htop') then
-		notify_title = 'htop - interactive process viewer'
-	elseif (evt == 'ncdu') then
-		notify_title = 'ncdu - NCurese disk usage'
-	else
-		notify_title = 'UNKNOW'
-	end
-
-	return notify_title
-end
-
-local function _get_log_lvl_name(lvl)
-	local lvl_name
-	if (lvl == 'ERROR') then
-		lvl_name = vim.log.levels.ERROR
-	elseif (lvl == 'WARN') then
-		lvl_name = vim.log.levels.WARN
-	elseif (lvl == 'INFO') then
-		lvl_name = vim.log.levels.INFO
-	elseif (lvl == 'TRACE') then
-		lvl_name = vim.log.levels.TRACE
-	else
-		lvl_name = vim.log.levels.DEBUG
-	end
-
-	return lvl_name
-end
-
-local function _notify_wk(lvl, evt)
-	vim.notify(
-	 	"\tNot available.\n\tOnly supported in UNIX",
-		_get_log_lvl_name(lvl),
-		{ title = _get_event_name(evt)}
-	)
-end
-
 function _NOTIFY_SAMPLE()
 	local plugin = "R - Info"
 	vim.notify([[
@@ -129,13 +87,16 @@ local Terminal  = require('toggleterm.terminal').Terminal
 local lazygit = Terminal:new({ cmd = "lazygit", direction = "float", hidden = true })
 local htop = Terminal:new({ cmd = "htop", direction = "float", hidden = true })
 local ncdu = Terminal:new({ cmd = "ncdu", direction = "float", hidden = true })
-local ranger = Terminal:new({ cmd = "ranger", direction = "float", hidden = true })
 
 function _LAZYGIT_TOGGLE()
 	if (vim.bo.fileformat:upper() == 'UNIX') then
 		lazygit:toggle()
 	else
-		_notify_wk('ERROR', 'lazygit')
+		vim.notify(
+			"\tNot available.\n\tOnly supported in UNIX",
+			vim.log.levels.ERROR,
+			{ title = 'lazygit - gui terminal git' }
+		)
 	end
 end
 
@@ -143,7 +104,11 @@ function _HTOP_TOGGLE()
 	if (vim.bo.fileformat:upper() == 'UNIX') then
 		htop:toggle()
 	else
-		_notify_wk('ERROR', 'htop')
+		vim.notify(
+			"\tNot available.\n\tOnly supported in UNIX",
+			vim.log.levels.ERROR,
+			{ title = 'htop - interactive process viewer' }
+		)
 	end
 end
 
@@ -151,15 +116,11 @@ function _NCDU_TOGGLE()
 	if (vim.bo.fileformat:upper() == 'UNIX') then
 		ncdu:toggle()
 	else
-		_notify_wk('ERROR', 'ncdu')
-	end
-end
-
-function _RANGER_TOGGLE()
-	if (vim.bo.fileformat:upper() == 'UNIX') then
-		ranger:toggle()
-	else
-		_notify_wk('ERROR', 'ranger')
+		vim.notify(
+			"\tNot available.\n\tOnly supported in UNIX",
+			vim.log.levels.ERROR,
+			{ title = 'ncdu - NCurese disk usage' }
+		)
 	end
 end
 
@@ -236,7 +197,6 @@ wk.register({
 		n = { "<cmd> set rnu!<CR>", "relative number" },
 		S = { "<cmd> lua _HTOP_TOGGLE()<CR>", "system view" },
 		D = { "<cmd> lua _NCDU_TOGGLE()<CR>", "disk view" },
-		R = { "<cmd> lua _RANGER_TOGGLE()<CR>", "ranger" },
 		i = { "<cmd> IndentBlanklineToggle<CR>", "indent" },
 		O = "onedark theme swap",
 		C = {

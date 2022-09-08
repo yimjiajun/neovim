@@ -87,7 +87,7 @@ return require('packer').startup(function()
 	use { "akinsho/toggleterm.nvim",
 		tag = 'v2.*',
 		-- lazygit is not installed. Manual Install : https://github.com/jesseduffield/lazygit#ubuntu
-		run = "sudo apt install ripgrep fzf ranger",
+		run = "sudo apt install ripgrep fzf",
 		config = function()
 			 require('setup.toggleterm')
 		end
