@@ -1,6 +1,6 @@
 vim.api.nvim_create_augroup("cursorline", { clear = true })
 	vim.api.nvim_create_autocmd( "InsertEnter", {
-		desc = "",
+		desc = "Disable cursor line when insert mode",
 		group = "cursorline",
 		pattern = "*",
 		callback = function()
@@ -9,7 +9,7 @@ vim.api.nvim_create_augroup("cursorline", { clear = true })
 		end,
 	})
 	vim.api.nvim_create_autocmd( "InsertLeave", {
-		desc = "",
+		desc = "Display cursor line",
 		group = "cursorline",
 		pattern = "*",
 		callback = function()
@@ -18,7 +18,7 @@ vim.api.nvim_create_augroup("cursorline", { clear = true })
 		end,
 	})
 	vim.api.nvim_create_autocmd( "WinEnter", {
-		desc = "",
+		desc = "Display cursor line",
 		group = "cursorline",
 		pattern = "*",
 		callback = function()
@@ -27,7 +27,7 @@ vim.api.nvim_create_augroup("cursorline", { clear = true })
 		end,
 	})
 	vim.api.nvim_create_autocmd( "WinLeave", {
-		desc = "",
+		desc = "Disable curasor display",
 		group = "cursorline",
 		pattern = "*",
 		callback = function()
@@ -36,7 +36,7 @@ vim.api.nvim_create_augroup("cursorline", { clear = true })
 		end,
 	})
 	vim.api.nvim_create_autocmd('TextYankPost', {
-		desc = "",
+		desc = "Flash the part being yank",
 		group = "cursorline",
 		pattern = "*",
 		callback = function()
