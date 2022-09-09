@@ -298,6 +298,7 @@ wk.register({
 			d = "lsp definition",
 			D = "lsp decalaration",
 			t = "lsp type definition",
+			i = "lsp implementation",
 	},
 	P = "close lsp preview",
 }, { prefix = "g" })
