@@ -57,6 +57,15 @@ return require('packer').startup(function()
 		end
 	}
 
+	-- LSP symbols
+	use { 'stevearc/aerial.nvim',
+		module = "aerial",
+		cmd = { "AerialToggle", "AerialOpen", "AerialInfo" },
+		config = function()
+			require ('setup.aerial')
+		end,
+	}
+
 	use { "williamboman/mason.nvim",
 		requires = {
 			{ 'williamboman/mason-lspconfig.nvim' },
