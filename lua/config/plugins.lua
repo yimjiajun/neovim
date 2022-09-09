@@ -21,21 +21,33 @@ return require('packer').startup(function()
 
 	use 'preservim/tagbar'
 
-	use { 'hrsh7th/nvim-cmp',
-		opt = true,
+	use { "hrsh7th/nvim-cmp",
 		requires = {
-			{ 'hrsh7th/cmp-nvim-lsp' },
-			{ 'hrsh7th/cmp-buffer' },
-			{ 'hrsh7th/cmp-path' },
-			{ 'hrsh7th/cmp-cmdline' },
-			{ 'hrsh7th/nvim-cmp' },
-			{ 'hrsh7th/cmp-vsnip', opt = true },
-			{ 'hrsh7th/vim-vsnip', opt = true },
+			{ "onsails/lspkind-nvim", module = "lspkind" },
+			{ "hrsh7th/cmp-buffer", module = "cmp_buffer" },
+			{ "hrsh7th/cmp-path", module = "cmp_path" },
+			{ "hrsh7th/cmp-nvim-lsp", module = "cmp_nvim_lsp" },
+			{ "hrsh7th/cmp-nvim-lua", module = "cmp_nvim_lua" },
+			{ "hrsh7th/cmp-calc", module = "cmp_calc" },
+			{ "hrsh7th/cmp-emoji", module = "cmp_emoji" },
+			{ "quangnguyen30192/cmp-nvim-ultisnips", module = "cmp_nvim_ultisnips" },
+			{ "tzachar/cmp-tabnine",
+				run = "./install.sh",
+				module = "cmp_tabnine",
+			},
+			{ "honza/vim-snippets", opt = true },
+			{ "SirVer/ultisnips",
+				opt = true,
+				wants = "vim-snippets",
+			},
 		},
+		event = "InsertEnter",
+		wants = "ultisnips",
 		config = function()
-			require('setup.cmp')
-		end
+		    require ("setup.cmp")
+		end,
 	}
+
 	use 'haorenW1025/completion-nvim'
 
 	use { "williamboman/mason.nvim",

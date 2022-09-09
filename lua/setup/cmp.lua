@@ -1,8 +1,27 @@
  vim.api.nvim_set_option('completeopt', 'menu,menuone,noselect')
   -- Set up nvim-cmp.
-    local cmp = require'cmp'
 
-  cmp.setup({
+local tabnine = require "cmp_tabnine"
+
+tabnine:setup {
+  max_lines = 100,
+  max_num_results = 5,
+  sort = true,
+}
+
+local t = function(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+require "cmp_nvim_lsp"
+require "cmp_buffer"
+require "cmp_nvim_lsp"
+require "cmp_nvim_lua"
+require "cmp_calc"
+require "cmp_emoji"
+require "cmp_nvim_ultisnips"
+local cmp = require'cmp'
+
+cmp.setup({
     snippet = {
       -- REQUIRED - you must specify a snippet engine
       expand = function(args)
@@ -13,22 +32,48 @@
       end,
     },
     window = {
-      -- completion = cmp.config.window.bordered(),
-      -- documentation = cmp.config.window.bordered(),
+       completion = cmp.config.window.bordered(),
+       documentation = cmp.config.window.bordered(),
     },
+    formatting = {
+		format = function(entry, vim_item)
+			-- fancy icons and a name of kind
+			vim_item.kind = require("lspkind").presets.default[vim_item.kind] .. " " .. vim_item.kind
+
+			-- set a name for each source
+			vim_item.menu = ({
+				buffer = "[Buffer]",
+				path = "[Path]",
+				nvim_lsp = "[LSP]",
+				nvim_lua = "[Lua]",
+				calc = "[Calc]",
+				emoji = "[Emoji]",
+				ultisnips = "[UltiSnips]",
+				cmp_tabnine = "[TabNine]",
+			})[entry.source.name]
+
+			return vim_item
+		end,
+	},
     mapping = cmp.mapping.preset.insert({
-      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-f>'] = cmp.mapping.scroll_docs(4),
-      ['<C-Space>'] = cmp.mapping.complete(),
-      ['<C-e>'] = cmp.mapping.abort(),
-      ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+        ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.abort(),
+        ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
     }),
     sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
-      { name = 'vsnip' }, -- For vsnip users.
-      -- { name = 'luasnip' }, -- For luasnip users.
-      -- { name = 'ultisnips' }, -- For ultisnips users.
-      -- { name = 'snippy' }, -- For snippy users.
+		{ name = 'nvim_lsp' },
+		{ name = 'vsnip' }, -- For vsnip users.
+		-- { name = 'luasnip' }, -- For luasnip users.
+		-- { name = 'ultisnips' }, -- For ultisnips users.
+		{ name = "buffer" },
+		{ name = "ultisnips" },
+		{ name = "cmp_tabnine" },
+		{ name = "nvim_lua" },
+		{ name = "path" },
+		{ name = "calc" },
+		{ name = "emoji" }, -- { name = 'snippy' }, -- For snippy users.
     }, {
       { name = 'buffer' },
     })
