@@ -1,6 +1,5 @@
  vim.api.nvim_set_option('completeopt', 'menu,menuone,noselect')
   -- Set up nvim-cmp.
-
 local tabnine = require "cmp_tabnine"
 
 tabnine:setup {
@@ -19,6 +18,7 @@ require "cmp_nvim_lua"
 require "cmp_calc"
 require "cmp_emoji"
 require "cmp_nvim_ultisnips"
+
 local cmp = require'cmp'
 
 cmp.setup({

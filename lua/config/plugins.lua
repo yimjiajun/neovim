@@ -50,6 +50,13 @@ return require('packer').startup(function()
 
 	use 'haorenW1025/completion-nvim'
 
+	-- Neovim UI Enhancer
+	use { 'stevearc/dressing.nvim',
+		config = function()
+			require('setup.dressing')
+		end
+	}
+
 	use { "williamboman/mason.nvim",
 		requires = {
 			{ 'williamboman/mason-lspconfig.nvim' },
