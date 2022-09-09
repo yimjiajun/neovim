@@ -17,7 +17,6 @@ require "cmp_nvim_lsp"
 require "cmp_nvim_lua"
 require "cmp_calc"
 require "cmp_emoji"
-require "cmp_nvim_ultisnips"
 
 local cmp = require'cmp'
 
@@ -68,7 +67,6 @@ cmp.setup({
 		-- { name = 'luasnip' }, -- For luasnip users.
 		-- { name = 'ultisnips' }, -- For ultisnips users.
 		{ name = "buffer" },
-		{ name = "ultisnips" },
 		{ name = "cmp_tabnine" },
 		{ name = "nvim_lua" },
 		{ name = "path" },
