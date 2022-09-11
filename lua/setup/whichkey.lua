@@ -344,9 +344,9 @@ wk.register({
 		scroll_up = '<c-u>', -- binding to scroll up inside the popup
 	},
 	window = {
-		border = "single", -- none, single, double, shadow
+		border = "shadow", -- none, single, double, shadow
 		position = "bottom", -- bottom, top
-		margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
+		margin = { 20, 20, 1, 20 }, -- extra window margin [top, right, bottom, left]
 		padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]
 		winblend = 0
 	},
@@ -369,12 +369,3 @@ wk.register({
 		v = { "j", "k" },
 	},
 }
-
-vim.api.nvim_create_autocmd( "VimEnter", {
-	desc = "Which key board with black color",
-	pattern = "*",
-	callback = function()
-		vim.cmd('highlight WhichKeyFloat cterm=bold ctermbg=12 ctermfg=7')
-		vim.cmd('highlight WhichKeyBorder cterm=bold ctermbg=12 ctermfg=7')
-	end,
-})
