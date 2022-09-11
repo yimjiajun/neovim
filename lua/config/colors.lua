@@ -1,14 +1,5 @@
 -- 256 xtern color - http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html
 
-vim.api.nvim_create_autocmd( "VimEnter", {
-	desc = "Float pop up window colors",
-	pattern = "*",
-	callback = function()
-		vim.cmd([[highlight NormalFloat guibg=#000000]])
-		vim.cmd([[highlight FloatBorder guibg=#000000 guifg=#FFFFFF]])
-	end,
-})
-
 vim.g.color_gruvbox = {
     fg = '#928374',
     -- bg = '#1F2223',

@@ -209,13 +209,13 @@ return require('packer').startup(function()
 	}
 	-- use 'sainnhe/gruvbox-material'
 
-	use { 'navarasu/onedark.nvim',
+	use { 'sam4llis/nvim-tundra',
 		config = function()
-			require('onedark').setup {
-				style = 'warmer'
-			}
-			require('setup.onedarks')
-			require('onedark').load()
-		end
+			require('setup.tundra')
+			vim.cmd([[colorscheme tundra]])
+		end,
 	}
+
+	use { "ellisonleao/gruvbox.nvim" }
+
 end)
