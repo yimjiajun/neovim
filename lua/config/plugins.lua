@@ -60,6 +60,7 @@ return require('packer').startup(function()
 		end,
 	}
 
+	-- LSP installer
 	use { "williamboman/mason.nvim",
 		requires = {
 			{ 'williamboman/mason-lspconfig.nvim' },
@@ -78,6 +79,7 @@ return require('packer').startup(function()
 		end,
 	}
 
+	-- session
 	use { 'Shatur/neovim-session-manager',
 		requires = {
 			{ 'nvim-lua/plenary.nvim' },
@@ -88,6 +90,7 @@ return require('packer').startup(function()
 		end
 	}
 
+	-- sidebar
 	use { 'kyazdani42/nvim-tree.lua',
 		requires = {
 			'kyazdani42/nvim-web-devicons', -- optional, for file icons
@@ -98,6 +101,7 @@ return require('packer').startup(function()
 		end
 	}
 
+	-- tab / buffer display
 	use { 'akinsho/bufferline.nvim',
 		tag = "v2.*",
 		requires = 'kyazdani42/nvim-web-devicons',
@@ -106,6 +110,7 @@ return require('packer').startup(function()
 		end
 	}
 
+	-- terminal
 	use { "akinsho/toggleterm.nvim",
 		tag = 'v2.*',
 		-- lazygit is not installed. Manual Install : https://github.com/jesseduffield/lazygit#ubuntu
@@ -115,21 +120,22 @@ return require('packer').startup(function()
 		end
 	}
 
-	use {
-		'nvim-treesitter/nvim-treesitter',
+	-- programming language highlight
+	use { 'nvim-treesitter/nvim-treesitter',
 		run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
 		config = function()
 			require "setup.treesitter"
 		end,
 	}
 
-	use {
-		'numToStr/Comment.nvim',
+	-- comment toggle
+	use { 'numToStr/Comment.nvim',
 		config = function()
 			require('Comment').setup()
 		end
 	}
 
+	-- key mapping tips
 	use { "folke/which-key.nvim",
 		requires = 'akinsho/toggleterm.nvim',
 		config = function()
@@ -137,24 +143,28 @@ return require('packer').startup(function()
 		end
 	}
 
+	-- dashboard
 	use { 'goolord/alpha-nvim',
 		config = function()
 		    require 'alpha'.setup(require('setup.alphas').config)
 		end
 	}
 
+	-- pop up notify
 	use { 'rcarriga/nvim-notify',
 		config = function()
 			require('setup.notify')
 		end
 	}
 
+	-- git live display
 	use { 'lewis6991/gitsigns.nvim',
 		config = function()
 			require('setup.gitsigns')
 		end
 	}
 
+	-- lsp pop up preview
 	use { 'rmagatti/goto-preview',
 		config = function()
 			require('goto-preview').setup {}
@@ -162,6 +172,7 @@ return require('packer').startup(function()
 		end
 	}
 
+	-- markdown preview
 	use{ "iamcco/markdown-preview.nvim",
 		run = "cd app && npm install",
 		setup = function()
@@ -171,6 +182,7 @@ return require('packer').startup(function()
 		ft = { "markdown" },
 	}
 
+	-- easy motion
 	use { 'phaazon/hop.nvim',
 		branch = 'v2', -- optional but strongly recommended
 		config = function()
@@ -182,12 +194,14 @@ return require('packer').startup(function()
 		end
 	}
 
+	-- indent dispaly
 	use { 'lukas-reineke/indent-blankline.nvim',
 		config = function()
 			require('setup.indent_blankline')
 		end,
 	}
 
+	-- Color display
 	use { 'norcalli/nvim-colorizer.lua',
 		config = function()
 			require('colorizer').setup()
@@ -195,14 +209,15 @@ return require('packer').startup(function()
 		end,
 	}
 
+	-- Smooth sroll
 	use { 'karb94/neoscroll.nvim',
 		config = function()
 			require('neoscroll').setup()
 			require('setup.neoscrolls')
 		end,
 	}
-	-- use 'sainnhe/gruvbox-material'
 
+	-- Themes
 	use { 'sam4llis/nvim-tundra',
 		config = function()
 			require('setup.tundra')
@@ -210,6 +225,6 @@ return require('packer').startup(function()
 		end,
 	}
 
-	use { "ellisonleao/gruvbox.nvim" }
-
+	-- NERDTree device ions
+	use { 'ryanoasis/vim-devicons' }
 end)
