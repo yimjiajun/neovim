@@ -1,7 +1,7 @@
 for _, source in ipairs {
+	"config.plugins",
 	"config.settings",
 	"config.autocmd",
-	"config.plugins",
 	"config.keymapping",
 	"config.colors",
 	"config.custom",

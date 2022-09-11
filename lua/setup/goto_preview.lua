@@ -1,10 +1,11 @@
 require('goto-preview').setup {
-  width = 120; -- Width of the floating window
+  width = 110; -- Width of the floating window
   height = 15; -- Height of the floating window
-  border = {"↖", "─" ,"┐", "│", "┘", "─", "└", "│"}; -- Border characters of the floating window
+  -- border = {"↖", "─" ,"┐", "│", "┘", "─", "└", "│"}; -- Border characters of the floating window
+  border = {"↖", "═" ,"", "", "", "─", "", ""}; -- Border characters of the floating window
   default_mappings = true; -- Bind default mappings
   debug = false; -- Print debug information
-  opacity = 20; -- 0-100 opacity level of the floating window where 100 is fully transparent.
+  opacity = 0; -- 0-100 opacity level of the floating window where 100 is fully transparent.
   resizing_mappings = true; -- Binds arrow keys to resizing the floating window.
   post_open_hook = nil; -- A function taking two arguments, a buffer and a window to be ran as a hook.
   -- These two configs can also be passed down to the goto-preview definition and implementation calls for one off "peak" functionality.

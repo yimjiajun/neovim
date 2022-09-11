@@ -225,6 +225,10 @@ return require('packer').startup(function()
 		end,
 	}
 
-	-- NERDTree device ions
-	use { 'ryanoasis/vim-devicons' }
+	use { 'kyazdani42/nvim-web-devicons' }
+	-- use { 'ryanoasis/vim-devicons' }
+	-- sidebar
+ 	use { 'preservim/nerdtree',
+		requires = 'ryanoasis/vim-devicons'
+	}
 end)
