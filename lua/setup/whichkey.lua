@@ -203,6 +203,8 @@ wk.register({
 			t = { "<cmd> !ctags -R . <CR>", "cTags" },
 			c = { "<cmd> !cscope -bqRv <CR>", "cscope" },
 		},
+		q = { "<cmd> cclose <CR>", "quickfix (close)" },
+		Q = { "<cmd> copen <CR>", "quickfix (open)" },
 	},
 	s = {
 		name = "Session",
