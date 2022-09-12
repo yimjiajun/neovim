@@ -198,7 +198,6 @@ wk.register({
 		S = { "<cmd> lua _HTOP_TOGGLE()<CR>", "system view" },
 		D = { "<cmd> lua _NCDU_TOGGLE()<CR>", "disk view" },
 		i = { "<cmd> IndentBlanklineToggle<CR>", "indent" },
-		O = "onedark theme swap",
 		C = {
 			name = "Create",
 			t = { "<cmd> !ctags -R . <CR>", "cTags" },
