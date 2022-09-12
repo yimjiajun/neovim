@@ -185,7 +185,7 @@ wk.register({
 			D = "diff previous",
 		},
 	},
-	T = { "<cmd>TagbarToggle<CR>", "tag bar" },
+	T = { "<cmd> AerialToggle! <CR>", "tag bar" },
 	t = {
 		name = "Toggle",
 		f = { "<cmd> ToggleTerm direction=float <CR>", "terminal" },
