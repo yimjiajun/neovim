@@ -23,5 +23,4 @@ vim.api.nvim_set_keymap('i', 'lkj', '<ESC>', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('t', 'lkj', '<C-\\><C-n>', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('t', '\\][', '<C-c> exit<CR>', { noremap = true, silent = true})
 -- COMMAND LINE
-vim.api.nvim_set_keymap('c', '<C-h>', '<Left>', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('c', '<C-l>', '<Right>', { noremap = true, silent = true})
