@@ -1,12 +1,12 @@
  vim.api.nvim_set_option('completeopt', 'menu,menuone,noselect')
   -- Set up nvim-cmp.
-local tabnine = require "cmp_tabnine"
-
-tabnine:setup {
-  max_lines = 100,
-  max_num_results = 5,
-  sort = true,
-}
+-- local tabnine = require "cmp_tabnine"
+--
+-- tabnine:setup {
+--   max_lines = 100,
+--   max_num_results = 5,
+--   sort = true,
+-- }
 
 local t = function(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
