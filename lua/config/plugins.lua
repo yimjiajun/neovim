@@ -22,6 +22,7 @@ return require('packer').startup(function()
 	use 'preservim/tagbar'
 
 	use { "hrsh7th/nvim-cmp",
+		after = { "nvim-lspconfig" },
 		requires = {
 			{ "onsails/lspkind-nvim", module = "lspkind" },
 			{ "hrsh7th/cmp-buffer", module = "cmp_buffer" },
@@ -62,6 +63,7 @@ return require('packer').startup(function()
 
 	-- LSP installer
 	use { "williamboman/mason.nvim",
+		after = { "nvim-lspconfig" },
 		requires = {
 			{ 'williamboman/mason-lspconfig.nvim' },
 			{ 'neovim/nvim-lspconfig' },
