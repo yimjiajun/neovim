@@ -221,7 +221,6 @@ return require('packer').startup(function()
 	use { 'sam4llis/nvim-tundra',
 		config = function()
 			require('setup.tundra')
-			vim.cmd([[colorscheme tundra]])
 		end,
 	}
 
