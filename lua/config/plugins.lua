@@ -5,11 +5,8 @@ vim.cmd [[packadd packer.nvim]]
 return require('packer').startup(function()
 
 	use 'wbthomason/packer.nvim' -- Package manager
-	use { 'neovim/nvim-lspconfig',
-		config = function()
-			require('setup.lspconfig')
-		end
-	}
+
+	use 'neovim/nvim-lspconfig' -- lsp config in nvim-cmp
 
 	use {
 		'nvim-lualine/lualine.nvim',
@@ -63,11 +60,14 @@ return require('packer').startup(function()
 
 	-- LSP installer
 	use { "williamboman/mason.nvim",
-		after = { "nvim-lspconfig" },
 		requires = {
 			{ 'williamboman/mason-lspconfig.nvim' },
 			{ 'neovim/nvim-lspconfig' },
 		},
+	}
+
+	use { 'williamboman/mason-lspconfig.nvim',
+		after = { "mason.nvim", "nvim-lspconfig" },
 		config = function()
 			require('setup.mason')
 		end
