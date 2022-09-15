@@ -6,8 +6,6 @@ return require('packer').startup(function()
 
 	use 'wbthomason/packer.nvim' -- Package manager
 
-	use 'neovim/nvim-lspconfig' -- lsp config in nvim-cmp
-
 	use {
 		'nvim-lualine/lualine.nvim',
 		requires = { 'kyazdani42/nvim-web-devicons', opt = true },
@@ -16,60 +14,66 @@ return require('packer').startup(function()
 		end,
 	}
 
-	use 'preservim/tagbar'
+	use { 'preservim/tagbar' }
 
-	use { "hrsh7th/nvim-cmp",
-		after = { "nvim-lspconfig" },
-		requires = {
-			{ "onsails/lspkind-nvim", module = "lspkind" },
-			{ "hrsh7th/cmp-buffer", module = "cmp_buffer" },
-			{ "hrsh7th/cmp-path", module = "cmp_path" },
-			{ "hrsh7th/cmp-nvim-lsp", module = "cmp_nvim_lsp" },
-			{ "hrsh7th/cmp-nvim-lua", module = "cmp_nvim_lua" },
-			{ "hrsh7th/cmp-calc", module = "cmp_calc" },
-			{ "hrsh7th/cmp-emoji", module = "cmp_emoji" },
-			-- { "tzachar/cmp-tabnine",
-			-- 	run = "./install.sh",
-			-- 	module = "cmp_tabnine",
-			-- },
-			{ "honza/vim-snippets", opt = true },
-		},
-		event = "InsertEnter",
-		config = function()
-		    require ("setup.cmp")
-		end,
-	}
+	if vim.g.nvim_lsp_support == 1 then
+		use 'neovim/nvim-lspconfig' -- lsp config in nvim-cmp
 
-	use 'haorenW1025/completion-nvim'
+		use { "hrsh7th/nvim-cmp",
+			after = { "nvim-lspconfig" },
+			requires = {
+				{ "onsails/lspkind-nvim", module = "lspkind" },
+				{ "hrsh7th/cmp-buffer", module = "cmp_buffer" },
+				{ "hrsh7th/cmp-path", module = "cmp_path" },
+				{ "hrsh7th/cmp-nvim-lsp", module = "cmp_nvim_lsp" },
+				{ "hrsh7th/cmp-nvim-lua", module = "cmp_nvim_lua" },
+				{ "hrsh7th/cmp-calc", module = "cmp_calc" },
+				{ "hrsh7th/cmp-emoji", module = "cmp_emoji" },
+				-- { "tzachar/cmp-tabnine",
+				-- 	run = "./install.sh",
+				-- 	module = "cmp_tabnine",
+				-- },
+				{ "honza/vim-snippets", opt = true },
+			},
+			event = "VimEnter",
+			config = function()
+				require ("setup.cmp")
+			end,
+		}
+
+		use 'haorenW1025/completion-nvim'
+
+		-- LSP installer
+		use { "williamboman/mason.nvim",
+			requires = {
+				{ 'williamboman/mason-lspconfig.nvim' },
+				{ 'neovim/nvim-lspconfig' },
+			},
+		}
+
+		use { 'williamboman/mason-lspconfig.nvim',
+			after = { "mason.nvim", "nvim-lspconfig" },
+			config = function()
+				require('setup.mason')
+			end
+		}
+
+		-- LSP symbols
+		use { 'stevearc/aerial.nvim',
+			module = "aerial",
+			cmd = { "AerialToggle", "AerialOpen", "AerialInfo" },
+			config = function()
+				require ('setup.aerial')
+			end,
+		}
+	else
+
+	end
 
 	-- Neovim UI Enhancer
 	use { 'stevearc/dressing.nvim',
 		config = function()
 			require('setup.dressing')
-		end
-	}
-
-	-- LSP symbols
-	use { 'stevearc/aerial.nvim',
-		module = "aerial",
-		cmd = { "AerialToggle", "AerialOpen", "AerialInfo" },
-		config = function()
-			require ('setup.aerial')
-		end,
-	}
-
-	-- LSP installer
-	use { "williamboman/mason.nvim",
-		requires = {
-			{ 'williamboman/mason-lspconfig.nvim' },
-			{ 'neovim/nvim-lspconfig' },
-		},
-	}
-
-	use { 'williamboman/mason-lspconfig.nvim',
-		after = { "mason.nvim", "nvim-lspconfig" },
-		config = function()
-			require('setup.mason')
 		end
 	}
 

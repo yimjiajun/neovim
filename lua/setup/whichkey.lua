@@ -278,32 +278,116 @@ wk.register({
 		},
 		c = {
 			name = "code",
-			a = "action",
+				a = "action",
 		},
 		f = "formatting",
 	},
 }, { prefix = "<leader>" })
 
-wk.register({
-	d = "lsp next diagnostic",
-	D = "lsp previous diagnostic",
-}, { prefix = "]" })
+if vim.g.nvim_lsp_support == 1 then
 
-wk.register({
-	r = "lsp reference",
-	D = "lsp decalaration",
-	d = "lsp definition",
-	p = {
-		name = "LSP Preview",
-			r = "lsp reference",
-			d = "lsp definition",
-			-- D = "lsp decalaration",
-			t = "lsp type definition",
-			i = "lsp implementation",
-	},
-	P = "close lsp preview",
-}, { prefix = "g" })
+	wk.register({
+		l = {
+			name = "Lsp",
+			e = "diagnostic open float",
+			q = "diagnostic setloclist",
+			w = {
+				name = "workspace folder",
+				a = "add",
+				r = "remove",
+				l = "list",
+			},
+			D = "type defination",
+			r = {
+				name = "Rename",
+				n = "buffer",
+			},
+			c = {
+				name = "code",
+					a = "action",
+			},
+			f = "formatting",
+		},
+	}, { prefix = "<leader>" })
 
+	wk.register({
+		d = "lsp next diagnostic",
+		D = "lsp previous diagnostic",
+	}, { prefix = "]" })
+
+	wk.register({
+		r = "lsp reference",
+		D = "lsp decalaration",
+		d = "lsp definition",
+		p = {
+			name = "LSP Preview",
+				r = "lsp reference",
+				d = "lsp definition",
+				-- D = "lsp decalaration",
+				t = "lsp type definition",
+				i = "lsp implementation",
+		},
+		P = "close lsp preview",
+	}, { prefix = "g" })
+
+else -- if vim.g.nvim_lsp_support == 1 then
+
+	wk.register({
+		d = "lsp definition",
+		r = "lsp reference",
+		i = "lsp implementation",
+		t = "lsp type-definition",
+		p = {
+			name = "lsp preview",
+			d = { "<CMD> CocCommand fzf-preview.CocDefinition <CR>", "definition"},
+			r = { "<CMD> CocCommand fzf-preview.CocReferences <CR>", "refrences"},
+			i = { "<CMD> CocCommand fzf-preview.CocImplementations <CR>", "implementation"},
+			t = { "<CMD> CocCommand fzf-preview.CocTypeDefinition <CR>", "type-definition"},
+			D = {
+				name = "diagnostics",
+				D = { "<CMD> CocCommand fzf-preview.CocDiagnostics <CR>", "diagnostics"},
+				d = { "<CMD> CocCommand fzf-preview.CocCurrentDiagnostics <CR>", "current diagnostics"},
+			},
+			o = { "<CMD> CocCommand fzf-preview.CocOutline <CR>", "outline"},
+		},
+	}, { prefix = "g" })
+
+	wk.register({
+		l = {
+			c = {
+				name = "Coc",
+				a = {
+					name = "Action",
+					a = "applying code-action (selected region)",
+					c = "applying code-action (current buffer)",
+					f = "applying code-action (current line)",
+					l = "run code lens action (current line)",
+					n = "symbol renaming",
+					s = "formatting selected code",
+				},
+				l = {
+					name = "Lists",
+					a = "all diagnostics",
+					e = "manage external",
+					c = "show commands",
+					o = "find symbol of current document",
+					s = "search workspace symbols",
+					j = "do definition action for next item",
+					k = "do default action for previous item",
+					p = "resume latest coc list",
+				},
+			},
+		},
+	}, { prefix = "<leader>" })
+
+	wk.register({
+		g = "previous coc diagnostic",
+	}, { prefix = "[" })
+
+	wk.register({
+		g = "next coc diagnostic",
+	}, { prefix = "]" })
+end
 
  require("which-key").setup {
 	plugins = {
