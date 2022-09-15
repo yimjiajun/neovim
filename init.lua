@@ -1,3 +1,5 @@
+vim.g.nvim_lsp_support = 1
+
 for _, source in ipairs {
 	"config.plugins",
 	"config.settings",
@@ -8,4 +10,8 @@ for _, source in ipairs {
 } do
   local status_ok, fault = pcall(require, source)
   if not status_ok then vim.api.nvim_err_writeln("Failed to load " .. source .. "\n\n" .. fault) end
+end
+
+if vim.g.nvim_lsp_support == 0 then
+	vim.cmd[[source $HOME/.config/nvim/lua/config/vimrc.vim]]
 end

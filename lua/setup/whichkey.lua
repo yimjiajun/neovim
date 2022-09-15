@@ -127,6 +127,9 @@ end
 local wk = require("which-key")
 
 wk.register({
+	e = { "<cmd> NvimTreeToggle <CR>", "file bar" },
+	E = { "<cmd> NvimTreeFindFile <CR>", "file location" },
+	T = { "<cmd> TagbarToggle <CR>", "tag bar" },
 	f = {
 		name = "Find", -- optional group name
 		g = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.*'})<CR>", "live grep"},
@@ -135,9 +138,11 @@ wk.register({
 		f = { "<cmd> lua require('telescope.builtin').find_files()<CR>", "files"},
 		h = { "<cmd> lua require('telescope.builtin').oldfiles()<CR>", "recently opened"},
 		H = { "<cmd> lua require('telescope.builtin').search_history()<CR>", "search histroy"},
-		m = { "<cmd> lua require('telescope.builtin').marks()<CR>", "marks"},
-		r = { "<cmd> lua require('telescope.builtin').registers()<CR>", "registers"},
 		j = { "<cmd> lua require('telescope.builtin').jumplist()<CR>", "jumplist"},
+		q = { "<cmd> lua require('telescope.builtin').quickfix({show_line = false, trim_text = true, fname_width = 80}) <CR>", "quickfix"},
+		Q = { "<cmd> lua require('telescope.builtin').quickfixhistory({show_line = true, trim_text = false}) <CR>", "quickfix history"},
+		m = { "<cmd> CocCommand fzf-preview.Marks <CR>", "marks (CWD)"},
+		r = { "<cmd> lua require('telescope.builtin').registers() print[[Ctrl+e to edit contents]] <CR>", "registers"},
 		S = {
 			name = "Specific",
 			c = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.c'})<CR>", "c"},
@@ -147,6 +152,7 @@ wk.register({
 		},
 		c = {
 			name = "Cscope",
+			a = { "<cmd> cs find a <cword><CR>", "(symbols) - assignment to this symbol"},
 			s = { "<cmd> cs find s <cword><CR>", "(symbols) - all refrences"},
 			g = { "<cmd> cs find g <cword><CR>", "(globals) - global definition(s)"},
 			c = { "<cmd> cs find c <cword><CR>", "(calls) - all calls to the function name"},
@@ -157,8 +163,6 @@ wk.register({
 			i = { "<cmd> cs find i <cfile><CR>", "(includes) - find files that include the filename"},
 		},
 	},
-	e = { "<cmd> NvimTreeToggle <CR>", "file bar" },
-	E = { "<cmd> NvimTreeFindFile <CR>", "file location" },
 	g = {
 		name = "git",
 		t = { "<cmd>lua _LAZYGIT_TOGGLE()<CR>", "lazygit" },
@@ -185,7 +189,6 @@ wk.register({
 			D = "diff previous",
 		},
 	},
-	T = { "<cmd> AerialToggle! <CR>", "tag bar" },
 	t = {
 		name = "Toggle",
 		f = { "<cmd> ToggleTerm direction=float <CR>", "terminal" },
@@ -216,6 +219,7 @@ wk.register({
 	},
 	b = {
 		name = "Buffer",
+		b = { "<cmd> lua require('telescope.builtin').buffers() <CR>", "buffers"},
 		g = { ":BufferLineGoToBuffer ", "goto" },
 		p = { "<cmd> BufferLineTogglePin<CR>", "pin" },
 		t = { "<cmd> BufferLinePick<CR>", "pick" },
@@ -236,22 +240,17 @@ wk.register({
 	},
 	v = {
 		name = "view",
-		s = { "<cmd> lua require('telescope.builtin').spell_suggest()<CR>", "spell suggest"},
-		r = { "<cmd> lua require('telescope.builtin').registers()<CR>", "registers"},
-		k = { "<cmd> lua require('telescope.builtin').keymaps()<CR>", "keymaps"},
-		h = { "<cmd> lua require('telescope.builtin').highlights()<CR>", "highlights"},
-		a = { "<cmd> lua require('telescope.builtin').autocommands()<CR>", "autocommands"},
-		q = { "<cmd> lua require('telescope.builtin').quickfix()<CR>", "quickfix"},
-		Q = { "<cmd> lua require('telescope.builtin').quickfixhistory()<CR>", "quickfix history"},
-		c = { "<cmd> lua require('telescope.builtin').command_history()<CR>", "command history"},
-		C = { "<cmd> lua require('telescope.builtin').commands()<CR>", "command"},
-		m = { "<cmd> lua require('telescope.builtin').man_pages()<CR>", "man pages"},
-		b = { "<cmd> lua require('telescope.builtin').buffers()<CR>", "buffers"},
-		f = { "<cmd> lua require('telescope.builtin').filetypes()<CR>", "setup filetype"},
-		t = { "<cmd> lua require('telescope.builtin').tags()<CR>", "ctags"},
-		j = { "<cmd> lua require('telescope.builtin').jumplist()<CR>", "jumplist"},
-		n = { "<cmd> lua require('telescope').extensions.notify.notify()<CR>", "notify history"},
-		['.'] = { "<cmd> lua _NOTIFY_SAMPLE()<CR>", "notify ami EC"},
+		s = { "<cmd> lua require('telescope.builtin').spell_suggest() <CR>", "spell suggest"},
+		k = { "<cmd> lua require('telescope.builtin').keymaps() <CR>", "keymaps"},
+		h = { "<cmd> lua require('telescope.builtin').highlights() <CR>", "highlights"},
+		a = { "<cmd> lua require('telescope.builtin').autocommands() <CR>", "autocommands"},
+		c = { "<cmd> lua require('telescope.builtin').command_history() <CR>", "command history"},
+		C = { "<cmd> lua require('telescope.builtin').commands() <CR>", "command"},
+		m = { "<cmd> lua require('telescope.builtin').marks() <CR>", "marks"},
+		f = { "<cmd> lua require('telescope.builtin').filetypes() <CR>", "setup filetype"},
+		t = { "<cmd> lua require('telescope.builtin').tags() <CR>", "ctags"},
+		n = { "<cmd> lua require('telescope').extensions.notify.notify() <CR>", "notify history"},
+		['.'] = { "<cmd> lua _NOTIFY_SAMPLE() <CR>", "notify ami EC"},
 	},
 	["<leader>"] = {
 		name = "EasyMotion",
@@ -278,32 +277,116 @@ wk.register({
 		},
 		c = {
 			name = "code",
-			a = "action",
+				a = "action",
 		},
 		f = "formatting",
 	},
 }, { prefix = "<leader>" })
 
-wk.register({
-	d = "lsp next diagnostic",
-	D = "lsp previous diagnostic",
-}, { prefix = "]" })
+if vim.g.nvim_lsp_support == 1 then
 
-wk.register({
-	r = "lsp reference",
-	D = "lsp decalaration",
-	d = "lsp definition",
-	p = {
-		name = "LSP Preview",
-			r = "lsp reference",
-			d = "lsp definition",
-			-- D = "lsp decalaration",
-			t = "lsp type definition",
-			i = "lsp implementation",
-	},
-	P = "close lsp preview",
-}, { prefix = "g" })
+	wk.register({
+		l = {
+			name = "Lsp",
+			e = "diagnostic open float",
+			q = "diagnostic setloclist",
+			w = {
+				name = "workspace folder",
+				a = "add",
+				r = "remove",
+				l = "list",
+			},
+			D = "type defination",
+			r = {
+				name = "Rename",
+				n = "buffer",
+			},
+			c = {
+				name = "code",
+					a = "action",
+			},
+			f = "formatting",
+		},
+	}, { prefix = "<leader>" })
 
+	wk.register({
+		d = "lsp next diagnostic",
+		D = "lsp previous diagnostic",
+	}, { prefix = "]" })
+
+	wk.register({
+		r = "lsp reference",
+		D = "lsp decalaration",
+		d = "lsp definition",
+		p = {
+			name = "LSP Preview",
+				r = "lsp reference",
+				d = "lsp definition",
+				-- D = "lsp decalaration",
+				t = "lsp type definition",
+				i = "lsp implementation",
+		},
+		P = "close lsp preview",
+	}, { prefix = "g" })
+
+else -- if vim.g.nvim_lsp_support == 1 then
+
+	wk.register({
+		d = "lsp definition",
+		r = "lsp reference",
+		i = "lsp implementation",
+		t = "lsp type-definition",
+		p = {
+			name = "lsp preview",
+			d = { "<CMD> CocCommand fzf-preview.CocDefinition <CR>", "definition"},
+			r = { "<CMD> CocCommand fzf-preview.CocReferences <CR>", "refrences"},
+			i = { "<CMD> CocCommand fzf-preview.CocImplementations <CR>", "implementation"},
+			t = { "<CMD> CocCommand fzf-preview.CocTypeDefinition <CR>", "type-definition"},
+			D = {
+				name = "diagnostics",
+				D = { "<CMD> CocCommand fzf-preview.CocDiagnostics <CR>", "diagnostics"},
+				d = { "<CMD> CocCommand fzf-preview.CocCurrentDiagnostics <CR>", "current diagnostics"},
+			},
+			o = { "<CMD> CocCommand fzf-preview.CocOutline <CR>", "outline"},
+		},
+	}, { prefix = "g" })
+
+	wk.register({
+		l = {
+			c = {
+				name = "Coc",
+				a = {
+					name = "Action",
+					a = "applying code-action (selected region)",
+					c = "applying code-action (current buffer)",
+					f = "applying code-action (current line)",
+					l = "run code lens action (current line)",
+					n = "symbol renaming",
+					s = "formatting selected code",
+				},
+				l = {
+					name = "Lists",
+					a = "all diagnostics",
+					e = "manage external",
+					c = "show commands",
+					o = "find symbol of current document",
+					s = "search workspace symbols",
+					j = "do definition action for next item",
+					k = "do default action for previous item",
+					p = "resume latest coc list",
+				},
+			},
+		},
+	}, { prefix = "<leader>" })
+
+	wk.register({
+		g = "previous coc diagnostic",
+	}, { prefix = "[" })
+
+	wk.register({
+		g = "next coc diagnostic",
+	}, { prefix = "]" })
+end
 
  require("which-key").setup {
 	plugins = {
@@ -357,7 +440,7 @@ wk.register({
 		spacing = 10, -- spacing between columns
 		align = "center", -- align columns left, center or right
 	},
-	ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
+	ignore_missing = true, -- enable this to hide mappings for which you didn't specify a label
 	hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ "}, -- hide mapping boilerplate
 	show_help = true, -- show help message on the command line when the popup is visible
 	triggers = "auto", -- automatically setup triggers
@@ -368,5 +451,7 @@ wk.register({
 		-- most people should not need to change this
 		i = { "j", "k" },
 		v = { "j", "k" },
+		-- customize
+		l = { "k", "j" },
 	},
 }
