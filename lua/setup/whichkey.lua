@@ -127,6 +127,9 @@ end
 local wk = require("which-key")
 
 wk.register({
+	e = { "<cmd> NvimTreeToggle <CR>", "file bar" },
+	E = { "<cmd> NvimTreeFindFile <CR>", "file location" },
+	T = { "<cmd> TagbarToggle <CR>", "tag bar" },
 	f = {
 		name = "Find", -- optional group name
 		g = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.*'})<CR>", "live grep"},
@@ -135,9 +138,11 @@ wk.register({
 		f = { "<cmd> lua require('telescope.builtin').find_files()<CR>", "files"},
 		h = { "<cmd> lua require('telescope.builtin').oldfiles()<CR>", "recently opened"},
 		H = { "<cmd> lua require('telescope.builtin').search_history()<CR>", "search histroy"},
-		m = { "<cmd> lua require('telescope.builtin').marks()<CR>", "marks"},
-		r = { "<cmd> lua require('telescope.builtin').registers()<CR>", "registers"},
 		j = { "<cmd> lua require('telescope.builtin').jumplist()<CR>", "jumplist"},
+		q = { "<cmd> lua require('telescope.builtin').quickfix({show_line = false, trim_text = true, fname_width = 80}) <CR>", "quickfix"},
+		Q = { "<cmd> lua require('telescope.builtin').quickfixhistory({show_line = true, trim_text = false}) <CR>", "quickfix history"},
+		m = { "<cmd> CocCommand fzf-preview.Marks <CR>", "marks (CWD)"},
+		r = { "<cmd> lua require('telescope.builtin').registers() print[[Ctrl+e to edit contents]] <CR>", "registers"},
 		S = {
 			name = "Specific",
 			c = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.c'})<CR>", "c"},
@@ -157,8 +162,6 @@ wk.register({
 			i = { "<cmd> cs find i <cfile><CR>", "(includes) - find files that include the filename"},
 		},
 	},
-	e = { "<cmd> NvimTreeToggle <CR>", "file bar" },
-	E = { "<cmd> NvimTreeFindFile <CR>", "file location" },
 	g = {
 		name = "git",
 		t = { "<cmd>lua _LAZYGIT_TOGGLE()<CR>", "lazygit" },
@@ -185,7 +188,6 @@ wk.register({
 			D = "diff previous",
 		},
 	},
-	T = { "<cmd> AerialToggle! <CR>", "tag bar" },
 	t = {
 		name = "Toggle",
 		f = { "<cmd> ToggleTerm direction=float <CR>", "terminal" },
@@ -216,6 +218,7 @@ wk.register({
 	},
 	b = {
 		name = "Buffer",
+		b = { "<cmd> lua require('telescope.builtin').buffers() <CR>", "buffers"},
 		g = { ":BufferLineGoToBuffer ", "goto" },
 		p = { "<cmd> BufferLineTogglePin<CR>", "pin" },
 		t = { "<cmd> BufferLinePick<CR>", "pick" },
@@ -236,22 +239,17 @@ wk.register({
 	},
 	v = {
 		name = "view",
-		s = { "<cmd> lua require('telescope.builtin').spell_suggest()<CR>", "spell suggest"},
-		r = { "<cmd> lua require('telescope.builtin').registers()<CR>", "registers"},
-		k = { "<cmd> lua require('telescope.builtin').keymaps()<CR>", "keymaps"},
-		h = { "<cmd> lua require('telescope.builtin').highlights()<CR>", "highlights"},
-		a = { "<cmd> lua require('telescope.builtin').autocommands()<CR>", "autocommands"},
-		q = { "<cmd> lua require('telescope.builtin').quickfix()<CR>", "quickfix"},
-		Q = { "<cmd> lua require('telescope.builtin').quickfixhistory()<CR>", "quickfix history"},
-		c = { "<cmd> lua require('telescope.builtin').command_history()<CR>", "command history"},
-		C = { "<cmd> lua require('telescope.builtin').commands()<CR>", "command"},
-		m = { "<cmd> lua require('telescope.builtin').man_pages()<CR>", "man pages"},
-		b = { "<cmd> lua require('telescope.builtin').buffers()<CR>", "buffers"},
-		f = { "<cmd> lua require('telescope.builtin').filetypes()<CR>", "setup filetype"},
-		t = { "<cmd> lua require('telescope.builtin').tags()<CR>", "ctags"},
-		j = { "<cmd> lua require('telescope.builtin').jumplist()<CR>", "jumplist"},
-		n = { "<cmd> lua require('telescope').extensions.notify.notify()<CR>", "notify history"},
-		['.'] = { "<cmd> lua _NOTIFY_SAMPLE()<CR>", "notify ami EC"},
+		s = { "<cmd> lua require('telescope.builtin').spell_suggest() <CR>", "spell suggest"},
+		k = { "<cmd> lua require('telescope.builtin').keymaps() <CR>", "keymaps"},
+		h = { "<cmd> lua require('telescope.builtin').highlights() <CR>", "highlights"},
+		a = { "<cmd> lua require('telescope.builtin').autocommands() <CR>", "autocommands"},
+		c = { "<cmd> lua require('telescope.builtin').command_history() <CR>", "command history"},
+		C = { "<cmd> lua require('telescope.builtin').commands() <CR>", "command"},
+		m = { "<cmd> lua require('telescope.builtin').marks() <CR>", "marks"},
+		f = { "<cmd> lua require('telescope.builtin').filetypes() <CR>", "setup filetype"},
+		t = { "<cmd> lua require('telescope.builtin').tags() <CR>", "ctags"},
+		n = { "<cmd> lua require('telescope').extensions.notify.notify() <CR>", "notify history"},
+		['.'] = { "<cmd> lua _NOTIFY_SAMPLE() <CR>", "notify ami EC"},
 	},
 	["<leader>"] = {
 		name = "EasyMotion",
@@ -452,6 +450,7 @@ end
 		-- most people should not need to change this
 		i = { "j", "k" },
 		v = { "j", "k" },
-		l = { "j", "k" },
+		-- customize
+		l = { "k", "j" },
 	},
 }
