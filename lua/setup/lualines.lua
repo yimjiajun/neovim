@@ -88,7 +88,7 @@ local config = {
     -- component_separators = { left = '', right = ''},
     -- section_separators = { left = '', right = ''},
     disabled_filetypes = {
-      statusline = {'NvimTree', 'packer', 'alpha'},
+      statusline = {'NvimTree', 'packer', 'alpha', 'plugin', 'aerial', 'tagbar' },
       winbar = {},
     },
     theme = {
