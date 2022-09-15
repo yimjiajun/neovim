@@ -141,8 +141,8 @@ wk.register({
 		j = { "<cmd> lua require('telescope.builtin').jumplist()<CR>", "jumplist"},
 		q = { "<cmd> lua require('telescope.builtin').quickfix({show_line = false, trim_text = true, fname_width = 80}) <CR>", "quickfix"},
 		Q = { "<cmd> lua require('telescope.builtin').quickfixhistory({show_line = true, trim_text = false}) <CR>", "quickfix history"},
-		m = { "<cmd> CocCommand fzf-preview.Marks <CR>", "marks (CWD)"},
 		r = { "<cmd> lua require('telescope.builtin').registers() print[[Ctrl+e to edit contents]] <CR>", "registers"},
+		m = { "<cmd> lua require('telescope.builtin').marks() <CR>", "marks"},
 		S = {
 			name = "Specific",
 			c = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.c'})<CR>", "c"},
@@ -246,7 +246,6 @@ wk.register({
 		a = { "<cmd> lua require('telescope.builtin').autocommands() <CR>", "autocommands"},
 		c = { "<cmd> lua require('telescope.builtin').command_history() <CR>", "command history"},
 		C = { "<cmd> lua require('telescope.builtin').commands() <CR>", "command"},
-		m = { "<cmd> lua require('telescope.builtin').marks() <CR>", "marks"},
 		f = { "<cmd> lua require('telescope.builtin').filetypes() <CR>", "setup filetype"},
 		t = { "<cmd> lua require('telescope.builtin').tags() <CR>", "ctags"},
 		n = { "<cmd> lua require('telescope').extensions.notify.notify() <CR>", "notify history"},
@@ -259,27 +258,6 @@ wk.register({
 		l = { "<cmd> lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", "line"},
 		F = { "<cmd> lua require'hop'.hint_patterns()<cr>", "patterns (all)"},
 		f = { "<cmd> lua require'hop'.hint_patterns({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", "patterns"},
-	},
-	l = {
-		name = "Lsp",
-		e = "diagnostic open float",
-		q = "diagnostic setloclist",
-		w = {
-			name = "workspace folder",
-			a = "add",
-			r = "remove",
-			l = "list",
-		},
-		D = "type defination",
-		r = {
-			name = "Rename",
-			n = "buffer",
-		},
-		c = {
-			name = "code",
-				a = "action",
-		},
-		f = "formatting",
 	},
 }, { prefix = "<leader>" })
 
@@ -296,15 +274,8 @@ if vim.g.nvim_lsp_support == 1 then
 				r = "remove",
 				l = "list",
 			},
-			D = "type defination",
-			r = {
-				name = "Rename",
-				n = "buffer",
-			},
-			c = {
-				name = "code",
-					a = "action",
-			},
+			r = "rename buffer",
+			c = "code action",
 			f = "formatting",
 		},
 	}, { prefix = "<leader>" })
@@ -318,11 +289,11 @@ if vim.g.nvim_lsp_support == 1 then
 		r = "lsp reference",
 		D = "lsp decalaration",
 		d = "lsp definition",
+		i = "lsp implementation",
 		p = {
 			name = "LSP Preview",
 				r = "lsp reference",
 				d = "lsp definition",
-				-- D = "lsp decalaration",
 				t = "lsp type definition",
 				i = "lsp implementation",
 		},
