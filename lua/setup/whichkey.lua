@@ -152,6 +152,7 @@ wk.register({
 		},
 		c = {
 			name = "Cscope",
+			a = { "<cmd> cs find a <cword><CR>", "(symbols) - assignment to this symbol"},
 			s = { "<cmd> cs find s <cword><CR>", "(symbols) - all refrences"},
 			g = { "<cmd> cs find g <cword><CR>", "(globals) - global definition(s)"},
 			c = { "<cmd> cs find c <cword><CR>", "(calls) - all calls to the function name"},
