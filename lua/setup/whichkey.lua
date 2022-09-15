@@ -357,7 +357,7 @@ wk.register({
 		spacing = 10, -- spacing between columns
 		align = "center", -- align columns left, center or right
 	},
-	ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
+	ignore_missing = true, -- enable this to hide mappings for which you didn't specify a label
 	hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ "}, -- hide mapping boilerplate
 	show_help = true, -- show help message on the command line when the popup is visible
 	triggers = "auto", -- automatically setup triggers
@@ -368,5 +368,6 @@ wk.register({
 		-- most people should not need to change this
 		i = { "j", "k" },
 		v = { "j", "k" },
+		l = { "j", "k" },
 	},
 }
