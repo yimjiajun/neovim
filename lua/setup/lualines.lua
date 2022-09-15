@@ -137,7 +137,7 @@ ins_left {
     -- auto change color according to neovims mode
     return { fg = fg1_colors[vim.fn.mode()] }
   end,
-  padding = { left = 0, right = 1 }, -- We don't need space before this
+  padding = { left = 0, right = 0 }, -- We don't need space before this
 }
 
 ins_left {
@@ -249,7 +249,7 @@ ins_right {
     -- auto change color according to neovims mode
     return { fg = fg1_colors[vim.fn.mode()] }
   end,
-  padding = { left = 1 },
+  padding = { left = 0 },
 }
 
 -- Now don't forget to initialize lualine
