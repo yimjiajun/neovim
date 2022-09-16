@@ -2,6 +2,7 @@
 -- window
 vim.api.nvim_set_keymap('n', '<S-h>', '<C-w>h', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<S-l>', '<C-w>l', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<CR>', '<cmd> set hlsearch! <CR>', { noremap = true, silent = true})
 -- buffer
 vim.api.nvim_set_keymap('n', '<S-Tab>', '<cmd>BufferLineCyclePrev<CR>', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<Tab>', '<cmd>BufferLineCycleNext<CR>', { noremap = true, silent = true})

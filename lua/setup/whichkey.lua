@@ -191,23 +191,22 @@ wk.register({
 	},
 	t = {
 		name = "Toggle",
-		f = { "<cmd> ToggleTerm direction=float <CR>", "terminal" },
-		t = { "<cmd> ToggleTerm direction=tab <CR>", "terminal(t)" },
-		v = { "<cmd> ToggleTerm direction=vertical size=50<CR>", "terminal(v)" },
-		h = { "<cmd> ToggleTerm direction=horizontal <CR>", "terminal(h)" },
-		s = { "<cmd> set hlsearch!<CR>", "highlight" },
-		N = { "<cmd> set nu!<CR>", "number line" },
-		n = { "<cmd> set rnu!<CR>", "relative number" },
-		S = { "<cmd> lua _HTOP_TOGGLE()<CR>", "system view" },
-		D = { "<cmd> lua _NCDU_TOGGLE()<CR>", "disk view" },
-		i = { "<cmd> IndentBlanklineToggle<CR>", "indent" },
+		f = { "<cmd> ToggleTerm direction=float <CR>", " float" },
+		t = { "<cmd> ToggleTerm direction=tab <CR>", " tab" },
+		v = { "<cmd> ToggleTerm direction=vertical size=50<CR>", " vertical" },
+		h = { "<cmd> ToggleTerm direction=horizontal <CR>", " horizontal" },
+		N = { "<cmd> set nu!<CR>", " number line" },
+		n = { "<cmd> set rnu!<CR>", " relative number" },
+		S = { "<cmd> lua _HTOP_TOGGLE()<CR>", " system view" },
+		D = { "<cmd> lua _NCDU_TOGGLE()<CR>", " disk view" },
+		i = { "<cmd> IndentBlanklineToggle<CR>", " indent" },
 		C = {
 			name = "Create",
-			t = { "<cmd> !ctags -R . <CR>", "cTags" },
-			c = { "<cmd> !cscope -bqRv <CR>", "cscope" },
+			t = { "<cmd> !ctags -R . <CR>", "  cTags" },
+			c = { "<cmd> !cscope -bqRv <CR>", "識  cscope" },
 		},
-		q = { "<cmd> cclose <CR>", "quickfix (close)" },
-		Q = { "<cmd> copen <CR>", "quickfix (open)" },
+		q = { "<cmd> cclose <CR>", " quickfix (close)" },
+		Q = { "<cmd> copen <CR>", " quickfix (open)" },
 	},
 	s = {
 		name = "Session",
@@ -392,7 +391,7 @@ end
 	icons = {
 		breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
 		separator = "|", -- symbol used between a key and it's label
-		group = "+", -- symbol prepended to a group
+		group = " ", -- symbol prepended to a group
 	},
 	popup_mappings = {
 		scroll_down = '<c-d>', -- binding to scroll down inside the popup
@@ -406,8 +405,8 @@ end
 		winblend = 10
 	},
 	layout = {
-		height = { min = 4, max = 25 }, -- min and max height of the columns
-		width = { min = 10, max = 50 }, -- min and max width of the columns
+		height = { min = 4, max = 20 }, -- min and max height of the columns
+		width = { min = 10, max = 40 }, -- min and max width of the columns
 		spacing = 10, -- spacing between columns
 		align = "center", -- align columns left, center or right
 	},
