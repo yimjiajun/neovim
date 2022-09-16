@@ -143,7 +143,7 @@ ins_left {
 ins_left {
   'filename',
   cond = conditions.buffer_not_empty,
-  color = { fg = colors.magenta, gui = 'bold' },
+  color = { fg = colors.cyan, gui = 'bold' },
 }
 
 -- ins_left {
@@ -156,7 +156,7 @@ ins_left {
 ins_left {
   'branch',
   icon = '',
-  color = { fg = colors.violet, gui = 'bold' },
+  color = { fg = colors.cyan, gui = 'bold' },
 }
 
 ins_left {
@@ -164,23 +164,23 @@ ins_left {
   -- Is it me or the symbol for modified us really weird
   symbols = { added = ' ', modified = '柳 ', removed = ' ' },
   diff_color = {
-    added = { fg = colors.green },
-    modified = { fg = colors.orange },
-    removed = { fg = colors.red },
+    added = { fg = colors.cyan },
+    modified = { fg = colors.cyan },
+    removed = { fg = colors.cyan },
   },
   cond = conditions.hide_in_width,
 }
 
-ins_right {
-  'diagnostics',
-  sources = { 'nvim_diagnostic' },
-  symbols = { error = ' ', warn = ' ', info = ' ' },
-  diagnostics_color = {
-    color_error = { fg = colors.red },
-    color_warn = { fg = colors.yellow },
-    color_info = { fg = colors.cyan },
-  },
-}
+-- ins_right {
+--   'diagnostics',
+--   sources = { 'nvim_diagnostic' },
+--   symbols = { error = ' ', warn = ' ', info = ' ' },
+--   diagnostics_color = {
+--     color_error = { fg = colors.cyan },
+--     color_warn = { fg = colors.cyan },
+--     color_info = { fg = colors.cyan },
+--   },
+-- }
 -- Insert mid section. You can make any number of sections in neovim :)
 -- for lualine it's any number greater then 2
 ins_left {
@@ -227,19 +227,19 @@ ins_right {
   'fileformat',
   fmt = string.upper,
   icons_enabled = true, -- I think icons are cool but Eviline doesn't have them. sigh
-  color = { fg = colors.green, gui = 'bold' },
+  color = { fg = colors.cyan, gui = 'bold' },
 }
 
 ins_right {
   'o:encoding', -- option component same as &encoding in viml
   fmt = string.upper, -- I'm not sure why it's upper case either ;)
   cond = conditions.hide_in_width,
-  color = { fg = colors.green, gui = 'bold' },
+  color = { fg = colors.cyan, gui = 'bold' },
 }
 
-ins_right { 'location' }
+ins_right { 'location', color = { fg = colors.cyan } }
 
-ins_right { 'progress', color = { fg = colors.fg, gui = 'bold' } }
+ins_right { 'progress', color = { fg = colors.cyan, gui = 'bold' } }
 
 ins_right {
   function()
