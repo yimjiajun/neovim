@@ -126,42 +126,63 @@ end
 
 local wk = require("which-key")
 
+function ignore_type(type)
+	return {"**/*", type}
+end
+
+function kconfig_type(type)
+	return {"**/Kconfig", "*.conf", type}
+end
+
+function c_type(type)
+	return {"*.c", "*.h", type}
+end
+
 wk.register({
-	e = { "<cmd> NvimTreeToggle <CR>", "file bar" },
-	E = { "<cmd> NvimTreeFindFile <CR>", "file location" },
-	T = { "<cmd> TagbarToggle <CR>", "tag bar" },
-	f = {
-		name = "Find", -- optional group name
-		g = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.*'})<CR>", "live grep"},
-		s = { "<cmd> lua require('telescope.builtin').grep_string()<CR>", "string"},
+	e = { "<cmd> NvimTreeToggle <CR>", " explore" },
+	E = { "<cmd> NvimTreeFindFile <CR>", " explore file location" },
+	T = { "<cmd> TagbarToggle <CR>", " tag bar" },
+	f = { name = "Find", -- optional group name
+		a = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='search all', glob_pattern=ignore_type([[!.*]])}) <CR>", "live grep"},
+		A = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='search all (+ hidden)', glob_pattern=[[**/*]]})<CR>", "live grep (+ hidden)"},
+		w = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='search word', default_text=vim.fn.expand('<cword>'), glob_pattern=ignore_type([[!.*]])})<CR>", "search word"},
+		W = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='search word (+ hidden)', default_text=vim.fn.expand('<cword>'), glob_pattern=[[**/*]]})<CR>", "search word (+ hidden)"},
+		c = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='.c', default_text=vim.fn.expand('<cword>'), glob_pattern=[[**/*.c]]})<CR>", "c source"},
+		C = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='.c + .h', default_text=vim.fn.expand('<cword>'), glob_pattern=c_type()})<CR>", "c source + header"},
+		k = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='kconfig + .conf', default_text=vim.fn.expand('<cword>'), glob_pattern=kconfig_type()})<CR>", "kconfig and .conf"},
+		d = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='dts + dtsi', glob_pattern=[[**/*.dts*]], default_text=vim.fn.expand('<cword>')})<CR>", "device tree structure"},
+		h = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='header', glob_pattern=[[*.h]], default_text=vim.fn.expand('<cword>')})<CR>", "header"},
+		b = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='build/', glob_pattern=[[**/build/*]], default_text=vim.fn.expand('<cword>')})<CR>", "build folder"},
+		['?'] = { ": lua require('telescope.builtin').live_grep({prompt_title='customize search', glob_pattern=[[$PARAM_1]], cwd=[[$PARAM_2]]})", "customize search"},
+		i = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='search word', default_text=vim.fn.expand('<cword>')})<CR>", "live grep"},
 		F = { "<cmd> lua require('telescope.builtin').find_files({hiddne=true}, {no_ignore=true})<CR>", "FILES"},
 		f = { "<cmd> lua require('telescope.builtin').find_files()<CR>", "files"},
-		h = { "<cmd> lua require('telescope.builtin').oldfiles()<CR>", "recently opened"},
-		H = { "<cmd> lua require('telescope.builtin').search_history()<CR>", "search histroy"},
+		o = { "<cmd> lua require('telescope.builtin').oldfiles()<CR>", "recently opened"},
+		S = { "<cmd> lua require('telescope.builtin').search_history()<CR>", "search histroy"},
 		j = { "<cmd> lua require('telescope.builtin').jumplist()<CR>", "jumplist"},
 		q = { "<cmd> lua require('telescope.builtin').quickfix({show_line = false, trim_text = true, fname_width = 80}) <CR>", "quickfix"},
 		Q = { "<cmd> lua require('telescope.builtin').quickfixhistory({show_line = true, trim_text = false}) <CR>", "quickfix history"},
 		r = { "<cmd> lua require('telescope.builtin').registers() print[[Ctrl+e to edit contents]] <CR>", "registers"},
 		m = { "<cmd> lua require('telescope.builtin').marks() <CR>", "marks"},
-		S = {
-			name = "Specific",
-			c = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.c'})<CR>", "c"},
-			h = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.h'})<CR>", "header"},
-			d = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.dts'})<CR>", "dts"},
-			D = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.dtsi'})<CR>", "dtsi"},
+		s = {	name = "Specific",
+			c = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='.c', glob_pattern=[[**/*.c]]})<CR>", "c source"},
+			C = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='.c + .h', glob_pattern=c_type()})<CR>", "c source + header"},
+			k = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='kconfig + .conf', glob_pattern=kconfig_type()})<CR>", "kconfig and .conf"},
+			d = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='dts + dtsi', glob_pattern=[[**/*.dts*]]})<CR>", "device tree structure"},
+			h = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='header', glob_pattern=[[*.h]]})<CR>", "header"},
+			b = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='build/', glob_pattern=[[**/build/*]]})<CR>", "build folder"},
 		},
-		c = {
-			name = "Cscope",
-			a = { "<cmd> cs find a <cword><CR>", "(symbols) - assignment to this symbol"},
-			s = { "<cmd> cs find s <cword><CR>", "(symbols) - all refrences"},
-			g = { "<cmd> cs find g <cword><CR>", "(globals) - global definition(s)"},
-			c = { "<cmd> cs find c <cword><CR>", "(calls) - all calls to the function name"},
-			t = { "<cmd> cs find t <cword><CR>", "(text) - all instances of the text"},
-			d = { "<cmd> cs find d <cword><CR>", "(called) - find functions that function"},
-			e = { "<cmd> cs find e <cword><CR>", "(egrep) - search for the word"},
-			f = { "<cmd> cs find f <cfile><CR>", "(files) - open the filename"},
-			i = { "<cmd> cs find i <cfile><CR>", "(includes) - find files that include the filename"},
-		},
+	},
+	c = { name = "cscope",
+		a = { "<cmd> cs find a <cword><CR>", "(symbols) - assignment to this symbol"},
+		s = { "<cmd> cs find s <cword><CR>", "(symbols) - all refrences"},
+		g = { "<cmd> cs find g <cword><CR>", "(globals) - global definition(s)"},
+		c = { "<cmd> cs find c <cword><CR>", "(calls) - all calls to the function name"},
+		t = { "<cmd> cs find t <cword><CR>", "(text) - all instances of the text"},
+		d = { "<cmd> cs find d <cword><CR>", "(called) - find functions that function"},
+		e = { "<cmd> cs find e <cword><CR>", "(egrep) - search for the word"},
+		f = { "<cmd> cs find f <cfile><CR>", "(files) - open the filename"},
+		i = { "<cmd> cs find i <cfile><CR>", "(includes) - find files that include the filename"},
 	},
 	g = {
 		name = "git",
