@@ -1,5 +1,6 @@
 vim.g.nvim_lsp_support = 1
 vim.g.nvim_lualine_simple = 1
+vim.g.nvim_buffer_display = 0
 
 for _, source in ipairs {
 	"config.plugins",

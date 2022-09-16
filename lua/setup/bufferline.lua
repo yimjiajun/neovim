@@ -1,3 +1,7 @@
+if vim.g.nvim_buffer_display == 0 then
+	return
+end
+
 require('bufferline').setup {
 	options = {
 		mode = "buffers", -- set to "tabs" to only show tabpages instead
