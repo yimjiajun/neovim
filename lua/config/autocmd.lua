@@ -90,3 +90,5 @@ if (vim.fn.has('cscope')) then
 		vim.cmd('cs add cscope.out')
 	end
 end
+
+vim.cmd[[source $HOME/.config/nvim/lua/config/autocmd.vim]]
