@@ -39,6 +39,11 @@ require('nvim-tundra').setup({
 		diffRemoved = { fg = '#d70000', italic = true },
 		Normal = { bg = '#000000' },
 		NormalNC = { bg = '#000000' },
+		Visual = { bg = '#1f2937', fg = '#f9fafb'},
+		-- TelescopePreviewBorder = { fg = '#f9fafb' },
+		TelescopePromptBorder = { fg = '#f9fafb' },
+		TelescopeResultsBorder = { fg = '#f9fafb' },
+		TelescopeResultsTitle = { bg = '#b5e8b0' },
 	},
   },
 })
