@@ -235,6 +235,12 @@ wk.register({
 	},
 }, { mode = 'v', prefix = "<leader>" })
 
+wk.register({
+	t = "tab next",
+	T = "tab previous",
+	x = "open url link",
+}, { mode = 'n', prefix = "g" })
+
 if vim.g.custom.lsp_support == 1 then
 
 	wk.register({
@@ -263,6 +269,7 @@ if vim.g.custom.lsp_support == 1 then
 		D = "lsp decalaration",
 		d = "lsp definition",
 		i = "lsp implementation",
+		I = "lsp type-definition",
 		p = { name = "LSP Preview",
 			r = "lsp reference",
 			d = "lsp definition",
