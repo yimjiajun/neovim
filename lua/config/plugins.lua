@@ -33,12 +33,24 @@ return require('packer').startup(function()
 				-- 	run = "./install.sh",
 				-- 	module = "cmp_tabnine",
 				-- },
-				{ "honza/vim-snippets", opt = true },
+
 			},
 			event = "VimEnter",
 			config = function()
 				require ("setup.cmp")
 			end,
+		}
+
+		use { 'hrsh7th/cmp-vsnip',
+			after = { 'nvim-cmp' },
+			requires = {
+				{ 'hrsh7th/vim-vsnip' },
+				{ 'hrsh7th/vim-vsnip-integ' },
+			},
+			config = function()
+				require ('setup.snippets')
+			end,
+			event = "InsertEnter",
 		}
 
 		use 'haorenW1025/completion-nvim'
