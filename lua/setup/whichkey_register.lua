@@ -102,7 +102,7 @@ wk.register({
 		b = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='build/', glob_pattern=[[**/build/*]], default_text=vim.fn.expand('<cword>')})<CR>", "build folder"},
 		['?'] = { ": lua require('telescope.builtin').live_grep({prompt_title='customize search', glob_pattern=[[$PARAM_1]], cwd=[[$PARAM_2]]})", "customize search"},
 		i = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='search word', default_text=vim.fn.expand('<cword>')})<CR>", "live grep"},
-		F = { "<cmd> lua require('telescope.builtin').find_files({hiddne=true}, {no_ignore=true})<CR>", "FILES"},
+		F = { "<cmd> lua require('telescope.builtin').find_files({hidden=true, no_ignore=true})<CR>", "* files"},
 		f = { "<cmd> lua require('telescope.builtin').find_files()<CR>", "files"},
 		o = { "<cmd> lua require('telescope.builtin').oldfiles()<CR>", "recently opened"},
 		S = { "<cmd> lua require('telescope.builtin').search_history()<CR>", "search histroy"},
