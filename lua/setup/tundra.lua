@@ -37,6 +37,8 @@ require('nvim-tundra').setup({
     colors = {},
     highlights = {
 		diffRemoved = { fg = '#d70000', italic = true },
+		DiffText = { bg = '#ffffaf', fg = '#000000', bold = true },
+		DiffDelete = { fg = '#008000', italic = true },
 		Normal = { bg = '#000000' },
 		NormalNC = { bg = '#000000' },
 		Visual = { bg = '#1f2937', fg = '#f9fafb'},

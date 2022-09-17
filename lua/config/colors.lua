@@ -73,6 +73,27 @@ vim.g.color_default = {
 	diff_remove= '#5f0000',
 	diff_text = '#000000',
 }
+
+vim.api.nvim_create_augroup("highlight_colors", { clear = true })
+	vim.api.nvim_create_autocmd( "VimEnter", {
+		desc = "spelling check",
+		group = "highlight_colors",
+		pattern = "*",
+		callback = function()
+			vim.cmd[[highlight SpellBad guifg=fg guibg=bg]]
+			vim.cmd[[highlight SpellCap guifg=fg guibg=bg]]
+		end,
+	})
+
+	vim.api.nvim_create_autocmd( "VimEnter", {
+		desc = "Git Signs",
+		group = "highlight_colors",
+		pattern = "*",
+		callback = function()
+			vim.cmd[[highlight GitSignsCurrentLineBlame guifg='#f9fafb' guibg='#5f0000']]
+		end,
+	})
+
 -- return as molokai when another lua calle
 local M = vim.g.color_default
 return M
