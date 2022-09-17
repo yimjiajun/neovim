@@ -198,7 +198,7 @@ else -- if vim.g.custom.lualine_simple == 0 then
 			-- auto change color according to neovims mode
 			return { fg = fg_colors[vim.fn.mode()] }
 		end,
-		padding = { left = 1, right = 4 },
+		padding = { left = 0, right = 4 },
 	}
 
 	ins_left {
