@@ -1,4 +1,4 @@
-if vim.g.nvim_buffer_display == 0 then
+if vim.g.custom.buffer_display == 0 then
 	return
 end
 

@@ -1,4 +1,4 @@
-if vim.g.nvim_lualine_simple == 0 then
+if vim.g.custom.lualine_simple == 0 then
 	local config = {
 		options = {
 			icons_enabled = true,
@@ -43,7 +43,7 @@ if vim.g.nvim_lualine_simple == 0 then
 	-- Now don't forget to initialize lualine
 	require('lualine').setup(config)
 
-else -- if vim.g.nvim_lualine_simple == 0 then
+else -- if vim.g.custom.lualine_simple == 0 then
 
 	-- Eviline config for lualine
 	-- Author: shadmansaleh
@@ -364,4 +364,4 @@ else -- if vim.g.nvim_lualine_simple == 0 then
 
 	-- Now don't forget to initialize lualine
 	lualine.setup(config)
-end -- if vim.g.nvim_lualine_simple == 0
+end -- if vim.g.custom.lualine_simple == 0

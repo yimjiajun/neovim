@@ -16,7 +16,7 @@ return require('packer').startup(function()
 
 	use { 'preservim/tagbar' }
 
-	if vim.g.nvim_lsp_support == 1 then
+	if vim.g.custom.lsp_support == 1 then
 		use 'neovim/nvim-lspconfig' -- lsp config in nvim-cmp
 
 		use { "hrsh7th/nvim-cmp",

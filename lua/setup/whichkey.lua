@@ -281,7 +281,7 @@ wk.register({
 	},
 }, { prefix = "<leader>" })
 
-if vim.g.nvim_lsp_support == 1 then
+if vim.g.custom.lsp_support == 1 then
 
 	wk.register({
 		l = {
