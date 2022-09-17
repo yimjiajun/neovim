@@ -16,6 +16,7 @@ vim.api.nvim_set_keymap('n', 'x', '\"_x', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', 'X', '\"_X', { noremap = true, silent = true})
 -- file
 vim.api.nvim_set_keymap('n', '<C-s>', '<cmd>w<CR>', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '<C-s>', '<cmd>w<CR>', { noremap = true, silent = true})
 -- INSERT
 -- move
 vim.api.nvim_set_keymap('i', '<C-b>', '<Left>', { noremap = true, silent = true})
@@ -34,3 +35,10 @@ vim.api.nvim_set_keymap('c', '<C-l>', '<Right>', { noremap = true, silent = true
 vim.api.nvim_set_keymap("v", "x", '\"_x', { noremap = true, silent = true})
 vim.api.nvim_set_keymap("v", "X", '\"_X', { noremap = true, silent = true})
 vim.api.nvim_set_keymap("v", "p", '\"_dP', { noremap = true, silent = true})
+
+-- Open links under cursor in browser with gx
+if vim.fn.has('macunix') == 1 then
+	vim.api.nvim_set_keymap("n", "gx", "<cmd> silent execute '!open ' . shellescape('<cWORD>') <CR>", { noremap = true, silent = true})
+else
+	vim.api.nvim_set_keymap("n", "gx", "<cmd> silent execute '!xdg-open ' . shellescape('<cWORD>') <CR>", { noremap = true, silent = true})
+end
