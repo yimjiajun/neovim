@@ -184,31 +184,33 @@ wk.register({
 		f = { "<cmd> cs find f <cfile><CR>", "(files) - open the filename"},
 		i = { "<cmd> cs find i <cfile><CR>", "(includes) - find files that include the filename"},
 	},
-	g = {
-		name = "git",
-		t = { "<cmd>lua _LAZYGIT_TOGGLE()<CR>", "lazygit" },
-		s = { "<cmd>lua require('telescope.builtin').git_status()<CR>", "status" },
-		l = {
-			name = "Log",
-			l = { "<cmd>lua require('telescope.builtin').git_commits()<CR>", "messages" },
-		},
-		g = {
-			name = "GitSigns",
-			s = "stage hunk",
+	g = { name = "GitSigns",
+		s = { name = "Stage",
+			s = "hunk",
+			S = "buffer",
+			u = "undo hunk",
 			r = "reset hunk",
-			S = "stage buffer",
-			u = "undo stage hunk",
 			R = "reset buffer",
 			p = "preview hunk",
-			b = "blame line",
-			t = {
-				name = "Toggle",
-				b = "current blame line",
-				d = "delete",
-			},
-			d = "diff this",
-			D = "diff previous",
 		},
+		b = { name = "Blame",
+			a = "details",
+			b = "toggle",
+		},
+		t = { name = "Toggle",
+			d = "deleted contents",
+			w = "diff contents",
+			s = "side signs",
+			l = "contents line",
+			b = "number line",
+			t = { "<cmd>lua _LAZYGIT_TOGGLE()<CR>", "lazygit" },
+		},
+		d = { name = "Diff",
+			d = "this",
+			p = "previous",
+		},
+		g = { "<cmd>lua require('telescope.builtin').git_status()<CR>", "status" },
+		l = { "<cmd>lua require('telescope.builtin').git_commits()<CR>", "commit logs" },
 	},
 	t = {
 		name = "Toggle",
@@ -221,6 +223,7 @@ wk.register({
 		S = { "<cmd> lua _HTOP_TOGGLE()<CR>", " system view" },
 		D = { "<cmd> lua _NCDU_TOGGLE()<CR>", " disk view" },
 		i = { "<cmd> IndentBlanklineToggle<CR>", " indent" },
+		s = { "<cmd> set spell! <CR>", "暈 spelling" },
 		C = {
 			name = "Create",
 			t = { "<cmd> !ctags -R . <CR>", "  cTags" },
@@ -237,29 +240,25 @@ wk.register({
 		D = { "<cmd> SessionManager delete_session<CR>", "delete session" },
 		s = { "<cmd> SessionManager save_current_session<CR>", "save session" },
 	},
-	b = {
-		name = "Buffer",
+	b = { name = "Buffer",
 		b = { "<cmd> lua require('telescope.builtin').buffers() <CR>", "buffers"},
 		g = { ":BufferLineGoToBuffer ", "goto" },
 		p = { "<cmd> BufferLineTogglePin<CR>", "pin" },
 		t = { "<cmd> BufferLinePick<CR>", "pick" },
 		d = { "<cmd> BufferLinePickClose<CR>", "delete (choose)" },
 		c = { "<cmd> bdelete<CR>", "close" },
-		s = {
-			name = "Sort",
+		s = { name = "Sort",
 			d = { "<cmd> BufferLineSortByDirectory<CR>", "directory" },
 			e = { "<cmd> BufferLineSortByExtension<CR>", "extension" },
 			r = { "<cmd> BufferLineSortByRelativeDirectory<CR>", "relative directory" },
 			t = { "<cmd> BufferLineSortByTabs<CR>", "tabs" },
 		},
-		C = {
-			name = "Close(s)",
+		C = { name = "Close(s)",
 			l = { "<cmd> BufferLineCloseRight<CR>", "right" },
 			h = { "<cmd> BufferLineCloseLeft<CR>", "left" },
 		},
 	},
-	v = {
-		name = "view",
+	v = { name = "view",
 		s = { "<cmd> lua require('telescope.builtin').spell_suggest() <CR>", "spell suggest"},
 		k = { "<cmd> lua require('telescope.builtin').keymaps() <CR>", "keymaps"},
 		h = { "<cmd> lua require('telescope.builtin').highlights() <CR>", "highlights"},
@@ -271,8 +270,7 @@ wk.register({
 		n = { "<cmd> lua require('telescope').extensions.notify.notify() <CR>", "notify history"},
 		['.'] = { "<cmd> lua _NOTIFY_SAMPLE() <CR>", "notify ami EC"},
 	},
-	["<leader>"] = {
-		name = "EasyMotion",
+	["<leader>"] = { name = "EasyMotion",
 		w = { "<cmd> lua require'hop'.hint_words({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR})<cr>", "word"},
 		a = { "<cmd> lua require'hop'.hint_words()<cr>", "all"},
 		l = { "<cmd> lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", "line"},
@@ -281,11 +279,19 @@ wk.register({
 	},
 }, { prefix = "<leader>" })
 
+wk.register({
+	g = { name = "Git",
+		s = { name = "Stage",
+			s = "stage to hunk",
+			r = "reset selected hunk",
+		},
+	},
+}, { mode = 'v', prefix = "<leader>" })
+
 if vim.g.custom.lsp_support == 1 then
 
 	wk.register({
-		l = {
-			name = "Lsp",
+		l = { name = "Lsp",
 			e = "diagnostic open float",
 			q = "diagnostic setloclist",
 			w = {
@@ -310,31 +316,28 @@ if vim.g.custom.lsp_support == 1 then
 		D = "lsp decalaration",
 		d = "lsp definition",
 		i = "lsp implementation",
-		p = {
-			name = "LSP Preview",
-				r = "lsp reference",
-				d = "lsp definition",
-				t = "lsp type definition",
-				i = "lsp implementation",
+		p = { name = "LSP Preview",
+			r = "lsp reference",
+			d = "lsp definition",
+			t = "lsp type definition",
+			i = "lsp implementation",
 		},
 		P = "close lsp preview",
 	}, { prefix = "g" })
 
-else -- if vim.g.nvim_lsp_support == 1 then
+else -- if vim.g.custom.lsp_support == 1 then
 
 	wk.register({
 		d = "lsp definition",
 		r = "lsp reference",
 		i = "lsp implementation",
 		t = "lsp type-definition",
-		p = {
-			name = "lsp preview",
+		p = { name = "lsp preview",
 			d = { "<CMD> CocCommand fzf-preview.CocDefinition <CR>", "definition"},
 			r = { "<CMD> CocCommand fzf-preview.CocReferences <CR>", "refrences"},
 			i = { "<CMD> CocCommand fzf-preview.CocImplementations <CR>", "implementation"},
 			t = { "<CMD> CocCommand fzf-preview.CocTypeDefinition <CR>", "type-definition"},
-			D = {
-				name = "diagnostics",
+			D = { name = "diagnostics",
 				D = { "<CMD> CocCommand fzf-preview.CocDiagnostics <CR>", "diagnostics"},
 				d = { "<CMD> CocCommand fzf-preview.CocCurrentDiagnostics <CR>", "current diagnostics"},
 			},
