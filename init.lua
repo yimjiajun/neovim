@@ -20,5 +20,5 @@ for _, source in ipairs {
 end
 
 if vim.g.custom.lsp_support == 0 then
-	vim.cmd[[source $HOME/.config/nvim/lua/config/vimrc.vim]]
+	vim.cmd[[source $MYVIMRC/../lua/config/vimrc.vim]]
 end

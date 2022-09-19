@@ -91,4 +91,4 @@ if (vim.fn.has('cscope')) then
 	end
 end
 
-vim.cmd[[source $HOME/.config/nvim/lua/config/autocmd.vim]]
+vim.cmd[[source $MYVIMRC/../lua/config/autocmd.vim]]

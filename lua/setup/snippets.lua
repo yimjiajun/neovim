@@ -1,2 +1,1 @@
-
-vim.cmd[[source $HOME/.config/nvim/lua/setup/snippets.vim]]
+vim.cmd[[source $MYVIMRC/../lua/setup/snippets.vim]]

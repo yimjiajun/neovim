@@ -8,7 +8,7 @@ require('notify').setup({
 	  TRACE = "✎",
 	  WARN = ""
 	},
-	level = 0,
+	level = 2,
 	minimum_width = 50,
 	render = "default",
 	stages = "slide",
