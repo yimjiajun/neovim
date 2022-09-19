@@ -92,6 +92,7 @@ if (vim.fn.has('cscope')) then
 end
 
 if vim.fn.has('win32') then
+	vim.cmd[[source $MYVIMRC/../lua/config/autocmd.vim]]
 else
 	vim.cmd[[source $HOME/.config/nvim/lua/config/autocmd.vim]]
 end
