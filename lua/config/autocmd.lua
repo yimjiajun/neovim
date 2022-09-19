@@ -85,10 +85,14 @@ vim.api.nvim_create_augroup( "highlight", { clear = true })
 		end,
 	})
 
-if (vim.fn.has('cscope')) then
+if (vim.fn.has('cscope') == 1) then
 	if (vim.fn.filereadable('cscope.out') == 1) then
 		vim.cmd('cs add cscope.out')
 	end
 end
 
-vim.cmd[[source $MYVIMRC/../lua/config/autocmd.vim]]
+if vim.fn.has('win32') == 1 then
+	vim.cmd[[source $MYVIMRC/../lua/config/autocmd.vim]]
+else
+	vim.cmd[[source $HOME/.config/nvim/lua/config/autocmd.vim]]
+end
