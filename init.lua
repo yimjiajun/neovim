@@ -20,5 +20,9 @@ for _, source in ipairs {
 end
 
 if vim.g.custom.lsp_support == 0 then
-	vim.cmd[[source $HOME/.config/nvim/lua/config/vimrc.vim]]
+	if vim.fn.has('win32') then
+	else
+		vim.cmd[[source $HOME/.config/nvim/lua/config/vimrc.vim]]
+
+	end
 end
