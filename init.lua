@@ -20,7 +20,7 @@ for _, source in ipairs {
 end
 
 if vim.g.custom.lsp_support == 0 then
-	if vim.fn.has('win32') then
+	if vim.fn.has('win32') == 1 then
 		vim.cmd[[source $MYVIMRC/../lua/config/vimrc.vim]]
 	else
 		vim.cmd[[source $HOME/.config/nvim/lua/config/vimrc.vim]]
