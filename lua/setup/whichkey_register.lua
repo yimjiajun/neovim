@@ -30,6 +30,31 @@ function _NOTIFY_SAMPLE()
 })
 end
 
+function git_view_open_tjps()
+	local notify_level = 'info'
+	local notify_timeout = 5000
+	vim.notify([[Ours]], notify_level,
+		{ title = [[Keys: leader + 'c' + 'o']], timeout=notify_timeout })
+	vim.notify([[Base]], notify_level,
+		{ title = [[Keys: leader + 'c' + 'b']], timeout=notify_timeout })
+	vim.notify([[Their]], notify_level,
+		{ title = [[Keys: leader + 'c' + 't']], timeout=notify_timeout })
+	vim.notify([[All]], notify_level,
+		{ title = [[Keys: leader + 'c' + 'a']], timeout=notify_timeout})
+	vim.notify([[Delete conflicts]], notify_level,
+		{ title = [[Keys: 'd' + 'k']], timeout = notify_timeout,
+			on_close = function()
+				vim.notify([['g'+'ctrl'+'x'\nSwap layout display]], notify_level,
+					{ title = [[Purpose : Merge tool]], timeout=notify_timeout,
+						on_close = function()
+							vim.notify([[Close Diff View]], notify_level,
+								{ title = [[Keys: 'leader' + 'g' + 'C']], timeout = notify_timeout})
+						end,
+					})
+			end,
+	})
+end
+
 local Terminal  = require('toggleterm.terminal').Terminal
 local lazygit = Terminal:new({ cmd = "lazygit", direction = "float", hidden = true })
 local htop = Terminal:new({ cmd = "htop", direction = "float", hidden = true })
@@ -131,7 +156,7 @@ wk.register({
 		f = { "<cmd> cs find f <cfile><CR>", "(files) - open the filename"},
 		i = { "<cmd> cs find i <cfile><CR>", "(includes) - find files that include the filename"},
 	},
-	g = { name = "GitSigns",
+	g = { name = "Git",
 		s = { name = "Stage",
 			s = "hunk",
 			S = "buffer",
@@ -150,14 +175,20 @@ wk.register({
 			s = "side signs",
 			l = "contents line",
 			b = "number line",
-			t = { "<cmd>lua _LAZYGIT_TOGGLE()<CR>", "lazygit" },
+			t = { "<cmd> lua _LAZYGIT_TOGGLE() <CR>", "lazygit" },
 		},
 		d = { name = "Diff",
 			d = "this",
 			p = "previous",
+			a = { "<cmd> DiffviewOpen <CR>", "all" },
 		},
-		g = { "<cmd>lua require('telescope.builtin').git_status()<CR>", "status" },
-		l = { "<cmd>lua require('telescope.builtin').git_commits()<CR>", "commit logs" },
+		g = { "<cmd> lua require('telescope.builtin').git_status()<CR>", "status" },
+		l = { "<cmd> lua require('telescope.builtin').git_commits()<CR>", "commit logs" },
+		L = { "<cmd> DiffviewFileHistory <CR>", "commit details" },
+		m = { "<cmd> DiffviewOpen <CR> <cmd> lua git_view_open_tips() <CR>", "merge" },
+		C = { "<cmd> DiffviewClose <CR>", "close - diff view" },
+		v = { "<cmd> DiffviewToggleFiles <CR>", "toggle - diff view" },
+		V = { "<cmd> DiffviewFocusFiles <CR>", "focus - diff view" },
 	},
 	t = {
 		name = "Toggle",

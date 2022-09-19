@@ -138,6 +138,11 @@ return require('packer').startup(function()
 		end
 	}
 
+	-- git easy diff view
+	use { 'sindrets/diffview.nvim',
+		requires = 'nvim-lua/plenary.nvim'
+	}
+
 	-- programming language highlight
 	use { 'nvim-treesitter/nvim-treesitter',
 		run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
