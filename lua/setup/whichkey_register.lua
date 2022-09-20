@@ -30,7 +30,7 @@ function _NOTIFY_SAMPLE()
 })
 end
 
-function git_view_open_tjps()
+function git_view_open_tips()
 	local notify_level = 'info'
 	local notify_timeout = 5000
 	vim.notify([[Ours]], notify_level,
@@ -44,8 +44,8 @@ function git_view_open_tjps()
 	vim.notify([[Delete conflicts]], notify_level,
 		{ title = [[Keys: 'd' + 'k']], timeout = notify_timeout,
 			on_close = function()
-				vim.notify([['g'+'ctrl'+'x'\nSwap layout display]], notify_level,
-					{ title = [[Purpose : Merge tool]], timeout=notify_timeout,
+				vim.notify([[Swap layout display]], notify_level,
+					{ title = [[Keys: 'g'+'ctrl'+'x']], timeout=notify_timeout,
 						on_close = function()
 							vim.notify([[Close Diff View]], notify_level,
 								{ title = [[Keys: 'leader' + 'g' + 'C']], timeout = notify_timeout})
