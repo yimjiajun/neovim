@@ -13,6 +13,7 @@ for _, source in ipairs {
 	"config.autocmd",
 	"config.keymapping",
 	"config.colors",
+	"config.compiler",
 	"config.custom",
 } do
   local status_ok, fault = pcall(require, source)
