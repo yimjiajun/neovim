@@ -2,7 +2,7 @@
 -- window
 vim.api.nvim_set_keymap('n', '<S-h>', '<C-w>h', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<S-l>', '<C-w>l', { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<CR>', '<cmd> set hlsearch! <CR>', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<Enter>', '<cmd> set hlsearch! <CR>', { noremap = true, silent = true})
 -- buffer
 if vim.g.custom.buffer_display == 1 then
 	vim.api.nvim_set_keymap('n', '<S-Tab>', '<cmd> BufferLineCyclePrev <CR>', { noremap = true, silent = true})
@@ -12,8 +12,9 @@ else
 	vim.api.nvim_set_keymap('n', '<Tab>', '<cmd> bn <CR>', { noremap = true, silent = true})
 end
 vim.api.nvim_set_keymap('n', '<C-c>', '<cmd> bdelete <CR>', { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', 'x', '\"_x', { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', 'X', '\"_X', { noremap = true, silent = true})
+-- vim.api.nvim_set_keymap('n', 'x', '\"_x', { noremap = true, silent = true})
+-- vim.api.nvim_set_keymap('n', 'X', '\"_X', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<C-j>', '<CR>', { noremap = true, silent = true})
 -- file
 vim.api.nvim_set_keymap('n', '<C-s>', '<cmd>w<CR>', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('i', '<C-s>', '<cmd>w<CR>', { noremap = true, silent = true})
