@@ -4,8 +4,8 @@ vim.api.nvim_create_augroup("cursorline", { clear = true })
 		group = "cursorline",
 		pattern = "*",
 		callback = function()
-			vim.api.nvim_set_option('cursorline', false)
-			vim.api.nvim_set_option('cursorcolumn', false)
+			vim.opt_local.cursorline = false
+			vim.opt_local.cursorcolumn = false
 		end,
 	})
 	vim.api.nvim_create_autocmd( "InsertLeave", {
@@ -13,8 +13,8 @@ vim.api.nvim_create_augroup("cursorline", { clear = true })
 		group = "cursorline",
 		pattern = "*",
 		callback = function()
-			vim.api.nvim_set_option('cursorline', true)
-			vim.api.nvim_set_option('cursorcolumn', false)
+			vim.opt_local.cursorline = true
+			vim.opt_local.cursorcolumn = false
 		end,
 	})
 	vim.api.nvim_create_autocmd( "WinEnter", {
@@ -22,8 +22,8 @@ vim.api.nvim_create_augroup("cursorline", { clear = true })
 		group = "cursorline",
 		pattern = "*",
 		callback = function()
-			vim.api.nvim_set_option('cursorline', true)
-			vim.api.nvim_set_option('cursorcolumn', false)
+			vim.opt_local.cursorline = true
+			vim.opt_local.cursorcolumn = false
 		end,
 	})
 	vim.api.nvim_create_autocmd( "WinLeave", {
@@ -31,8 +31,8 @@ vim.api.nvim_create_augroup("cursorline", { clear = true })
 		group = "cursorline",
 		pattern = "*",
 		callback = function()
-			vim.api.nvim_set_option('cursorline', false)
-			vim.api.nvim_set_option('cursorcolumn', false)
+			vim.opt_local.cursorline = false
+			vim.opt_local.cursorcolumn = false
 		end,
 	})
 	vim.api.nvim_create_autocmd('TextYankPost', {

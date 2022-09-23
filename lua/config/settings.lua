@@ -16,6 +16,8 @@ vim.api.nvim_win_set_option(0, 'linebreak', true)
 vim.api.nvim_set_option('splitbelow', true)
 vim.api.nvim_set_option('splitright', false)
 vim.api.nvim_set_option('wildmenu', true)
+vim.api.nvim_set_option('cursorline', true)
+vim.api.nvim_set_option('cursorcolumn', false)
 -- editor
 vim.api.nvim_set_option('ignorecase', true)
 vim.api.nvim_set_option('smartcase', true)
