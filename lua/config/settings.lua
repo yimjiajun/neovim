@@ -2,6 +2,7 @@
 
 vim.api.nvim_set_option('hidden', true)
 vim.api.nvim_set_option('clipboard', 'unnamedplus')
+vim.api.nvim_set_option('lazyredraw', true)
 vim.api.nvim_set_option('timeoutlen', 300)
 vim.api.nvim_set_option('updatetime', 400)
 -- view
