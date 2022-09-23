@@ -46,11 +46,27 @@ vim.api.nvim_create_augroup("cursorline", { clear = true })
 
 vim.api.nvim_create_augroup( "extension file", { clear = true })
 	vim.api.nvim_create_autocmd( "FileType", {
-		desc = "smart indent for c and c++",
+		desc = "smart indent for c ",
 		group = "extension file",
-		pattern = "c, cpp",
+		pattern = "c",
 		callback = function()
-			vim.api.nvim_set_option('cindent', true)
+			vim.opt_local.cindent = true
+			vim.opt_local.softtabstop = 4
+			vim.opt_local.tabstop = 4
+			vim.opt_local.shiftwidth = 4
+			vim.opt_local.expandtab = false
+		end,
+	})
+	vim.api.nvim_create_autocmd( "FileType", {
+		desc = "smart indent for header",
+		group = "extension file",
+		pattern = "cpp",
+		callback = function()
+			vim.opt_local.cindent = true
+			vim.opt_local.softtabstop = 4
+			vim.opt_local.tabstop = 4
+			vim.opt_local.shiftwidth = 4
+			vim.opt_local.expandtab = false
 		end,
 	})
 	vim.api.nvim_create_autocmd( "FileType", {
