@@ -5,6 +5,8 @@ vim.g.custom = {
 	lualine_simple = 1,
 	-- display buffer
 	buffer_display = 0,
+	-- statusline support
+	statusline_support = 0,
 }
 
 -- theme support : tundra / gruvbox

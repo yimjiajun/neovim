@@ -10,7 +10,9 @@ return require('packer').startup(function()
 		'nvim-lualine/lualine.nvim',
 		requires = { 'kyazdani42/nvim-web-devicons', opt = true },
 		config = function()
-			require('setup.lualines')
+			if vim.g.custom.statusline_support == 1 then
+				require('setup.lualines')
+			end
 		end,
 	}
 
