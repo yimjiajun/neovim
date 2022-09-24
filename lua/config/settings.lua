@@ -1,4 +1,3 @@
--- vim.cmd([[colorscheme default]])
 
 vim.api.nvim_set_option('hidden', true)
 vim.api.nvim_set_option('clipboard', 'unnamedplus')

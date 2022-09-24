@@ -246,6 +246,11 @@ return require('packer').startup(function()
 			require('setup.tundra')
 		end,
 	}
+	use { "ellisonleao/gruvbox.nvim",
+		config = function ()
+			require('setup.gruvbox')
+		end
+	}
 
 	use { 'kyazdani42/nvim-web-devicons' }
 	-- use { 'ryanoasis/vim-devicons' }

@@ -35,7 +35,7 @@ local default_header = {
     },
     opts = {
         position = "center",
-        hl = "Label",
+        hl = "String",
         -- wrap = "overflow";
     },
 }
