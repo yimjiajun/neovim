@@ -9,9 +9,6 @@ vim.g.custom = {
 	statusline_support = 0,
 }
 
--- theme support : tundra / gruvbox
-vim.cmd[[colorscheme gruvbox]]
-
 for _, source in ipairs {
 	"config.plugins",
 	"config.settings",
