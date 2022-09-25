@@ -36,20 +36,24 @@ require('nvim-tundra').setup({
   overwrite = {
     colors = {},
     highlights = {
-		diffRemoved = { fg = '#d70000', italic = true },
-		DiffText = { bg = '#1c1c1c', fg = '#ffffaf', bold = true },
-		DiffDelete = { bg = '#5f0000', italic = true },
-		DiffAdd = { bg = '#262626', italic = true },
-		DiffChange = { bg = '#121212', italic = true },
-		Normal = { bg = '#000000' },
-		NormalNC = { bg = '#000000' },
-		Visual = { bg = '#1f2937', fg = '#f9fafb'},
-		-- TelescopePreviewBorder = { fg = '#f9fafb' },
-		TelescopePromptBorder = { fg = '#f9fafb' },
-		TelescopeResultsBorder = { fg = '#f9fafb' },
-		TelescopeResultsTitle = { bg = '#b5e8b0' },
-	},
+			diffRemoved = { fg = '#d70000', italic = true },
+			DiffText = { bg = '#1c1c1c', fg = '#ffffaf', bold = true },
+			DiffDelete = { bg = '#5f0000', italic = true },
+			DiffAdd = { bg = '#262626', italic = true },
+			DiffChange = { bg = '#121212', italic = true },
+			Normal = { bg = '#000000' },
+			NormalNC = { bg = '#000000' },
+			Visual = { bg = '#1f2937', fg = '#f9fafb'},
+			TelescopePreviewBorder = { fg = '#f9fafb',  bg = '#000000'},
+			TelescopePromptBorder = { fg = '#f9fafb',  bg = '#000000'},
+			TelescopePromptNormal = { bg = '#000000'},
+			TelescopeResultsBorder = { fg = '#f9fafb', bg = '#000000'},
+			TelescopeResultsTitle = { bg = '#b5e8b0' },
+		},
   },
 })
 
-vim.opt.background = 'dark'
+if vim.g.custom.theme == 'tundra' then
+	vim.opt.background = 'dark'
+	vim.cmd[[colorscheme tundra]]
+end
