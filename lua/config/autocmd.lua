@@ -114,7 +114,7 @@ vim.api.nvim_create_augroup( "highlight", { clear = true })
 
 if (vim.fn.has('cscope') == 1) then
 	if (vim.fn.filereadable('cscope.out') == 1) then
-		vim.cmd('cs add cscope.out')
+		vim.cmd('silent cs add cscope.out')
 	end
 end
 
