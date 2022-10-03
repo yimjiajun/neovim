@@ -189,6 +189,9 @@ return require('packer').startup(function()
 		end
 	}
 
+	-- git command line
+	use { 'tpope/vim-fugitive' }
+
 	-- lsp pop up preview
 	use { 'rmagatti/goto-preview',
 		config = function()
