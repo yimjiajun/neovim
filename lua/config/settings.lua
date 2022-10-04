@@ -8,7 +8,7 @@ vim.api.nvim_set_option('updatetime', 400)
 vim.api.nvim_set_option('termguicolors', true)
 vim.api.nvim_set_option('showmode', false)
 if vim.g.custom.statusline_support == 0 then
-	vim.api.nvim_set_option('laststatus', 0)
+	vim.api.nvim_set_option('laststatus', 2)
 end
 vim.api.nvim_win_set_option(0, 'number', true)
 vim.api.nvim_win_set_option(0, 'numberwidth', 4)
