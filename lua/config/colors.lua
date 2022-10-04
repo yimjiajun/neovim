@@ -104,6 +104,24 @@ vim.api.nvim_create_augroup("highlight_colors", { clear = true })
 		end,
 	})
 
+	vim.api.nvim_create_autocmd( "VimEnter", {
+		desc = "visual",
+		group = "highlight_colors",
+		pattern = "*",
+		callback = function()
+			vim.cmd[[highlight Visual guibg=#3c383b]]
+		end,
+	})
+
+	vim.api.nvim_create_autocmd( "VimEnter", {
+		desc = "Signs",
+		group = "highlight_colors",
+		pattern = "*",
+		callback = function()
+			vim.cmd[[highlight SignColumn guibg=bg]]
+		end,
+	})
+
 -- return as molokai when another lua calle
 local M = vim.g.color_default
 return M
