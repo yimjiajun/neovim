@@ -100,6 +100,7 @@ vim.api.nvim_create_augroup("highlight_colors", { clear = true })
 		pattern = "*",
 		callback = function()
 			vim.cmd[[highlight StatusLine gui=none guifg=fg guibg=bg]]
+			vim.cmd[[highlight StatusLineNC gui=none guibg=bg]]
 		end,
 	})
 
