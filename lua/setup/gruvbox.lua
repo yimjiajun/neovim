@@ -23,3 +23,19 @@ if vim.g.custom.theme == 'gruvbox' then
 	vim.opt.background = 'dark'
 	vim.cmd[[colorscheme gruvbox]]
 end
+
+vim.api.nvim_create_augroup("Gruvbox", { clear = true })
+	vim.api.nvim_create_autocmd( "VimEnter", {
+		desc = "Sign",
+		group = "Gruvbox",
+		pattern = "*",
+		callback = function()
+			vim.cmd[[highlight GruvboxGreenSign guibg=bg]]
+			vim.cmd[[highlight GruvboxAquaSign guibg=bg]]
+			vim.cmd[[highlight GruvboxBlueSign guibg=bg]]
+			vim.cmd[[highlight GruvboxOrangeSign guibg=bg]]
+			vim.cmd[[highlight GruvboxYellowSign guibg=bg]]
+			vim.cmd[[highlight GruvboxRedSign guibg=bg]]
+			vim.cmd[[highlight GruvboxPurpleSign guibg=bg]]
+		end,
+	})

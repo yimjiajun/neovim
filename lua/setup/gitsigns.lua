@@ -83,3 +83,13 @@ require('gitsigns').setup {
   end
 }
 
+vim.api.nvim_create_augroup("Git Signs", { clear = true })
+	vim.api.nvim_create_autocmd( "VimEnter", {
+		desc = "Highlight color",
+		group = "Git Signs",
+		pattern = "*",
+		callback = function()
+			vim.cmd[[highlight GitSignsCurrentLineBlame guifg='#f9fafb' guibg='#5f0000']]
+		end,
+	})
+

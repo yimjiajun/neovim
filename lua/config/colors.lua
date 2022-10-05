@@ -86,15 +86,6 @@ vim.api.nvim_create_augroup("highlight_colors", { clear = true })
 	})
 
 	vim.api.nvim_create_autocmd( "VimEnter", {
-		desc = "Git Signs",
-		group = "highlight_colors",
-		pattern = "*",
-		callback = function()
-			vim.cmd[[highlight GitSignsCurrentLineBlame guifg='#f9fafb' guibg='#5f0000']]
-		end,
-	})
-
-	vim.api.nvim_create_autocmd( "VimEnter", {
 		desc = "spelling check",
 		group = "highlight_colors",
 		pattern = "*",
@@ -110,6 +101,15 @@ vim.api.nvim_create_augroup("highlight_colors", { clear = true })
 		pattern = "*",
 		callback = function()
 			vim.cmd[[highlight Visual guibg=#3c383b]]
+		end,
+	})
+
+	vim.api.nvim_create_autocmd( "VimEnter", {
+		desc = "Signs",
+		group = "highlight_colors",
+		pattern = "*",
+		callback = function()
+			vim.cmd[[highlight SignColumn guibg=bg]]
 		end,
 	})
 
