@@ -97,8 +97,8 @@ local buttons = {
         button("7", "  Frecency/MRU", "<cmd> lua require('telescope.builtin').jumplist()<CR>"),
         button("8", "  Git Status",  "<cmd>lua require('telescope.builtin').git_status()<CR>"),
         button("9", "  Git logs", "<cmd>lua require('telescope.builtin').git_status()<CR>"),
-        button("1 0", "  Create ctags", "<cmd> !ctags -R .<CR>"),
-        button("1 1", "  Create cscope", "<cmd> !cscope -bqR <CR>"),
+        button("1 0", "  Create ctags", "<cmd> !ctags -R --verbose=yes .<CR>"),
+        button("1 1", "  Create cscope", "<cmd> !cscope -bqRv <CR>"),
         button("SPC t S", "  View process system"),
     },
     opts = {

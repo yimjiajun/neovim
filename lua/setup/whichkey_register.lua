@@ -208,7 +208,7 @@ wk.register({
 		s = { "<cmd> set spell! <CR>", "暈 spelling" },
 		C = {
 			name = "Create",
-			t = { "<cmd> !ctags -R . <CR>", "  cTags" },
+			t = { "<cmd> !ctags -R --verbose=yes . <CR>", "  cTags" },
 			c = { "<cmd> !cscope -bqRv <CR>", "識  cscope" },
 		},
 		q = { "<cmd> cclose <CR>", " quickfix (close)" },
