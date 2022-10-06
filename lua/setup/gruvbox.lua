@@ -15,7 +15,6 @@ require("gruvbox").setup({
   dim_inactive = false,
   transparent_mode = false,
   overrides = {
-		NormalFloat = { bg = bg },
 	},
 })
 

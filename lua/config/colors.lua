@@ -86,7 +86,7 @@ vim.api.nvim_create_augroup("highlight_colors", { clear = true })
 	})
 
 	vim.api.nvim_create_autocmd( "VimEnter", {
-		desc = "spelling check",
+		desc = "Status line",
 		group = "highlight_colors",
 		pattern = "*",
 		callback = function()
@@ -114,11 +114,11 @@ vim.api.nvim_create_augroup("highlight_colors", { clear = true })
 	})
 
 	vim.api.nvim_create_autocmd( "VimEnter", {
-		desc = "Signs",
+		desc = "Float",
 		group = "highlight_colors",
 		pattern = "*",
 		callback = function()
-			vim.cmd[[highlight SignColumn guibg=bg]]
+			vim.cmd[[highlight NormalFloat guibg=bg]]
 		end,
 	})
 
