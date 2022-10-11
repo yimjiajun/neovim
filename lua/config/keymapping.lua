@@ -60,3 +60,13 @@ vim.api.nvim_set_keymap('i', '\'<CR>', '\'<CR>\'<C-o>O', { noremap = true, silen
 vim.api.nvim_set_keymap("v", "x", '\"_x', { noremap = true, silent = true})
 vim.api.nvim_set_keymap("v", "X", '\"_X', { noremap = true, silent = true})
 vim.api.nvim_set_keymap("v", "p", '\"_dP', { noremap = true, silent = true})
+
+----------------------
+-- browser
+----------------------
+-- Open links under cursor in browser
+if vim.fn.has('macunix') == 1 then
+	vim.api.nvim_set_keymap("n", "gx", "<cmd> silent execute '!open ' . shellescape('<cWORD>') <CR>", { noremap = true, silent = true})
+else
+	vim.api.nvim_set_keymap("n", "gx", "<cmd> silent execute '!xdg-open ' . shellescape('<cWORD>') <CR>", { noremap = true, silent = true})
+end
