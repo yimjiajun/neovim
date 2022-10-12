@@ -149,17 +149,6 @@ wk.register({
 			L = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='.ld', glob_pattern=[[**/*.ld]]})<CR>", "linker"},
 		},
 	},
-	c = { name = "cscope",
-		a = { "<cmd> cs find a <cword><CR>", "(symbols) - assignment to this symbol"},
-		s = { "<cmd> cs find s <cword><CR>", "(symbols) - all refrences"},
-		g = { "<cmd> cs find g <cword><CR>", "(globals) - global definition(s)"},
-		c = { "<cmd> cs find c <cword><CR>", "(calls) - all calls to the function name"},
-		t = { "<cmd> cs find t <cword><CR>", "(text) - all instances of the text"},
-		d = { "<cmd> cs find d <cword><CR>", "(called) - find functions that function"},
-		e = { "<cmd> cs find e <cword><CR>", "(egrep) - search for the word"},
-		f = { "<cmd> cs find f <cfile><CR>", "(files) - open the filename"},
-		i = { "<cmd> cs find i <cfile><CR>", "(includes) - find files that include the filename"},
-	},
 	g = { name = "Git",
 		s = { name = "Stage",
 			s = "hunk",
@@ -260,6 +249,24 @@ wk.register({
 		f = { "<cmd> lua require'hop'.hint_patterns({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", "patterns"},
 	},
 }, { prefix = "<leader>" })
+
+if (vim.fn.has('cscope') == 1) then
+	if (vim.fn.filereadable('cscope.out') == 1) then
+		wk.register({
+			c = { name = "cscope",
+				a = { "<cmd> cs find a <cword><CR>", "(symbols) - assignment to this symbol"},
+				s = { "<cmd> cs find s <cword><CR>", "(symbols) - all refrences"},
+				g = { "<cmd> cs find g <cword><CR>", "(globals) - global definition(s)"},
+				c = { "<cmd> cs find c <cword><CR>", "(calls) - all calls to the function name"},
+				t = { "<cmd> cs find t <cword><CR>", "(text) - all instances of the text"},
+				d = { "<cmd> cs find d <cword><CR>", "(called) - find functions that function"},
+				e = { "<cmd> cs find e <cword><CR>", "(egrep) - search for the word"},
+				f = { "<cmd> cs find f <cfile><CR>", "(files) - open the filename"},
+				i = { "<cmd> cs find i <cfile><CR>", "(includes) - find files that include the filename"},
+			},
+		}, { mode = 'n', prefix = "<leader>" })
+	end
+end
 
 wk.register({
 	g = { name = "Git",
