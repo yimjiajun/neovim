@@ -114,6 +114,9 @@ wk.register({
 	e = { "<cmd> NvimTreeToggle <CR>", " explore" },
 	E = { "<cmd> NvimTreeFindFile <CR>", " explore file location" },
 	T = { "<cmd> TagbarToggle <CR>", " tag bar" },
+}, { prefix = "<leader>" })
+
+wk.register({
 	f = { name = "Find", -- optional group name
 		a = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='search all', glob_pattern=ignore_type([[!.*]])}) <CR>", "live grep"},
 		A = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='search all (+ hidden)', glob_pattern=[[**/*]]})<CR>", "live grep (+ hidden)"},
@@ -149,6 +152,21 @@ wk.register({
 			L = { "<cmd> lua require('telescope.builtin').live_grep({prompt_title='.ld', glob_pattern=[[**/*.ld]]})<CR>", "linker"},
 		},
 	},
+	v = { name = "view",
+		s = { "<cmd> lua require('telescope.builtin').spell_suggest() <CR>", "spell suggest"},
+		k = { "<cmd> lua require('telescope.builtin').keymaps() <CR>", "keymaps"},
+		h = { "<cmd> lua require('telescope.builtin').highlights() <CR>", "highlights"},
+		a = { "<cmd> lua require('telescope.builtin').autocommands() <CR>", "autocommands"},
+		c = { "<cmd> lua require('telescope.builtin').command_history() <CR>", "command history"},
+		C = { "<cmd> lua require('telescope.builtin').commands() <CR>", "command"},
+		f = { "<cmd> lua require('telescope.builtin').filetypes() <CR>", "setup filetype"},
+		t = { "<cmd> lua require('telescope.builtin').tags() <CR>", "ctags"},
+		n = { "<cmd> lua require('telescope').extensions.notify.notify() <CR>", "notify history"},
+		['.'] = { "<cmd> lua _NOTIFY_SAMPLE() <CR>", "notify ami EC"},
+	},
+}, { prefix = "<leader>" })
+
+wk.register({
 	g = { name = "Git",
 		s = { name = "Stage",
 			s = "hunk",
@@ -183,6 +201,18 @@ wk.register({
 		v = { "<cmd> DiffviewToggleFiles <CR>", "toggle - diff view" },
 		V = { "<cmd> DiffviewFocusFiles <CR>", "focus - diff view" },
 	},
+}, { prefix = "<leader>" })
+
+wk.register({
+	g = { name = "Git",
+		s = { name = "Stage",
+			s = "stage to hunk",
+			r = "reset selected hunk",
+		},
+	},
+}, { mode = 'v', prefix = "<leader>" })
+
+wk.register({
 	t = {
 		name = "Toggle",
 		f = { "<cmd> ToggleTerm direction=float <CR>", " float" },
@@ -203,6 +233,9 @@ wk.register({
 		q = { "<cmd> cclose <CR>", " quickfix (close)" },
 		Q = { "<cmd> copen <CR>", " quickfix (open)" },
 	},
+}, { prefix = "<leader>" })
+
+wk.register({
 	s = {
 		name = "Session",
 		l = { "<cmd> SessionManager load_last_session<CR>", "load last session" },
@@ -211,36 +244,38 @@ wk.register({
 		D = { "<cmd> SessionManager delete_session<CR>", "delete session" },
 		s = { "<cmd> SessionManager save_current_session<CR>", "save session" },
 	},
-	b = { name = "Buffer",
-		b = { "<cmd> lua require('telescope.builtin').buffers() <CR>", "buffers"},
-		g = { ":BufferLineGoToBuffer ", "goto" },
-		p = { "<cmd> BufferLineTogglePin<CR>", "pin" },
-		t = { "<cmd> BufferLinePick<CR>", "pick" },
-		d = { "<cmd> BufferLinePickClose<CR>", "delete (choose)" },
-		c = { "<cmd> bdelete<CR>", "close" },
-		s = { name = "Sort",
-			d = { "<cmd> BufferLineSortByDirectory<CR>", "directory" },
-			e = { "<cmd> BufferLineSortByExtension<CR>", "extension" },
-			r = { "<cmd> BufferLineSortByRelativeDirectory<CR>", "relative directory" },
-			t = { "<cmd> BufferLineSortByTabs<CR>", "tabs" },
+}, { prefix = "<leader>" })
+
+if vim.g.custom.buffer_display == 1 then
+	wk.register({
+		b = { name = "Buffer",
+			b = { "<cmd> lua require('telescope.builtin').buffers() <CR>", "buffers"},
+			g = { ":BufferLineGoToBuffer ", "goto" },
+			p = { "<cmd> BufferLineTogglePin<CR>", "pin" },
+			t = { "<cmd> BufferLinePick<CR>", "pick" },
+			d = { "<cmd> BufferLinePickClose<CR>", "delete (choose)" },
+			s = { name = "Sort",
+				d = { "<cmd> BufferLineSortByDirectory<CR>", "directory" },
+				e = { "<cmd> BufferLineSortByExtension<CR>", "extension" },
+				r = { "<cmd> BufferLineSortByRelativeDirectory<CR>", "relative directory" },
+				t = { "<cmd> BufferLineSortByTabs<CR>", "tabs" },
+			},
+			C = { name = "Close(s)",
+				l = { "<cmd> BufferLineCloseRight<CR>", "right" },
+				h = { "<cmd> BufferLineCloseLeft<CR>", "left" },
+			},
 		},
-		C = { name = "Close(s)",
-			l = { "<cmd> BufferLineCloseRight<CR>", "right" },
-			h = { "<cmd> BufferLineCloseLeft<CR>", "left" },
+	}, { prefix = "<leader>" })
+else
+	wk.register({
+		b = { name = "Buffer",
+			b = { "<cmd> lua require('telescope.builtin').buffers() <CR>", "buffers"},
+			c = { "<cmd> bdelete<CR>", "close" },
 		},
-	},
-	v = { name = "view",
-		s = { "<cmd> lua require('telescope.builtin').spell_suggest() <CR>", "spell suggest"},
-		k = { "<cmd> lua require('telescope.builtin').keymaps() <CR>", "keymaps"},
-		h = { "<cmd> lua require('telescope.builtin').highlights() <CR>", "highlights"},
-		a = { "<cmd> lua require('telescope.builtin').autocommands() <CR>", "autocommands"},
-		c = { "<cmd> lua require('telescope.builtin').command_history() <CR>", "command history"},
-		C = { "<cmd> lua require('telescope.builtin').commands() <CR>", "command"},
-		f = { "<cmd> lua require('telescope.builtin').filetypes() <CR>", "setup filetype"},
-		t = { "<cmd> lua require('telescope.builtin').tags() <CR>", "ctags"},
-		n = { "<cmd> lua require('telescope').extensions.notify.notify() <CR>", "notify history"},
-		['.'] = { "<cmd> lua _NOTIFY_SAMPLE() <CR>", "notify ami EC"},
-	},
+	}, { prefix = "<leader>" })
+end
+
+wk.register({
 	["<leader>"] = { name = "EasyMotion",
 		w = { "<cmd> lua require'hop'.hint_words({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR})<cr>", "word"},
 		a = { "<cmd> lua require'hop'.hint_words()<cr>", "all"},
@@ -249,6 +284,7 @@ wk.register({
 		f = { "<cmd> lua require'hop'.hint_patterns({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", "patterns"},
 	},
 }, { prefix = "<leader>" })
+
 
 if (vim.fn.has('cscope') == 1) then
 	if (vim.fn.filereadable('cscope.out') == 1) then
@@ -267,15 +303,6 @@ if (vim.fn.has('cscope') == 1) then
 		}, { mode = 'n', prefix = "<leader>" })
 	end
 end
-
-wk.register({
-	g = { name = "Git",
-		s = { name = "Stage",
-			s = "stage to hunk",
-			r = "reset selected hunk",
-		},
-	},
-}, { mode = 'v', prefix = "<leader>" })
 
 wk.register({
 	t = "tab next",
