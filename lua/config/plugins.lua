@@ -266,4 +266,20 @@ return require('packer').startup(function()
  	use { 'preservim/nerdtree',
 		requires = 'ryanoasis/vim-devicons'
 	}
+
+	-- integrate vim editor on browser
+	-- this should also install firenvim from browser store/extension
+	use { 'glacambre/firenvim',
+		run = function() vim.fn['firenvim#install'](0) end,
+		setup = function()
+			vim.api.nvim_create_autocmd( "BufEnter", {
+				desc = "set markdown filetype when in github txt file",
+				pattern = "github.com_*.txt",
+				callback = function()
+					vim.cmd([[set filetype=markdown]])
+				end,
+			})
+		end,
+	}
+
 end)
