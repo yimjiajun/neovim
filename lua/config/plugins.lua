@@ -147,7 +147,10 @@ return require('packer').startup(function()
 
 	-- programming language highlight
 	use { 'nvim-treesitter/nvim-treesitter',
-		run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
+		run = function()
+			require('nvim-treesitter.install').update({ with_sync = true })
+			vim.cmd([[TSUpdateSync]])
+		end,
 		config = function()
 			require "setup.treesitter"
 		end,
