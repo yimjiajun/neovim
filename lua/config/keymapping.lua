@@ -70,3 +70,9 @@ if vim.fn.has('macunix') == 1 then
 else
 	vim.api.nvim_set_keymap("n", "gx", "<cmd> silent execute '!xdg-open ' . shellescape('<cWORD>') <CR>", { noremap = true, silent = true})
 end
+
+----------------------
+-- Bug
+----------------------
+-- Suibstitue with s key will cause character swap forwading and never stop unless send terminal <ctr-c>
+vim.api.nvim_set_keymap('n', 's', 'c <esc>', { noremap = false, silent = true})
