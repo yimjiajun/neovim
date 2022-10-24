@@ -18,6 +18,12 @@ require("gruvbox").setup({
 	},
 })
 
+require("gruvbox").setup({
+	palette_overrides = {
+		dark0_hard = "#0C0C0C",
+	}
+})
+
 if vim.g.custom.theme == 'gruvbox' then
 	vim.opt.background = 'dark'
 	vim.cmd[[colorscheme gruvbox]]
