@@ -31,7 +31,7 @@ end
 
 vim.api.nvim_create_augroup("Gruvbox", { clear = true })
 	vim.api.nvim_create_autocmd( "VimEnter", {
-		desc = "Sign",
+		desc = "Sign and TabLine",
 		group = "Gruvbox",
 		pattern = "*",
 		callback = function()
@@ -42,5 +42,6 @@ vim.api.nvim_create_augroup("Gruvbox", { clear = true })
 			vim.cmd[[highlight GruvboxYellowSign guibg=bg]]
 			vim.cmd[[highlight GruvboxRedSign guibg=bg]]
 			vim.cmd[[highlight GruvboxPurpleSign guibg=bg]]
+			vim.cmd[[highlight TablineFill guibg=bg]]
 		end,
 	})
