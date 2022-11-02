@@ -74,5 +74,12 @@ end
 ----------------------
 -- Bug
 ----------------------
--- Suibstitue with s key will cause character swap forwading and never stop unless send terminal <ctr-c>
-vim.api.nvim_set_keymap('n', 's', 'c <esc>', { noremap = false, silent = true})
+vim.api.nvim_create_augroup("keymap", { clear = true })
+	vim.api.nvim_create_autocmd( "VimEnter", {
+		desc = "Replace to normal substitue, since suibstitue with s key will cause character swap forwading and never stop unless send terminal <ctr-c>",
+		group = "keymap",
+		pattern = "*",
+		callback = function()
+			vim.api.nvim_set_keymap('n', 's', 'c <esc>', { noremap = false, silent = true})
+		end,
+	})
