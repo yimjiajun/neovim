@@ -95,3 +95,11 @@ Getting started : [how's to clangd](https://clangd.llvm.org/installation#compile
 clangd 設定指南:
 - [compile_command guide](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#clangd)
 - [json guide](https://clang.llvm.org/docs/JSONCompilationDatabase.html)
+
+# Vim Tips
+
+[Vim Cheat Sheet](https://vim.rtorr.com) / [Vim 訣竅表格](https://vim.rtorr.com/lang/zh_tw)
+- vim 基本鍵盤對應的功能介紹
+
+[Vim Command Sheet](https://vimhelp.org/index.txt.html#ex-cmd-index)
+- vim 基本指令對應的功能介紹
