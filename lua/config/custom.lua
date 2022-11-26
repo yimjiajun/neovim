@@ -8,5 +8,5 @@ vim.g.custom = {
 	-- statusline support
 	statusline_support = 0,
 	-- theme selection [ tundra, gruvbox ]
-	theme = 'gruvbox',
+	theme = 'tundra',
 }
