@@ -1,15 +1,20 @@
-require('config.settings')
-require('config.autocmd')
-require('config.plugins')
-require('config.keymapping')
-require('setup.cmp')
-require('setup.treesitter')
-require('setup.feline')
-require('setup.session_manager')
-require('setup.nvim_tree')
--- require('setup.onedark')
-require('setup.bufferline')
--- require('setup.mason')
--- require('setup.lspconfig')
+for _, source in ipairs {
+	"config.custom",
+	"config.plugins",
+	"config.settings",
+	"config.autocmd",
+	"config.keymapping",
+	"config.colors",
+	"config.compiler",
+} do
+  local status_ok, fault = pcall(require, source)
+  if not status_ok then vim.api.nvim_err_writeln("Failed to load " .. source .. "\n\n" .. fault) end
+end
 
-require('config.custom')
+if vim.g.custom.lsp_support == 0 then
+	if vim.fn.has('win32') == 1 then
+		vim.cmd[[source $MYVIMRC/../lua/config/vimrc.vim]]
+	else
+		vim.cmd[[source $HOME/.config/nvim/lua/config/vimrc.vim]]
+	end
+end

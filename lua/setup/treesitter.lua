@@ -1,7 +1,12 @@
 require'nvim-treesitter.configs'.setup {
   -- A list of parser names, or "all"
-  ensure_installed = { "c", "lua", "rust" },
-
+	ensure_installed = {
+		"c", "cpp", "cmake",
+		"bash",
+		"lua",
+		"make", "markdown", "markdown_inline",
+		"python", "yaml", "vim"
+	},
   -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
 
@@ -22,7 +27,7 @@ require'nvim-treesitter.configs'.setup {
     -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
     -- the name of the parser)
     -- list of language that will be disabled
-    disable = { "c", "rust" },
+    disable = { "rust", "help" },
 
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
@@ -30,4 +35,11 @@ require'nvim-treesitter.configs'.setup {
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = false,
   },
+}
+
+-- Indentation based on treesitter
+require'nvim-treesitter.configs'.setup {
+  indent = {
+    enable = true
+  }
 }

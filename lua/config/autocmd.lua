@@ -1,42 +1,42 @@
 vim.api.nvim_create_augroup("cursorline", { clear = true })
 	vim.api.nvim_create_autocmd( "InsertEnter", {
-		desc = "",
+		desc = "Disable cursor line when insert mode",
 		group = "cursorline",
 		pattern = "*",
 		callback = function()
-			vim.api.nvim_set_option('cursorline', false)
-			vim.api.nvim_set_option('cursorcolumn', false)
+			vim.opt_local.cursorline = false
+			vim.opt_local.cursorcolumn = false
 		end,
 	})
 	vim.api.nvim_create_autocmd( "InsertLeave", {
-		desc = "",
+		desc = "Display cursor line",
 		group = "cursorline",
 		pattern = "*",
 		callback = function()
-			vim.api.nvim_set_option('cursorline', true)
-			vim.api.nvim_set_option('cursorcolumn', false)
+			vim.opt_local.cursorline = true
+			vim.opt_local.cursorcolumn = false
 		end,
 	})
 	vim.api.nvim_create_autocmd( "WinEnter", {
-		desc = "",
+		desc = "Display cursor line",
 		group = "cursorline",
 		pattern = "*",
 		callback = function()
-			vim.api.nvim_set_option('cursorline', true)
-			vim.api.nvim_set_option('cursorcolumn', false)
+			vim.opt_local.cursorline = true
+			vim.opt_local.cursorcolumn = false
 		end,
 	})
 	vim.api.nvim_create_autocmd( "WinLeave", {
-		desc = "",
+		desc = "Disable curasor display",
 		group = "cursorline",
 		pattern = "*",
 		callback = function()
-			vim.api.nvim_set_option('cursorline', false)
-			vim.api.nvim_set_option('cursorcolumn', false)
+			vim.opt_local.cursorline = false
+			vim.opt_local.cursorcolumn = false
 		end,
 	})
 	vim.api.nvim_create_autocmd('TextYankPost', {
-		desc = "",
+		desc = "Flash the part being yank",
 		group = "cursorline",
 		pattern = "*",
 		callback = function()
@@ -46,11 +46,27 @@ vim.api.nvim_create_augroup("cursorline", { clear = true })
 
 vim.api.nvim_create_augroup( "extension file", { clear = true })
 	vim.api.nvim_create_autocmd( "FileType", {
-		desc = "smart indent for c and c++",
+		desc = "smart indent for c ",
 		group = "extension file",
-		pattern = "c, cpp",
+		pattern = "c",
 		callback = function()
-			vim.api.nvim_set_option('cindent', true)
+			vim.opt_local.cindent = true
+			vim.opt_local.softtabstop = 4
+			vim.opt_local.tabstop = 4
+			vim.opt_local.shiftwidth = 4
+			vim.opt_local.expandtab = false
+		end,
+	})
+	vim.api.nvim_create_autocmd( "FileType", {
+		desc = "smart indent for header",
+		group = "extension file",
+		pattern = "cpp",
+		callback = function()
+			vim.opt_local.cindent = true
+			vim.opt_local.softtabstop = 4
+			vim.opt_local.tabstop = 4
+			vim.opt_local.shiftwidth = 4
+			vim.opt_local.expandtab = false
 		end,
 	})
 	vim.api.nvim_create_autocmd( "FileType", {
@@ -62,6 +78,17 @@ vim.api.nvim_create_augroup( "extension file", { clear = true })
 			vim.opt_local.softtabstop = 2
 			vim.opt_local.shiftwidth = 2
 			vim.opt_local.expandtab = true
+		end,
+	})
+	vim.api.nvim_create_autocmd( "FileType", {
+		desc = "smart indent for yaml",
+		group = "extension file",
+		pattern = "lua",
+		callback = function()
+			vim.opt_local.tabstop = 2
+			vim.opt_local.softtabstop = 2
+			vim.opt_local.shiftwidth = 2
+			vim.opt_local.expandtab = false
 		end,
 	})
 	vim.api.nvim_create_autocmd( "BufWritePre", {
@@ -84,3 +111,15 @@ vim.api.nvim_create_augroup( "highlight", { clear = true })
 			vim.cmd([[syn match ExtraWhitespace /\s\+$\| \+\ze\t/]])
 		end,
 	})
+
+if (vim.fn.has('cscope') == 1) then
+	if (vim.fn.filereadable('cscope.out') == 1) then
+		vim.cmd('silent cs add cscope.out')
+	end
+end
+
+if vim.fn.has('win32') == 1 then
+	vim.cmd[[source $MYVIMRC/../lua/config/autocmd.vim]]
+else
+	vim.cmd[[source $HOME/.config/nvim/lua/config/autocmd.vim]]
+end

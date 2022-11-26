@@ -1,71 +1,85 @@
-local wk = require("which-key")
--- As an example, we will create the following mappings:
---  * <leader>ff find files
---  * <leader>fr show recent files
---  * <leader>fb Foobar
--- we'll document:
---  * <leader>fn new file
---  * <leader>fe edit file
--- and hide <leader>1
+----------------------
+-- move
+----------------------
+vim.api.nvim_set_keymap('i', '<C-j>', '<CR>', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '<C-b>', '<Left>', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '<C-d>', '<del>', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '<C-f>', '<Right>', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '<esc>b', '<C-o>b', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '<esc>f', '<C-o>w', { noremap = true, silent = true})
 
-local Terminal  = require('toggleterm.terminal').Terminal
-	local lazygit = Terminal:new({ cmd = "lazygit", direction = "float", hidden = true })
-		function _lazygit_toggle()
-		  lazygit:toggle()
-		end
-	local htop = Terminal:new({ cmd = "htop", direction = "float", hidden = true })
-		function _htop_toggle()
-		  htop:toggle()
-		end
-	local ncdu = Terminal:new({ cmd = "ncdu", direction = "float", hidden = true })
-		function _ncdu_toggle()
-		  ncdu:toggle()
-		end
-wk.register({
-	f = {
-		name = "Find", -- optional group name
-		a = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.*'})<CR>", "live grep"},
-		s = { "<cmd> lua require('telescope.builtin').grep_string()<CR>", "string"},
-		F = { "<cmd> lua require('telescope.builtin').find_files({hiddne=true}, {no_ignore=true})<CR>", "FILES"},
-		f = { "<cmd> lua require('telescope.builtin').find_files()<CR>", "files"},
-		S = {
-			name = "Specific",
-			c = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.c'})<CR>", "c"},
-			h = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.h'})<CR>", "header"},
-			d = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.dts'})<CR>", "dts"},
-			D = { "<cmd> lua require('telescope.builtin').live_grep({glob_pattern='*.dtsi'})<CR>", "dtsi"},
-		},
-	},
-	e = { "<cmd> NvimTreeToggle <CR>", "file bar" },
-	E = { "<cmd> NvimTreeFindFile <CR>", "file location" },
-	g = {
-		name = "git",
-		t = { "<cmd>lua _lazygit_toggle()<CR>", "lazygit" },
-	},
-	T = { "<cmd>TagbarToggle<CR>", "tag bar" },
-	t = {
-		name = "Toggle",
-		f = { "<cmd> ToggleTerm direction=float <CR>", "terminal" },
-		v = { "<cmd> ToggleTerm direction=vertical size=50<CR>", "terminal(v)" },
-		t = { "<cmd> ToggleTerm direction=tab <CR>", "terminal(t)" },
-		h = { "<cmd> ToggleTerm direction=horizontal <CR>", "terminal(h)" },
-		s = { "<cmd>lua _htop_toggle()<CR>", "system view" },
-		d = { "<cmd>lua _ncdu_toggle()<CR>", "disk view" },
-	},
-	s = {
-		name = "Session",
-		l = { "<cmd>SessionManager load_last_session<CR>", "load last session" },
-		d = { "<cmd> SessionManager load_current_dir_session<CR>", "load current dir session" },
-		L = { "<cmd> SessionManager load_session<CR>", "load session" },
-		D = { "<cmd> SessionManager delete_session<CR>", "delete session" },
-		s = { "<cmd> SessionManager save_current_session<CR>", "save session" },
-	},
-}, { prefix = "<leader>" })
+----------------------
+-- window
+----------------------
+vim.api.nvim_set_keymap('n', '<S-h>', '<C-w>h', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<S-l>', '<C-w>l', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<C-s>', '<cmd>w<CR>', { noremap = true, silent = true})
 
-vim.api.nvim_set_keymap('n', '<S-h>', '<cmd>bprevious<CR>', { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<S-l>', '<cmd>bNext<CR>', { noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<S-c>', '<cmd>bdelete<CR>', { noremap = true, silent = true})
-vim.api.nvim_set_keymap('i', '<C-h>', '<Left>', { noremap = true, silent = true})
-vim.api.nvim_set_keymap('i', '<C-j>', '<Down>', { noremap = true, silent = true})
-vim.api.nvim_set_keymap('i', '<C-k>', '<Up>', { noremap = true, silent = true})
-vim.api.nvim_set_keymap('i', '<C-Space>', '<ESC>', { noremap = true, silent = true})
+----------------------
+-- buffer
+----------------------
+if vim.g.custom.buffer_display == 1 then
+	vim.api.nvim_set_keymap('n', '<S-Tab>', '<cmd> BufferLineCyclePrev <CR>', { noremap = true, silent = true})
+	vim.api.nvim_set_keymap('n', '<Tab>', '<cmd> BufferLineCycleNext <CR>', { noremap = true, silent = true})
+else
+	vim.api.nvim_set_keymap('n', '<S-Tab>', '<cmd> bp <CR>', { noremap = true, silent = true})
+	vim.api.nvim_set_keymap('n', '<Tab>', '<cmd> bn <CR>', { noremap = true, silent = true})
+end
+vim.api.nvim_set_keymap('n', '<C-c>', '<cmd> bdelete <CR>', { noremap = true, silent = true})
+
+----------------------
+-- view
+----------------------
+vim.api.nvim_set_keymap('n', '<BS>', '<cmd> set hlsearch! <CR>', { noremap = true, silent = true})
+
+----------------------
+-- edit
+----------------------
+vim.api.nvim_set_keymap('i', '<C-s>', '<cmd>w<CR>', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '<C-d>', '<del>', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '<C-h>', '<c-o>X', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', 'lkj', '<ESC>', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('t', 'lkj', '<C-\\><C-n>', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('t', '\\][', '<C-c> exit<CR>', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '""', '""<ESC>i', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '\'\'', '\'\'<ESC>i', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '()', '()<ESC>i', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '{}', '{}<ESC>i', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '{<CR>', '{<CR>}<C-o>O', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '(<CR>', '(<CR>)<C-o>O', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '[<CR>', '[<CR>]<C-o>O', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '"<CR>', '"<CR>"<C-o>O', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('i', '\'<CR>', '\'<CR>\'<C-o>O', { noremap = true, silent = true})
+
+----------------------
+-- yank
+----------------------
+-- vim.api.nvim_set_keymap('n', 'x', '\"_x', { noremap = true, silent = true})
+-- vim.api.nvim_set_keymap('n', 'X', '\"_X', { noremap = true, silent = true})
+-- Don't yank on delete char
+vim.api.nvim_set_keymap("v", "x", '\"_x', { noremap = true, silent = true})
+vim.api.nvim_set_keymap("v", "X", '\"_X', { noremap = true, silent = true})
+vim.api.nvim_set_keymap("v", "p", '\"_dP', { noremap = true, silent = true})
+
+----------------------
+-- browser
+----------------------
+-- Open links under cursor in browser
+if vim.fn.has('macunix') == 1 then
+	vim.api.nvim_set_keymap("n", "gx", "<cmd> silent execute '!open ' . shellescape('<cWORD>') <CR>", { noremap = true, silent = true})
+else
+	vim.api.nvim_set_keymap("n", "gx", "<cmd> silent execute '!xdg-open ' . shellescape('<cWORD>') <CR>", { noremap = true, silent = true})
+end
+
+----------------------
+-- Bug
+----------------------
+vim.api.nvim_create_augroup("keymap", { clear = true })
+	vim.api.nvim_create_autocmd( "VimEnter", {
+		desc = "Replace to normal substitue, since suibstitue with s key will cause character swap forwading and never stop unless send terminal <ctr-c>",
+		group = "keymap",
+		pattern = "*",
+		callback = function()
+			vim.api.nvim_set_keymap('n', 's', 'c <esc>', { noremap = false, silent = true})
+		end,
+	})
