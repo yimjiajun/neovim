@@ -90,8 +90,10 @@ vim.api.nvim_create_augroup("highlight_colors", { clear = true })
 		group = "highlight_colors",
 		pattern = "*",
 		callback = function()
-			vim.cmd[[highlight StatusLine gui=none guifg=fg guibg=bg]]
-			vim.cmd[[highlight StatusLineNC gui=none guibg=bg]]
+			if vim.g.custom.theme == 'gruvbox' then
+					vim.cmd[[highlight StatusLine gui=none guifg=fg guibg=bg]]
+					vim.cmd[[highlight StatusLineNC gui=none guibg=bg]]
+			end
 		end,
 	})
 
