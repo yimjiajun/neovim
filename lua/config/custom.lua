@@ -9,4 +9,6 @@ vim.g.custom = {
 	statusline_support = 0,
 	-- theme selection [ tundra, gruvbox ]
 	theme = 'tundra',
+	-- transparent background
+	transparent_background = 1,
 }
