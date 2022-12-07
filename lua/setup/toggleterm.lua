@@ -19,14 +19,13 @@
         -- highlights which map to a highlight group name and a table of it's values
         -- NOTE: this is only a subset of values, any group placed here will be set for the terminal window split
         Normal = {
-          -- guibg = "<VALUE-HERE>",
+          link = "Normal",
         },
         NormalFloat = {
-          -- link = 'Normal'
+          link = 'Normal'
         },
         FloatBorder = {
-          -- guifg = "<VALUE-HERE>",
-          -- guibg = "<VALUE-HERE>",
+          link = "NormalFloat",
         },
       },
       shade_terminals = true, -- NOTE: this option takes priority over highlights specified so if you specify Normal highlights you should set this to false
