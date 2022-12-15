@@ -29,6 +29,7 @@ if vim.g.custom.theme == 'gruvbox' then
 	vim.cmd[[colorscheme gruvbox]]
 end
 
+if vim.g.custom.theme == 'gruvbox' then
 vim.api.nvim_create_augroup("Gruvbox", { clear = true })
 	vim.api.nvim_create_autocmd( "VimEnter", {
 		desc = "Sign and TabLine",
@@ -45,3 +46,4 @@ vim.api.nvim_create_augroup("Gruvbox", { clear = true })
 			vim.cmd[[highlight TablineFill guibg=bg]]
 		end,
 	})
+end

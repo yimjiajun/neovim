@@ -115,14 +115,6 @@ vim.api.nvim_create_augroup("highlight_colors", { clear = true })
 		end,
 	})
 
-	vim.api.nvim_create_autocmd( "VimEnter", {
-		desc = "Float",
-		group = "highlight_colors",
-		pattern = "*",
-		callback = function()
-			vim.cmd[[highlight NormalFloat guibg=bg]]
-		end,
-	})
 
 -- return as molokai when another lua calle
 local M = vim.g.color_default

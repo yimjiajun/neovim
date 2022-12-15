@@ -49,7 +49,7 @@
         -- like `size`, width and height can be a number or function which is passed the current terminal
         -- width = <value>,
          -- height = 50,
-        winblend = 20,
+        -- winblend = 20,
       },
       winbar = {
         enabled = false,

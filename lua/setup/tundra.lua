@@ -41,8 +41,6 @@ local setup = {
 			DiffDelete = { bg = '#5f0000', italic = true },
 			DiffAdd = { bg = '#262626', italic = true },
 			DiffChange = { bg = '#121212', italic = true },
-			-- Normal = { bg = '#000000' },
-			-- NormalNC = { bg = '#000000' },
 			Visual = { bg = '#1f2937', fg = '#f9fafb'},
 			TelescopePreviewBorder = { fg = '#f9fafb',  bg = 'none'},
 			TelescopePreviewNormal = { bg = 'none'},
@@ -53,6 +51,9 @@ local setup = {
 			TelescopeResultsTitle = { bg = '#b5e8b0' },
 			NormalFloat = { bg = 'none' },
 			NormalFloatNC = { bg = 'none' },
+			TabLine = { bg = 'none', fg = '#6C6C6C' },
+			TabLineSel = { bg = 'none' },
+			TabLineFill = { bg = 'none' },
 		},
   },
 };
