@@ -11,7 +11,7 @@ augroup Binary
 augroup END
 
 augroup LargeFile
-	let g:large_file = 10485760 " 10MB
+	let g:large_file = 500 * 1048" 500KB
 
 	" Set options:
 	"   eventignore+=FileType (no syntax highlighting etc
@@ -25,6 +25,15 @@ augroup LargeFile
 		\ if getfsize(f) > g:large_file |
 						\ set eventignore+=FileType |
 						\ setlocal noswapfile bufhidden=unload buftype=nowrite undolevels=-1 |
+						\ if getfsize(f) <= (1048*1048*1048) |
+							\ if getfsize(f) < (1048*1048) |
+								\ echo "large file :" (getfsize(f)/1048)"KB" |
+							\ else |
+								\ echo "large file :" (getfsize(f)/1048/1048)(getfsize(f)/1048%1000)"MB" |
+							\ endif |
+						\ else |
+							\ echo "large file :" (getfsize(f)/1048/1048/1048)(getfsize(f)/1048/1048%1000)"GB" |
+						\ endif |
 		\ else |
 						\ set eventignore-=FileType |
 		\ endif
