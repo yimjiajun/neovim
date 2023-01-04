@@ -54,10 +54,10 @@ local setup = {
 			TabLine = { bg = 'none', fg = '#6C6C6C' },
 			TabLineSel = { bg = 'none' },
 			TabLineFill = { bg = 'none' },
+			Pmenu = { fg = 'none', bg = 'none' },
 		},
   },
 };
-
 
 if vim.g.custom.theme == 'tundra' then
 	if vim.g.custom.transparent_background == 0 then
