@@ -4,7 +4,7 @@
 require("nvim-tree").setup({
   sort_by = "case_sensitive",
   view = {
-    adaptive_size = true,
+    adaptive_size = false,
 		width = 50,
     mappings = {
       list = {
@@ -12,7 +12,7 @@ require("nvim-tree").setup({
       },
     },
 		float = {
-			enable = true,
+			enable = false,
 			open_win_config = {
 				relative = "cursor",
 				border = "rounded",
@@ -31,10 +31,3 @@ require("nvim-tree").setup({
   },
 })
 
-vim.api.nvim_create_autocmd( "FileType", {
-	desc = "Highlight colors",
-	pattern = "NvimTree",
-	callback = function()
-		vim.cmd([[highlight NvimTreeVertSplit guibg=bg guifg=fg]])
-	end,
-})
