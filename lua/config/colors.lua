@@ -74,48 +74,6 @@ vim.g.color_default = {
 	diff_text = '#000000',
 }
 
-vim.api.nvim_create_augroup("highlight_colors", { clear = true })
-	vim.api.nvim_create_autocmd( "VimEnter", {
-		desc = "spelling check",
-		group = "highlight_colors",
-		pattern = "*",
-		callback = function()
-			vim.cmd[[highlight SpellBad guifg=fg guibg=bg]]
-			vim.cmd[[highlight SpellCap guifg=fg guibg=bg]]
-		end,
-	})
-
-	vim.api.nvim_create_autocmd( "VimEnter", {
-		desc = "Status line",
-		group = "highlight_colors",
-		pattern = "*",
-		callback = function()
-			if vim.g.custom.theme == 'gruvbox' then
-					vim.cmd[[highlight StatusLine gui=none guifg=fg guibg=bg]]
-					vim.cmd[[highlight StatusLineNC gui=none guibg=bg]]
-			end
-		end,
-	})
-
-	vim.api.nvim_create_autocmd( "VimEnter", {
-		desc = "visual",
-		group = "highlight_colors",
-		pattern = "*",
-		callback = function()
-			vim.cmd[[highlight Visual guibg=#3c383b]]
-		end,
-	})
-
-	vim.api.nvim_create_autocmd( "VimEnter", {
-		desc = "Signs",
-		group = "highlight_colors",
-		pattern = "*",
-		callback = function()
-			vim.cmd[[highlight SignColumn guibg=bg]]
-		end,
-	})
-
-
 -- return as molokai when another lua calle
 local M = vim.g.color_default
 return M
