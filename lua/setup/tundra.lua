@@ -59,6 +59,9 @@ local setup = {
 			SpelCap = { fg = 'none', bg = 'none' },
 			SignColumn = { bg = 'none' },
 			GitSignsCurrentLineBlame = { fg='#f9fafb', bg='#5f0000'},
+			-- StatusLine = { fg='none', bg='#1f2937'},
+			StatusLine = { fg='#1c1c1c', bg='#ebdbb2'},
+			StatusLineNC = { fg='none', bg='#1f2223'},
 		},
   },
 };
