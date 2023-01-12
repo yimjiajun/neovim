@@ -7,7 +7,7 @@ vim.api.nvim_set_option('updatetime', 400)
 -- view
 vim.api.nvim_set_option('termguicolors', true)
 vim.api.nvim_set_option('showmode', true)
-vim.api.nvim_set_option('laststatus', 1)
+vim.api.nvim_set_option('laststatus', 2)
 if vim.fn.has('nvim-0.8') == 1 then
 	vim.api.nvim_set_option('cmdheight', 1)
 end
