@@ -162,6 +162,11 @@ wk.register({
 		f = { "<cmd> lua require('telescope.builtin').filetypes() <CR>", "setup filetype"},
 		t = { "<cmd> lua require('telescope.builtin').tags() <CR>", "ctags"},
 		n = { "<cmd> lua require('telescope').extensions.notify.notify() <CR>", "notify history"},
+		['!'] = { name = "Cellular-automaton",
+			['1'] = { "<cmd> CellularAutomaton make_it_rain<CR>", "code raining"},
+			['2'] = { "<cmd> CellularAutomaton game_of_life<CR>", "code life"},
+			['3'] = { "<cmd> CellularAutomaton snake<CR>", "code snake"},
+		},
 		['.'] = { "<cmd> lua _NOTIFY_SAMPLE() <CR>", "notify ami EC"},
 	},
 }, { prefix = "<leader>" })

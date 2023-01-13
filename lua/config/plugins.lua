@@ -282,4 +282,10 @@ return require('packer').startup(function()
 		end,
 	}
 
+	use { 'eandrju/cellular-automaton.nvim',
+		config = function()
+			require('setup.cellular_automaton')
+		end,
+	}
+
 end)
