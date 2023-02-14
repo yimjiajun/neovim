@@ -7,6 +7,10 @@ vim.api.nvim_set_keymap('i', '<C-d>', '<del>', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('i', '<C-f>', '<Right>', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('i', '<esc>b', '<C-o>b', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('i', '<esc>f', '<C-o>w', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<C-k>', '<cmd>m .-2<CR>==', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<C-j>', '<cmd>m .+1<CR>==', { noremap = true, silent = true})
+vim.api.nvim_set_keymap('v', '<C-k>', "<cmd>'<,'>m '<-2<CR>gv=gv", { noremap = true, silent = true})
+vim.api.nvim_set_keymap('v', '<C-j>', "<cmd>'<, '>m '>+1<CR>gv=gv", { noremap = true, silent = true})
 
 ----------------------
 -- window
