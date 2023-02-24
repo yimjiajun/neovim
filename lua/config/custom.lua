@@ -8,7 +8,15 @@ vim.g.custom = {
 	-- statusline support
 	statusline_support = 0,
 	-- theme selection [ tundra, gruvbox ]
-	theme = 'tundra',
+	theme = 'gruvbox',
+	-- background color
+	background = 'dark',
 	-- transparent background
-	transparent_background = 1,
+	transparent_background = 0,
 }
+
+if vim.g.custom.theme == 'gruvbox' then
+	vim.g.gruvbox_theme = {
+		contrast = 0,
+	}
+end
