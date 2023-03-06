@@ -74,6 +74,9 @@ if vim.g.custom.theme == 'tundra' then
 				highlights = {
 					Normal = { bg = '#000000' },
 					NormalNC = { bg = '#000000' },
+					-- StatusLine = { fg='none', bg='#1f2937'},
+					StatusLine = { fg='#1c1c1c', bg='#ebdbb2'},
+					StatusLineNC = { fg='none', bg='#1f2223'},
 					TelescopePreviewBorder = { fg = '#f9fafb',  bg = '#000000'},
 					TelescopePreviewNormal = { bg = '#000000'},
 					TelescopePromptBorder = { fg = '#f9fafb',  bg = '#000000'},
