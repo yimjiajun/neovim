@@ -288,4 +288,8 @@ return require('packer').startup(function()
 		end,
 	}
 
+	-- github copilot
+	-- This should run Copilot! setup to authenticate copilot
+	use { 'github/copilot.vim' }
+
 end)
