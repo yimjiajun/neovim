@@ -137,7 +137,7 @@ local lsp_flags = {
 -- TODO this should change with mason.lua ( require("mason-lspconfig").setup({...)
 local servers = { 'bashls', 'clangd', 'cmake',
 		'lua_ls', 'zk', 'ltex', 'yamlls',
-		'powershell_es', 'pyright'}
+		'powershell_es', 'pyright', 'pylsp'}
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     -- on_attach = my_custom_on_attach,
