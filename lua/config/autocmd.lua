@@ -122,6 +122,15 @@ vim.api.nvim_create_augroup( "extension file", { clear = true })
 		end,
 	})
 
+	vim.api.nvim_create_autocmd( "BufWritePre", {
+		desc = "kill MS-doc new line",
+		group = "extension file",
+		pattern = "*",
+		callback = function()
+			vim.cmd([[%s/\r\+$//e]])
+		end,
+	})
+
 vim.api.nvim_create_augroup( "highlight", { clear = true })
 	vim.api.nvim_create_autocmd( "Syntax", {
 		desc = "whitespace trailing display",
