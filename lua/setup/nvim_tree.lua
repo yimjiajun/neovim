@@ -4,7 +4,7 @@
 require("nvim-tree").setup({
   sort_by = "case_sensitive",
   view = {
-    adaptive_size = false,
+    adaptive_size = true,
 		width = 50,
     mappings = {
       list = {
@@ -12,7 +12,7 @@ require("nvim-tree").setup({
       },
     },
 		float = {
-			enable = false,
+			enable = true,
 			open_win_config = {
 				relative = "cursor",
 				border = "rounded",
