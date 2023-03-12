@@ -111,6 +111,7 @@ vim.api.nvim_create_augroup( "extension file", { clear = true })
 			vim.opt_local.tabstop = 2
 			vim.opt_local.shiftwidth = 2
 			vim.opt_local.expandtab = true
+			vim.cmd([[setlocal spell]])
 		end,
 	})
 	vim.api.nvim_create_autocmd( "BufWritePre", {
