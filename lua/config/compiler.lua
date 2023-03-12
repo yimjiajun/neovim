@@ -17,8 +17,10 @@ if prj_found ~= true then
 		group = "compiler",
 		pattern = "c",
 		callback = function()
-			local bufnr = vim.api.nvim_get_current_buf()
-			vim.api.nvim_buf_set_option(bufnr, 'makeprg', [[gcc % -o %:t:r && mv %:t:r /tmp/%:t:r && /tmp/%:t:r && rm /tmp/%:t:r]])
+		if not io.open(string.lower('Makefile')) then
+				local bufnr = vim.api.nvim_get_current_buf()
+				vim.api.nvim_buf_set_option(bufnr, 'makeprg', [[gcc % -o %:t:r && mv %:t:r /tmp/%:t:r && /tmp/%:t:r && rm /tmp/%:t:r]])
+			end
 		end,
 	})
 end
