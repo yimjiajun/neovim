@@ -74,6 +74,12 @@ vim.g.color_default = {
 	diff_text = '#000000',
 }
 
+if vim.g.custom.theme == 'zellner' then
+	vim.cmd([[hi FloatBorder guibg='none']])
+	vim.cmd([[hi NormalFloat guibg='none']])
+	vim.cmd([[hi StatusLine guibg='#ebdbb2' guifg='#000000']])
+end
+
 -- return as molokai when another lua calle
 local M = vim.g.color_default
 return M

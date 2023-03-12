@@ -1,3 +1,16 @@
+if vim.g.custom.theme ~= "gruvbox" then
+	if vim.g.custom.theme ~= "tundra" then
+		vim.g.custom.theme = 'zellner'
+		vim.g.custom.background = 'light'
+		vim.cmd([[colorscheme zellner]])
+	end
+end
+
+if vim.g.custom.background == 'light' then
+	vim.api.nvim_set_option('background', 'light')
+else
+	vim.api.nvim_set_option('background', 'dark')
+end
 
 vim.api.nvim_set_option('hidden', true)
 vim.api.nvim_set_option('clipboard', 'unnamedplus')
