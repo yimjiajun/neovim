@@ -136,7 +136,7 @@ local lsp_flags = {
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 -- TODO this should change with mason.lua ( require("mason-lspconfig").setup({...)
 local servers = { 'bashls', 'clangd', 'cmake',
-		'lua_ls', 'zk', 'ltex', 'yamlls',
+		'lua_ls', 'zk', 'yamlls',
 		'powershell_es', 'pyright', 'pylsp'}
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
