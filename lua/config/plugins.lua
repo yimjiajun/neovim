@@ -292,4 +292,7 @@ return require('packer').startup(function()
 	-- This should run Copilot! setup to authenticate copilot
 	use { 'github/copilot.vim' }
 
+	-- Async build ( usage same as :make, makprg, copen, cclose )
+	-- Command : Make, Copen
+	use { 'tpope/vim-dispatch' }
 end)
