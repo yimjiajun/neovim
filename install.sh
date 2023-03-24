@@ -3,9 +3,9 @@
 case "$OSTYPE" in
 	"linux-gnu"*)
 		if [[ "$(command -v nala)" ]]; then
-			pkg_install_cmd="sudo nala install"
+			pkg_install_cmd="sudo nala -y install"
 		else
-			pkg_install_cmd="sudo apt-get install"
+			pkg_install_cmd="sudo apt-get -y install"
 		fi
 		;;
 	"darwin"*)
@@ -116,7 +116,7 @@ function install {
 			echo -e "Install clangd ..." >&1
 
 			if [[ "$OSTYPE" == "linux-gnu" ]]; then
-				sudo apt-get intsall clangd-12
+				sudo apt-get intsall -y clangd-12
 				sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-12 100
 			elif [[ "$OSTYPE" == "darwin"* ]]; then
 				brew install llvm
@@ -128,7 +128,7 @@ function install {
 
 			if awk 'BEGIN { exit !('"$version"' >= 22.04) }'; then
 				echo -e "Install python env for cmake and py lsp ..." >&1
-				sudo apt install python3.10-venv
+				sudo apt install -y python3.10-venv
 			fi
 		}
 
@@ -172,8 +172,9 @@ function install {
 		fi
 
 		install_nvim $neovim_install_path
-		packer_manager_install
 	fi
+
+	packer_manager_install
 
 	# install_nvim_config $neovim_config_path
 
