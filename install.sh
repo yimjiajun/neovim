@@ -79,12 +79,12 @@ function install {
 	}
 
 	function packer_manager_install {
-		local path="$HOME/.local/share/pkg_install_cmd/site/pack/packer/start/packer.nvim"
+		local path="$HOME/.local/share/nvim/site/pack/packer/start/packer.nvim"
 
 		echo -e "Install Neovim packer manager" >&1
 
 		if [[ ! -d "$path" ]]; then
-			git clone --depth 1 https://github.com/wbthomason/packer.pkg_install_cmd "$path"
+			git clone --depth 1 https://github.com/wbthomason/packer.nvim "$path"
 		else
 			git -C "$path" pull
 		fi
