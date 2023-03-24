@@ -117,6 +117,13 @@ function install {
 				echo -e "\033[31msudo apt-get remove --purge nodejs npm\033[0m" >&1
 				echo -e "Re-install node and npm failed!" >&2
 			fi
+
+			echo -e "Install npm ... for neovim lsp" >&1
+			$pkg_install_cmd npm
+
+			if [[ "$?" -ne 0 ]]; then
+				echo -e"\033[31msudo apt-get remove --purge npm\033[0m" >&1
+			fi
 		}
 
 		function install_clangd {
