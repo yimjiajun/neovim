@@ -100,8 +100,19 @@ function install {
 
 			echo -e "Install nvm ..." >&1
 			curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+
+			if [[ "$?" -ne 0 ]]; then
+				echo -e "Install nvm failed!" >&2
+				return 1
+			fi
+
+			if [[ -f "$HOME/.nvm/nvm.sh" ]]; then
+				source "$HOME/.nvm/nvm.sh"
+			fi
+
 			echo -e "Install node and npm ..." >&1
 			nvm install node
+
 			if [[ "$?" -ne 0 ]]; then
 				echo -e "\033[31msudo apt-get remove --purge nodejs npm\033[0m" >&1
 				echo -e "Re-install node and npm failed!" >&2
