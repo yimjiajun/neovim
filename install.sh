@@ -5,7 +5,7 @@ case "$OSTYPE" in
 		if [[ "$(command -v nala)" ]]; then
 			pkg_install_cmd="sudo nala -y install"
 		else
-			pkg_install_cmd="sudo apt-get -y install"
+			pkg_install_cmd="sudo apt install -y"
 		fi
 		;;
 	"darwin"*)
@@ -116,7 +116,7 @@ function install {
 			echo -e "Install clangd ..." >&1
 
 			if [[ "$OSTYPE" == "linux-gnu" ]]; then
-				sudo apt-get intsall -y clangd-12
+				sudo apt install -y clangd-12
 				sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-12 100
 			elif [[ "$OSTYPE" == "darwin"* ]]; then
 				brew install llvm
