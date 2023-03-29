@@ -240,14 +240,6 @@ return require('packer').startup(function()
 		end,
 	}
 
-	-- Smooth sroll
-	use { 'karb94/neoscroll.nvim',
-		config = function()
-			require('neoscroll').setup()
-			require('setup.neoscrolls')
-		end,
-	}
-
 	-- Themes
 	use { 'sam4llis/nvim-tundra',
 		config = function()
