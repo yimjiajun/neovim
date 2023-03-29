@@ -135,7 +135,7 @@ local lsp_flags = {
 }
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
 -- TODO this should change with mason.lua ( require("mason-lspconfig").setup({...)
-local servers = { 'bashls', 'clangd', 'cmake',
+local servers = { 'bashls', 'cmake',
 		'lua_ls', 'zk', 'yamlls',
 		'powershell_es', 'pyright', 'pylsp'}
 for _, lsp in ipairs(servers) do
@@ -156,4 +156,28 @@ require('lspconfig')['lua_ls'].setup{
 			}
 		}
 	},
+}
+
+local clangd_capabilities = capabilities
+clangd_capabilities.textDocument.semanticHighlighting = true
+clangd_capabilities.offsetEncoding = "utf-8"
+require('lspconfig')['clangd'].setup{
+	capabilities = clangd_capabilities,
+	cmd = {
+		"clangd",
+		"--background-index",
+		"--pch-storage=memory",
+		"--clang-tidy",
+		"--suggest-missing-includes",
+		"--cross-file-rename",
+		"--completion-style=detailed",
+	},
+	init_options = {
+		clangdFileStatus = true,
+		usePlaceholders = true,
+		completeUnimported = true,
+		semanticHighlighting = true,
+	},
+	on_attach = on_attach,
+	flags = lsp_flags,
 }
