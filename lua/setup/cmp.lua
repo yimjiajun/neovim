@@ -1,4 +1,4 @@
- vim.api.nvim_set_option('completeopt', 'menu,menuone,noselect')
+vim.api.nvim_set_option('completeopt', 'menu,menuone,noselect')
   -- Set up nvim-cmp.
 -- local tabnine = require "cmp_tabnine"
 --
