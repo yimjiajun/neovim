@@ -2,64 +2,34 @@
 
 # 下載
 
-## 方法一
-
-透過該`install.sh`下載一切所需要的內容
-
 1. 透過git repository 下載安裝工具
 
-		git clone https://github.com/yimjiajun/nvimSetup.git
+  ```bash
+  if [[ -d "$HOME/.config/nvim" ]]; then
+    # backup current neovim configuration directory
+    mv "$HOME/.config/nvim" "$HOME/.config/nvim~"
+  fi
+
+  git clone https://github.com/yimjiajun/neovim.git "$HOME/.config/nvim"
+  ```
 
 2. 執行安裝
 
-		cd nvimSetup && ./install.sh
+透過該`setup.sh`下載一切所需要的內容
 
-## 方法二
-
-**手動下載**
-
-下載`Neovim`: https://github.com/neovim/neovim/wiki/Building-Neovim
-
-**使用該存儲庫提供的設定:**
-
-1. 下載套件管理- [packer](https://github.com/wbthomason/packer.nvim)
-	- linux / unix
-
-			git clone --depth 1 https://github.com/wbthomason/packer.nvim\
-			 ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-
-	- window
-
-			git clone https://github.com/wbthomason/packer.nvim "$env:LOCALAPPDATA\nvim-data\site\pack\packer\start\packer.nvim"
-
-2. 備份目前的設定檔案:
-	- linux / unix
-
-			mv ~/.config/nvim /tmp/
-
-	- window
-
-			~\AppData\Local\nvim
-
-3. 下載該設定檔案
-	- linux / unix
-
-			git clone git@github.com:yimjiajun/neovim.git ~/.config/nvim
-
-	- window
-
-			git clone git@github.com:yimjiajun/neovim.git ~\AppData\Local\nvim
-
-4. 更新
-
-		nvim +PackerSync
+  ```bash
+  "$HOME/.config/nvim/setup.sh install"
+  ```
 
 開始使用
 
+  ```bash
 	nvim
+  ```
 
 # 工具
 
+- [ ] [lazy](https://github.com/folke/lazy.nvim) : 套件管理
 - [ ] [fzf](https://github.com/junegunn/fzf) : 簡易且快速找尋檔案
 - [ ] [htop](https://htop.dev/) : 系統管理
 - [ ] [ripgrep](https://github.com/BurntSushi/ripgrep) : 閃電速度找尋文字
