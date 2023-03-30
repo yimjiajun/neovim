@@ -1,4 +1,10 @@
-<img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Neovim-logo.svg" alt="Neovim-logo" width="600"/>
+<div align="center">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Neovim-logo.svg" alt="Neovim-logo" width="200">
+</div>
+
+<div align="center">
+  <img src="https://github.com/yimjiajun/neovim/wiki/images/neovim_home.png" alt="Neovim Home" width="1000">
+</div>
 
 # 下載
 
@@ -37,25 +43,34 @@
 - [ ] [ncdu](https://dev.yorhel.nl/ncdu) : 存儲容量管理
 
 # Lsp (language server protocol)
-<img src="https://matklad.github.io/assets/LSP-MxN.png" alt="Lsp-description" width="500"/>
+
+<div align="center">
+  <img src="https://matklad.github.io/assets/LSP-MxN.png" alt="Lsp-description" width="500"/>
+</div>
 
 ## Clangd
 
-<img src="https://llvm.org/img/LLVMWyvernBig.png" alt="Lsp-llvm-clangd" width="200"/>
+<div align="center">
+  <img src="https://llvm.org/img/LLVMWyvernBig.png" alt="Lsp-llvm-clangd" width="200">
+</div>
 
 Getting started : [how's to clangd](https://clangd.llvm.org/installation#compile_commandsjson)
 
 ### Cmake
 
-使用cmake規劃build，能同時產生`compile_command.json`.
-`compile_command.json`會產生在`build/`檔案裡
+使用cmake規劃build，能同時產生 `compile_command.json` 在 `build/` 檔案裡
+
 - 若在build階段過後，未產生該檔案，需附該設定變數:
 
-		cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+    ```bash
+    cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+    ```
 
-連結該檔案到程式最外層`CWD`
+連結該檔案到程式最外層**CWD**
 
-	ln -s $project/build/compilie_command.json .
+```bash
+ln -s $project/build/compilie_command.json .
+```
 
 ### Customize clangd (compile_command.json)
 
