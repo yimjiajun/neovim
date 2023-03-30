@@ -4,28 +4,28 @@
 
 1. 透過git repository 下載安裝工具
 
-  ```bash
-  if [[ -d "$HOME/.config/nvim" ]]; then
-    # backup current neovim configuration directory
-    mv "$HOME/.config/nvim" "$HOME/.config/nvim~"
-  fi
+    ```bash
+    if [[ -d "$HOME/.config/nvim" ]]; then
+      # backup current neovim configuration directory
+      mv "$HOME/.config/nvim" "$HOME/.config/nvim~"
+    fi
 
-  git clone https://github.com/yimjiajun/neovim.git "$HOME/.config/nvim"
-  ```
+    git clone https://github.com/yimjiajun/neovim.git "$HOME/.config/nvim"
+    ```
 
 2. 執行安裝
 
-透過該`setup.sh`下載一切所需要的內容
+    透過該`setup.sh`下載一切所需要的內容
 
-  ```bash
-  "$HOME/.config/nvim/setup.sh install"
-  ```
+    ```bash
+    "$HOME/.config/nvim/setup.sh install"
+    ```
 
-開始使用
+3. 開始使用
 
-  ```bash
-	nvim
-  ```
+    ```bash
+    nvim
+    ```
 
 # 工具
 
