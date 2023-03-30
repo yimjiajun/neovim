@@ -12,7 +12,7 @@ vim.g.custom = {
 	-- background color
 	background = 'dark',
 	-- transparent background
-	transparent_background = 0,
+	transparent_background = 1,
 }
 
 if vim.g.custom.theme == 'gruvbox' then

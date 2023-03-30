@@ -110,5 +110,11 @@ if vim.g.custom.theme == 'gruvbox' then
 
 	require("gruvbox").setup(setup)
 
+	-- gruvbox-material
+	vim.g.gruvbox_material_background = 'hard'
+	vim.g.gruvbox_material_better_performance = 1 -- Enabling this option will reduce loading time by approximately 50%.
+	vim.g.gruvbox_material_palette = 'material'
+	vim.g.gruvbox_material_transparent_background = vim.g.custom.transparent_background
+
 	vim.cmd("colorscheme gruvbox-material")
 end
