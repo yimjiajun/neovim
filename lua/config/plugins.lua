@@ -267,7 +267,7 @@ require('hop').setup ({
 		enabled = false,
 		concurrency = nil, ---@type number? set to 1 to check for updates very slowly
 		notify = true, -- get a notification when new updates are found
-		frequency = 3600 * 24 * 7, -- check for updates. Ex. every hour (3600)
+		frequency = 604800, -- check for updates. Ex. every hour (3600)
 	},
 	change_detection = {
 		-- automatically check for config file changes and reload the ui
