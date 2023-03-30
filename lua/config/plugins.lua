@@ -18,8 +18,8 @@ require("lazy").setup({
 		},
 
 		{ 'preservim/tagbar' },
-
-		{ 'neovim/nvim-lspconfig' }, -- lsp config in nvim-cmp
+		-- lsp config in nvim-cmp
+		{ 'neovim/nvim-lspconfig' },
 		{ "onsails/lspkind-nvim" },
 		{ "hrsh7th/cmp-buffer" },
 		{ "hrsh7th/cmp-path" },
@@ -138,7 +138,7 @@ require("lazy").setup({
 
 		-- dashboard
 		{ 'goolord/alpha-nvim',
-config = function()
+			config = function()
 				require 'alpha'.setup(require('setup.alphas').config)
 			end
 		},
@@ -158,7 +158,7 @@ config = function()
 		},
 
 		-- git command line
-{ 'tpope/vim-fugitive' },
+		{ 'tpope/vim-fugitive' },
 
 		-- lsp pop up preview
 		{ 'rmagatti/goto-preview',
@@ -184,7 +184,7 @@ config = function()
 			config = function()
 				-- you can configure Hop the way you like here; see :h hop-config
 				require('setup.hop')
-require('hop').setup ({
+				require('hop').setup ({
 					keys = 'etovxqpdygfblzhckisuran',
 				})
 			end
@@ -210,7 +210,8 @@ require('hop').setup ({
 			config = function()
 				require('setup.tundra')
 			end,
-},
+		},
+
 		{ "sainnhe/gruvbox-material" },
 		{ "ellisonleao/gruvbox.nvim", -- optional, for file icons
 			config = function ()
