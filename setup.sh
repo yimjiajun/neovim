@@ -172,12 +172,20 @@ function link {
 }
 
 function main {
-	if [[ -z "$1" ]]; then
-		echo "Usage: $0 [run|install|link]"
-		exit 1
+	local sel="$1"
+
+	if [[ -z "$sel" ]]; then
+		read -p "Setup all required tools? [y/N] " -n 1 -r
+
+		if [[ "$REPLY" =~ ^[Yy]$ ]]; then
+			sel="install"
+		else
+			echo "Usage: $0 [run|install|link]"
+			exit 1
+		fi
 	fi
 
-	case "$1" in
+	case "$sel" in
 		run)
 			run
 			;;
