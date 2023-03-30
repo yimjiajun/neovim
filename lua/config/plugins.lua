@@ -196,7 +196,7 @@ require("lazy").setup({
 		},
 
 		-- Color display
-{ 'norcalli/nvim-colorizer.lua',
+		{ 'norcalli/nvim-colorizer.lua',
 			config = function()
 				require('colorizer').setup()
 				require('setup.colorizers')
@@ -274,9 +274,7 @@ require("lazy").setup({
 		notify = true, -- get a notification when changes are found
 	},
 	performance = {
-		cache = {
-			enabled = true,
-		},
+		cache = { enabled = true, },
     reset_packpath = true, -- reset the package path to improve startup time
     rtp = {
       -- disable some rtp plugins
