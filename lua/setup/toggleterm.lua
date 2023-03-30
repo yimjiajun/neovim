@@ -25,7 +25,7 @@
           link = 'Normal'
         },
         FloatBorder = {
-          link = "NormalFloat",
+          -- link = "NormalFloat",
         },
       },
       shade_terminals = true, -- NOTE: this option takes priority over highlights specified so if you specify Normal highlights you should set this to false

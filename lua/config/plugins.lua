@@ -244,7 +244,10 @@ return require('packer').startup(function(use)
 			require('setup.tundra')
 		end,
 	}
-	use { "ellisonleao/gruvbox.nvim",
+	use { "sainnhe/gruvbox-material",
+		requires = {
+		 "ellisonleao/gruvbox.nvim", -- optional, for file icons
+		},
 		config = function ()
 			require('setup.gruvbox')
 		end

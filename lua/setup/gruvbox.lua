@@ -110,5 +110,5 @@ if vim.g.custom.theme == 'gruvbox' then
 
 	require("gruvbox").setup(setup)
 
-	vim.cmd("colorscheme gruvbox")
+	vim.cmd("colorscheme gruvbox-material")
 end
