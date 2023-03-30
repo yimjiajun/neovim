@@ -23,7 +23,6 @@ function run {
 		exit 1
 	fi
 
-	# if nvim command found
 	if [[ -n "$(command -v nvim)" ]]; then
 		if [[ "$1" == "nvim" ]]; then
 			nvim
@@ -60,36 +59,6 @@ function install {
 		sudo make -C ${path} install
 
 		echo -e "NeoVim installed on /usr/local/" >&1
-	}
-
-	function install_nvim_config {
-		path="$1"
-
-		if [[ -d "$path" ]]; then
-			read -p "Neovim config already exists, do you want to overwrite it? [y/n] " -n 1 -r
-
-			if [[ $REPLY =~ ^[Yy]$ ]]; then
-				rm -rf $path
-			else
-				return 0
-			fi
-		fi
-
-		git clone https://github.com/yimjiajun/neovim.git $path
-	}
-
-	function packer_manager_install {
-		local path="$HOME/.local/share/nvim/site/pack/packer/start/packer.nvim"
-
-		echo -e "Install Neovim packer manager" >&1
-
-		if [[ ! -d "$path" ]]; then
-			git clone --depth 1 https://github.com/wbthomason/packer.nvim "$path"
-		else
-			git -C "$path" pull
-		fi
-
-		return
 	}
 
 	function relative_tools_install {
@@ -192,13 +161,9 @@ function install {
 		install_nvim $neovim_install_path
 	fi
 
-	packer_manager_install
-
-	# install_nvim_config $neovim_config_path
-
 	relative_tools_install
 
-	nvim +PackerSync
+	echo -e "Success install neovim!" >&1
 }
 
 function link {
@@ -230,3 +195,5 @@ function main {
 }
 
 main "$@"
+
+exit 0
