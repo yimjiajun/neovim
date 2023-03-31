@@ -168,12 +168,11 @@ require("lazy").setup({
 
 		-- markdown preview
 		{ "iamcco/markdown-preview.nvim",
-		run = "cd app && npm install",
-		setup = function()
-			vim.g.mkdp_filetypes = { "markdown" }
-			vim.g.mkdp_browser = 'firefox'
-		end,
-		ft = { "markdown" },
+			build = "cd app && npm install",
+			config = function()
+				require('setup.markdown_preview')
+			end,
+			ft = { "markdown" },
 		},
 
 		-- easy motion
