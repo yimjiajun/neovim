@@ -13,6 +13,8 @@ vim.g.custom = {
 	background = 'dark',
 	-- transparent background
 	transparent_background = 1,
+	-- customizing function
+	func = require('config.functions'),
 }
 
 if vim.g.custom.theme == 'gruvbox' then
