@@ -3,12 +3,7 @@ local func = require("config.functions")
 
 local function makeprg_mdbook()
 	local bufnr = vim.api.nvim_get_current_buf()
-
-	if not io.open(string.lower('book')) then
-		vim.api.nvim_buf_set_option(bufnr, 'makeprg', [[mdbook build]])
-	end
-
-	vim.api.nvim_buf_set_option(bufnr, 'makeprg', " if [[ ! -d book ]]; then mdbook build; fi mdbook serve")
+	vim.api.nvim_buf_set_option(bufnr, 'makeprg', " if [[ ! -d book ]];then; mdbook build;fi; mdbook serve")
 end
 
 local function makeprg_zephyr()
