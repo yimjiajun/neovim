@@ -249,6 +249,13 @@ require("lazy").setup({
 		-- Async build ( usage same as :make, makprg, copen, cclose )
 		-- Command : Make, Copen
 		{ 'tpope/vim-dispatch' },
+
+		{ 'sakhnik/nvim-gdb',
+			build = "./install.sh",
+			config = function()
+				require('setup.nvim_gdb')
+			end,
+		},
 	},
   defaults = {
     -- By default, Your custom plugins will load during startup.
