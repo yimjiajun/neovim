@@ -3,7 +3,13 @@ local func = require("config.functions")
 
 local function makeprg_mdbook()
 	local bufnr = vim.api.nvim_get_current_buf()
-	vim.api.nvim_buf_set_option(bufnr, 'makeprg', " if [[ ! -d book ]];then; mdbook build;fi; mdbook serve")
+		if vim.fn.executable('xdg-open') == 1 then
+			vim.api.nvim_buf_set_option(bufnr, 'makeprg', " if [[ ! -d book ]];then; mdbook build;fi; xdg-open http://localhost:3000 && mdbook serve")
+		elseif vim.fn.executable('wslview') == 1 then
+			vim.api.nvim_buf_set_option(bufnr, 'makeprg', " if [[ ! -d book ]];then; mdbook build;fi; wslview http://localhost:3000 && mdbook serve")
+		elseif vim.fn.executable('open') == 1 then
+			vim.api.nvim_buf_set_option(bufnr, 'makeprg', " if [[ ! -d book ]];then; mdbook build;fi; open http://localhost:3000 && mdbook serve")
+		end
 end
 
 local function makeprg_zephyr()
