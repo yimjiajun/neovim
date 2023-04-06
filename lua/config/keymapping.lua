@@ -71,8 +71,19 @@ vim.api.nvim_set_keymap("v", "p", '\"_dP', { noremap = true, silent = true})
 -- Open links under cursor in browser
 if vim.fn.has('macunix') == 1 then
 	vim.api.nvim_set_keymap("n", "gx", "<cmd> silent execute '!open ' . shellescape('<cWORD>') <CR>", { noremap = true, silent = true})
+elseif vim.fn.has('win32') == 1 then
+	vim.api.nvim_set_keymap("n", "gx", "<cmd> silent execute '!start ' . shellescape('<cWORD>') <CR>", { noremap = true, silent = true})
 else
-	vim.api.nvim_set_keymap("n", "gx", "<cmd> silent execute '!xdg-open ' . shellescape('<cWORD>') <CR>", { noremap = true, silent = true})
+	if vim.fn.isdirectory('/run/WSL') == 1 then
+		vim.api.nvim_set_keymap("n", "gx", "<cmd> silent execute '!wslview ' . shellescape('<cWORD>') <CR>", { noremap = true, silent = true})
+	else
+		if vim.fn.executable('xdg-open') == 1 then
+			vim.api.nvim_set_keymap("n", "gx", "<cmd> silent execute '!xdg-open ' . shellescape('<cWORD>') <CR>", { noremap = true, silent = true})
+		else
+			vim.api.nvim_set_keymap("n", "gx", "<cmd> echo 'Web browser not found to open ' .. expand('<cWORD>') <CR>", { noremap = true, silent = true})
+
+		end
+	end
 end
 
 ----------------------
