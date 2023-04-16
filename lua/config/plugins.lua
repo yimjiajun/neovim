@@ -263,6 +263,8 @@ require("lazy").setup({
 			end
 		},
 
+		{ 'dhruvasagar/vim-table-mode' },
+
 		{'nvim-orgmode/orgmode',
 			ft = {'org'},
 			dependencies = "nvim-treesitter/nvim-treesitter",
