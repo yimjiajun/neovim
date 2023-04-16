@@ -256,6 +256,12 @@ require("lazy").setup({
 				require('setup.nvim_gdb')
 			end,
 		},
+
+		{ "folke/zen-mode.nvim",
+			config = function()
+				require("setup.zen_mode")
+			end
+		},
 	},
   defaults = {
     -- By default, Your custom plugins will load during startup.
