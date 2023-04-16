@@ -280,16 +280,17 @@ else
 	}, { prefix = "<leader>" })
 end
 
-wk.register({
-	["<leader>"] = { name = "EasyMotion",
-		w = { "<cmd> lua require'hop'.hint_words({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR})<cr>", "word"},
-		a = { "<cmd> lua require'hop'.hint_words()<cr>", "all"},
-		l = { "<cmd> lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", "line"},
-		F = { "<cmd> lua require'hop'.hint_patterns()<cr>", "patterns (all)"},
-		f = { "<cmd> lua require'hop'.hint_patterns({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", "patterns"},
-	},
-}, { prefix = "<leader>" })
-
+if pcall(require, 'hop') then
+	wk.register({
+		["<leader>"] = { name = "EasyMotion",
+			w = { "<cmd> lua require'hop'.hint_words({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR})<cr>", "word"},
+			a = { "<cmd> lua require'hop'.hint_words()<cr>", "all"},
+			l = { "<cmd> lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", "line"},
+			F = { "<cmd> lua require'hop'.hint_patterns()<cr>", "patterns (all)"},
+			f = { "<cmd> lua require'hop'.hint_patterns({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", "patterns"},
+		},
+	}, { prefix = "<leader>" })
+end
 
 if (vim.fn.has('cscope') == 1) then
 	if (vim.fn.filereadable('cscope.out') == 1) then
@@ -307,6 +308,12 @@ if (vim.fn.has('cscope') == 1) then
 			},
 		}, { mode = 'n', prefix = "<leader>" })
 	end
+end
+
+if pcall(require, 'zen-mode') then
+	wk.register({
+		z = {"<cmd> ZenMode<CR>", "Zen"},
+	}, { prefix = "<leader>" })
 end
 
 wk.register({
@@ -409,4 +416,3 @@ else -- if vim.g.custom.lsp_support == 1 then
 		g = "next coc diagnostic",
 	}, { prefix = "]" })
 end
-
