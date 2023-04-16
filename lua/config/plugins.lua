@@ -209,8 +209,8 @@ require("lazy").setup({
 			end,
 		},
 
-		{ "sainnhe/gruvbox-material" },
-		{ "ellisonleao/gruvbox.nvim", -- optional, for file icons
+		{ "sainnhe/gruvbox-material",
+			dependencies = { "ellisonleao/gruvbox.nvim" },
 			config = function ()
 				require('setup.gruvbox')
 			end
