@@ -1,4 +1,4 @@
-local M
+local ret = {}
 
 local function get_orgmode_remote_path()
 	local path
@@ -14,41 +14,44 @@ local function get_orgmode_remote_path()
 	return path
 end
 
+local function setup_whichkey()
+	if pcall(require, "which-key") then
+		vim.api.nvim_create_augroup("orgmode", { clear = true })
+
+		vim.api.nvim_create_autocmd( "FileType", {
+			desc = "Append orgmode keybindings to which-key",
+			group = "orgmode",
+			pattern = "org",
+			callback = function()
+				local wk = require("which-key")
+
+				wk.register({
+					['?'] = "org mode help",
+				}, { prefix = "g" })
+
+				wk.register({
+					o = { name = "Orgmode",
+						a = { "Open agenda prompt" },
+						c = { "Open capture prompt" },
+					},
+				}, { prefix = "<leader>" })
+
+			end,
+		})
+	end
+end
+
 local remote_path = get_orgmode_remote_path()
 local usr_org_file = remote_path .. '/' .. vim.fn.expand("org/refile.org")
 local usr_org_agenda_files = { remote_path .. '/' .. '**/*' }
-
-M = {
+local M = {
 	org_agenda_files = usr_org_agenda_files,
 	org_default_notes_file = usr_org_file,
 }
 
-if pcall(require, "which-key") then
-	vim.api.nvim_create_augroup("orgmode", { clear = true })
-
-	vim.api.nvim_create_autocmd( "FileType", {
-		desc = "Append orgmode keybindings to which-key",
-		group = "orgmode",
-		pattern = "org",
-		callback = function()
-			local wk = require("which-key")
-
-			wk.register({
-				['?'] = "org mode help",
-			}, { prefix = "g" })
-
-			wk.register({
-				o = { name = "Orgmode",
-					a = { "Open agenda prompt" },
-					c = { "Open capture prompt" },
-				},
-			}, { prefix = "<leader>" })
-
-		end,
-	})
-end
-
 require('orgmode').setup_ts_grammar()
 require('orgmode').setup(M)
+setup_whichkey()
+ret.setup = M
 
-return M
+return ret
