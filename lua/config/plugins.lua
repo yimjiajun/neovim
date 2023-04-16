@@ -262,7 +262,19 @@ require("lazy").setup({
 				require("setup.zen_mode")
 			end
 		},
+
+		{'nvim-orgmode/orgmode',
+			ft = {'org'},
+			dependencies = "nvim-treesitter/nvim-treesitter",
+			build = function()
+				vim.cmd[[TSUpdate org]]
+			end,
+			config = function()
+				require('setup.orgmode')
+			end
+		},
 	},
+
   defaults = {
     -- By default, Your custom plugins will load during startup.
     -- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.

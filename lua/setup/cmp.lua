@@ -72,6 +72,7 @@ cmp.setup({
 		{ name = "path" },
 		{ name = "calc" },
 		{ name = "emoji" }, -- { name = 'snippy' }, -- For snippy users.
+		{ name = 'orgmode' },
     }, {
       { name = 'buffer' },
     })
