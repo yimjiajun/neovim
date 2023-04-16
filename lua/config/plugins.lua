@@ -273,6 +273,13 @@ require("lazy").setup({
 				require('setup.orgmode')
 			end
 		},
+
+		{ "akinsho/org-bullets.nvim",
+			dependencies = "nvim-orgmode/orgmode",
+			config = function()
+				require('setup.orgmode').setup_org_bullets()
+			end,
+		},
 	},
 
   defaults = {

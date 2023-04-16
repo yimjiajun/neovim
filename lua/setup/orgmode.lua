@@ -1,5 +1,24 @@
 local ret = {}
 
+function ret.setup_org_bullets()
+	local P = require('org-bullets')
+	P.setup {
+		concealcursor = false, -- If false then when the cursor is on a line underlying characters are visible
+		symbols = {
+			-- list symbol
+			list = "•",
+			-- headlines can be a list
+			headlines = { "◉", "○", "✸", "✿" },
+			checkboxes = {
+				half = { "", "OrgTSCheckboxHalfChecked" },
+				done = { "✓", "OrgDone" },
+				todo = { "˟", "OrgTODO" },
+			},
+		}
+	}
+	return P
+end
+
 local function get_orgmode_remote_path()
 	local path
 	if vim.fn.has('unix') == 1 or vim.fn.has('mac') == 1 then
