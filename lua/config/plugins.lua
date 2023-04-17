@@ -175,6 +175,8 @@ require("lazy").setup({
 			ft = { "markdown" },
 		},
 
+		{ 'godlygeek/tabular' },
+
 		-- easy motion
 		{ 'phaazon/hop.nvim',
 			branch = 'v2', -- optional but strongly recommended
