@@ -40,7 +40,6 @@ local function setup_whichkey()
 		vim.api.nvim_create_autocmd( "FileType", {
 			desc = "Append orgmode keybindings to which-key",
 			group = "orgmode",
-			pattern = "org",
 			callback = function()
 				local wk = require("which-key")
 
