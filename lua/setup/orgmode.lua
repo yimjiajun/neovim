@@ -21,15 +21,29 @@ end
 
 local function get_orgmode_remote_path()
 	local path
+
 	if vim.fn.has('unix') == 1 or vim.fn.has('mac') == 1 then
-		if vim.fn.isdirectory("/run/wsl") == 1 then
-			path = vim.fn.expand("/mnt/c/Users/**/Dropbox")
-		else
-			path = vim.fn.expand("$HOME/Dropbox")
+		local remote_path = vim.fn.expand("$HOME/Dropbox")
+
+		if vim.fn.isdirectory("/run/WSL") == 1 then
+			if vim.fn.isdirectory(remote_path) == 0 then
+				local dir = vim.fn.system([[find /mnt/c/Users/*/ -maxdepth 1 -type d \( -iname "Dropbox" ! -path "*All Users*" \) -print -quit 2>/dev/null]])
+				dir = dir:gsub('\n', '')
+				local sys_cmd = 'ln -s' .. ' ' .. dir .. ' ' .. remote_path
+				vim.fn.system(sys_cmd)
+				print("Org-mode: Created symlink for WSL <Dropbox> for orgmode ... " .. remote_path)
+			end
 		end
-	elseif vim.fn.has('win32') == 1 then
-		path = vim.fn.expand("C:\\Users\\**\\Dropbox")
+		path = vim.fn.expand(remote_path)
+	else
+		return nil
 	end
+
+	if vim.fn.isdirectory(path) == 0 then
+		print("Org-mode: <Dropbox> directory not found: " .. path)
+		path = nil
+	end
+
 	return path
 end
 
