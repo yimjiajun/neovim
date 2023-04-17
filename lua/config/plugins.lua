@@ -178,6 +178,7 @@ require("lazy").setup({
 		{ 'godlygeek/tabular' },
 
 		{ 'preservim/vim-markdown',
+			ft = { "markdown" },
 			dependencies = 'godlygeek/tabular',
 		},
 
@@ -269,10 +270,11 @@ require("lazy").setup({
 			end
 		},
 
-		{ 'dhruvasagar/vim-table-mode' },
+		{ 'dhruvasagar/vim-table-mode',
+			ft = {'markdown', 'org'},
+		},
 
 		{'nvim-orgmode/orgmode',
-			ft = {'org'},
 			dependencies = "nvim-treesitter/nvim-treesitter",
 			build = function()
 				vim.cmd[[TSUpdate org]]
@@ -283,6 +285,7 @@ require("lazy").setup({
 		},
 
 		{ "akinsho/org-bullets.nvim",
+			ft = {'org'},
 			dependencies = "nvim-orgmode/orgmode",
 			config = function()
 				require('setup.orgmode').setup_org_bullets()
