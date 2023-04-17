@@ -1,6 +1,6 @@
-local M
+local ret = {}
 
-M = {
+local M = {
   window = {
     backdrop = 0.95, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
     -- height and width can be:
@@ -57,5 +57,6 @@ M = {
 }
 
 require("zen-mode").setup(M)
+ret.setup = M
 
-return M
+return ret
