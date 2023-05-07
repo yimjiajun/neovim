@@ -1,20 +1,14 @@
-for _, source in ipairs {
-	"config.custom",
-	"config.plugins",
-	"config.settings",
-	"config.autocmd",
-	"config.keymapping",
-	"config.colors",
-	"config.compiler",
-} do
-  local status_ok, fault = pcall(require, source)
-  if not status_ok then vim.api.nvim_err_writeln("Failed to load " .. source .. "\n\n" .. fault) end
-end
+local config_path = vim.fn.stdpath("config")
+local config_dir = {"config", "setup", "features", "usr"}
 
-if vim.g.custom.lsp_support == 0 then
-	if vim.fn.has('win32') == 1 then
-		vim.cmd[[source $MYVIMRC/../lua/config/vimrc.vim]]
-	else
-		vim.cmd[[source $HOME/.config/nvim/lua/config/vimrc.vim]]
+for _, dir in ipairs(config_dir) do
+	local lua_config_path = config_path .. "/lua/" .. dir
+	local lua_files = vim.fn.glob(lua_config_path .. "/*.lua", false, true)
+
+	for _, file in ipairs(lua_files) do
+		local script = vim.fn.fnamemodify(file, ":t")
+		local source = dir .. "." .. string.match(script, "([^.]+)")
+		local status_ok, fault = pcall(require, source)
+		if not status_ok then vim.api.nvim_err_writeln("Failed to load " .. source .. "\n\n" .. fault) end
 	end
 end
