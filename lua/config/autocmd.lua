@@ -76,6 +76,58 @@ vim.api.nvim_create_autocmd( "WinLeave", {
 	end,
 })
 
+vim.api.nvim_create_augroup( "programming", { clear = true })
+vim.api.nvim_create_autocmd( "FileType", {
+	desc = "C",
+	group = "programming",
+	pattern = "c",
+	callback = function()
+		vim.cmd('setlocal cindent')
+		vim.cmd('setlocal softtabstop=4')
+		vim.cmd('setlocal tabstop=4')
+		vim.cmd('setlocal shiftwidth=4')
+		vim.cmd('setlocal noexpandtab')
+	end,
+})
+
+vim.api.nvim_create_autocmd( "FileType", {
+	desc = "Cpp",
+	group = "programming",
+	pattern = "cpp",
+	callback = function()
+		vim.cmd('setlocal cindent')
+		vim.cmd('setlocal softtabstop=4')
+		vim.cmd('setlocal tabstop=4')
+		vim.cmd('setlocal shiftwidth=4')
+		vim.cmd('setlocal noexpandtab')
+	end,
+})
+
+vim.api.nvim_create_autocmd( "FileType", {
+	desc = "markdown",
+	group = "programming",
+	pattern = "md",
+	callback = function()
+		vim.cmd('setlocal softtabstop=2')
+		vim.cmd('setlocal tabstop=2')
+		vim.cmd('setlocal shiftwidth=2')
+		vim.cmd('setlocal expandtab')
+		vim.cmd('setlocal spell')
+	end,
+})
+
+vim.api.nvim_create_autocmd( "FileType", {
+	desc = "python",
+	group = "programming",
+	pattern = "py",
+	callback = function()
+		vim.cmd('setlocal softtabstop=2')
+		vim.cmd('setlocal tabstop=2')
+		vim.cmd('setlocal shiftwidth=2')
+		vim.cmd('setlocal expandtab')
+	end,
+})
+
 vim.cmd([[
 augroup Binary
     autocmd!
