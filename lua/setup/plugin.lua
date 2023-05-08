@@ -62,6 +62,14 @@ require("lazy").setup({
 				require('setup.gruvbox')
 			end
 		},
+
+		{ 'williamboman/mason-lspconfig.nvim',
+			after = { "mason.nvim", "nvim-lspconfig" },
+			dependencies = { "williamboman/mason.nvim" },
+			config = function()
+				require('setup.mason')
+			end
+		},
 	},
 
 	defaults = {
