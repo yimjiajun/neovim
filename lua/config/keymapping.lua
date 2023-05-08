@@ -1,3 +1,5 @@
+keyfunc = require("config.function")
+
 -- Define which_key_map table
 vim.g.which_key_map = {}
 vim.g.which_key_map_visual = {}
@@ -78,7 +80,6 @@ local function setting_key_newtr()
   vim.api.nvim_set_keymap('n', '<Leader>E', ':Explore<CR>', { silent = true })
 end
 
-keyfunc = require("config.function")
 
 local function setting_key_search()
     vim.api.nvim_set_keymap('n', '<Leader>ff', [[<cmd> lua keyfunc.SearchFile() <CR>]], {silent = true})
