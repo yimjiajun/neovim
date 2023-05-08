@@ -80,7 +80,6 @@ local function setting_key_newtr()
   vim.api.nvim_set_keymap('n', '<Leader>E', ':Explore<CR>', { silent = true })
 end
 
-
 local function setting_key_search()
     vim.api.nvim_set_keymap('n', '<Leader>ff', [[<cmd> lua keyfunc.SearchFile() <CR>]], {silent = true})
     vim.api.nvim_set_keymap('n', '<Leader>fw', [[<cmd> lua keyfunc.SearchWord(" ") <CR>]], {silent = true})
@@ -128,6 +127,17 @@ local function setting_key_git()
   vim.api.nvim_set_keymap('n', '<Leader>ggc', [[<cmd> lua keyfunc.GitCommit("default") <CR>]], { silent = true })
 end
 
+local function setting_key_terminal()
+  -- vim.g.which_key_map.t.s = 'Term (split)'
+  vim.api.nvim_set_keymap('n', '<leader>ts', [[<cmd> lua keyfunc.Terminal("split") <CR>]], {silent = true})
+  -- vim.g.which_key_map.t.v = 'Term (vert)'
+  vim.api.nvim_set_keymap('n', '<leader>tv', [[<cmd> lua keyfunc.Terminal("vertical") <CR>]], {silent = true})
+  -- vim.g.which_key_map.t.f = 'Term'
+  vim.api.nvim_set_keymap('n', '<leader>tf', [[<cmd> lua keyfunc.Terminal("default") <CR>]], {silent = true})
+  -- vim.g.which_key_map.t.F = 'Term (selection)'
+  vim.api.nvim_set_keymap('n', '<leader>tF', [[<cmd> lua keyfunc.Terminal("selection") <CR>]], {silent = true})
+end
+
 setting_key_move()
 setting_key_buffer()
 setting_key_view()
@@ -137,3 +147,4 @@ setting_key_leader()
 setting_key_newtr()
 setting_key_search()
 setting_key_git()
+setting_key_terminal()

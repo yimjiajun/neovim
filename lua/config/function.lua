@@ -113,6 +113,26 @@ local function git_function_setup()
   end
 end
 
+local function terminal(mode)
+	if mode == "split" then
+		vim.cmd("sp | term")
+	elseif mode == "vertical" then
+		vim.cmd("vs | term")
+	elseif mode == "selection" then
+		local shell = vim.fn.input("Select shell (bash, sh, zsh, powershell.exe): ")
+		if vim.fn.exists(":FloatermNew") == 1 then
+			vim.cmd("FloatermNew --width=0.9 --height=0.9 " .. shell)
+		else
+			vim.cmd("tab term " .. shell)
+		end
+	else
+		if vim.fn.exists(":FloatermNew") == 1 then
+			vim.cmd("FloatermNew --width=0.9 --height=0.9")
+		else
+			vim.cmd("tab term")
+		end
+	end
+end
 git_function_setup()
 
 local M = {
@@ -124,6 +144,7 @@ local M = {
 	GitDiff = git_diff,
 	GitLog = git_log,
 	GitStatus = git_status,
+	Terminal = terminal,
 }
 
 return M
