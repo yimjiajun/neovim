@@ -3,6 +3,13 @@ local config_dir = {"config", "setup", "features", "usr"}
 
 for _, dir in ipairs(config_dir) do
 	local lua_config_path = config_path .. "/lua/" .. dir
+
+	if dir == "setup" then
+		local status_ok, fault = pcall(require, "setup.plugin")
+		if not status_ok then vim.api.nvim_err_writeln("Failed to load " .. source .. "\n\n" .. fault) end
+		goto continue
+	end
+
 	local lua_files = vim.fn.glob(lua_config_path .. "/*.lua", false, true)
 
 	for _, file in ipairs(lua_files) do
@@ -11,4 +18,6 @@ for _, dir in ipairs(config_dir) do
 		local status_ok, fault = pcall(require, source)
 		if not status_ok then vim.api.nvim_err_writeln("Failed to load " .. source .. "\n\n" .. fault) end
 	end
+
+	::continue::
 end
