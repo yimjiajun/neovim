@@ -19,10 +19,10 @@ local function setting_key_buffer()
   vim.api.nvim_set_keymap('n', '<Tab>', ':bn<CR>', { silent = true })
   vim.api.nvim_set_keymap('n', '<esc><esc>', ':bd<CR>', { silent = true })
 
-  vim.g.which_key_map.b = 'Buffers'
-  vim.api.nvim_set_keymap('n', '<Leader>b', ':call M_buffer("list")<CR>', { silent = true })
-  vim.g.which_key_map.m = 'Marks'
-  vim.api.nvim_set_keymap('n', '<Leader>m', ':call M_marks("default")<CR>', { silent = true })
+  -- vim.g.which_key_map.b = 'Buffers'
+  vim.api.nvim_set_keymap('n', '<leader>b', [[<cmd> lua keyfunc.GetBuffers("list") <CR>]], { silent = true })
+  -- vim.g.which_key_map.m = 'Marks'
+  vim.api.nvim_set_keymap('n', '<leader>m', [[<cmd> lua keyfunc.GetMarks("default") <CR>]], { silent = true })
 end
 
 local function setting_key_view()
@@ -138,12 +138,22 @@ local function setting_key_terminal()
   vim.api.nvim_set_keymap('n', '<leader>tF', [[<cmd> lua keyfunc.Terminal("selection") <CR>]], {silent = true})
 end
 
+local function setting_key_session()
+  -- vim.g.which_key_map.s = 'Session load'
+  vim.api.nvim_set_keymap('n', '<leader>s', [[<cmd> lua keyfunc.Session("load") <CR>]], {silent = true})
+end
+
+local function setting_key_features()
+  -- vim.g.which_key_map.t.c = 'cTags'
+  vim.api.nvim_set_keymap('n', '<leader>tc', [[<cmd> lua keyfunc.CreateCtags() <CR>]], {silent = true})
+end
+
+setting_key_leader()
 setting_key_move()
 setting_key_buffer()
 setting_key_view()
 setting_key_edit()
 setting_key_yank()
-setting_key_leader()
 setting_key_newtr()
 setting_key_search()
 setting_key_git()

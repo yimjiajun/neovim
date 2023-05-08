@@ -133,6 +133,17 @@ local function terminal(mode)
 		end
 	end
 end
+
+local function get_buffers(mode)
+	if mode == "list" then
+		vim.cmd("ls")
+	end
+end
+
+local function get_marks(mode)
+	vim.cmd("marks")
+end
+
 git_function_setup()
 
 local M = {
@@ -145,6 +156,8 @@ local M = {
 	GitLog = git_log,
 	GitStatus = git_status,
 	Terminal = terminal,
+	GetBuffers = get_buffers,
+	GetMarks = get_marks,
 }
 
 return M
