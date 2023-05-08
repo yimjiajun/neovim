@@ -34,6 +34,17 @@ require("lazy").setup({
 				require ("setup.cmp")
 			end,
 		},
+		{ "nvim-cmp",
+			dependencies = {
+				"hrsh7th/cmp-vsnip",
+				"hrsh7th/vim-vsnip-integ",
+				"hrsh7th/vim-vsnip",
+				"haorenW1025/completion-nvim",
+			},
+			config = function()
+				require ("setup.snippets")
+			end,
+		},
 	},
 
 	defaults = {
