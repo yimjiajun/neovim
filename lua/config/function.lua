@@ -144,6 +144,27 @@ local function get_marks(mode)
 	vim.cmd("marks")
 end
 
+
+local function session(mode)
+	local path = vim.fn.stdpath('data')
+	local session_name = vim.fn.substitute(vim.fn.expand(vim.fn.getcwd()), '/', '_', 'g') .. ".vim"
+	local src = path .. '/' .. session_name
+
+	if mode == "save" then
+		if vim.fn.isdirectory(path) == 0 then
+			M_create_directory(path)
+		end
+
+		vim.cmd("mksession! " .. src)
+	else
+		if vim.fn.isdirectory(path) == 1 and vim.fn.filereadable(src) == 1 then
+			vim.cmd("source " .. src)
+		else
+			vim.cmd("echohl WarningMsg | echo 'src not found!' | echohl none")
+		end
+	end
+end
+
 git_function_setup()
 
 local M = {
@@ -158,6 +179,7 @@ local M = {
 	Terminal = terminal,
 	GetBuffers = get_buffers,
 	GetMarks = get_marks,
+	Session = session,
 }
 
 return M
