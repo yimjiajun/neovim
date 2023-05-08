@@ -144,6 +144,15 @@ local function get_marks(mode)
 	vim.cmd("marks")
 end
 
+local function set_statusline(mode)
+	if mode == "ascii" then
+		vim.o.statusline = " %<%f%h%m%r%=%b\\ 0x%B\\ \\ %l,%c%V\\ %P"
+	elseif mode == "byte" then
+		vim.o.statusline = " %<%f%=\\ [%1*%M%*%n%R%H]\\ %-19(%3l,%02c%03V%)%O'%02b'"
+	else
+		vim.o.statusline = " %<%f\\ %h%m%r%=%-14.(%l,%c%V%)\\ %P"
+	end
+end
 
 local function session(mode)
 	local path = vim.fn.stdpath('data')
@@ -189,6 +198,7 @@ local M = {
 	Terminal = terminal,
 	GetBuffers = get_buffers,
 	GetMarks = get_marks,
+	SetStatusline = set_statusline,
 	Session = session,
 	CreateCtags = create_ctags,
 }
