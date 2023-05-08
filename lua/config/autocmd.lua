@@ -28,6 +28,44 @@ vim.api.nvim_create_autocmd( "BufWritePre", {
 	end,
 })
 
+vim.api.nvim_create_augroup( "cursor", { clear = true })
+
+vim.api.nvim_create_autocmd( "InsertLeave, WinEnter", {
+	desc = "Enable cursor line",
+	group = "cursor",
+	pattern = "*",
+	callback = function()
+		vim.cmd('set cursorline')
+	end,
+})
+
+vim.api.nvim_create_autocmd( "WinEnter", {
+	desc = "Enable cursor line",
+	group = "cursor",
+	pattern = "*",
+	callback = function()
+		vim.cmd('set cursorline')
+	end,
+})
+
+vim.api.nvim_create_autocmd( "InsertEnter", {
+	desc = "Disable cursor line",
+	group = "cursor",
+	pattern = "*",
+	callback = function()
+		vim.cmd('set nocursorline')
+	end,
+})
+
+vim.api.nvim_create_autocmd( "WinLeave", {
+	desc = "Disable cursor line",
+	group = "cursor",
+	pattern = "*",
+	callback = function()
+		vim.cmd('set nocursorline')
+	end,
+})
+
 vim.cmd([[
 augroup Binary
     autocmd!
