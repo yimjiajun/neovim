@@ -10,7 +10,15 @@ vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
 require("lazy").setup({
 	spec = {
+		{ 'nvim-treesitter/nvim-treesitter',
+			run = function()
+				require('nvim-treesitter.install').update({ with_sync = true })
+				require("setup.treesitter")
+				vim.cmd([[TSUpdateSync]])
+			end,
+		},
 	},
+
 	defaults = {
 		-- By default, Your custom plugins will load during startup.
 		-- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.
