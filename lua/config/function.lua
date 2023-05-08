@@ -165,6 +165,16 @@ local function session(mode)
 	end
 end
 
+local function create_ctags()
+	local success = os.execute("ctags -RV . && sort -u -o tags tags")
+
+	if success then
+		vim.api.nvim_echo({{"Ctags created !", "MoreMsg"}}, true, {})
+	else
+		vim.api.nvim_echo({{"Failed to create ctags !", "ErrorMsg"}}, true, {})
+	end
+end
+
 git_function_setup()
 
 local M = {
@@ -180,6 +190,7 @@ local M = {
 	GetBuffers = get_buffers,
 	GetMarks = get_marks,
 	Session = session,
+	CreateCtags = create_ctags,
 }
 
 return M
