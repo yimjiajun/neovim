@@ -1,5 +1,6 @@
 local function Setting_view()
   vim.opt.background = "dark"
+  vim.cmd('colorscheme habamax')
   vim.opt.timeoutlen = 300
   vim.opt.updatetime = 400
   vim.opt.showmode = true
