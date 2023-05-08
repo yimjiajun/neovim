@@ -55,6 +55,13 @@ require("lazy").setup({
 		},
 
 		{ 'tpope/vim-fugitive' },
+
+		{ "sainnhe/gruvbox-material",
+			dependencies = { "ellisonleao/gruvbox.nvim" },
+			config = function ()
+				require('setup.gruvbox')
+			end
+		},
 	},
 
 	defaults = {
