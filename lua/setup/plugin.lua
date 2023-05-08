@@ -17,6 +17,23 @@ require("lazy").setup({
 				vim.cmd([[TSUpdateSync]])
 			end,
 		},
+		{ 'neovim/nvim-lspconfig' },
+		{ "hrsh7th/nvim-cmp",
+			after = { "nvim-lspconfig" },
+			dependencies = {
+				"onsails/lspkind-nvim",
+				"hrsh7th/cmp-buffer",
+				"hrsh7th/cmp-path",
+				"hrsh7th/cmp-nvim-lsp",
+				"hrsh7th/cmp-nvim-lua",
+				"hrsh7th/cmp-calc",
+				"hrsh7th/cmp-emoji",
+			},
+			event = "VimEnter",
+			config = function()
+				require ("setup.cmp")
+			end,
+		},
 	},
 
 	defaults = {
