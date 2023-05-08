@@ -14,6 +14,8 @@ local function Setting_view()
   vim.opt.wildmenu = true
   vim.opt.cursorline = true
   vim.opt.cursorcolumn = false
+  vim.opt.tabstop = 4
+  vim.opt.shiftwidth = 4
   vim.opt.syntax = "on"
   vim.opt.listchars = { tab = "▸ ", trail = "·", extends = "…", precedes = "…", nbsp = "␣" }
   vim.opt.list = true
