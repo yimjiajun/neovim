@@ -53,6 +53,8 @@ require("lazy").setup({
 			end,
 			ft = { "markdown" },
 		},
+
+		{ 'tpope/vim-fugitive' },
 	},
 
 	defaults = {
