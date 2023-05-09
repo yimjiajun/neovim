@@ -170,6 +170,22 @@ local function get_marks(mode)
 	vim.cmd("marks")
 end
 
+local function get_jumplist(mode)
+	if vim.fn.exists(':Telescope') then
+		require('telescope.builtin').jumplist()
+		return
+	end
+	vim.cmd("jump")
+end
+
+local function get_register_list(mode)
+	if vim.fn.exists(':Telescope') then
+		require('telescope.builtin').registers()
+		return
+	end
+	vim.cmd("registers")
+end
+
 local function set_statusline(mode)
 	if mode == "ascii" then
 		vim.o.statusline = " %<%f%h%m%r%=%b\\ 0x%B\\ \\ %l,%c%V\\ %P"
@@ -224,6 +240,8 @@ local M = {
 	Terminal = terminal,
 	GetBuffers = get_buffers,
 	GetMarks = get_marks,
+	GetJumplist = get_jumplist,
+	GetRegisterList = get_register_list,
 	SetStatusline = set_statusline,
 	Session = session,
 	CreateCtags = create_ctags,

@@ -23,6 +23,8 @@ local function setting_key_buffer()
   vim.api.nvim_set_keymap('n', '<leader>b', [[<cmd> lua keyfunc.GetBuffers("list") <CR>]], { silent = true })
   -- vim.g.which_key_map.m = 'Marks'
   vim.api.nvim_set_keymap('n', '<leader>m', [[<cmd> lua keyfunc.GetMarks("default") <CR>]], { silent = true })
+  vim.api.nvim_set_keymap('n', '<leader>h', [[<cmd> lua keyfunc.GetJumplist("default") <CR>]], { silent = true })
+  vim.api.nvim_set_keymap('n', '<leader>r', [[<cmd> lua keyfunc.GetRegisterList("default") <CR>]], { silent = true })
 end
 
 local function setting_key_view()
