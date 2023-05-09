@@ -79,6 +79,12 @@ require("lazy").setup({
 				require('setup.telescope')
 			end
 		},
+
+		{ 'numToStr/Comment.nvim',
+			config = function()
+				require('Comment').setup()
+			end
+		},
 	},
 
 	defaults = {
