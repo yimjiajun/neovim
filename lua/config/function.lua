@@ -3,12 +3,21 @@ local build_cmd_list = {
 }
 
 local function search_file()
-  local regex_file = vim.fn.input("File to search (regex): ")
-  vim.cmd("silent! find ./**/" .. regex_file)
+	if vim.fn.exists(':Telescope') then
+		vim.cmd('Telescope find_files')
+	else
+		local regex_file = vim.fn.input("File to search (regex): ")
+		vim.cmd("silent! find ./**/" .. regex_file)
+	end
 end
 
 local function search_word(extension)
 	vim.fn.setreg('"', extension)
+
+	if vim.fn.exists(':Telescope') then
+		require('telescope.builtin').live_grep({prompt_title='search word', default_text=vim.fn.expand('<cword>'), glob_pattern={vim.fn.getreg('"')}})
+		return
+	end
 
 	if vim.fn.executable("rg") == 0 then
 		vim.cmd([[cexpr system('rg --vimgrep ' .. expand('<cword>') .. ' ./**/' .. getreg('"'))]])
@@ -20,6 +29,11 @@ local function search_word(extension)
 end
 
 local function search_fuzzy(extension)
+	if vim.fn.exists(':Telescope') then
+		require('telescope.builtin').live_grep({prompt_title='search all', glob_pattern={"**/*", "!.*"}})
+		return
+	end
+
 	local word = vim.fn.input("Enter word to search: ")
 
 	if word == "" then
@@ -56,15 +70,19 @@ local function git_diff(mode)
 end
 
 local function git_log(mode)
-  local cmd = vim.g.git_func_cmd
-  if mode == "graph" then
-    vim.cmd(string.format("%s %s", cmd, "log --oneline --graph"))
-  elseif mode == "commit_count" then
-    vim.cmd(string.format("%s %s", cmd, "rev-list --count"))
-  elseif mode == "diff" then
-    vim.cmd(string.format("%s %s", cmd, "log --patch"))
-  else
-    vim.cmd(string.format("%s %s", cmd, "log"))
+	local cmd = vim.g.git_func_cmd
+	if mode == "graph" then
+		vim.cmd(string.format("%s %s", cmd, "log --oneline --graph"))
+	elseif mode == "commit_count" then
+		vim.cmd(string.format("%s %s", cmd, "rev-list --count"))
+	elseif mode == "diff" then
+		vim.cmd(string.format("%s %s", cmd, "log --patch"))
+	else
+	  if vim.fn.exists(':Telescope') then
+		  require('telescope.builtin').git_commits()
+		  return
+	  end
+	  vim.cmd(string.format("%s %s", cmd, "log"))
   end
 end
 
@@ -75,12 +93,12 @@ local function git_status(mode)
   elseif mode == "check_whitespace" then
     vim.cmd(string.format("%s %s", cmd, "diff-tree --check $(git hash-object -t tree /dev/null) HEAD"))
   else
-    if vim.g.loaded_fzf_vim == "1" then
-      vim.cmd("GFiles?")
-    else
-      vim.cmd(string.format("%s %s", cmd, "status"))
-    end
-  end
+	  if vim.fn.exists(':Telescope') then
+		  require('telescope.builtin').git_status()
+		  return
+	  end
+	  vim.cmd(string.format("%s %s", cmd, "status"))
+	end
 end
 
 local function git_add(mode)
@@ -136,11 +154,19 @@ end
 
 local function get_buffers(mode)
 	if mode == "list" then
+		if vim.fn.exists(':Telescope') then
+			require('telescope.builtin').buffers()
+			return
+		end
 		vim.cmd("ls")
 	end
 end
 
 local function get_marks(mode)
+	if vim.fn.exists(':Telescope') then
+		require('telescope.builtin').marks()
+		return
+	end
 	vim.cmd("marks")
 end
 
