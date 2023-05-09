@@ -99,6 +99,12 @@ require("lazy").setup({
 				print('Exit neovim and re-enter to run :Copilot! to register API key')
 			end,
 		},
+
+		{ "akinsho/toggleterm.nvim",
+			config = function()
+				require('setup.toggleterm')
+			end
+		},
 	},
 
 	defaults = {

@@ -37,7 +37,7 @@ end
 local function setting_key_edit()
   vim.api.nvim_set_keymap('i', 'lkj', '<ESC>', { noremap = true })
   vim.api.nvim_set_keymap('t', 'lkj', '<ESC>', { noremap = true })
-  vim.api.nvim_set_keymap('t', '\\][', '<C-c>exit<CR>', { noremap = true })
+  vim.api.nvim_set_keymap('t', '\\][', '<C-c> exit <CR>', { noremap = true })
   vim.api.nvim_set_keymap('i', '()', '()<ESC>i', { noremap = true })
   vim.api.nvim_set_keymap('i', '{}', '{}<ESC>i', { noremap = true })
   vim.api.nvim_set_keymap('i', '""', '""<ESC>i', { noremap = true })

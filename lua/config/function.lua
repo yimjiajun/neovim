@@ -138,14 +138,14 @@ local function terminal(mode)
 		vim.cmd("vs | term")
 	elseif mode == "selection" then
 		local shell = vim.fn.input("Select shell (bash, sh, zsh, powershell.exe): ")
-		if vim.fn.exists(":FloatermNew") == 1 then
-			vim.cmd("FloatermNew --width=0.9 --height=0.9 " .. shell)
+		if vim.fn.exists(":ToggleTerm") then
+			vim.cmd("ToggleTerm" .. shell)
 		else
 			vim.cmd("tab term " .. shell)
 		end
 	else
-		if vim.fn.exists(":FloatermNew") == 1 then
-			vim.cmd("FloatermNew --width=0.9 --height=0.9")
+		if vim.fn.exists(":ToggleTerm") then
+			vim.cmd("ToggleTerm")
 		else
 			vim.cmd("tab term")
 		end
