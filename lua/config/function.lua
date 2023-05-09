@@ -217,7 +217,9 @@ local function session(mode)
 end
 
 local function create_ctags()
-	local success = os.execute("ctags -RV . && sort -u -o tags tags")
+	print('Creating ctags ...')
+
+	local success = os.execute("ctags -R . && sort -u -o tags tags")
 
 	if success then
 		vim.api.nvim_echo({{"Ctags created !", "MoreMsg"}}, true, {})
