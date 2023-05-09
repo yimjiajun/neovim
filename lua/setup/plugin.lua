@@ -93,6 +93,12 @@ require("lazy").setup({
 				require("setup.zen_mode")
 			end
 		},
+
+		{ 'github/copilot.vim',
+			build = function()
+				print('Exit neovim and re-enter to run :Copilot! to register API key')
+			end,
+		},
 	},
 
 	defaults = {
