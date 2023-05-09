@@ -105,6 +105,12 @@ require("lazy").setup({
 				require('setup.toggleterm')
 			end
 		},
+
+		{ 'lewis6991/gitsigns.nvim',
+			config = function()
+				require('setup.gitsigns')
+			end
+		},
 	},
 
 	defaults = {
