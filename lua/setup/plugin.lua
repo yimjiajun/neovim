@@ -87,6 +87,12 @@ require("lazy").setup({
 		},
 
 		{ 'tpope/vim-dispatch' },
+
+		{ "folke/zen-mode.nvim",
+			config = function()
+				require("setup.zen_mode")
+			end
+		},
 	},
 
 	defaults = {
