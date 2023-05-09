@@ -111,6 +111,12 @@ require("lazy").setup({
 				require('setup.gitsigns')
 			end
 		},
+
+		{ 'goolord/alpha-nvim',
+			config = function()
+				require('alpha').setup(require('setup.alphas').config)
+			end
+		},
 	},
 
 	defaults = {
