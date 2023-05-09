@@ -85,6 +85,8 @@ require("lazy").setup({
 				require('Comment').setup()
 			end
 		},
+
+		{ 'tpope/vim-dispatch' },
 	},
 
 	defaults = {
