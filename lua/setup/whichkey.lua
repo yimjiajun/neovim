@@ -148,5 +148,6 @@ wk.register({
 }, { prefix = "g" })
 
 ret.setup = M
+ret.register = wk.register
 
 return ret
