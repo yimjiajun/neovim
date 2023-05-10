@@ -73,7 +73,6 @@ require("which-key").setup(M)
 
 local wk = require("which-key")
 wk.register({
-	l = { name = '+ Lsp' },
 	b = 'Buffer',
 	m = 'Marks',
 	h = 'Jumplist',
@@ -81,7 +80,7 @@ wk.register({
 	e = 'Explorer',
 	E = 'Explorer File',
 	s = 'load session',
-	f = { name = '+ Find',
+	f = { name = 'Find',
 		f = 'File',
 		w = 'Word',
 		c = 'c',
@@ -96,8 +95,8 @@ wk.register({
 		m = 'CMakeLists',
 		v = 'VimRipGrep',
 	},
-	g = { name = '+ Global Plug',
-		g = { name = '+ Git',
+	g = { name = 'Global Plug',
+		g = { name = 'Git',
 			l = 'log Graph',
 			L = 'log',
 			H = 'log patch',
@@ -114,14 +113,39 @@ wk.register({
 			c = 'commit',
 		},
 	},
-	t = { name = '+ Toggle',
+	t = { name = 'Toggle',
 		f = 'terminal',
 		F = 'terminal shell',
 		s = 'terminal split',
 		v = 'terminal vsplit',
 		c = 'ctags generator',
 	},
+	l = { name = "Lsp",
+		e = "diagnostic open float",
+		q = "diagnostic setloclist",
+		w = { name = "workspace folder",
+			a = "add",
+			r = "remove",
+			l = "list",
+		},
+		r = "rename buffer",
+		c = "code action",
+		f = "formatting",
+	},
 }, { mode = "n", prefix = "<leader>", })
+
+wk.register({
+	d = "lsp next diagnostic",
+	D = "lsp previous diagnostic",
+}, { mode = 'n',  prefix = "]" })
+
+wk.register({
+	r = "lsp reference",
+	D = "lsp decalaration",
+	d = "lsp definition",
+	i = "lsp implementation",
+	y = "lsp type-definition",
+}, { prefix = "g" })
 
 ret.setup = M
 
