@@ -117,6 +117,24 @@ require("lazy").setup({
 				require('alpha').setup(require('setup.alphas').config)
 			end
 		},
+
+		{ 'nvim-orgmode/orgmode',
+			dependencies = "nvim-treesitter/nvim-treesitter",
+			build = function()
+				vim.cmd[[TSUpdate org]]
+			end,
+			config = function()
+				require('setup.orgmode')
+			end
+		},
+
+		{ "akinsho/org-bullets.nvim",
+			ft = {'org'},
+			dependencies = "nvim-orgmode/orgmode",
+			config = function()
+				require('setup.orgmode').setup_org_bullets()
+			end,
+		},
 	},
 
 	defaults = {
