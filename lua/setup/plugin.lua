@@ -135,6 +135,12 @@ require("lazy").setup({
 				require('setup.orgmode').setup_org_bullets()
 			end,
 		},
+
+		{ "folke/which-key.nvim",
+			config = function()
+				require('setup.whichkey')
+			end
+		},
 	},
 
 	defaults = {

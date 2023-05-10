@@ -28,8 +28,8 @@ local function search_word(extension)
 	vim.cmd("silent! tab +copen")
 end
 
-local function search_fuzzy(extension)
-	if vim.fn.exists(':Telescope') then
+local function search_fuzzy(extension, vim_mode)
+	if vim.fn.exists(':Telescope') and vim_mode ~= 1 then
 		require('telescope.builtin').live_grep({prompt_title='search all', glob_pattern={"**/*", "!.*"}})
 		return
 	end

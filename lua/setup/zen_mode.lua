@@ -57,7 +57,13 @@ local M = {
 }
 
 require("zen-mode").setup(M)
+
 vim.api.nvim_set_keymap('n', '<leader>z', [[<cmd> ZenMode <CR>]], { silent = true })
+
+if pcall(require, "which-key") then
+	local wk = require("which-key")
+	wk.register({ z = 'zen Mode' }, { mode = 'n', prefix = '<leader>' })
+end
 
 ret.setup = M
 
