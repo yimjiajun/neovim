@@ -73,8 +73,8 @@ require("which-key").setup(M)
 
 local wk = require("which-key")
 wk.register({
-	b = 'Buffer',
-	m = 'Marks',
+	w = 'Buffer',
+	q = 'Marks',
 	h = 'Jumplist',
 	r = 'Registers',
 	e = 'Explorer',
