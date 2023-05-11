@@ -147,6 +147,16 @@ require("lazy").setup({
 				require('setup.surround')
 			end
 		},
+
+		{ "plasticboy/vim-markdown",
+			dependencies = {
+				"godlygeek/tabular",
+				'dhruvasagar/vim-table-mode' },
+			ft = { "markdown" },
+			config = function()
+				require('setup.vim-markdown')
+			end,
+		},
 	},
 
 	defaults = {
