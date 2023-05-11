@@ -29,6 +29,64 @@ local function do_chg_wd()
 	vim.loop.chdir(current_file_dir)
 end
 
+local function setup_lazygit()
+	if vim.fn.executable('lazygit') == 0 then
+		return
+	end
+
+	if pcall(require, "which-key") then
+		local wk = require("which-key")
+		wk.register({ L = "lazygit", }, { mode = 'n', prefix = "<leader>g" })
+	end
+
+	if vim.fn.exists(':ToggleTerm') then
+		vim.api.nvim_set_keymap('n', '<leader>gL', [[<cmd> TermExec cmd="lazygit" <CR>]], { silent = true })
+		return
+	end
+
+	vim.api.nvim_set_keymap('n', '<leader>gL', [[<cmd> tab term lazygit <CR>]], { silent = true })
+end
+
+local function setup_htop()
+	if vim.fn.executable('htop') == 0 then
+		return
+	end
+
+	if pcall(require, "which-key") then
+		local wk = require("which-key")
+		wk.register({ H = "htop", }, { mode = 'n', prefix = "<leader>g" })
+	end
+
+	if vim.fn.exists(':ToggleTerm') then
+		vim.api.nvim_set_keymap('n', '<leader>gH', [[<cmd> TermExec cmd="htop" <CR>]], { silent = true })
+		return
+	end
+
+	vim.api.nvim_set_keymap('n', '<leader>gH', [[<cmd> tab term htop <CR>]], { silent = true })
+end
+
+local function setup_ncdu()
+	if vim.fn.executable('ncdu') == 0 then
+		return
+	end
+
+	if pcall(require, "which-key") then
+		local wk = require("which-key")
+		wk.register({ N = "ncdu", }, { mode = 'n', prefix = "<leader>g" })
+	end
+
+	if vim.fn.exists(':ToggleTerm') then
+		vim.api.nvim_set_keymap('n', '<leader>gN', [[<cmd> TermExec cmd="ncdu" <CR>]], { silent = true })
+		return
+	end
+
+	vim.api.nvim_set_keymap('n', '<leader>gN', [[<cmd> tab term ncdu <CR>]], { silent = true })
+end
+
+setup_lazygit()
+setup_htop()
+setup_ncdu()
+
 local ret = {
 	DoChgWd = do_chg_wd,
 	GetFileDir = get_file_dir,
