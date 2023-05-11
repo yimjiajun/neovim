@@ -141,6 +141,12 @@ require("lazy").setup({
 				require('setup.whichkey')
 			end
 		},
+
+		{ "tpope/vim-surround",
+			config = function()
+				require('setup.surround')
+			end
+		},
 	},
 
 	defaults = {
