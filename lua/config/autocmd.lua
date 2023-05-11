@@ -28,16 +28,6 @@ vim.api.nvim_create_autocmd( "BufWritePre", {
 	end,
 })
 
-vim.api.nvim_create_autocmd( "Syntax", {
-	desc = "Display whitespace trailing",
-	group = "format",
-	pattern = "*",
-	callback = function()
-		vim.cmd([[match ExtraWhitespace /\s\+$\| \+\ze\t/]])
-		vim.cmd([[highlight ExtraWhitespace ctermbg=red guibg=red]])
-	end,
-})
-
 vim.api.nvim_create_augroup( "cursor", { clear = true })
 
 vim.api.nvim_create_autocmd( "InsertLeave, WinEnter", {
