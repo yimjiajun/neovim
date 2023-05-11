@@ -34,7 +34,7 @@ M = {
 	icons = {
 		breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
 		separator = "|", -- symbol used between a key and it's label
-		group = " ", -- symbol prepended to a group
+		group = "+ ", -- symbol prepended to a group
 	},
 	popup_mappings = {
 		scroll_down = '<c-d>', -- binding to scroll down inside the popup
@@ -73,13 +73,14 @@ require("which-key").setup(M)
 
 local wk = require("which-key")
 wk.register({
-	w = 'Buffer',
-	q = 'Marks',
-	h = 'Jumplist',
-	r = 'Registers',
-	e = 'Explorer',
-	E = 'Explorer File',
+	w = 'buffer',
+	q = 'marks',
+	h = 'jumplist',
+	r = 'registers',
+	e = 'explorer',
+	E = 'explorer File',
 	s = 'load session',
+	b = 'build',
 	f = { name = 'Find',
 		f = 'File',
 		w = 'Word',

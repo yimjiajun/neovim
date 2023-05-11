@@ -107,6 +107,7 @@ end
 
 local function setting_key_features()
   vim.api.nvim_set_keymap('n', '<leader>tc', [[<cmd> lua keyfunc.CreateCtags() <CR>]], {silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>b', [[<cmd> lua keyfunc.Build() <CR>]], {silent = true})
 end
 
 setting_key_leader()

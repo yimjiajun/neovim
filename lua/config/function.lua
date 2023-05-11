@@ -228,6 +228,14 @@ local function create_ctags()
 	end
 end
 
+local function build()
+	if vim.fn.exists(':Make') then
+		vim.cmd("Make")
+	else
+		vim.cmd("make")
+	end
+end
+
 git_function_setup()
 
 local M = {
@@ -247,6 +255,7 @@ local M = {
 	SetStatusline = set_statusline,
 	Session = session,
 	CreateCtags = create_ctags,
+	Build = build,
 }
 
 return M
