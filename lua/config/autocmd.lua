@@ -76,6 +76,15 @@ vim.api.nvim_create_autocmd( "WinLeave", {
 	end,
 })
 
+vim.api.nvim_create_autocmd('TextYankPost', {
+	desc = "Flash the part being yank",
+	group = "cursor",
+	pattern = "*",
+	callback = function()
+		vim.highlight.on_yank({ higroup = 'Visual' })
+	end,
+})
+
 vim.api.nvim_create_augroup( "programming", { clear = true })
 vim.api.nvim_create_autocmd( "FileType", {
 	desc = "C",
