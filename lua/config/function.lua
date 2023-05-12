@@ -197,13 +197,13 @@ local function set_statusline(mode)
 end
 
 local function session(mode)
-	local path = vim.fn.stdpath('data')
+	local path = vim.fn.stdpath('data') .. '/sessions'
 	local session_name = vim.fn.substitute(vim.fn.expand(vim.fn.getcwd()), '/', '_', 'g') .. ".vim"
 	local src = path .. '/' .. session_name
 
 	if mode == "save" then
 		if vim.fn.isdirectory(path) == 0 then
-			M_create_directory(path)
+			vim.fn.mkdir(path, "p")
 		end
 
 		vim.cmd("mksession! " .. src)
