@@ -35,18 +35,6 @@ require("lazy").setup({
 			end,
 		},
 
-		{ "hrsh7th/cmp-vsnip",
-			after = { "nvim-lspconfig" },
-			dependencies = {
-				"hrsh7th/vim-vsnip-integ",
-				"hrsh7th/vim-vsnip",
-				"haorenW1025/completion-nvim",
-			},
-			config = function()
-				require ("setup.snippets")
-			end,
-		},
-
 		{ "iamcco/markdown-preview.nvim",
 			build = "cd app && npm install",
 			config = function()
