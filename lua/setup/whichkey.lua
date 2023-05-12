@@ -121,32 +121,11 @@ wk.register({
 		v = 'terminal vsplit',
 		c = 'ctags generator',
 	},
-	l = { name = "Lsp",
-		e = "diagnostic open float",
-		q = "diagnostic setloclist",
-		w = { name = "workspace folder",
-			a = "add",
-			r = "remove",
-			l = "list",
-		},
-		r = "rename buffer",
-		c = "code action",
-		f = "formatting",
-	},
 }, { mode = "n", prefix = "<leader>", })
 
 wk.register({
-	d = "lsp next diagnostic",
-	D = "lsp previous diagnostic",
-}, { mode = 'n',  prefix = "]" })
-
-wk.register({
-	r = "lsp reference",
-	D = "lsp decalaration",
-	d = "lsp definition",
-	i = "lsp implementation",
-	y = "lsp type-definition",
-}, { prefix = "g" })
+	g = { name = 'Global Plug' },
+}, { mode = 'v',  prefix = "<leader>" })
 
 ret.setup = M
 ret.register = wk.register

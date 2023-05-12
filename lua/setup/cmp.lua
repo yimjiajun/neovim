@@ -193,3 +193,35 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
 vim.diagnostic.config{
   float={border=_border}
 }
+
+if pcall(require, "which-key") then
+	local wk = require("which-key")
+
+	wk.register({
+		l = { name = "Lsp",
+			e = "diagnostic open float",
+			q = "diagnostic setloclist",
+			w = { name = "workspace folder",
+				a = "add",
+				r = "remove",
+				l = "list",
+			},
+			r = "rename buffer",
+			c = "code action",
+			f = "formatting",
+		},
+	}, { mode = 'n',  prefix = "<leader>" })
+
+	wk.register({
+		d = "lsp next diagnostic",
+		D = "lsp previous diagnostic",
+	}, { mode = 'n',  prefix = "]" })
+
+	wk.register({
+		r = "lsp reference",
+		D = "lsp decalaration",
+		d = "lsp definition",
+		i = "lsp implementation",
+		y = "lsp type-definition",
+	}, { mode = 'n',  prefix = "g" })
+end
