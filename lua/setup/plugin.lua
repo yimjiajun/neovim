@@ -145,6 +145,12 @@ require("lazy").setup({
 				require('setup.vim-markdown')
 			end,
 		},
+
+		{ 'rmagatti/goto-preview',
+			config = function()
+				require('setup.goto-preview')
+			end
+		},
 	},
 
 	defaults = {
