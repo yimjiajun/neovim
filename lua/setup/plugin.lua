@@ -28,6 +28,10 @@ require("lazy").setup({
 				"hrsh7th/cmp-nvim-lua",
 				"hrsh7th/cmp-calc",
 				"hrsh7th/cmp-emoji",
+				"hrsh7th/cmp-vsnip",
+				"hrsh7th/vim-vsnip-integ",
+				"hrsh7th/vim-vsnip",
+				"haorenW1025/completion-nvim",
 			},
 			event = "VimEnter",
 			config = function()
