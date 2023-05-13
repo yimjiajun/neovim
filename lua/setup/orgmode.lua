@@ -1,4 +1,5 @@
 local ret = {}
+vim.g.orgmode_dir = vim.fn.stdpath('data') .. '/org'
 
 function ret.setup_org_bullets()
 	local P = require('org-bullets')
@@ -19,38 +20,98 @@ function ret.setup_org_bullets()
 	return P
 end
 
-local function get_orgmode_remote_path()
-	local path
 
-	if vim.fn.has('unix') == 1 or vim.fn.has('mac') == 1 then
-		local remote_path = vim.fn.expand("$HOME/Dropbox")
-
-		if vim.fn.isdirectory("/run/WSL") == 1 then
-			if vim.fn.isdirectory(remote_path) == 0 then
-				local dir = vim.fn.system([[find /mnt/c/Users/*/ -maxdepth 1 -type d \( -iname "Dropbox" ! -path "*All Users*" \) -print -quit 2>/dev/null]])
-				dir = dir:gsub('\n', '')
-				local sys_cmd = 'ln -s' .. ' ' .. dir .. ' ' .. remote_path
-				vim.fn.system(sys_cmd)
-				print("Org-mode: Created symlink for WSL <Dropbox> for orgmode ... " .. remote_path)
-			end
-		end
-		path = vim.fn.expand(remote_path)
-	else
-		return nil
-	end
+local function setup_orgmode_file_path()
+	local path = vim.g.orgmode_dir
+	local url = 'https://github.com/yimjiajun/schedule.git'
 
 	if vim.fn.isdirectory(path) == 0 then
-		print("Org-mode: <Dropbox> directory not found: " .. path)
-		path = nil
+		vim.fn.mkdir(path, "p")
+		vim.fn.system("git clone " .. url .. " " .. path)
 	end
 
-	return path
+	if vim.fn.isdirectory(path) then
+		if vim.fn.system([[git status --porcelain=v1 | wc -l]]) == 0 then
+			vim.fn.system("git -C " .. path .. " pull ")
+		end
+	end
+end
+
+local function setup_orgmode_autocmd()
+	vim.api.nvim_create_augroup( "orgmode", { clear = true })
+	vim.api.nvim_create_autocmd( "VimLeavePre", {
+		desc = "Push orgmode changes to remote",
+		group = "orgmode",
+		pattern = "*",
+		callback = function()
+			local function get_orgmode_remote_path()
+				local path
+
+				if vim.fn.has('unix') == 0 then
+					return nil
+				end
+				local remote_path = vim.fn.expand("$HOME/Dropbox")
+
+				if vim.fn.isdirectory("/run/WSL") == 1 and vim.fn.isdirectory(remote_path) == 0 then
+					local dir = vim.fn.system([[find /mnt/c/Users/*/ -maxdepth 1 -type d \( -iname "Dropbox" ! -path "*All Users*" \) -print -quit 2>/dev/null]])
+					dir = dir:gsub('\n', '')
+					local sys_cmd = 'ln -s' .. ' ' .. dir .. ' ' .. remote_path
+					vim.fn.system(sys_cmd)
+					print("Org-mode: Created symlink for WSL <Dropbox> for orgmode ... " .. remote_path)
+				end
+
+				path = vim.fn.expand(remote_path)
+
+				if vim.fn.isdirectory(path) == 0 then
+					print("Org-mode: <Dropbox> directory not found: " .. path)
+					path = nil
+				end
+
+				return path
+			end
+
+			local path = vim.g.orgmode_dir
+			local git_status_chg = 0
+
+			if vim.fn.isdirectory(path) == 0 then
+				return
+			end
+
+			git_status_chg = vim.fn.system("git -C " .. path .. " status --porcelain=v1 | wc -l")
+
+			if tonumber(git_status_chg, 10) == 0 then
+				return
+			end
+
+			vim.fn.system("git -C " .. path .. " add .")
+			vim.fn.system("git -C " .. path .. " commit -m'" .. vim.fn.getcwd() .. "'")
+			vim.fn.system("git -C " .. path .. " push ")
+
+			local remote_path = get_orgmode_remote_path()
+
+			if remote_path == nil then
+				return
+			end
+
+			remote_path = remote_path .. "/" .. vim.fn.fnamemodify(vim.g.orgmode_dir, ":t")
+
+			if vim.fn.isdirectory(remote_path) == 0 then
+				vim.api.echo({{"Org-mode: Creating remote directory ... " .. remote_path, "WarningMsg"}}, true, {})
+				vim.fn.mkdir(remote_path, "p")
+			end
+
+			if vim.fn.isdirectory(remote_path .. "/.git") == 0 then
+				vim.api.nvim_echo({{"Org-mode: git in remote path is not found ! ...\nSkip update remote server", "WarningMsg"}}, true, {})
+				return
+			end
+
+			vim.fn.system("git -C " .. remote_path .. " pull ")
+		end,
+	})
 end
 
 local function setup_whichkey()
 	if pcall(require, "which-key") then
-		vim.api.nvim_create_augroup("orgmode", { clear = true })
-
 		vim.api.nvim_create_autocmd( "FileType", {
 			desc = "Append orgmode keybindings to which-key",
 			group = "orgmode",
@@ -97,14 +158,15 @@ local function orgmode_file_create(path)
 	end
 end
 
-local remote_path = get_orgmode_remote_path()
 
-if remote_path == nil then
-	return
+setup_orgmode_file_path()
+
+if vim.fn.isdirectory(vim.g.orgmode_dir) == 0 then
+	return ret
 end
 
-local usr_org_file = remote_path .. '/' .. vim.fn.expand("org/refile.org")
-local usr_org_agenda_files = { remote_path .. '/' .. '**/*' }
+local usr_org_file = vim.g.orgmode_dir .. '/' .. "refile.org"
+local usr_org_agenda_files = { vim.g.orgmode_dir .. '/' .. '**/*' }
 local usr_org_capture_templates = {
 	T = {
 		description = 'Todo',
@@ -156,7 +218,9 @@ local M = {
 require('orgmode').setup_ts_grammar()
 require('orgmode').setup(M)
 orgmode_file_create(vim.fn.fnamemodify(usr_org_file, ":h"))
+setup_orgmode_autocmd()
 setup_whichkey()
+
 ret.setup = M
 
 return ret
