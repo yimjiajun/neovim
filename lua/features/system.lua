@@ -29,6 +29,18 @@ local function do_chg_wd()
 	vim.loop.chdir(current_file_dir)
 end
 
+local function pwrsh_cmd(cmd)
+	if vim.fn.executable('powershell.exe') == 0 then
+		vim.api.echo({{"powershell not supporting ...", "WarningMsg"}}, true, {})
+		return nil
+	end
+
+	cmd = "powershell.exe" .. ' -C ' .. cmd
+	print(vim.fn.system(cmd))
+
+	return cmd
+end
+
 local function setup_lazygit()
 	if vim.fn.executable('lazygit') == 0 then
 		return
@@ -92,6 +104,7 @@ local ret = {
 	GetFileDir = get_file_dir,
 	GetFileName = get_file_name,
 	GetDirWithPattern = get_dirs_with_pattern,
+	PwrshCmd = pwrsh_cmd,
 }
 
 for name in pairs(ret) do
@@ -99,5 +112,6 @@ for name in pairs(ret) do
 end
 
 vim.cmd("command! -nargs=1 GetDirWithPattern lua print(require('features.system').GetDirWithPattern(<f-args>))")
+vim.cmd("command! -nargs=1 PwrshCmd lua require('features.system').PwrshCmd(<f-args>)")
 
 return ret
