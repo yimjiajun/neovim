@@ -102,7 +102,8 @@ local function setup_orgmode_autocmd()
 
 			if vim.fn.isdirectory(remote_path .. "/.git") == 0 then
 				vim.api.nvim_echo({{"Org-mode: git in remote path is not found ! ...\nSkip update remote server", "WarningMsg"}}, true, {})
-				return
+				vim.fn.system("git -C " .. remote_path .. " clean --fdx ")
+				vim.fn.system("git -C " .. remote_path .. " reset --hard ")
 			end
 
 			vim.fn.system("git -C " .. remote_path .. " pull ")
