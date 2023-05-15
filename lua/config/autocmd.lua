@@ -105,7 +105,7 @@ vim.api.nvim_create_autocmd( "FileType", {
 vim.api.nvim_create_autocmd( "FileType", {
 	desc = "markdown",
 	group = "programming",
-	pattern = "md",
+	pattern = "markdown",
 	callback = function()
 		vim.cmd('setlocal softtabstop=2')
 		vim.cmd('setlocal tabstop=2')
