@@ -116,8 +116,9 @@ local function setup_whichkey()
 			desc = "Append orgmode keybindings to which-key",
 			group = "orgmode",
 			callback = function()
-				local wk = require("which-key")
+				vim.api.nvim_set_keymap('n', '<leader>ou', [[<cmd> lua require('setup.orgmode').UpdateRep() <CR>]], { silent = true })
 
+				local wk = require("which-key")
 				wk.register({
 					['?'] = "org mode help",
 				}, { prefix = "g" })
@@ -126,6 +127,7 @@ local function setup_whichkey()
 					o = { name = "Orgmode",
 						a = { "Open agenda prompt" },
 						c = { "Open capture prompt" },
+						u = { "Update local repository" },
 					},
 				}, { prefix = "<leader>" })
 
@@ -156,6 +158,11 @@ local function orgmode_file_create(path)
 			print("Org-mode: Created file ... " .. p .. '/' .. v)
 		end
 	end
+end
+
+local function orgmode_update_repository()
+	local path = vim.g.orgmode_dir
+	vim.fn.system("git -C " .. path .. " pull ")
 end
 
 
@@ -221,6 +228,9 @@ orgmode_file_create(vim.fn.fnamemodify(usr_org_file, ":h"))
 setup_orgmode_autocmd()
 setup_whichkey()
 
-ret.setup = M
+ret = {
+	setup = M,
+	UpdateRep = orgmode_update_repository,
+}
 
 return ret
