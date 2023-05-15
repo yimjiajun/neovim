@@ -1,7 +1,7 @@
 local ret = {}
 vim.g.orgmode_dir = vim.fn.stdpath('data') .. '/org'
 
-function ret.setup_org_bullets()
+local function setup_org_bullets()
 	local P = require('org-bullets')
 	P.setup {
 		concealcursor = false, -- If false then when the cursor is on a line underlying characters are visible
@@ -231,7 +231,8 @@ setup_whichkey()
 
 ret = {
 	setup = M,
-	UpdateRep = orgmode_update_repository,
+	UpdateuRep = orgmode_update_repository,
+	SetupOrgBullets = setup_org_bullets,
 }
 
 return ret

@@ -124,7 +124,7 @@ require("lazy").setup({
 			ft = {'org'},
 			dependencies = "nvim-orgmode/orgmode",
 			config = function()
-				require('setup.orgmode').setup_org_bullets()
+				require('setup.orgmode').SetupOrgBullets()
 			end,
 		},
 
