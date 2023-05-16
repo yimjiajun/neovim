@@ -229,7 +229,7 @@ local function create_ctags()
 end
 
 local function build()
-	if vim.fn.exists(':Make') then
+	if vim.fn.exists(':Make') and vim.fn.exists("$TMUX") then
 		vim.cmd("Make")
 	else
 		vim.cmd("make")
