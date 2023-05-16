@@ -139,7 +139,7 @@ local function terminal(mode)
 	elseif mode == "selection" then
 		local shell = vim.fn.input("Select shell (bash, sh, zsh, powershell.exe): ")
 		if vim.fn.exists(":ToggleTerm") then
-			vim.cmd("ToggleTerm" .. shell)
+			vim.cmd("TermExec cmd='" .. shell .. "'")
 		else
 			vim.cmd("tab term " .. shell)
 		end
