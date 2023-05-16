@@ -11,15 +11,19 @@ local function pandoc_install()
 	end
 end
 
-local function pandoc_convert_to_pdf(file)
+local function pandoc_convert_to_pdf()
 
 	local cmd = "pandoc -s -f markdown-implicit_figures --pdf-engine=xelatex "
 
-	if vim.fn.executable('pandoc') == 0 then
+	if vim.fn.executable('pandoc') == 0 or vim.fn.executable('xetex') == 0 or vim.fn.executable('latex') == 0 then
 		vim.api.nvim_echo({{"pandoc not installed!", "WarningMsg"}}, true, {})
 		vim.api.nvim_echo({{"Install pandoc ...", "MoreMsg"}}, true, {})
 		pandoc_install()
 	end
+
+	vim.api.nvim_echo({{"Current Directroy: ", "MoreMsg"}}, true, {})
+	print(vim.fn.system('ls'))
+	local file = vim.fn.input(">> File: ")
 
 	cmd = cmd .. file .. " -o " .. vim.fn.fnamemodify(file, ":t:r") .. ".pdf"
 
@@ -31,6 +35,6 @@ local ret = {
 	Install = pandoc_install,
 }
 
-vim.cmd("command! -nargs=1 ConvPdf lua require('features.file').ConvPdf(<f-args>)")
+vim.cmd("command! -nargs=0 ConvPdf lua require('features.file').ConvPdf()")
 
 return ret
