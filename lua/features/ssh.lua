@@ -16,7 +16,7 @@ local function ssh_connect(host, port, user, password)
 		if vim.fn.executable('sshpass') == 1 then
 			cmd = "sshpass -p " .. password .. " " .. cmd
 		else
-			vim.fn.echo({{"** Password: " .. password, "MoreMsg"}})
+			vim.api.nvim_echo({{"** Password: " .. password, "MoreMsg"}}, true, {})
 		end
 
 		cmd = "tab " .. terminal .. " " .. cmd
@@ -34,7 +34,7 @@ local function ssh_connect_request()
 	local pass = vim.fn.inputsecret("Password: ")
 
 	if host_ip == "" or usr == "" or pass == "" then
-		vim.fn.echo({{"** Invalid input", "ErrorMsg"}})
+		vim.api.nvim_echo({{"** Invalid input", "ErrorMsg"}}, true, {})
 		return
 	end
 

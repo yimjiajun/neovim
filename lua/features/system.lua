@@ -31,7 +31,7 @@ end
 
 local function pwrsh_cmd(cmd)
 	if vim.fn.executable('powershell.exe') == 0 then
-		vim.api.echo({{"powershell not supporting ...", "WarningMsg"}}, true, {})
+		vim.api.nvim_echo({{"powershell not supporting ...", "WarningMsg"}}, true, {})
 		return nil
 	end
 

@@ -96,7 +96,7 @@ local function setup_orgmode_autocmd()
 			remote_path = remote_path .. "/" .. vim.fn.fnamemodify(vim.g.orgmode_dir, ":t")
 
 			if vim.fn.isdirectory(remote_path) == 0 then
-				vim.api.echo({{"Org-mode: Creating remote directory ... " .. remote_path, "WarningMsg"}}, true, {})
+				vim.api.nvim_echo({{"Org-mode: Creating remote directory ... " .. remote_path, "WarningMsg"}}, true, {})
 				vim.fn.mkdir(remote_path, "p")
 			end
 
