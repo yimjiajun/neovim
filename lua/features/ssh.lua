@@ -11,12 +11,12 @@ local function ssh_connect(host, port, user, password)
 	cmd = cmd .. " " .. user .. "@" .. host .. " -p " .. port
 
 	if vim.fn.exists('win32') or vim.fn.isdirectory('/run/WSL') then
-		cmd = "tab " .. terminal .. " powershell.exe -C " .. cmd
+		cmd = "tab " .. terminal .. " " .. "echo 'password: " .. password .. "';" .. " powershell.exe -C " .. cmd
 	else
 		if vim.fn.executable('sshpass') == 1 then
 			cmd = "sshpass -p " .. password .. " " .. cmd
 		else
-			vim.api.nvim_echo({{"** Password: " .. password, "MoreMsg"}}, true, {})
+			cmd = "echo 'password: " .. password .. "';" .. cmd
 		end
 
 		cmd = "tab " .. terminal .. " " .. cmd
