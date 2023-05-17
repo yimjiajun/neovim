@@ -95,6 +95,48 @@ local function setup_ncdu()
 	vim.api.nvim_set_keymap('n', '<leader>gN', [[<cmd> tab term ncdu; exit <CR>]], { silent = true })
 end
 
+local function get_os_like_id()
+	local id = ''
+	if vim.fn.has('mac') == 1 then
+		id = vim.fn.system("echo $OSTYPE")
+	elseif vim.fn.has('unix') == 1 then
+		id = vim.fn.system("cat /etc/os-release | grep ID_LIKE | cut -d '=' -f 2")
+	else
+		id = 'unknown'
+	end
+
+	return vim.fn.trim(id)
+end
+
+local function get_install_package_cmd()
+	local install_cmd = nil
+
+	if vim.fn.has('mac') == 1 then
+		if vim.fn.executable('brew') == 1 then
+			install_cmd = 'brew install '
+		elseif vim.fn.executable('port') == 1 then
+			install_cmd = 'sudo port install'
+		end
+	elseif vim.fn.has('unix') == 1 then
+		if get_os_like_id() == 'debian' then
+			install_cmd = 'sudo apt install -y '
+		end
+	end
+
+	if install_cmd == nil then
+		vim.api.nvim_echo({{ 'System install command not found! ...', 'WarningMsg' }}, true, {})
+		local usr_install_cmd = vim.fn.input("Please enter system install command: ")
+		vim.api.nvim_echo({{ '\nSystem Install Command Provided: ' .. usr_install_cmd, 'Question' }}, true, {})
+
+		local confirm = vim.fn.input("Confirm? (Y/n) ")
+		if confirm:match('^%s*[yY].*$') then
+			install_cmd = usr_install_cmd
+		end
+	end
+
+	return install_cmd
+end
+
 setup_lazygit()
 setup_htop()
 setup_ncdu()
@@ -104,6 +146,8 @@ local ret = {
 	GetFileDir = get_file_dir,
 	GetFileName = get_file_name,
 	GetDirWithPattern = get_dirs_with_pattern,
+	GetInstallPackageCmd = get_install_package_cmd,
+	GetOsLikeId = get_os_like_id,
 	PwrshCmd = pwrsh_cmd,
 }
 

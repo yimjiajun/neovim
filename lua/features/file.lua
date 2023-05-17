@@ -1,10 +1,8 @@
 local function pandoc_install()
 	local cmd = nil
 
-	if vim.fn.exists('unix') then
-		cmd = "sudo apt install -y "
-		cmd = cmd ..  " texlive-latex-base " .. " texlive-latex-extra " .. "texlive-xetex "
-	end
+	cmd = require('features.system').GetInstallPackageCmd()
+	cmd = cmd ..  " texlive-latex-base " .. " texlive-latex-extra " .. "texlive-xetex "
 
 	if vim.fn.empty(cmd) == 0 then
 		vim.cmd("tab term " .. cmd .. "; exit")
