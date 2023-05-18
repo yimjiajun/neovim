@@ -164,6 +164,17 @@ require("lazy").setup({
 				  require('setup.lualine')
 			  end
 		},
+
+		{ "folke/noice.nvim",
+			dependencies = {
+				"MunifTanjim/nui.nvim",
+				"rcarriga/nvim-notify",
+			},
+			config = function()
+				require('setup.noice')
+				require('setup.notify')
+			end,
+		},
 	},
 
 	defaults = {
