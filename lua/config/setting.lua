@@ -7,7 +7,7 @@ local function Setting_view()
 	vim.opt.updatetime = 400
 	vim.opt.showmode = true
 	vim.opt.laststatus = 2
-	vim.opt.cmdheight = 1
+	vim.opt.cmdheight = 0
 	vim.opt.relativenumber = true
 	vim.opt.number = true
 	vim.opt.wrap = true
