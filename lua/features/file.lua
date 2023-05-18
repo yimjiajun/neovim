@@ -2,11 +2,14 @@ local function pandoc_install()
 	local cmd = nil
 
 	cmd = require('features.system').GetInstallPackageCmd()
-	cmd = cmd ..  " texlive-latex-base " .. " texlive-latex-extra " .. "texlive-xetex "
 
-	if vim.fn.empty(cmd) == 0 then
-		vim.cmd("tab term " .. cmd .. "; exit")
+	if cmd == nil then
+		vim.api.nvim_echo({{"Not support this system!", "WarningMsg"}}, true, {})
+		return
 	end
+
+	cmd = cmd ..  " texlive-latex-base " .. " texlive-latex-extra " .. "texlive-xetex "
+	vim.cmd("tabnew | term " .. cmd .. "; exit")
 end
 
 local function pandoc_convert_to_pdf(file)

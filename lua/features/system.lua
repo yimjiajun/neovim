@@ -56,7 +56,7 @@ local function setup_lazygit()
 		return
 	end
 
-	vim.api.nvim_set_keymap('n', '<leader>gL', [[<cmd> tab term lazygit; exit <CR>]], { silent = true })
+	vim.api.nvim_set_keymap('n', '<leader>gL', [[<cmd> tabnew | term lazygit; exit <CR>]], { silent = true })
 end
 
 local function setup_htop()

@@ -141,13 +141,13 @@ local function terminal(mode)
 		if vim.fn.exists(":ToggleTerm") then
 			vim.cmd("TermExec cmd='" .. shell .. "'")
 		else
-			vim.cmd("tab term " .. shell)
+			vim.cmd("tabnew | term " .. shell)
 		end
 	else
 		if vim.fn.exists(":ToggleTerm") then
 			vim.cmd("ToggleTerm")
 		else
-			vim.cmd("tab term")
+			vim.cmd("tabnew | term")
 		end
 	end
 end
