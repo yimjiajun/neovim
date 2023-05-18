@@ -49,10 +49,12 @@ require("lazy").setup({
 
 		{ 'tpope/vim-fugitive' },
 
-		{ "sainnhe/gruvbox-material",
-			dependencies = { "ellisonleao/gruvbox.nvim" },
-			config = function ()
-				require('setup.gruvbox')
+		{ "bluz71/vim-moonfly-colors",
+			name = "moonfly", lazy = false, priority = 1000,
+			config = function()
+				vim.cmd([[autocmd ColorScheme * highlight NormalFloat guibg=none]])
+				vim.cmd([[autocmd ColorScheme * highlight FloatBorder guibg=none]])
+				vim.cmd([[colorscheme moonfly]])
 			end
 		},
 
