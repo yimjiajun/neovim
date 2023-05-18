@@ -36,6 +36,7 @@ local function Setting_editor()
 	vim.opt.backup = false
 	vim.opt.writebackup = false
 	vim.opt.swapfile = false
+	vim.opt.clipboard = "unnamedplus"
 
 	if vim.opt.undodir == "" then
 		local local_share_path = vim.fn.stdpath('data')
