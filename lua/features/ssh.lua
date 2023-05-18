@@ -72,13 +72,14 @@ local function ssh_run()
 	ssh_connect(sel_ssh.name, sel_ssh.host, sel_ssh.port, sel_ssh.pass)
 end
 
-local function ssh_insert_info(username, hostname, port, password)
+local function ssh_insert_info(username, hostname, port, password, description)
 	local data = vim.g.ssh_data
 	local info = {
 		name = username,
 		host = hostname,
 		port = port,
 		pass = password,
+		description = description,
 	}
 
 	table.insert(data, info)
