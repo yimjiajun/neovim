@@ -3,6 +3,7 @@ vim.g.ssh_data = {
 		name = "jun",
 		pass = "jun",
 		port = "22",
+		description = "Raspberry Pi 4B",
 	},
 }
 
@@ -50,8 +51,13 @@ local function ssh_connect_request()
 end
 
 local function ssh_run()
+		 local display_msg = string.format("%3s| %-20s | %-10s | %-5s | %-s", "idx",  "hostname/ip", "usrname", "port", "description")
+		 print("-----------------------------------------------+")
+		 print(display_msg)
+		 print("-----------------------------------------------+")
 	for idx, info in ipairs(vim.g.ssh_data) do
-		vim.api.nvim_echo({{idx .. ": " .. info.name .. "@" .. info.host .. ":" .. info.port, "MoreMsg"}}, true, {})
+		 display_msg = string.format("%3d| %-20s | %-10s | %-5s\t%5s", idx, info.host, info.name, info.port, info.description)
+		 vim.api.nvim_echo({{display_msg, "MoreMsg"}}, true, {})
 	end
 
 	local sel_idx = tonumber(vim.fn.input("Enter number to run ssh: "))
