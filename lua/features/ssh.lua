@@ -1,6 +1,14 @@
+vim.g.ssh_data = {
+	{ host = "raspberrypi",
+		name = "jun",
+		pass = "jun",
+		port = "22",
+	},
+}
+
 local ret = {}
 
-local function ssh_connect(host, port, user, password)
+local function ssh_connect(user, host, port, password)
 	if port == '' then
 		port = 22
 	end
@@ -38,14 +46,47 @@ local function ssh_connect_request()
 		return
 	end
 
-	return ssh_connect(host_ip, port, usr, pass)
+	return ssh_connect(usr, host_ip, port, pass)
+end
+
+local function ssh_run()
+	for idx, info in ipairs(vim.g.ssh_data) do
+		vim.api.nvim_echo({{idx .. ": " .. info.name .. "@" .. info.host .. ":" .. info.port, "MoreMsg"}}, true, {})
+	end
+
+	local sel_idx = tonumber(vim.fn.input("Enter number to run ssh: "))
+	local sel_ssh = vim.g.ssh_data[sel_idx]
+
+	if sel_ssh == nil then
+		vim.api.nvim_echo({{"\nInvalid index", "WarningMsg"}}, true, {})
+		return
+	end
+
+	vim.api.nvim_echo({{"\nStart SSH connecting ...", "none"}}, true, {})
+	ssh_connect(sel_ssh.name, sel_ssh.host, sel_ssh.port, sel_ssh.pass)
+end
+
+local function ssh_insert_info(username, hostname, port, password)
+	local data = vim.g.ssh_data
+	local info = {
+		name = username,
+		host = hostname,
+		port = port,
+		pass = password,
+	}
+
+	table.insert(data, info)
+	vim.g.ssh_data = data
 end
 
 ret = {
 	SshConnect = ssh_connect,
 	SshConnectReq = ssh_connect_request,
+	SshRun = ssh_run,
+	SshInsertInfo = ssh_insert_info,
 }
 
-vim.cmd("command! -nargs=0 Ssh lua require('features.ssh').SshConnectReq()")
+vim.cmd("command! -nargs=0 SshReq lua require('features.ssh').SshConnectReq()")
+vim.cmd("command! -nargs=0 Ssh lua require('features.ssh').SshRun()")
 
 return ret
