@@ -19,7 +19,8 @@ end
 
 local function install_mdbook()
 	if vim.fn.executable('cargo') == 0 then
-		install_rust()
+		vim.api.nvim_echo({{"Please install rust first", "ErrorMsg"}}, true, {})
+		return
 	end
 
 	if vim.fn.executable('mdbook') == 0 then
