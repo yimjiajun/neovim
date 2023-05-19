@@ -74,7 +74,7 @@ local function git_log(mode)
 	if mode == "graph" then
 		vim.cmd(string.format("%s %s", cmd, "log --oneline --graph"))
 	elseif mode == "commit_count" then
-		vim.cmd(string.format("%s %s", cmd, "rev-list --count"))
+		vim.cmd(string.format("%s %s", cmd, "rev-list HEAD --count"))
 	elseif mode == "diff" then
 		vim.cmd(string.format("%s %s", cmd, "log --patch"))
 	else
