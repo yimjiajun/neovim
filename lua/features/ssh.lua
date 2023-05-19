@@ -7,8 +7,6 @@ vim.g.ssh_data = {
 	},
 }
 
-local ret = {}
-
 local function ssh_connect(user, host, port, password)
 	if port == '' then
 		port = 22
@@ -88,7 +86,19 @@ local function ssh_insert_info(username, hostname, port, password, description)
 	vim.g.ssh_data = data
 end
 
-ret = {
+local function setting_key_ssh()
+	vim.api.nvim_set_keymap('n', '<leader>tS', [[<cmd> lua require('features.ssh').SshRun() <CR> ]], { silent = true })
+	if pcall(require, "which-key") then
+		local wk = require("which-key")
+		wk.register({
+			S = "SSH connect",
+		}, { mode = "n", prefix = "<leader>t" })
+	end
+end
+
+setting_key_ssh()
+
+local ret = {
 	SshConnect = ssh_connect,
 	SshConnectReq = ssh_connect_request,
 	SshRun = ssh_run,
