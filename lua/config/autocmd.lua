@@ -75,6 +75,15 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 	end,
 })
 
+vim.api.nvim_create_autocmd( "FileType", {
+	desc = "Release <Enter> keymap feature",
+	group = "cursor",
+	pattern = "qf",
+	callback = function()
+		vim.api.nvim_buf_set_keymap(0, 'n', '<CR>', '<CR>', { noremap = true, silent = true })
+	end,
+})
+
 vim.api.nvim_create_augroup( "programming", { clear = true })
 vim.api.nvim_create_autocmd( "FileType", {
 	desc = "C",
