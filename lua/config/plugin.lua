@@ -175,6 +175,16 @@ require("lazy").setup({
 				require('setup.notify')
 			end,
 		},
+
+		{ "stevearc/oil.nvim",
+			opts = {},
+			dependencies = { "nvim-tree/nvim-web-devicons" },
+			config = function()
+				require("oil").setup({})
+				vim.api.nvim_set_keymap('n', '<Leader>e', [[<cmd> lua require("oil").toggle_float() <CR>]], { silent = true})
+				vim.api.nvim_set_keymap('n', '<Leader>E', [[<cmd> lua require("oil").open() <CR>]], { silent = true, desc = "open explore in buffer" })
+			end,
+		},
 	},
 
 	defaults = {
