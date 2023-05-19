@@ -13,6 +13,7 @@ local function install_rust()
 	if rust_env_setup == 0 then
 		vim.fn.system("echo 'source " .. rust_env .. "' >> " .. shell_src)
 		vim.api.nvim_echo({{"Export rust env to " .. shell_src, "MoreMsg"}}, true, {})
+		vim.fn.system("source " .. shell_src)
 	end
 end
 
