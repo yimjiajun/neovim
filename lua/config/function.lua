@@ -19,8 +19,8 @@ local function search_word(extension)
 		return
 	end
 
-	if vim.fn.executable("rg") == 0 then
-		vim.cmd([[cexpr system('rg --vimgrep ' .. expand('<cword>') .. ' ./**/' .. getreg('"'))]])
+	if vim.fn.executable("rg") then
+		vim.cmd([[cexpr system('rg --vimgrep ' .. expand('<cword>') .. " ./**/" .. getreg('"'))]])
 	else
 		vim.cmd([[silent! vimgrep /]] .. vim.fn.expand("<cword>") .. [[/gj ./**/]] .. vim.fn.getreg('"'))
 	end
@@ -30,7 +30,11 @@ end
 
 local function search_fuzzy(extension, vim_mode)
 	if vim.fn.exists(':Telescope') and vim_mode ~= 1 then
-		require('telescope.builtin').live_grep({prompt_title='search all', glob_pattern={"**/*", "!.*"}})
+		if vim_mode == 0 then
+			require('telescope.builtin').live_grep({prompt_title='search all', glob_pattern={"**/*", "!.*"}})
+		else
+			require('telescope.builtin').live_grep({prompt_title='search all', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*", "!.*"}})
+		end
 		return
 	end
 
@@ -44,7 +48,7 @@ local function search_fuzzy(extension, vim_mode)
 	vim.fn.setreg('-', word)
 
 	if vim.fn.executable("rg") == 1 then
-		vim.cmd([[cexpr system('rg --vimgrep --smart-case ' .. getreg('-') .. ' ./**/' .. getreg('"'))]])
+		vim.cmd([[cexpr system('rg --vimgrep --smart-case ' .. getreg('-') .. "| grep " .. getreg('"') ..  "| sort -u")]])
 	else
 		vim.cmd([[silent! vimgrep /]] .. vim.fn.getreg('-') .. [[/gj ./**/]] .. vim.fn.getreg('"'))
 	end
