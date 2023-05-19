@@ -58,3 +58,5 @@ require("toggleterm").setup{
 		end
 	},
 }
+
+vim.cmd("command! -nargs=1 TermCmd lua require'toggleterm'.exec(<q-args>)")

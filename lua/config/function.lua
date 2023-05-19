@@ -122,13 +122,13 @@ local function git_commit(mode)
 end
 
 local function git_function_setup()
-  if vim.fn.exists(":FloatermNew") == 1 then
-    vim.g.git_func_cmd = "FloatermNew --width=0.9 --height=0.9 git "
-  elseif vim.fn.exists(":Git") == 1 then
-    vim.g.git_func_cmd = "Git"
-  else
-    vim.g.git_func_cmd = "!git"
-  end
+	if vim.fn.exists(":Git") then
+		vim.g.git_func_cmd = "Git"
+	elseif vim.fn.exists(":ToggleTerm") and vim.fn.exists(":TermCmd") then
+		vim.g.git_func_cmd = "TermCmd git"
+	else
+		vim.g.git_func_cmd = "!git"
+	end
 end
 
 local function terminal(mode)
