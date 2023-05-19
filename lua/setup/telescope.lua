@@ -10,3 +10,9 @@ require('telescope').setup{
 	prompt_prefix='  ',
 	},
 }
+
+local function setting_key_telescope()
+	vim.api.nvim_set_keymap('n', "z=", [[<cmd> lua require('telescope.builtin').spell_suggest() <CR>]] , { silent = true, desc = 'Spell Suggest' })
+end
+
+setting_key_telescope()
