@@ -231,7 +231,7 @@ setup_whichkey()
 
 ret = {
 	setup = M,
-	UpdateuRep = orgmode_update_repository,
+	UpdateRep = orgmode_update_repository,
 	SetupOrgBullets = setup_org_bullets,
 }
 
