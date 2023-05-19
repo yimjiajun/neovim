@@ -1,5 +1,5 @@
 vim.g.ssh_data = {
-	{ host = "raspberrypi",
+	{ host = "raspberrypi.local",
 		name = "jun",
 		pass = "jun",
 		port = "22",
