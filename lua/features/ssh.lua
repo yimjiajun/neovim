@@ -55,7 +55,7 @@ local function ssh_run()
 	 print("-----------------------------------------------+")
 
 	 for idx, info in ipairs(vim.g.ssh_data) do
-		 display_msg = string.format("%3d| %-20s | %-10s | %-5s\t%5s", idx, info.host, info.name, info.port, info.description)
+		 display_msg = string.format("%3d| %-20s | %-10s | %-5s\t%5s\t", idx, info.host, info.name, info.port, info.description)
 		 vim.api.nvim_echo({{display_msg, "MoreMsg"}}, true, {})
 	 end
 
