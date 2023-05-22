@@ -1,4 +1,5 @@
 local sys_func = require("features.system")
+local compiler_build_data = {}
 
 -- compiler selection
 -- @param extension file extension
@@ -6,16 +7,14 @@ local sys_func = require("features.system")
 -- @param .cmd command to run (stirng)
 -- @param .desc description of build (string)
 -- @param .ext file extension (string)
--- @param .make use vim builtin make if true, else use terminal (boolean)
-local compiler_build_data = {}
-
-local function compiler_insert_info(name, cmd, desc, ext, use_vim_make)
+-- @param .type build type: "make", "term", "term_full" (string)
+local function compiler_insert_info(name, cmd, desc, ext, type)
 	local data = compiler_build_data
 	local info = {
 		name = name,
 		cmd = cmd,
 		desc = desc,
-		make = use_vim_make,
+		build_type = type,
 		ext = ext,
 	}
 
@@ -41,25 +40,25 @@ local function setup_c()
 
 		compiler_insert_info("zephyr setup",
 			cmd .. "exit",
-			"setup ecfw-zephyr configuration", "c", false)
+			"setup ecfw-zephyr configuration", "c", "term")
 		compiler_insert_info("zephyr build",
 			"west build -d $(west config manifest.path)/build $(west config manifest.path);" .. "exit",
-			"build zephyr project", "c", true)
+			"build zephyr project", "c", "make")
 		compiler_insert_info("zephyr build all",
 			"west build -p=always -d $(west config manifest.path)/build $(west config manifest.path);" .. "exit",
-			"re-build zephyr project as pristine", "c", true)
+			"re-build zephyr project as pristine", "c", "make")
 		compiler_insert_info("zephyr menu",
 			"west build -t menuconfig $(west config manifest.path);" .. "exit",
-			"interactive config zephyr kconfig value", "c", false)
+			"interactive config zephyr kconfig value", "c", "term_full")
 	end
 
 	setup_zephyr_project()
 
-	compiler_insert_info("gcc build", [[gcc % -o %:t:r ]], "gcc build c source", true)
-	compiler_insert_info("gcc run", [[./%:t:r]], "gcc run executable source", true)
+	compiler_insert_info("gcc build", [[gcc % -o %:t:r ]], "gcc build c source", "make")
+	compiler_insert_info("gcc run", [[./%:t:r]], "gcc run executable source", "make")
 	compiler_insert_info("gcc build & run",
 		[[gcc % -o %:t:r && mv %:t:r /tmp/%:t:r && /tmp/%:t:r && rm /tmp/%:t:r]],
-		"gcc build and run c source", true)
+		"gcc build and run c source", "make")
 end
 
 local function setup_markdown()
@@ -81,12 +80,12 @@ local function setup_markdown()
 			.. " http://localhost:3000 && mdbook serve"
 
 		compiler_insert_info("mdbook", cmd,
-			"open mdbook for markdown", "markdown", true)
+			"open mdbook for markdown", "markdown", "make")
 	end
 
 	if vim.fn.exists('g:mkdp_command_for_global') == 1 then
 		compiler_insert_info("md preview", [[nvim +MarkdownPreview %]],
-			"Preview current markdown file", "markdown", true)
+			"Preview current markdown file", "markdown", "make")
 	end
 end
 
@@ -96,15 +95,15 @@ local function setup_rust()
 	end
 
 	compiler_insert_info("build rust", "rustc % --out-dir ./" .. vim.fn.expand("%:h"),
-		"build current rust file", "rust", true)
+		"build current rust file", "rust", "make")
 	compiler_insert_info("run rust", "./" .. vim.fn.expand("%:r"),
-		"run current executable rust file", "rust", true)
+		"run current executable rust file", "rust", "make")
 
 	if io.open(string.lower('Cargo.toml')) then
 		compiler_insert_info("cargo build", [[cargo build]],
-			"build with cargo", "rust", true)
+			"build with cargo", "rust", "make")
 		compiler_insert_info("cargo run", [[cargo run]],
-			"run with cargo", "rust", true)
+			"run with cargo", "rust", "make")
 	end
 end
 
@@ -123,17 +122,17 @@ local function get_compiler_build_data()
 
 	if check_ext_file_exist("py") == 1 then
 		compiler_insert_info("run script", "python3 %" .. ";read;exit",
-			"run current python file", "py", true)
+			"run current python file", "py", "make")
 	end
 
 	if check_ext_file_exist("sh") == 1 then
 		compiler_insert_info("run script", [[./%]],
-			"run current buffer bash script", "sh",  true)
+			"run current buffer bash script", "sh",  "make")
 	end
 
 	if check_ext_file_exist("perl") == 1 then
 		compiler_insert_info("run script", [[perl %]],
-			"run current buffer perl script", "perl", true)
+			"run current buffer perl script", "perl", "make")
 	end
 
 	if check_ext_file_exist("rs") == 1 then
@@ -167,8 +166,17 @@ local function compiler_build_selection()
 		return false
 	end
 
-	if sel_tbl.make == false then
+	if sel_tbl.build_type == "term" then
 		vim.cmd("5split | terminal " .. sel_tbl.cmd)
+		return false
+	end
+
+	if sel_tbl.build_type == "term_full" then
+		if vim.fn.exists(":ToggleTerm") and vim.fn.exists(":TermCmd") then
+			vim.cmd("TermCmd " .. sel_tbl.cmd)
+		end
+
+		vim.cmd("tabnew | terminal " .. sel_tbl.cmd)
 		return false
 	end
 
