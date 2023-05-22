@@ -46,4 +46,31 @@ local function setting_key_telescope()
 	end
 end
 
+local function telescope_buffer()
+	local action_state = require('telescope.actions.state')
+	local actions = require('telescope.actions')
+	local m = {}
+
+	m.buffer_with_del = function(opts)
+		opts = opts or {}
+		opts.attach_mappings = function(prompt_bufnr, map)
+			local delete_buf = function()
+				local selection = action_state.get_selected_entry()
+				actions.close(prompt_bufnr)
+				vim.api.nvim_buf_delete(selection.bufnr, { force = true })
+			end
+			map('i', '<del>', delete_buf)
+			return true
+		end
+		require('telescope.builtin').buffers(opts)
+	end
+	return m
+end
+
 setting_key_telescope()
+
+local ret = {
+	Buffer = telescope_buffer,
+}
+
+return ret

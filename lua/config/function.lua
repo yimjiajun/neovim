@@ -155,7 +155,7 @@ end
 local function get_buffers(mode)
 	if mode == "list" then
 		if vim.fn.exists(':Telescope') then
-			require('telescope.builtin').buffers()
+			require('setup.telescope').Buffer().buffer_with_del()
 			return
 		end
 		vim.cmd("ls")
