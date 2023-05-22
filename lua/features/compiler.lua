@@ -139,6 +139,10 @@ local function get_compiler_build_data()
 		setup_rust()
 	end
 
+	if vim.fn.empty(vim.g.compiler_build_data) == 0 then
+		table.insert(compiler_build_data, vim.g.compiler_build_data)
+	end
+
 	return compiler_build_data
 end
 
