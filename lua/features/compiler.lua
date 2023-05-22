@@ -163,6 +163,11 @@ local function compiler_build_selection()
 
 	print("---------------end of list----------------------+")
 	local sel_idx = tonumber(vim.fn.input("Enter number to run build: "))
+
+	if sel_idx == nil then
+		return false
+	end
+
 	local sel_tbl = tbl[sel_idx]
 
 	if sel_tbl == nil then
