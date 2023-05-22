@@ -1,7 +1,3 @@
-local build_cmd_list = {
-  { name = "Vim", cmd = "vim --version" },
-}
-
 local function search_file()
 	if vim.fn.exists(':Telescope') then
 		vim.cmd('Telescope find_files')
@@ -233,11 +229,19 @@ local function create_ctags()
 end
 
 local function build()
+	local compiler = require('features.compiler')
+	local status = compiler.Selection()
+
+	if status == false then
+		return
+	end
+
 	if vim.fn.exists(':Make') and vim.fn.exists("$TMUX") then
 		vim.cmd("Make")
-	else
-		vim.cmd("make")
+		return
 	end
+
+	vim.cmd("make")
 end
 
 git_function_setup()

@@ -23,6 +23,13 @@ local function get_file_name()
 	return current_file_name
 end
 
+local function check_extension_file_exist(extension)
+	local cmd = "find . -type f -name " .. '"*."' .. extension .. " -print -quit | wc -l"
+	local result = tonumber(vim.fn.system(cmd))
+
+	return result
+end
+
 local function do_chg_wd()
 	local current_file_dir = get_file_dir()
 	print('Changing working directory to: ' .. current_file_dir)
@@ -148,6 +155,7 @@ local ret = {
 	GetDirWithPattern = get_dirs_with_pattern,
 	GetInstallPackageCmd = get_install_package_cmd,
 	GetOsLikeId = get_os_like_id,
+	ChkExtExist = check_extension_file_exist,
 	PwrshCmd = pwrsh_cmd,
 }
 
