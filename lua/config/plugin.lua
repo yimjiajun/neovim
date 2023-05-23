@@ -165,17 +165,6 @@ require("lazy").setup({
 			  end
 		},
 
-		{ "folke/noice.nvim",
-			dependencies = {
-				"MunifTanjim/nui.nvim",
-				"rcarriga/nvim-notify",
-			},
-			config = function()
-				require('setup.noice')
-				require('setup.notify')
-			end,
-		},
-
 		{ "stevearc/oil.nvim",
 			opts = {},
 			dependencies = { "nvim-tree/nvim-web-devicons" },
