@@ -49,8 +49,16 @@ local function ssh_connect_request()
 end
 
 local function ssh_list(save_file)
+	local show_pass = false
+
 	if save_file == true then
 		local file = '/tmp/ssh_list.txt'
+
+		if vim.fn.tolower(vim.fn.trim(
+			vim.fn.input("view password? (y/n): "))) == 'y' then
+			show_pass = true
+		end
+
 		vim.fn.setreg('"', file)
 		vim.cmd([[redir! > ]] .. vim.fn.getreg('"'))
 	end
@@ -62,6 +70,11 @@ local function ssh_list(save_file)
 
 	 for idx, info in ipairs(vim.g.ssh_data) do
 		 display_msg = string.format("%3d| %-20s | %-10s | %-5s\t%5s\t", idx, info.host, info.name, info.port, info.description)
+
+		 if save_file == true and show_pass == true then
+			 display_msg = display_msg .. "[" .. info.pass .. "]"
+		 end
+
 		 vim.api.nvim_echo({{display_msg, "MoreMsg"}}, true, {})
 	 end
 
