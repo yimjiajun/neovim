@@ -11,7 +11,11 @@ local function search_word(extension)
 	vim.fn.setreg('"', extension)
 
 	if vim.fn.exists(':Telescope') then
-		require('telescope.builtin').live_grep({prompt_title='search word', default_text=vim.fn.expand('<cword>'), glob_pattern={vim.fn.getreg('"')}})
+		if extension == " " then
+			require('telescope.builtin').grep_string({prompt_title='search word'})
+		else
+			require('telescope.builtin').live_grep({prompt_title='search ' .. vim.fn.getreg('"'), default_text=vim.fn.expand('<cword>'), glob_pattern={vim.fn.getreg('"')}})
+		end
 		return
 	end
 
@@ -27,7 +31,7 @@ end
 local function search_fuzzy(extension, vim_mode)
 	if vim.fn.exists(':Telescope') and vim_mode ~= 1 then
 		if vim_mode == 0 then
-			require('telescope.builtin').live_grep({prompt_title='search all', glob_pattern={"**/*", "!.*"}})
+			require('telescope.builtin').live_grep({prompt_title='search ALL', glob_pattern={"**/*", "!.*"}})
 		else
 			require('telescope.builtin').live_grep({prompt_title='search all', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*", "!.*"}})
 		end
