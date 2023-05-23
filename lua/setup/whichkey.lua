@@ -81,6 +81,7 @@ wk.register({
 	E = 'explorer File',
 	s = 'load session',
 	b = 'build',
+	v = 'view',
 	f = { name = 'Find',
 		f = 'file',
 		w = 'word',

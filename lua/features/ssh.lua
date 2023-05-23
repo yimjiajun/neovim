@@ -48,7 +48,13 @@ local function ssh_connect_request()
 	return ssh_connect(usr, host_ip, port, pass)
 end
 
-local function ssh_run()
+local function ssh_list(save_file)
+	if save_file == true then
+		local file = '/tmp/ssh_list.txt'
+		vim.fn.setreg('"', file)
+		vim.cmd([[redir! > ]] .. vim.fn.getreg('"'))
+	end
+
 	 local display_msg = string.format("%3s| %-20s | %-10s | %-5s | %-s", "idx",  "hostname/ip", "usrname", "port", "description")
 	 print("-----------------------------------------------+")
 	 print(display_msg)
@@ -60,6 +66,16 @@ local function ssh_run()
 	 end
 
 	print("---------------end of list----------------------+")
+
+	if save_file == true then
+		vim.cmd([[redir END]])
+		vim.cmd([[tabnew ]] .. vim.fn.getreg('"'))
+	end
+end
+
+local function ssh_run()
+	ssh_list(false)
+
 	local sel_idx = tonumber(vim.fn.input("Enter number to run ssh: "))
 	local sel_ssh = vim.g.ssh_data[sel_idx]
 
@@ -94,6 +110,14 @@ local function setting_key_ssh()
 			S = "SSH connect",
 		}, { mode = "n", prefix = "<leader>t" })
 	end
+
+	vim.api.nvim_set_keymap('n', '<leader>vS', [[<cmd> lua require('features.ssh').SshList(true) <CR> ]], { silent = true })
+	if pcall(require, "which-key") then
+		local wk = require("which-key")
+		wk.register({
+			S = "SSH list",
+		}, { mode = "n", prefix = "<leader>v" })
+	end
 end
 
 setting_key_ssh()
@@ -103,9 +127,11 @@ local ret = {
 	SshConnectReq = ssh_connect_request,
 	SshRun = ssh_run,
 	SshInsertInfo = ssh_insert_info,
+	SshList = ssh_list,
 }
 
 vim.cmd("command! -nargs=0 SshReq lua require('features.ssh').SshConnectReq()")
 vim.cmd("command! -nargs=0 Ssh lua require('features.ssh').SshRun()")
+vim.cmd("command! -nargs=0 SshList lua require('features.ssh').SshList(true)")
 
 return ret
