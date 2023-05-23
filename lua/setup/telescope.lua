@@ -34,6 +34,11 @@ local function setting_key_telescope()
 		[[<cmd> lua require('telescope.builtin').tags() <CR>]],
 		{ silent = true, desc = 'search from tags' })
 
+	vim.api.nvim_set_keymap('n', "<leader>fF",
+		[[<cmd> lua require('telescope.builtin').find_files({hidden=false, no_ignore=true, no_ignore_parent=true}) <CR>]],
+		{ silent = true, desc = 'search all' })
+
+
 	if pcall(require, "which-key") then
 		local wk = require("which-key")
 		wk.register({
@@ -41,6 +46,7 @@ local function setting_key_telescope()
 				s = "tags stack" },
 			f = {
 				b = "buffer search",
+				F = "all files",
 				t = "tags", },
 		}, { prefix = "<leader>" })
 	end
