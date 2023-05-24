@@ -29,13 +29,15 @@ local function setup_c()
 		end
 
 		local cmd = "if [[ $(west config --local -l | grep -c 'manifest.path') -eq 0 ]] then;"
-					.. "echo -n 'Enter zephyr base directory: '; read; cd $REPLY; west init -l;"
+					.. "echo -n 'current path contents > '; ls;"
+					.. "echo -n 'Enter project directory path: '; read;"
+					.. "cd $REPLY; west init -l; west update;"
 				.. "fi;"
 
 		cmd = cmd .. "if [[ $((west config --local -l) | grep -c 'zephyr.base-prefer') -eq 0 ]] then;"
 					.. "west config --local zephyr.base-prefer configfile;"
-					.. "echo -n 'Enter project directory: '; read; west config --local zephyr.base $REPLY;"
-					.. "echo -n 'Enter board name: ' ; read; west conifg --local build.board $REPLY;"
+					.. "echo -n 'Enter zephyr base directory path: '; read;" .. "west config --local zephyr.base $REPLY;"
+					.. "echo -n 'Enter board name: ' ; read;" .. "west config --local build.board $REPLY;"
 				.. "fi;"
 
 		compiler_insert_info("zephyr setup",
