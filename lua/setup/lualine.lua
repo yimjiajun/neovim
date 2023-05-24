@@ -1,7 +1,7 @@
 local function lualine_classical()
 	local config = {
 		options = {
-			icons_enabled = true,
+			icons_enabled = false,
 			theme = 'ayu_dark',
 			component_separators = { left = '', right = '' },
 			section_separators = { left = '', right = '' },
@@ -22,7 +22,7 @@ local function lualine_classical()
 			lualine_a = { 'mode' },
 			lualine_b = { 'branch', 'diff' },
 			lualine_c = { 'filename' },
-			lualine_x = { 'encoding', 'fileformat', 'filetype' },
+			lualine_x = { 'encoding', 'fileformat', 'filetype', {'%-=0x%B'}, },
 			lualine_y = { 'progress' },
 			lualine_z = { 'location' }
 		},
