@@ -149,6 +149,8 @@ end
 local function compiler_build_selection()
 
 	local tbl = get_compiler_build_data()
+	local target_tbl = {}
+	local target_tbl_cnt = 0
 	local display_msg = string.format("%3s| %-20s | %-s", "idx",  "name", "description")
 	print("---------------list of compilers---------------+")
 	print(display_msg)
@@ -156,8 +158,10 @@ local function compiler_build_selection()
 
 	for idx, info in ipairs(tbl) do
 		if (info.ext == vim.bo.filetype) then
-			display_msg = string.format("%3d| %-20s | %5s\t", idx, info.name, info.desc)
+			target_tbl_cnt = target_tbl_cnt + 1
+			display_msg = string.format("%3d| %-20s | %5s\t", target_tbl_cnt, info.name, info.desc)
 			vim.api.nvim_echo({{display_msg, "none"}}, true, {})
+			table.insert(target_tbl, info)
 		end
 	end
 
@@ -168,7 +172,7 @@ local function compiler_build_selection()
 		return false
 	end
 
-	local sel_tbl = tbl[sel_idx]
+	local sel_tbl = target_tbl[sel_idx]
 
 	if sel_tbl == nil then
 		vim.api.nvim_echo({{"\nInvalid index", "WarningMsg"}}, true, {})
