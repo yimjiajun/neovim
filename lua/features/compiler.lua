@@ -94,7 +94,7 @@ local function setup_rust()
 		return
 	end
 
-	compiler_insert_info("build rust", "rustc % --out-dir ./" .. vim.fn.expand("%:h"),
+	compiler_insert_info("build rust", "rustc % --out-dir %:h ",
 		"build current rust file", "rust", "make")
 	compiler_insert_info("run rust", "./" .. vim.fn.expand("%:r"),
 		"run current executable rust file", "rust", "make")
