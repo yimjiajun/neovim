@@ -7,35 +7,17 @@ local function search_file()
 	end
 end
 
-local function search_word(extension)
-	vim.fn.setreg('"', extension)
+local function search_word(extension, mode)
+	if extension == "" then
+		if vim.fn.executable("rg") == 1 then
+			extension = vim.fn.input("Enter filetype to search: ", '-g "*.' .. vim.fn.expand("%:e") .. '"')
 
-	if vim.fn.exists(':Telescope') then
-		if extension == " " then
-			require('telescope.builtin').grep_string({prompt_title='search word'})
+			if mode == 'complete' then
+				extension = "--no-ignore " .. extension
+			end
 		else
-			require('telescope.builtin').live_grep({prompt_title='search ' .. vim.fn.getreg('"'), default_text=vim.fn.expand('<cword>'), glob_pattern={vim.fn.getreg('"')}})
+			extension = vim.fn.input("Enter filetype to search: ")
 		end
-		return
-	end
-
-	if vim.fn.executable("rg") then
-		vim.cmd([[cexpr system('rg --vimgrep ' .. expand('<cword>') .. " ./**/" .. getreg('"'))]])
-	else
-		vim.cmd([[silent! vimgrep /]] .. vim.fn.expand("<cword>") .. [[/gj ./**/]] .. vim.fn.getreg('"'))
-	end
-
-	vim.cmd("silent! tab +copen")
-end
-
-local function search_fuzzy(extension, vim_mode)
-	if vim.fn.exists(':Telescope') and vim_mode ~= 1 then
-		if vim_mode == 0 then
-			require('telescope.builtin').live_grep({prompt_title='search ALL', glob_pattern={"**/*", "!.*"}})
-		else
-			require('telescope.builtin').live_grep({prompt_title='search all', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*", "!.*"}})
-		end
-		return
 	end
 
 	local word = vim.fn.input("Enter word to search: ")
@@ -44,15 +26,17 @@ local function search_fuzzy(extension, vim_mode)
 		word = vim.fn.expand("<cword>")
 	end
 
-	vim.fn.setreg('"', extension)
-	vim.fn.setreg('-', word)
+	vim.fn.setreg('"', tostring(extension))
+	vim.fn.setreg('-', tostring(word))
+
+	local cmd = [[silent! vimgrep /]] .. vim.fn.getreg('-') .. [[/gj ]] .. vim.fn.getreg('"')
 
 	if vim.fn.executable("rg") == 1 then
-		vim.cmd([[cexpr system('rg --vimgrep --smart-case ' .. getreg('-') .. "| grep " .. getreg('"') ..  "| sort -u")]])
-	else
-		vim.cmd([[silent! vimgrep /]] .. vim.fn.getreg('-') .. [[/gj ./**/]] .. vim.fn.getreg('"'))
+		cmd = [[cexpr system('rg --vimgrep --smart-case ' .. ' "' .. getreg('-') .. '" ' .. getreg('"'))]]
+
 	end
 
+	vim.cmd(cmd)
 	vim.cmd("silent! tab +copen")
 end
 

@@ -38,6 +38,45 @@ local function setting_key_telescope()
 		[[<cmd> lua require('telescope.builtin').find_files({hidden=false, no_ignore=true, no_ignore_parent=true}) <CR>]],
 		{ silent = true, desc = 'search all' })
 
+	vim.api.nvim_set_keymap('n', "<leader>fw",
+		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search word', default_text=vim.fn.expand('<cWORD>'), glob_pattern={"**/*", "!.*", "!tags"}})<CR>]],
+		{ silent = true, desc = 'search all from cursor' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fA",
+		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search ALL', glob_pattern={"**/*", "!.*", "!tags"}})<CR>]],
+		{ silent = true, desc = 'search all from user input' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fa",
+		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search ALL', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*", "!.*", "!tags"}})<CR>]],
+		{ silent = true, desc = 'search all from cursor' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fc",
+		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search c,cpp', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.[c,cpp]", "!.*", "!tags"}})<CR>]],
+		{ silent = true, desc = 'c' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fC",
+		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search c,cpp,h', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.[c,h]", "!.*", "!tags"}})<CR>]],
+		{ silent = true, desc = 'c & h' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fh",
+		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search h', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.h", "!.*", "!tags"}})<CR>]],
+		{ silent = true, desc = 'header' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fK",
+		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search Kconfig', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/Kconfig", "!.*", "!tags"}})<CR>]],
+		{ silent = true, desc = 'Kconfig' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fk",
+		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search .conf', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.conf", "!.*", "!tags"}})<CR>]],
+		{ silent = true, desc = '.config' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fd",
+		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search dts,dtsi', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.[dts,dtsi]", "!.*", "!tags"}})<CR>]],
+		{ silent = true, desc = 'dts & dtsi' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fm",
+		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search Make', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/[CMakeLists.txt,MakeFile,makefile]", "!.*", "!tags"}})<CR>]],
+		{ silent = true, desc = 'make' })
 
 	if pcall(require, "which-key") then
 		local wk = require("which-key")
