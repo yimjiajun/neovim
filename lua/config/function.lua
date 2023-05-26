@@ -36,8 +36,7 @@ local function search_word(extension, mode)
 
 	end
 
-	vim.cmd(cmd)
-	vim.cmd("silent! tab +copen")
+	vim.cmd("silent! " .. cmd  .. " | silent! +copen")
 end
 
 local function git_diff(mode)
