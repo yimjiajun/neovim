@@ -1,33 +1,49 @@
-local telescope = require("telescope")
-local lga_actions = require("telescope-live-grep-args.actions")
-
-telescope.setup {
-	defaults = {
-		layout_strategy = 'horizontal',
-		layout_config = {
-			height = 0.80,
-			width = 0.95,
-			prompt_position = 'bottom',
-			-- mirror = true,
+local function setup_telescope()
+	local fb_actions = require "telescope".extensions.file_browser.actions
+	local file_browser = {
+		theme = "ivy",
+		-- disables netrw and use telescope-file-browser in its place
+		hijack_netrw = true,
+	}
+	local lga_actions = require("telescope-live-grep-args.actions")
+	local live_grep_args = {
+		auto_quoting = true,
+		mappings = {
+			i = {
+				["<C-k>"] = lga_actions.quote_prompt(),
+				["<C-i>"] = lga_actions.quote_prompt({ postfix = " --no-ignore " }),
+				["<C-f>"] = lga_actions.quote_prompt({ postfix = " --glob **/*." }),
+				["<C-F>"] = lga_actions.quote_prompt({ postfix = " --no-ignore --glob **/*." }),
+			},
 		},
-		prompt_prefix='  ',
-	},
-	extensions = {
-		live_grep_args = {
-			auto_quoting = true,
+	}
+
+	local telescope = require("telescope")
+	telescope.setup {
+		defaults = {
+			layout_strategy = 'horizontal',
+			layout_config = {
+				height = 0.80,
+				width = 0.95,
+				prompt_position = 'bottom',
+				mirror = false,
+			},
 			mappings = {
 				i = {
-					["<C-k>"] = lga_actions.quote_prompt(),
-					["<C-i>"] = lga_actions.quote_prompt({ postfix = " --no-ignore " }),
-					["<C-f>"] = lga_actions.quote_prompt({ postfix = " --glob **/*." }),
-					["<C-F>"] = lga_actions.quote_prompt({ postfix = " --no-ignore --glob **/*." }),
+					["<C-h>"] = "which_key"
 				},
 			},
-		}
+			prompt_prefix='  ',
+		},
+		extensions = {
+			live_grep_args = live_grep_args,
+			flie_browser = file_browser,
+		},
 	}
-}
 
-telescope.load_extension('live_grep_args')
+	telescope.load_extension('live_grep_args')
+	telescope.load_extension('file_browser')
+end
 
 local function setting_key_telescope()
 	vim.api.nvim_set_keymap('n', "z=",
@@ -52,9 +68,21 @@ local function setting_key_telescope()
 		[[<cmd> lua require('telescope.builtin').tags() <CR>]],
 		{ silent = true, desc = 'search from tags' })
 
+	vim.api.nvim_set_keymap('n', "<leader>e",
+		[[<cmd> Telescope file_browser <CR>]],
+		{ silent = true, desc = 'Explorer' })
+
+	vim.api.nvim_set_keymap('n', "<leader>E",
+		[[<cmd> Telescope file_browser path=%:p:h select_buffer=true <CR>]],
+		{ silent = true, desc = 'Explorer cfrom current buffer path' })
+
+	vim.api.nvim_set_keymap('n', "<leader>ff",
+		[[<cmd> lua require('telescope.builtin').find_files({hidden=false, no_ignore=false, no_ignore_parent=false}) <CR>]],
+		{ silent = true, desc = 'search files' })
+
 	vim.api.nvim_set_keymap('n', "<leader>fF",
 		[[<cmd> lua require('telescope.builtin').find_files({hidden=false, no_ignore=true, no_ignore_parent=true}) <CR>]],
-		{ silent = true, desc = 'search all' })
+		{ silent = true, desc = 'search all files' })
 
 	vim.api.nvim_set_keymap('n', "<leader>fw",
 		[[<cmd> lua require("telescope-live-grep-args.shortcuts").grep_word_under_cursor()<CR>]],
@@ -130,6 +158,7 @@ local function telescope_buffer()
 	return m
 end
 
+setup_telescope()
 setting_key_telescope()
 
 local ret = {

@@ -1,10 +1,6 @@
 local function search_file()
-	if vim.fn.exists(':Telescope') then
-		vim.cmd('Telescope find_files')
-	else
-		local regex_file = vim.fn.input("File to search (regex): ")
-		vim.cmd("silent! find ./**/" .. regex_file)
-	end
+	local regex_file = vim.fn.input("File to search (regex): ")
+	vim.cmd("silent! find ./**/" .. regex_file)
 end
 
 local function search_word(extension, mode)

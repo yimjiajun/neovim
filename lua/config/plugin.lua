@@ -70,6 +70,7 @@ require("lazy").setup({
 			tag = '0.1.1',
 			dependencies = {
 				'nvim-lua/plenary.nvim',
+				"nvim-telescope/telescope-file-browser.nvim",
 				"nvim-telescope/telescope-live-grep-args.nvim",
 			},
 			config = function()
@@ -166,16 +167,6 @@ require("lazy").setup({
 			  config = function()
 				  require('setup.lualine')
 			  end
-		},
-
-		{ "stevearc/oil.nvim",
-			opts = {},
-			dependencies = { "nvim-tree/nvim-web-devicons" },
-			config = function()
-				require("oil").setup({})
-				vim.api.nvim_set_keymap('n', '<Leader>e', [[<cmd> lua require("oil").toggle_float() <CR>]], { silent = true})
-				vim.api.nvim_set_keymap('n', '<Leader>E', [[<cmd> lua require("oil").open() <CR>]], { silent = true, desc = "open explore in buffer" })
-			end,
 		},
 	},
 
