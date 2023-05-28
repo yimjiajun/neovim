@@ -1,15 +1,33 @@
-require('telescope').setup{
+local telescope = require("telescope")
+local lga_actions = require("telescope-live-grep-args.actions")
+
+telescope.setup {
 	defaults = {
 		layout_strategy = 'horizontal',
-			layout_config = {
+		layout_config = {
 			height = 0.80,
 			width = 0.95,
 			prompt_position = 'bottom',
 			-- mirror = true,
 		},
-	prompt_prefix='  ',
+		prompt_prefix='  ',
 	},
+	extensions = {
+		live_grep_args = {
+			auto_quoting = true,
+			mappings = {
+				i = {
+					["<C-k>"] = lga_actions.quote_prompt(),
+					["<C-i>"] = lga_actions.quote_prompt({ postfix = " --no-ignore " }),
+					["<C-f>"] = lga_actions.quote_prompt({ postfix = " --glob **/*." }),
+					["<C-F>"] = lga_actions.quote_prompt({ postfix = " --no-ignore --glob **/*." }),
+				},
+			},
+		}
+	}
 }
+
+telescope.load_extension('live_grep_args')
 
 local function setting_key_telescope()
 	vim.api.nvim_set_keymap('n', "z=",
@@ -39,43 +57,43 @@ local function setting_key_telescope()
 		{ silent = true, desc = 'search all' })
 
 	vim.api.nvim_set_keymap('n', "<leader>fw",
-		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search word', default_text=vim.fn.expand('<cWORD>'), glob_pattern={"**/*", "!.*", "!tags"}})<CR>]],
-		{ silent = true, desc = 'search all from cursor' })
+		[[<cmd> lua require("telescope-live-grep-args.shortcuts").grep_word_under_cursor()<CR>]],
+		{ silent = true, desc = 'search word under cursor' })
 
 	vim.api.nvim_set_keymap('n', "<leader>fA",
-		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search ALL', glob_pattern={"**/*", "!.*", "!tags"}})<CR>]],
+		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search ALL', glob_pattern={"!.*", "!tags"}})<CR>]],
 		{ silent = true, desc = 'search all from user input' })
 
 	vim.api.nvim_set_keymap('n', "<leader>fa",
-		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search ALL', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*", "!.*", "!tags"}})<CR>]],
+		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search all', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*", "!.*", "!tags"}})<CR>]],
 		{ silent = true, desc = 'search all from cursor' })
 
 	vim.api.nvim_set_keymap('n', "<leader>fc",
-		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search c,cpp', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.[c,cpp]", "!.*", "!tags"}})<CR>]],
+		[[<cmd> lua  require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search c,cpp', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.[c,cpp]", "!.*", "!tags"}})<CR>]],
 		{ silent = true, desc = 'c' })
 
 	vim.api.nvim_set_keymap('n', "<leader>fC",
-		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search c,cpp,h', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.[c,h]", "!.*", "!tags"}})<CR>]],
+		[[<cmd> lua  require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search c,cpp,h', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.[c,h]", "!.*", "!tags"}})<CR>]],
 		{ silent = true, desc = 'c & h' })
 
 	vim.api.nvim_set_keymap('n', "<leader>fh",
-		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search h', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.h", "!.*", "!tags"}})<CR>]],
+		[[<cmd> lua  require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search h', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.h", "!.*", "!tags"}})<CR>]],
 		{ silent = true, desc = 'header' })
 
 	vim.api.nvim_set_keymap('n', "<leader>fK",
-		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search Kconfig', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/Kconfig", "!.*", "!tags"}})<CR>]],
+		[[<cmd> lua  require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search Kconfig', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/Kconfig", "!.*", "!tags"}})<CR>]],
 		{ silent = true, desc = 'Kconfig' })
 
 	vim.api.nvim_set_keymap('n', "<leader>fk",
-		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search .conf', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.conf", "!.*", "!tags"}})<CR>]],
+		[[<cmd> lua  require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search .conf', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.conf", "!.*", "!tags"}})<CR>]],
 		{ silent = true, desc = '.config' })
 
 	vim.api.nvim_set_keymap('n', "<leader>fd",
-		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search dts,dtsi', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.[dts,dtsi]", "!.*", "!tags"}})<CR>]],
+		[[<cmd> lua  require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search dts,dtsi', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.[dts,dtsi]", "!.*", "!tags"}})<CR>]],
 		{ silent = true, desc = 'dts & dtsi' })
 
 	vim.api.nvim_set_keymap('n', "<leader>fm",
-		[[<cmd> lua  require('telescope.builtin').live_grep({prompt_title='search Make', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/[CMakeLists.txt,MakeFile,makefile]", "!.*", "!tags"}})<CR>]],
+		[[<cmd> lua  require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search Make', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/[CMakeLists.txt,MakeFile,makefile]", "!.*", "!tags"}})<CR>]],
 		{ silent = true, desc = 'make' })
 
 	if pcall(require, "which-key") then
