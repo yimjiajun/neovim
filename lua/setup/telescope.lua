@@ -1,7 +1,6 @@
 local function setup_telescope()
 	local fb_actions = require "telescope".extensions.file_browser.actions
 	local file_browser = {
-		theme = "ivy",
 		-- disables netrw and use telescope-file-browser in its place
 		hijack_netrw = true,
 	}
@@ -21,10 +20,11 @@ local function setup_telescope()
 	local telescope = require("telescope")
 	telescope.setup {
 		defaults = {
-			layout_strategy = 'horizontal',
+			theme = "dropdown",
+			layout_strategy = 'vertical',
 			layout_config = {
-				height = 0.80,
-				width = 0.95,
+				height = 0.95,
+				width = 0.90,
 				prompt_position = 'bottom',
 				mirror = false,
 			},
