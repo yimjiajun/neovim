@@ -56,7 +56,7 @@ local function setting_key_telescope()
 			{ silent = true, desc = 'buffer tags list' })
 	end
 
-	vim.api.nvim_set_keymap('n', "<leader>ts",
+	vim.api.nvim_set_keymap('n', "<leader>tS",
 		[[<cmd> lua require('telescope.builtin').tagstack() <CR>]],
 		{ silent = true, desc = 'tag stack selection' })
 
@@ -128,7 +128,7 @@ local function setting_key_telescope()
 		local wk = require("which-key")
 		wk.register({
 			t = { t = "tags list",
-				s = "tags stack" },
+				S = "tags stack" },
 			f = {
 				b = "buffer search",
 				F = "all files",
