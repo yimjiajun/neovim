@@ -4,6 +4,7 @@ vim.g.ssh_data = {
 		pass = "jun",
 		port = "22",
 		description = "Raspberry Pi 4B",
+		group = "raspberry",
 	},
 }
 
@@ -48,8 +49,68 @@ local function ssh_connect_request()
 	return ssh_connect(usr, host_ip, port, pass)
 end
 
-local function ssh_list(save_file)
+local function display_delimited_line(delimited_character)
+	local current_window = vim.api.nvim_get_current_win()
+	local window_width = vim.api.nvim_win_get_width(current_window)
+	local delimited_mark = tostring(delimited_character or "=")
+	local delimited_len = window_width - 10
+	local display_msg = ""
+
+	for i = 1, delimited_len do
+		display_msg = display_msg .. delimited_mark
+	end
+
+	print(display_msg)
+end
+
+local function display_tittle(tittle)
+	local display_msg = string.format("%4s", tittle)
+
+	display_delimited_line()
+	print(display_msg)
+	display_delimited_line()
+end
+
+local function ssh_list_get_group()
+	local group_list = {}
+
+	for _, info in ipairs(vim.g.ssh_data) do
+		local cnt = 1
+		repeat
+			if group_list[cnt] ~= info.group then
+				table.insert(group_list, info.group)
+				break
+			else
+				cnt = cnt + 1
+			end
+		until cnt < #group_list
+	end
+
+	display_tittle("SSH Group List")
+
+	for idx, grp in ipairs(group_list) do
+		print(string.format("%3d| %s", idx, grp))
+	end
+
+	local sel_idx = tonumber(vim.fn.input("Enter number to select ssh group: "))
+	local sel_grp = group_list[sel_idx]
+
+	if sel_grp == nil then
+		vim.api.nvim_echo({{"\nInvalid selection", "WarningMsg"}}, false, {})
+		return
+	end
+
+	return sel_grp
+end
+
+local function ssh_get_list(save_file)
 	local show_pass = false
+	local ssh_sel_list = {}
+	local group = ssh_list_get_group()
+
+	if group == nil then
+		return nil
+	end
 
 	if save_file == true then
 		local file = '/tmp/ssh_list.txt'
@@ -63,41 +124,58 @@ local function ssh_list(save_file)
 		vim.cmd([[redir! > ]] .. vim.fn.getreg('"'))
 	end
 
-	 local display_msg = string.format("%3s| %-20s | %-10s | %-5s | %-s", "idx",  "hostname/ip", "usrname", "port", "description")
-	 print("-----------------------------------------------+")
-	 print(display_msg)
-	 print("-----------------------------------------------+")
+	 local display_msg = string.format("%3s| %-20s | %-20s | %-5s | %-s", "idx",  "hostname/ip", "usrname", "port", "description")
+	 display_tittle(display_msg)
 
-	 for idx, info in ipairs(vim.g.ssh_data) do
-		 display_msg = string.format("%3d| %-20s | %-10s | %-5s\t%5s\t", idx, info.host, info.name, info.port, info.description)
-
-		 if save_file == true and show_pass == true then
-			 display_msg = display_msg .. "[" .. info.pass .. "]"
+	 local idx = 1
+	 for _, info in ipairs(vim.g.ssh_data) do
+		 if info.group ~= group then
+			 goto continue
 		 end
 
-		 vim.api.nvim_echo({{display_msg, "MoreMsg"}}, true, {})
-	 end
+		 display_msg = string.format("%3d| %-20s | %-20s | %-5s | %-s", idx, info.host, info.name, info.port, info.description)
+if save_file == true and show_pass == true then
+			 display_msg = display_msg .. "\t" .. "[" .. info.pass .. "]"
+		 end
 
-	print("---------------end of list----------------------+")
+		 vim.api.nvim_echo({{display_msg, "none"}}, true, {})
+
+		 if idx % 2 == 0 then
+			 if idx % 4 == 0 then
+				 display_delimited_line("~")
+			 else
+				 display_delimited_line("-")
+			 end
+		 end
+
+		 table.insert(ssh_sel_list, info)
+		 idx = idx + 1
+		 ::continue::
+	 end
 
 	if save_file == true then
 		vim.cmd([[redir END]])
-		vim.cmd([[tabnew ]] .. vim.fn.getreg('"'))
+		vim.cmd([[tabnew ]] .. vim.fn.getreg('"') .. " | setlocal readonly")
 	end
+
+	return ssh_sel_list
 end
 
 local function ssh_run()
-	ssh_list(false)
+	local ssh_list = ssh_get_list(false)
 
-	local sel_idx = tonumber(vim.fn.input("Enter number to run ssh: "))
-	local sel_ssh = vim.g.ssh_data[sel_idx]
-
-	if sel_ssh == nil then
-		vim.api.nvim_echo({{"\nInvalid index", "WarningMsg"}}, true, {})
+	if ssh_list == nil then
 		return
 	end
 
-	vim.api.nvim_echo({{"\nStart SSH connecting ...", "none"}}, true, {})
+	local sel_idx = tonumber(vim.fn.input("Enter number to run ssh: "))
+	local sel_ssh = ssh_list[sel_idx]
+
+	if sel_ssh == nil then
+		vim.api.nvim_echo({{"\nInvalid index", "WarningMsg"}}, false, {})
+		return
+	end
+
 	ssh_connect(sel_ssh.name, sel_ssh.host, sel_ssh.port, sel_ssh.pass)
 end
 
@@ -140,7 +218,7 @@ local ret = {
 	SshConnectReq = ssh_connect_request,
 	SshRun = ssh_run,
 	SshInsertInfo = ssh_insert_info,
-	SshList = ssh_list,
+	SshList = ssh_get_list,
 }
 
 vim.cmd("command! -nargs=0 SshReq lua require('features.ssh').SshConnectReq()")
