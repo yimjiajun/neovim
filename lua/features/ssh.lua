@@ -73,17 +73,28 @@ end
 
 local function ssh_list_get_group()
 	local group_list = {}
+	local group_total = 0
 
 	for _, info in ipairs(vim.g.ssh_data) do
 		local cnt = 1
+
 		repeat
-			if group_list[cnt] ~= info.group then
-				table.insert(group_list, info.group)
+			if info.group == nil then
 				break
-			else
-				cnt = cnt + 1
 			end
-		until cnt < #group_list
+
+			if group_list[cnt] == info.group then
+				break
+			end
+
+			if group_list[cnt] == nil then
+				table.insert(group_list, info.group)
+				group_total = group_total + 1
+				break
+			end
+
+			cnt = cnt + 1
+		until (cnt - 1) > group_total
 	end
 
 	display_tittle("SSH Group List")
@@ -124,7 +135,7 @@ local function ssh_get_list(save_file)
 		vim.cmd([[redir! > ]] .. vim.fn.getreg('"'))
 	end
 
-	 local display_msg = string.format("%3s| %-20s | %-20s | %-5s | %-s", "idx",  "hostname/ip", "usrname", "port", "description")
+	 local display_msg = string.format("%3s| %-20s | %-20s | %-5s | %-s", "idx",  "hostname/ip", "username", "port", "description")
 	 display_tittle(display_msg)
 
 	 local idx = 1
@@ -179,7 +190,7 @@ local function ssh_run()
 	ssh_connect(sel_ssh.name, sel_ssh.host, sel_ssh.port, sel_ssh.pass)
 end
 
-local function ssh_insert_info(username, hostname, port, password, description)
+local function ssh_insert_info(username, hostname, port, password, description, group)
 	local data = vim.g.ssh_data
 	local info = {
 		name = username,
@@ -187,6 +198,7 @@ local function ssh_insert_info(username, hostname, port, password, description)
 		port = port,
 		pass = password,
 		description = description,
+		group = group,
 	}
 
 	table.insert(data, info)
