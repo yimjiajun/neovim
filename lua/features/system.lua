@@ -144,6 +144,24 @@ local function get_install_package_cmd()
 	return install_cmd
 end
 
+local function get_git_branch()
+	local git_rep_exists = vim.fn.system("git rev-parse --is-inside-work-tree >/dev/null 2>&1 | echo $?")
+
+	if git_rep_exists == 0 then
+		return ' '
+	end
+
+	local branch = vim.fn.system("git branch --show-current")
+
+	if branch ~= '' then
+		return vim.fn.trim(branch)
+	end
+
+	local commita_hash = vim.fn.system("git rev-parse --short HEAD")
+
+	return vim.fn.trim(commita_hash)
+end
+
 setup_lazygit()
 setup_htop()
 setup_ncdu()
@@ -157,6 +175,7 @@ local ret = {
 	GetOsLikeId = get_os_like_id,
 	ChkExtExist = check_extension_file_exist,
 	PwrshCmd = pwrsh_cmd,
+	GetGitBranch = get_git_branch,
 }
 
 for name in pairs(ret) do
