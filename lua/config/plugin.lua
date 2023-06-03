@@ -161,13 +161,6 @@ require("lazy").setup({
 				require('setup.goto-preview')
 			end
 		},
-
-		{ 'nvim-lualine/lualine.nvim',
-			  dependencies = { 'nvim-tree/nvim-web-devicons' },
-			  config = function()
-				  require('setup.lualine')
-			  end
-		},
 	},
 
 	defaults = {
