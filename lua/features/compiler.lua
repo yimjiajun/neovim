@@ -1,4 +1,9 @@
 local sys_func = require("features.system")
+local common = require("features.common")
+local display_tittle = common.DisplayTittle
+local display_delimited_line = common.DisplayDelimitedLine
+local group_selection = common.GroupSelection
+vim.g.compiler_build_data = {}
 local compiler_build_data = {}
 
 -- compiler selection
@@ -8,7 +13,7 @@ local compiler_build_data = {}
 -- @param .desc description of build (string)
 -- @param .ext file extension (string)
 -- @param .type build type: "make", "term", "term_full" (string)
-local function compiler_insert_info(name, cmd, desc, ext, type)
+local function compiler_insert_info(name, cmd, desc, ext, type, grp)
 	local data = compiler_build_data
 	local info = {
 		name = name,
@@ -16,10 +21,26 @@ local function compiler_insert_info(name, cmd, desc, ext, type)
 		desc = desc,
 		build_type = type,
 		ext = ext,
+		group = grp,
 	}
 
 	table.insert(data, info)
 	compiler_build_data = data
+end
+
+local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp)
+	local data = vim.g.compiler_build_data
+	local info = {
+		name = name,
+		cmd = cmd,
+		desc = desc,
+		build_type = type,
+		ext = ext,
+		group = grp,
+	}
+
+	table.insert(data, info)
+	vim.g.compiler_build_data = data
 end
 
 local function setup_c()
@@ -42,25 +63,25 @@ local function setup_c()
 
 		compiler_insert_info("zephyr setup",
 			cmd .. "exit",
-			"setup ecfw-zephyr configuration", "c", "term")
+			"setup ecfw-zephyr configuration", "c", "term", "zephyr")
 		compiler_insert_info("zephyr build",
 			"west build -d $(west config manifest.path)/build $(west config manifest.path);" .. "exit",
-			"build zephyr project", "c", "make")
+			"build zephyr project", "c", "make", "zephyr")
 		compiler_insert_info("zephyr build all",
 			"west build -p=always -d $(west config manifest.path)/build $(west config manifest.path);" .. "exit",
-			"re-build zephyr project as pristine", "c", "make")
+			"re-build zephyr project as pristine", "c", "make", "zephyr")
 		compiler_insert_info("zephyr menu",
 			"west build -t menuconfig $(west config manifest.path);" .. "exit",
-			"interactive config zephyr kconfig value", "c", "term_full")
+			"interactive config zephyr kconfig value", "c", "term_full", "zephyr")
 	end
 
 	setup_zephyr_project()
 
-	compiler_insert_info("gcc build", [[gcc % -o %:t:r ]], "gcc build c source", "make")
-	compiler_insert_info("gcc run", [[./%:t:r]], "gcc run executable source", "make")
+	compiler_insert_info("gcc build", [[gcc % -o %:t:r ]], "gcc build c source", "make", "build")
+	compiler_insert_info("gcc run", [[./%:t:r]], "gcc run executable source", "make", "build")
 	compiler_insert_info("gcc build & run",
 		[[gcc % -o %:t:r && mv %:t:r /tmp/%:t:r && /tmp/%:t:r && rm /tmp/%:t:r]],
-		"gcc build and run c source", "make")
+		"gcc build and run c source", "make", "build")
 end
 
 local function setup_markdown()
@@ -82,12 +103,12 @@ local function setup_markdown()
 			.. " http://localhost:3000 && mdbook serve"
 
 		compiler_insert_info("mdbook", cmd,
-			"open mdbook for markdown", "markdown", "make")
+			"open mdbook for markdown", "markdown", "make", "build")
 	end
 
 	if vim.fn.exists('g:mkdp_command_for_global') == 1 then
 		compiler_insert_info("md preview", [[nvim +MarkdownPreview %]],
-			"Preview current markdown file", "markdown", "make")
+			"Preview current markdown file", "markdown", "make", "plugin")
 	end
 end
 
@@ -97,21 +118,21 @@ local function setup_rust()
 	end
 
 	compiler_insert_info("build rust", "rustc % --out-dir %:h ",
-		"build current rust file", "rust", "make")
+		"build current rust file", "rust", "make", "build")
 	compiler_insert_info("run rust", "./" .. vim.fn.expand("%:r"),
-		"run current executable rust file", "rust", "make")
+		"run current executable rust file", "rust", "make", "build")
 
 	if io.open(string.lower('Cargo.toml')) then
 		compiler_insert_info("cargo build", [[cargo build]],
-			"build with cargo", "rust", "make")
+			"build with cargo", "rust", "make", "build")
 		compiler_insert_info("cargo run", [[cargo run]],
-			"run with cargo", "rust", "make")
+			"run with cargo", "rust", "make", "build")
 	end
 end
 
 local function get_compiler_build_data()
 
-	compiler_build_data = { }
+	compiler_build_data = {}
 	local check_ext_file_exist = sys_func.ChkExtExist
 
 	if check_ext_file_exist("c") == 1 then
@@ -124,17 +145,17 @@ local function get_compiler_build_data()
 
 	if check_ext_file_exist("py") == 1 then
 		compiler_insert_info("run script", "python3 %" .. ";read;exit",
-			"run current python file", "py", "make")
+			"run current python file", "py", "make", "build")
 	end
 
 	if check_ext_file_exist("sh") == 1 then
 		compiler_insert_info("run script", [[./%]],
-			"run current buffer bash script", "sh",  "make")
+			"run current buffer bash script", "sh",  "make", "build")
 	end
 
 	if check_ext_file_exist("perl") == 1 then
 		compiler_insert_info("run script", [[perl %]],
-			"run current buffer perl script", "perl", "make")
+			"run current buffer perl script", "perl", "make", "build")
 	end
 
 	if check_ext_file_exist("rs") == 1 then
@@ -151,23 +172,47 @@ end
 local function compiler_build_selection()
 
 	local tbl = get_compiler_build_data()
+
+	if tbl == nil then
+		return false
+	end
+
+	local grp = group_selection(tbl)
+
+	if grp == nil then
+		return false
+	end
+
 	local target_tbl = {}
 	local target_tbl_cnt = 0
 	local display_msg = string.format("%3s| %-20s | %-s", "idx",  "name", "description")
-	print("---------------list of compilers---------------+")
-	print(display_msg)
-	print("------------------------------------------------+")
+	display_tittle(display_msg)
 
-	for idx, info in ipairs(tbl) do
-		if (info.ext == vim.bo.filetype) then
-			target_tbl_cnt = target_tbl_cnt + 1
-			display_msg = string.format("%3d| %-20s | %5s\t", target_tbl_cnt, info.name, info.desc)
-			vim.api.nvim_echo({{display_msg, "none"}}, true, {})
-			table.insert(target_tbl, info)
+	for _, info in ipairs(tbl) do
+		if (info.ext ~= vim.bo.filetype) then
+			goto continue
 		end
+
+		if (info.group ~= grp) then
+			goto continue
+		end
+
+		target_tbl_cnt = target_tbl_cnt + 1
+		display_msg = string.format("%3d| %-20s | %5s\t", target_tbl_cnt, info.name, info.desc)
+		vim.api.nvim_echo({{display_msg, "none"}}, true, {})
+		table.insert(target_tbl, info)
+
+		 if target_tbl_cnt % 2 == 0 then
+			 if target_tbl_cnt % 4 == 0 then
+				 display_delimited_line("~")
+			 else
+				 display_delimited_line("-")
+			 end
+		 end
+
+		::continue::
 	end
 
-	print("---------------end of list----------------------+")
 	local sel_idx = tonumber(vim.fn.input("Enter number to run build: "))
 
 	if sel_idx == nil then
@@ -204,6 +249,7 @@ end
 
 local ret = {
 	Selection = compiler_build_selection,
+	InsertInfo = compiler_insert_info_permanent,
 }
 
 return ret
