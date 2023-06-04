@@ -127,10 +127,11 @@ local function ssh_get_list(save_file)
 		local file = '/tmp/ssh_list.txt'
 
 		if vim.fn.tolower(vim.fn.trim(
-			vim.fn.input("view password? (y/n): "))) == 'y' then
+			vim.fn.input("view password? (y/n): ", 'y'))) == 'y' then
 			show_pass = true
 		end
 
+		vim.api.nvim_echo({{"\nredirecting ssh information to file", "none"}}, false, {})
 		vim.fn.setreg('"', file)
 		vim.cmd([[redir! > ]] .. vim.fn.getreg('"'))
 	end
