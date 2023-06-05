@@ -5,7 +5,7 @@ local function display_delimited_line(delimited_character)
 	local delimited_len = window_width - 10
 	local display_msg = ""
 
-	for i = 1, delimited_len do
+	for _ = 1, delimited_len do
 		display_msg = display_msg .. delimited_mark
 	end
 
