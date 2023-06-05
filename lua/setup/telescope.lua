@@ -46,9 +46,21 @@ local function setup_telescope()
 end
 
 local function setting_key_telescope()
+	vim.api.nvim_set_keymap('n', '<leader>w', [[<cmd> lua require('setup.telescope').Buffer().buffer_with_del() <CR>]], { silent = true })
+
+	vim.api.nvim_set_keymap('n', '<Leader>ggs', [[<cmd> lua require('telescope.builtin').git_status() <CR>]], { silent = true })
+
+	vim.api.nvim_set_keymap('n', '<leader>q', [[<cmd> lua require('telescope.builtin').marks() <CR>]], { silent = true })
+
+	vim.api.nvim_set_keymap('n', '<leader>h', [[<cmd> lua require('telescope.builtin').jumplist() <CR>]], { silent = true })
+
+	vim.api.nvim_set_keymap('n', '<leader>r', [[<cmd> lua require('telescope.builtin').registers() <CR>]], { silent = true })
+
 	vim.api.nvim_set_keymap('n', "z=",
 		[[<cmd> lua require('telescope.builtin').spell_suggest() <CR>]],
 		{ silent = true, desc = 'Spell Suggest' })
+
+		vim.api.nvim_set_keymap('n', '<Leader>ggL', [[<cmd> lua require('telescope.builtin').git_commits() <CR>]], { silent = true })
 
 	if vim.fn.filereadable("tags") == 1 then
 		vim.api.nvim_set_keymap('n', "<leader>tt",

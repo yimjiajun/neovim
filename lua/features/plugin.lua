@@ -47,7 +47,11 @@ require("lazy").setup({
 			ft = { "markdown" },
 		},
 
-		{ 'tpope/vim-fugitive' },
+		{ 'tpope/vim-fugitive',
+			config = function ()
+				require('setup.fugitive')
+			end
+		},
 
 		{ "bluz71/vim-moonfly-colors",
 			name = "moonfly", lazy = false, priority = 1000,
@@ -84,7 +88,11 @@ require("lazy").setup({
 			end
 		},
 
-		{ 'tpope/vim-dispatch' },
+		{ 'tpope/vim-dispatch',
+			config = function()
+				require('setup.dispatch')
+			end
+		},
 
 		{ "folke/zen-mode.nvim",
 			config = function()

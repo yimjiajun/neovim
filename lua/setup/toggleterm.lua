@@ -59,4 +59,15 @@ require("toggleterm").setup{
 	},
 }
 
+local function toggleterm_setup_keymapping()
+  vim.api.nvim_set_keymap('n', "<leader>tf", ":ToggleTerm <CR>", { silent = true, noremap = true })
+end
+
+local function toggleterm_setup_global_variable()
+	vim.g.vim_git = "TermCmd git"
+end
+
+toggleterm_setup_keymapping()
+toggleterm_setup_global_variable()
+
 vim.cmd("command! -nargs=1 TermCmd lua require'toggleterm'.exec(<q-args>)")
