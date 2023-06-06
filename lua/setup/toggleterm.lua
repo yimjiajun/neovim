@@ -64,7 +64,9 @@ local function toggleterm_setup_keymapping()
 end
 
 local function toggleterm_setup_global_variable()
-	vim.g.vim_git = "TermCmd git"
+	if vim.g.vim_git == "!git"  then
+		vim.g.vim_git = "TermCmd git"
+	end
 end
 
 toggleterm_setup_keymapping()
