@@ -61,6 +61,50 @@ local function setup_c()
 					.. "echo -n 'Enter board name: ' ; read;" .. "west config --local build.board $REPLY;"
 				.. "fi;"
 
+		local pre_build_config = "if [[ $(west config --local -l | grep -c 'build.board') -eq 0 ]] then;"
+				.. "echo -n 'Enter board name: ' ; read;" .. "west config --local build.board $REPLY;"
+			.. "fi;"
+			.. "if [[ $(west config --local build.board | grep -c '^mec') ]] then;"
+				.. "if [[ ! -d $(west topdir)/CPGZephyrDocs ]] then;"
+					.. "git clone --depth 1 https://github.com/MicrochipTech/CPGZephyrDocs.git $(west topdir)/CPGZephyrDocs;"
+					.. "if [[ ! -d $(west topdir)/CPGZephyrDocs ]] then;"
+						.. "echo 'CPGZephyrDocs download failed for MicrochipTech';"
+						.. "exit 1;"
+					.. "fi;"
+					.. "spi_imgs=$(west topdir)/CPGZephyrDocs/MEC1501/SPI_image_gen/everglades_spi_gen_lin64 ;"
+					.. "sudo chmod +x ${spi_imgs};"
+					.. "spi_imgs=$(west topdir)/CPGZephyrDocs/MEC152x/SPI_image_gen/everglades_spi_gen_RomE ;"
+					.. "sudo chmod +x ${spi_imgs};"
+					.. "spi_imgs=$(west topdir)/CPGZephyrDocs/MEC172x/SPI_image_gen/mec172x_spi_gen_lin_x86_64 ;"
+					.. "sudo chmod +x ${spi_imgs};"
+				.. "fi;"
+				.. "if [[ $(west config --local build.board | grep -c '^mec15') ]] then;"
+						.. "if [[ $(west config --local build.board | grep -c '^mec150') ]] then;"
+							.. "spi_img_gen=$(west topdir)/CPGZephyrDocs/MEC1501/SPI_image_gen/everglades_spi_gen_lin64;"
+							.. "export EVERGLADES_SPI_GEN=${spi_img_gen};"
+						.. "elif [[ $(west config --local build.board | grep -c '^mec152') ]] then;"
+							.. "spi_img_gen=$(west topdir)/CPGZephyrDocs/MEC152x/SPI_image_gen/everglades_spi_gen_RomE;"
+							.. "export EVERGLADES_SPI_GEN=${spi_img_gen};"
+						.. "else"
+							.. "export EVERGLADES_SPI_GEN=$(west topdir)/CPGZephyrDocs/MEC1501/SPI_image_gen/everglades_spi_gen_lin64;"
+							.. "export EVERGLADES_SPI_GEN=${spi_img_gen};"
+						.. "fi;"
+				.. "elif [[ $(west config --local build.board | grep -c '^mec17') ]] then;"
+						.. "if [[ $(west config --local build.board | grep -c '^mec170') ]] then;"
+							.. "echo 'MEC170x not supported';"
+							.. "exit 1;"
+						.. "elif [[ $(west config --local build.board | grep -c '^mec172') ]] then;"
+							.. "spi_img_gen=$(west topdir)/CPGZephyrDocs/MEC172x/SPI_image_gen/mec172x_spi_gen_lin_x86_64;"
+							.. "export MEC172X_SPI_GEN=${spi_img_gen};"
+						.. "else"
+							.. "spi_img_gen=$(west topdir)/CPGZephyrDocs/MEC172x/SPI_image_gen/mec172x_spi_gen_lin_x86_64;"
+							.. "export MEC172X_SPI_GEN=${spi_img_gen};"
+						.. "fi;"
+				.. "fi;"
+			.. "elif [[ $(west config --local build.board | grep -c '^it') ]] then;"
+				.. "echo 'iTE boards not supported';"
+			.. "fi;"
+
 		compiler_insert_info("zephyr setup",
 			full_config .. "exit",
 			"setup zephyr configuration", "c", "term", "zephyr")
@@ -71,7 +115,7 @@ local function setup_c()
 			"west build -d $(west config manifest.path)/build $(west config manifest.path);" .. "exit",
 			"build zephyr project", "c", "make", "zephyr")
 		compiler_insert_info("zephyr build all",
-			"west build -p=always -d $(west config manifest.path)/build $(west config manifest.path);" .. "exit",
+			pre_build_config .. "west build -p=always -d $(west config manifest.path)/build $(west config manifest.path);" .. "exit",
 			"re-build zephyr project as pristine", "c", "make", "zephyr")
 		compiler_insert_info("zephyr menu",
 			"west build -t menuconfig $(west config manifest.path);" .. "exit",
