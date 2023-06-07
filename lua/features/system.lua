@@ -145,19 +145,31 @@ local function get_install_package_cmd()
 end
 
 local function get_git_branch()
-	local git_rep_exists = vim.fn.system("git rev-parse --is-inside-work-tree >/dev/null 2>&1 | echo $?")
+	local current_file_path = vim.fn.expand('%:p:h')
 
-	if git_rep_exists == 0 then
-		return ' '
+	if current_file_path == '' then
+		return ''
 	end
 
-	local branch = vim.fn.system("git branch --show-current")
+	local git_cmd = 'git -C ' .. current_file_path
+	local git_rep_exists = vim.fn.system(
+		"if " .. git_cmd .. " rev-parse --is-inside-work-tree >/dev/null 2>&1 ; then\
+			echo 1;\
+		else \
+			echo 0;\
+		fi")
+
+	if tonumber(git_rep_exists) == 0 then
+		return ''
+	end
+
+	local branch = vim.fn.system(git_cmd .. " branch --show-current")
 
 	if branch ~= '' then
 		return vim.fn.trim(branch)
 	end
 
-	local commita_hash = vim.fn.system("git rev-parse --short HEAD")
+	local commita_hash = vim.fn.system(git_cmd .. " rev-parse --short HEAD")
 
 	return vim.fn.trim(commita_hash)
 end
