@@ -8,6 +8,14 @@ vim.api.nvim_create_autocmd( "VimLeavePre", {
 	end,
 })
 
+vim.api.nvim_create_autocmd( "BufRead", {
+	desc = "Refresh statusline",
+	pattern = "*",
+	callback = function()
+		require('config.function').SetStatusline()
+	end,
+})
+
 vim.api.nvim_create_augroup( "format", { clear = true })
 
 vim.api.nvim_create_autocmd( "BufWritePre", {
