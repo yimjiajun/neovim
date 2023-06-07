@@ -32,6 +32,7 @@ require("lazy").setup({
 				"hrsh7th/vim-vsnip-integ",
 				"hrsh7th/vim-vsnip",
 				"haorenW1025/completion-nvim",
+				"ray-x/lsp_signature.nvim",
 			},
 			event = "VimEnter",
 			config = function()
