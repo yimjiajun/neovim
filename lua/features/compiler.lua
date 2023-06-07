@@ -55,15 +55,18 @@ local function setup_c()
 					.. "cd $REPLY; west init -l; west update;"
 				.. "fi;"
 
-		cmd = cmd .. "if [[ $((west config --local -l) | grep -c 'zephyr.base-prefer') -eq 0 ]] then;"
+		local full_config = cmd .. "if [[ $((west config --local -l) | grep -c 'zephyr.base-prefer') -eq 0 ]] then;"
 					.. "west config --local zephyr.base-prefer configfile;"
 					.. "echo -n 'Enter zephyr base directory path: '; read;" .. "west config --local zephyr.base $REPLY;"
 					.. "echo -n 'Enter board name: ' ; read;" .. "west config --local build.board $REPLY;"
 				.. "fi;"
 
 		compiler_insert_info("zephyr setup",
-			cmd .. "exit",
-			"setup ecfw-zephyr configuration", "c", "term", "zephyr")
+			full_config .. "exit",
+			"setup zephyr configuration", "c", "term", "zephyr")
+		compiler_insert_info("zephyr board",
+			"echo -n 'Enter board name: ' ; read;" .. "west config --local build.board $REPLY; exit",
+			"setup zephyr boards", "c", "term", "zephyr")
 		compiler_insert_info("zephyr build",
 			"west build -d $(west config manifest.path)/build $(west config manifest.path);" .. "exit",
 			"build zephyr project", "c", "make", "zephyr")
