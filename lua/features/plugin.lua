@@ -90,8 +90,8 @@ require("lazy").setup({
 					{ silent = true, desc = 'Explorer' })
 
 				vim.api.nvim_set_keymap('n', "<leader>E",
-					[[<cmd> Telescope file_browser path=%:p:h select_buffer=true <CR>]],
-					{ silent = true, desc = 'Explorer cfrom current buffer path' })
+					[[<cmd> Telescope file_browser path=%:p:h select_buffer=true <cr>]],
+					{ silent = true, desc = 'explorer from current buffer path' })
 
 				require('telescope').load_extension('file_browser')
 			end
