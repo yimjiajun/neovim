@@ -45,6 +45,26 @@ local function setup_builtin_compiler()
 		md_compiler_data.build_type,
 		md_compiler_data.group
 	)
+
+	if pcall(require, 'glow') then
+		md_compiler_data = {
+			name = "markdown (neovim)",
+			cmd = "Glow",
+			desc = "preview current buffer markdown in neovim",
+			ext = "markdown",
+			build_type = "builtin",
+			group = "plugin",
+		}
+
+		require('features.compiler').InsertInfo(
+			md_compiler_data.name,
+			md_compiler_data.cmd,
+			md_compiler_data.desc,
+			md_compiler_data.ext,
+			md_compiler_data.build_type,
+			md_compiler_data.group
+		)
+	end
 end
 
 vim.g.mkdp_filetypes = { "markdown" }

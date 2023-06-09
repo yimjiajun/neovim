@@ -204,6 +204,18 @@ require("lazy").setup({
 				require('setup.goto-preview')
 			end
 		},
+
+		{ "ellisonleao/glow.nvim",
+			config = function ()
+				require('glow').setup({
+					border = "shadow", -- floating window border config
+					style = "dark", -- filled automatically with your current editor background, you can override using glow json style
+					width_ratio = 0.9, -- maximum width of the glow window compared to the nvim window size (overrides `width`)
+					height_ratio = 0.9,
+				})
+			end,
+			cmd = 'Glow'
+		},
 	},
 
 	defaults = {
