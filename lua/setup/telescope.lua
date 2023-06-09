@@ -1,23 +1,38 @@
 local function setup_telescope()
-	local fb_actions = require "telescope".extensions.file_browser.actions
-	local file_browser = {
-		-- disables netrw and use telescope-file-browser in its place
-		hijack_netrw = true,
-	}
-	local lga_actions = require("telescope-live-grep-args.actions")
-	local live_grep_args = {
-		auto_quoting = true,
-		mappings = {
-			i = {
-				["<C-k>"] = lga_actions.quote_prompt(),
-				["<C-i>"] = lga_actions.quote_prompt({ postfix = " --no-ignore " }),
-				["<C-f>"] = lga_actions.quote_prompt({ postfix = " --glob **/*." }),
-				["<C-F>"] = lga_actions.quote_prompt({ postfix = " --no-ignore --glob **/*." }),
+	local function get_live_grep_args()
+		local lga_actions = require("telescope-live-grep-args.actions")
+		local ret = {
+			auto_quoting = true,
+			mappings = {
+				i = {
+					["<C-k>"] = lga_actions.quote_prompt(),
+					["<C-i>"] = lga_actions.quote_prompt({ postfix = " --no-ignore " }),
+					["<C-f>"] = lga_actions.quote_prompt({ postfix = " --glob **/*." }),
+					["<C-F>"] = lga_actions.quote_prompt({ postfix = " --no-ignore --glob **/*." }),
+				},
 			},
-		},
+		}
+
+		return ret
+	end
+
+
+	local function get_file_browser()
+		local ret = {
+			-- disables netrw and use telescope-file-browser in its place
+			hijack_netrw = true,
+		}
+
+		return ret
+	end
+
+	local extensions = {
+		live_grep_args = get_live_grep_args(),
+		file_browser = get_file_browser(),
 	}
 
 	local telescope = require("telescope")
+
 	telescope.setup {
 		defaults = {
 			theme = "dropdown",
@@ -35,14 +50,10 @@ local function setup_telescope()
 			},
 			prompt_prefix='  ',
 		},
-		extensions = {
-			live_grep_args = live_grep_args,
-			flie_browser = file_browser,
-		},
+		extensions = extensions,
 	}
 
 	telescope.load_extension('live_grep_args')
-	telescope.load_extension('file_browser')
 end
 
 local function setting_key_telescope()
@@ -79,14 +90,6 @@ local function setting_key_telescope()
 	vim.api.nvim_set_keymap('n', "<leader>ft",
 		[[<cmd> lua require('telescope.builtin').tags() <CR>]],
 		{ silent = true, desc = 'search from tags' })
-
-	vim.api.nvim_set_keymap('n', "<leader>e",
-		[[<cmd> Telescope file_browser <CR>]],
-		{ silent = true, desc = 'Explorer' })
-
-	vim.api.nvim_set_keymap('n', "<leader>E",
-		[[<cmd> Telescope file_browser path=%:p:h select_buffer=true <CR>]],
-		{ silent = true, desc = 'Explorer cfrom current buffer path' })
 
 	vim.api.nvim_set_keymap('n', "<leader>ff",
 		[[<cmd> lua require('telescope.builtin').find_files({hidden=false, no_ignore=false, no_ignore_parent=false}) <CR>]],

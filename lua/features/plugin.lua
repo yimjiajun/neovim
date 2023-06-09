@@ -75,11 +75,25 @@ require("lazy").setup({
 			tag = '0.1.1',
 			dependencies = {
 				'nvim-lua/plenary.nvim',
-				"nvim-telescope/telescope-file-browser.nvim",
 				"nvim-telescope/telescope-live-grep-args.nvim",
 			},
 			config = function()
 				require('setup.telescope')
+			end
+		},
+
+		{ "nvim-telescope/telescope-file-browser.nvim",
+			dependencies = { 'nvim-telescope/telescope.nvim' },
+			config = function ()
+				vim.api.nvim_set_keymap('n', "<leader>e",
+					[[<cmd> Telescope file_browser <CR>]],
+					{ silent = true, desc = 'Explorer' })
+
+				vim.api.nvim_set_keymap('n', "<leader>E",
+					[[<cmd> Telescope file_browser path=%:p:h select_buffer=true <CR>]],
+					{ silent = true, desc = 'Explorer cfrom current buffer path' })
+
+				require('telescope').load_extension('file_browser')
 			end
 		},
 
