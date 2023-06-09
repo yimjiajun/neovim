@@ -3,7 +3,7 @@ local common = require("features.common")
 local display_tittle = common.DisplayTittle
 local display_delimited_line = common.DisplayDelimitedLine
 local group_selection = common.GroupSelection
-vim.g.compiler_build_data = {}
+vim.g.compiler_data = {}
 local compiler_build_data = {}
 
 -- compiler selection
@@ -29,6 +29,7 @@ local function compiler_insert_info(name, cmd, desc, ext, type, grp)
 end
 
 local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp)
+	local data = vim.g.compiler_data
 	local info = {
 		name = name,
 		cmd = cmd,
@@ -38,14 +39,8 @@ local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp)
 		group = grp,
 	}
 
-	if vim.fn.empty(vim.g.compiler_build_data) == 1 then
-		vim.g.compiler_build_data = info
-		return
-	end
-
-	local data = vim.g.compiler_build_data
 	table.insert(data, info)
-	vim.g.compiler_build_data = data
+	vim.g.compiler_data = data
 end
 
 local function setup_c()
@@ -209,8 +204,10 @@ local function get_compiler_build_data()
 		setup_rust()
 	end
 
-	if vim.fn.empty(vim.g.compiler_build_data) == 0 then
-		table.insert(compiler_build_data, vim.g.compiler_build_data)
+	if vim.fn.empty(vim.g.compiler_data) == 0 then
+		for _, info in ipairs(vim.g.compiler_data) do
+			table.insert(compiler_build_data, info)
+		end
 	end
 
 	return compiler_build_data
