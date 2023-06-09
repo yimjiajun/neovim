@@ -29,7 +29,7 @@ end
 
 local function setup_builtin_compiler()
 	local md_compiler_data = {
-		name = "markdown preview on browser",
+		name = "markdown (browser)",
 		cmd = "MarkdownPreview",
 		desc = "preview current buffer markdown on browser",
 		ext = "markdown",
