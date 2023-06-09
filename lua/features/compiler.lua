@@ -19,8 +19,8 @@ local function compiler_insert_info(name, cmd, desc, ext, type, grp)
 		name = name,
 		cmd = cmd,
 		desc = desc,
-		build_type = type,
 		ext = ext,
+		build_type = type,
 		group = grp,
 	}
 
@@ -29,16 +29,21 @@ local function compiler_insert_info(name, cmd, desc, ext, type, grp)
 end
 
 local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp)
-	local data = vim.g.compiler_build_data
 	local info = {
 		name = name,
 		cmd = cmd,
 		desc = desc,
-		build_type = type,
 		ext = ext,
+		build_type = type,
 		group = grp,
 	}
 
+	if vim.fn.empty(vim.g.compiler_build_data) == 1 then
+		vim.g.compiler_build_data = info
+		return
+	end
+
+	local data = vim.g.compiler_build_data
 	table.insert(data, info)
 	vim.g.compiler_build_data = data
 end
@@ -151,11 +156,6 @@ local function setup_markdown()
 
 		compiler_insert_info("mdbook", cmd,
 			"open mdbook for markdown", "markdown", "make", "build")
-	end
-
-	if vim.fn.exists('g:mkdp_command_for_global') == 1 then
-		compiler_insert_info("md preview", [[nvim +MarkdownPreview %]],
-			"Preview current markdown file", "markdown", "make", "plugin")
 	end
 end
 
