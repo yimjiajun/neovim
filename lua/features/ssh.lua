@@ -4,7 +4,7 @@ vim.g.ssh_data = {
 		pass = "jun",
 		port = "22",
 		description = "Raspberry Pi 4B",
-		group = "raspberry",
+		group = "computer",
 	},
 }
 
