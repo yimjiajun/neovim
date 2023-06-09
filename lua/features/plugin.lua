@@ -97,6 +97,26 @@ require("lazy").setup({
 			end
 		},
 
+		{ 'dhruvmanila/telescope-bookmarks.nvim',
+			dependencies = {
+				'nvim-telescope/telescope.nvim',
+				'kkharji/sqlite.lua',
+			},
+			build = "pip3 install buku",
+			config = function ()
+				vim.api.nvim_set_keymap('n', "<leader>f1",
+					[[<cmd> Telescope bookmarks <cr>]],
+					{ silent = true, desc = 'open browser bookmarks' })
+
+					if pcall(require, "which-key") then
+						local wk = require("which-key")
+						wk.register({ ['1'] = "browser bookmarks" }, { prefix = "<leader>f" })
+					end
+
+				require('telescope').load_extension('bookmarks')
+			end
+		},
+
 		{ 'numToStr/Comment.nvim',
 			config = function()
 				require('Comment').setup()

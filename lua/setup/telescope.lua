@@ -26,9 +26,51 @@ local function setup_telescope()
 		return ret
 	end
 
+	local function get_bookmark()
+		local function get_browser()
+			if vim.fn.executable("buku") == 1 then
+				return 'buku'
+			elseif vim.fn.executable("chrome") == 1 then
+				return 'chrome'
+			elseif vim.fn.executable("msedge.exe") == 1 then
+				return 'edge'
+			elseif vim.fn.executable("safari") == 1 then
+				return 'safari'
+			elseif vim.fn.executable("firefox") == 1 then
+				return 'firefox'
+			else
+				return nil
+			end
+		end
+
+		local function get_url_open_command()
+			if vim.fn.executable("wslview") == 1 then
+				return 'wslview'
+			elseif vim.fn.executable("xdg-open") == 1 then
+				return 'xdg-open'
+			elseif vim.fn.executable("powershell.exe") == 1 then
+				return 'powershell.exe -Command Start-Process'
+			elseif vim.fn.executable("open") == 1 then
+				return 'open'
+			else
+				return nil
+			end
+		end
+
+		local ret = {
+			selected_browser = get_browser(),
+			url_open_command = get_url_open_command(),
+			buku_include_tags = true,
+			full_path = true,
+		}
+
+		return ret
+	end
+
 	local extensions = {
 		live_grep_args = get_live_grep_args(),
 		file_browser = get_file_browser(),
+		bookmarks = get_bookmark(),
 	}
 
 	local telescope = require("telescope")
