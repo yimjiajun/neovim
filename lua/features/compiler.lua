@@ -287,6 +287,11 @@ local function compiler_build_selection()
 		return false
 	end
 
+	if sel_tbl.build_type == "builtin" then
+		vim.cmd(sel_tbl.cmd)
+		return false
+	end
+
 	local bufnr = vim.api.nvim_get_current_buf()
 	vim.api.nvim_buf_set_option(bufnr, 'makeprg', sel_tbl.cmd)
 
