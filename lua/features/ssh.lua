@@ -76,34 +76,34 @@ local function ssh_get_list(save_file)
 		vim.cmd([[redir! > ]] .. vim.fn.getreg('"'))
 	end
 
-	 local display_msg = string.format("%3s| %-20s | %-20s | %-5s | %-s", "idx",  "hostname/ip", "username", "port", "description")
-	 display_tittle(display_msg)
+	local display_msg = string.format("%3s| %-20s | %-20s | %-5s | %-s", "idx",  "hostname/ip", "username", "port", "description")
+	display_tittle(display_msg)
 
-	 local idx = 1
-	 for _, info in ipairs(vim.g.ssh_data) do
-		 if info.group ~= group then
-			 goto continue
-		 end
+	local idx = 1
+	for _, info in ipairs(vim.g.ssh_data) do
+		if info.group ~= group then
+			goto continue
+		end
 
-		 display_msg = string.format("%3d| %-20s | %-20s | %-5s | %-s", idx, info.host, info.name, info.port, info.description)
-if save_file == true and show_pass == true then
-			 display_msg = display_msg .. "\t" .. "[" .. info.pass .. "]"
-		 end
+		display_msg = string.format("%3d| %-20s | %-20s | %-5s | %-s", idx, info.host, info.name, info.port, info.description)
+		if save_file == true and show_pass == true then
+			display_msg = display_msg .. "\t" .. "[" .. info.pass .. "]"
+		end
 
-		 vim.api.nvim_echo({{display_msg, "none"}}, true, {})
+		vim.api.nvim_echo({{display_msg, "none"}}, true, {})
 
-		 if idx % 2 == 0 then
-			 if idx % 4 == 0 then
-				 display_delimited_line("~")
-			 else
-				 display_delimited_line("-")
-			 end
-		 end
+		if idx % 2 == 0 then
+			if idx % 4 == 0 then
+				display_delimited_line("~")
+			else
+				display_delimited_line("-")
+			end
+		end
 
-		 table.insert(ssh_sel_list, info)
-		 idx = idx + 1
-		 ::continue::
-	 end
+		table.insert(ssh_sel_list, info)
+		idx = idx + 1
+		::continue::
+	end
 
 	if save_file == true then
 		vim.cmd([[redir END]])
