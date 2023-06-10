@@ -29,7 +29,7 @@ end
 
 local function setup_builtin_compiler()
 	local md_compiler_data = {
-		name = "markdown (browser)",
+		name = "md (browser)",
 		cmd = "MarkdownPreview",
 		desc = "preview current buffer markdown on browser",
 		ext = "markdown",
@@ -48,7 +48,7 @@ local function setup_builtin_compiler()
 
 	if pcall(require, 'glow') then
 		md_compiler_data = {
-			name = "markdown (neovim)",
+			name = "md (neovim)",
 			cmd = "Glow",
 			desc = "preview current buffer markdown in neovim",
 			ext = "markdown",

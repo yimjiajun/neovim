@@ -276,6 +276,10 @@ local function setup_extension_bookmarks()
 end
 
 local function setup_extension_heading()
+	require('features.compiler').InsertInfo("md (heading)",
+		"Telescope heading", "display markdown heading",
+		"markdown", "builtin", "plugin")
+
 	require('telescope').load_extension('heading')
 end
 
