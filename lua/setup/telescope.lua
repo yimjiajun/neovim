@@ -215,11 +215,38 @@ local function telescope_buffer()
 	return m
 end
 
+local function setup_extension_file_browser()
+	vim.api.nvim_set_keymap('n', "<leader>e",
+		[[<cmd> Telescope file_browser <CR>]],
+		{ silent = true, desc = 'Explorer' })
+
+	vim.api.nvim_set_keymap('n', "<leader>E",
+		[[<cmd> Telescope file_browser path=%:p:h select_buffer=true <cr>]],
+		{ silent = true, desc = 'explorer from current buffer path' })
+
+	require('telescope').load_extension('file_browser')
+end
+
+local function setup_extension_bookmarks()
+	vim.api.nvim_set_keymap('n', "<leader>f1",
+		[[<cmd> Telescope bookmarks <cr>]],
+		{ silent = true, desc = 'open browser bookmarks' })
+
+	if pcall(require, "which-key") then
+		local wk = require("which-key")
+		wk.register({ ['1'] = "browser bookmarks" }, { prefix = "<leader>f" })
+	end
+
+	require('telescope').load_extension('bookmarks')
+end
+
 setup_telescope()
 setting_key_telescope()
 
 local ret = {
 	Buffer = telescope_buffer,
+	setup_file_browser = setup_extension_file_browser,
+	setup_bookmarks = setup_extension_bookmarks,
 }
 
 return ret
