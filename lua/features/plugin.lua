@@ -73,12 +73,17 @@ require("lazy").setup({
 
 		{	'nvim-telescope/telescope.nvim',
 			tag = '0.1.1',
-			dependencies = {
-				'nvim-lua/plenary.nvim',
-				"nvim-telescope/telescope-live-grep-args.nvim",
-			},
+			dependencies = { 'nvim-lua/plenary.nvim' },
 			config = function()
-				require('setup.telescope')
+				require('setup.telescope').setup()
+				require('setup.telescope').setup_keymapping()
+			end
+		},
+
+		{ "nvim-telescope/telescope-live-grep-args.nvim",
+			dependencies = { 'nvim-telescope/telescope.nvim' },
+			config = function()
+				require('setup.telescope').setup_live_grep_args()
 			end
 		},
 

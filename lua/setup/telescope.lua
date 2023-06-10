@@ -5,10 +5,16 @@ local function setup_telescope()
 			auto_quoting = true,
 			mappings = {
 				i = {
-					["<C-k>"] = lga_actions.quote_prompt(),
-					["<C-i>"] = lga_actions.quote_prompt({ postfix = " --no-ignore " }),
-					["<C-f>"] = lga_actions.quote_prompt({ postfix = " --glob **/*." }),
-					["<C-F>"] = lga_actions.quote_prompt({ postfix = " --no-ignore --glob **/*." }),
+					["<C-k>"] = {lga_actions.quote_prompt(), "surrounded text"},
+					["<C-i>"] = {lga_actions.quote_prompt({ postfix = " --no-ignore " }), "ignore"},
+					["<A-c>"] = {lga_actions.quote_prompt({ postfix = " --no-ignore --glob '*.{c,cpp}'"}), "c,cpp"},
+					["<A-C>"] = {lga_actions.quote_prompt({ postfix = " --no-ignore --glob '*.{c,cpp,h,hpp}'"}), "c,cpp,h,hpp"},
+					["<A-h>"] = {lga_actions.quote_prompt({ postfix = " --no-ignore --glob '*.{h,hpp}'"}), "h,hpp"},
+					["<A-k>"] = {lga_actions.quote_prompt({ postfix = " --no-ignore --glob '{*.conf,Kconfig}'"}), ".conf,Kconfig"},
+					["<A-K>"] = {lga_actions.quote_prompt({ postfix = " --no-ignore --glob 'Kconfig'"}), "Kconfig"},
+					["<A-d>"] = {lga_actions.quote_prompt({ postfix = " --no-ignore --glob '*.{dts,dtsi}'"}), "dts, dtsi"},
+					["<A-m>"] = {lga_actions.quote_prompt({ postfix = " --no-ignore --glob '{CMakeLists,MakeFile,makefile}'"}), "CMakeLists,MakeFile"},
+					["<A-M>"] = {lga_actions.quote_prompt({ postfix = " --no-ignore --glob '*.{md,rst,txt}'"}), "md,rst,txt"},
 				},
 			},
 		}
@@ -16,9 +22,13 @@ local function setup_telescope()
 		return ret
 	end
 
-
 	local function get_file_browser()
 		local ret = {
+			layout_strategy = 'horizontal',
+			layout_config = {
+				preview_width = 0.7,
+				prompt_position = 'bottom',
+			},
 			-- disables netrw and use telescope-file-browser in its place
 			hijack_netrw = true,
 		}
@@ -104,12 +114,62 @@ local function setup_telescope()
 					["<C-h>"] = "which_key"
 				},
 			},
-			prompt_prefix='  ',
+			prompt_prefix=' > ',
 		},
 		extensions = extensions,
 	}
 
-	telescope.load_extension('live_grep_args')
+	require('telescope').load_extension('live_grep_args')
+end
+
+local function setup_extension_live_grep_args()
+	vim.api.nvim_set_keymap('n', "<leader>fW",
+		[[<cmd> lua require("telescope-live-grep-args.shortcuts").grep_word_under_cursor({prompt_title='fixed word'})<CR>]],
+		{ silent = true, desc = 'search word under cursor' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fw",
+		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='word', default_text=vim.fn.expand('<cword>')})<CR>]],
+		{ silent = true, desc = 'search word under cursor' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fA",
+		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='ALL'})<CR>]],
+		{ silent = true, desc = 'search all from user input' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fa",
+		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='all', default_text='"' .. vim.fn.expand('<cword>')  .. '"' ..  " --glob '!{.*,  tags}'"})<CR>]],
+		{ silent = true, desc = 'search all from cursor' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fc",
+		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='c, cpp', default_text='"' .. vim.fn.expand('<cword>')  .. '"' ..  " --glob '!{.*,  tags}' --glob '*.{c,cpp}'"})<CR>]],
+		{ silent = true, desc = 'c' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fC",
+		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='c, cpp, h, hpp', default_text='"' .. vim.fn.expand('<cword>')  .. '"' ..  " --glob '!{.*,  tags}' --glob '*.{c,cpp,h,hpp}'"})<CR>]],
+		{ silent = true, desc = 'c & h' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fh",
+		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='h, hpp', default_text='"' .. vim.fn.expand('<cword>')  .. '"' ..  " --glob '!{.*,  tags}' --glob '*.{h,hpp}'"})<CR>]],
+		{ silent = true, desc = 'header' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fK",
+		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='Kconfig, conf', default_text='"' .. vim.fn.expand('<cword>')  .. '"' ..  " --glob '!{.*,  tags}' --glob '{Kconfig,*.conf}'"})<CR>]],
+		{ silent = true, desc = 'Kconfig' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fk",
+		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='conf', default_text='"' .. vim.fn.expand('<cword>')  .. '"' ..  " --glob '!{.*,  tags}' --glob '*.conf'"})<CR>]],
+		{ silent = true, desc = '.config' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fd",
+		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='dts, dtsi', default_text='"' .. vim.fn.expand('<cword>')  .. '"' ..  " --glob '!{.*,  tags}' --glob '{*.dts,*.dtsi}'"})<CR>]],
+		{ silent = true, desc = 'dts & dtsi' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fm",
+		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='CMakeLists, MakeFile, makefile', default_text='"' .. vim.fn.expand('<cword>')  .. '"' ..  " --glob '!{.*,  tags}' --glob '{CMakeLists,MakeFile,makefile}'"})<CR>]],
+		{ silent = true, desc = 'make' })
+
+	vim.api.nvim_set_keymap('n', "<leader>fM",
+		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='md, rst', default_text='"' .. vim.fn.expand('<cword>')  .. '"' ..  " --glob '!{.*,  tags}' --glob '*.{md,rst}'"})<CR>]],
+		{ silent = true, desc = 'md, rst' })
 end
 
 local function setting_key_telescope()
@@ -154,46 +214,6 @@ local function setting_key_telescope()
 	vim.api.nvim_set_keymap('n', "<leader>fF",
 		[[<cmd> lua require('telescope.builtin').find_files({hidden=false, no_ignore=true, no_ignore_parent=true}) <CR>]],
 		{ silent = true, desc = 'search all files' })
-
-	vim.api.nvim_set_keymap('n', "<leader>fw",
-		[[<cmd> lua require("telescope-live-grep-args.shortcuts").grep_word_under_cursor()<CR>]],
-		{ silent = true, desc = 'search word under cursor' })
-
-	vim.api.nvim_set_keymap('n', "<leader>fA",
-		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search ALL', glob_pattern={"!.*", "!tags"}})<CR>]],
-		{ silent = true, desc = 'search all from user input' })
-
-	vim.api.nvim_set_keymap('n', "<leader>fa",
-		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search all', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*", "!.*", "!tags"}})<CR>]],
-		{ silent = true, desc = 'search all from cursor' })
-
-	vim.api.nvim_set_keymap('n', "<leader>fc",
-		[[<cmd> lua  require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search c,cpp', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.[c,cpp]", "!.*", "!tags"}})<CR>]],
-		{ silent = true, desc = 'c' })
-
-	vim.api.nvim_set_keymap('n', "<leader>fC",
-		[[<cmd> lua  require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search c,cpp,h', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.[c,h]", "!.*", "!tags"}})<CR>]],
-		{ silent = true, desc = 'c & h' })
-
-	vim.api.nvim_set_keymap('n', "<leader>fh",
-		[[<cmd> lua  require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search h', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.h", "!.*", "!tags"}})<CR>]],
-		{ silent = true, desc = 'header' })
-
-	vim.api.nvim_set_keymap('n', "<leader>fK",
-		[[<cmd> lua  require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search Kconfig', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/Kconfig", "!.*", "!tags"}})<CR>]],
-		{ silent = true, desc = 'Kconfig' })
-
-	vim.api.nvim_set_keymap('n', "<leader>fk",
-		[[<cmd> lua  require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search .conf', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.conf", "!.*", "!tags"}})<CR>]],
-		{ silent = true, desc = '.config' })
-
-	vim.api.nvim_set_keymap('n', "<leader>fd",
-		[[<cmd> lua  require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search dts,dtsi', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/*.[dts,dtsi]", "!.*", "!tags"}})<CR>]],
-		{ silent = true, desc = 'dts & dtsi' })
-
-	vim.api.nvim_set_keymap('n', "<leader>fm",
-		[[<cmd> lua  require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='search Make', default_text=vim.fn.expand('<cword>'), glob_pattern={"**/[CMakeLists.txt,MakeFile,makefile]", "!.*", "!tags"}})<CR>]],
-		{ silent = true, desc = 'make' })
 
 	if pcall(require, "which-key") then
 		local wk = require("which-key")
@@ -242,13 +262,13 @@ local function setup_extension_file_browser()
 end
 
 local function setup_extension_bookmarks()
-	vim.api.nvim_set_keymap('n', "<leader>f1",
+	vim.api.nvim_set_keymap('n', "<leader>vl",
 		[[<cmd> Telescope bookmarks <cr>]],
 		{ silent = true, desc = 'open browser bookmarks' })
 
 	if pcall(require, "which-key") then
 		local wk = require("which-key")
-		wk.register({ ['1'] = "browser bookmarks" }, { prefix = "<leader>f" })
+		wk.register({ l = "browser bookmarks" }, { prefix = "<leader>v" })
 	end
 
 	require('telescope').load_extension('bookmarks')
@@ -258,11 +278,11 @@ local function setup_extension_heading()
 	require('telescope').load_extension('heading')
 end
 
-setup_telescope()
-setting_key_telescope()
-
 local ret = {
 	Buffer = telescope_buffer,
+	setup = setup_telescope,
+	setup_keymapping = setting_key_telescope,
+	setup_live_grep_args = setup_extension_live_grep_args,
 	setup_file_browser = setup_extension_file_browser,
 	setup_bookmarks = setup_extension_bookmarks,
 	setup_heading = setup_extension_heading,
