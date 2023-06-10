@@ -76,6 +76,7 @@ local function setting_key_search()
     vim.api.nvim_set_keymap('n', '<Leader>fK', [[<cmd> lua KeyFunc.SearchWord("./**/Kconfig", "normal") <CR>]], {silent = true})
     vim.api.nvim_set_keymap('n', '<Leader>fk', [[<cmd> lua KeyFunc.SearchWord("./**/*.conf", "normal") <CR>]], {silent = true})
     vim.api.nvim_set_keymap('n', '<Leader>fm', [[<cmd> lua KeyFunc.SearchWord("./**/CMakeLists.txt", "normal") <CR>]], {silent = true})
+    vim.api.nvim_set_keymap('n', '<Leader>fM', [[<cmd> lua KeyFunc.SearchWord("./**/*.{md,rst,txt}", "normal") <CR>]], {silent = true})
     vim.api.nvim_set_keymap('n', '<Leader>fv', [[<cmd> lua KeyFunc.SearchWord("", "normal") <CR>]], {silent = true})
     vim.api.nvim_set_keymap('n', '<Leader>fV', [[<cmd> lua KeyFunc.SearchWord("", "complete") <CR>]], {silent = true})
 end
