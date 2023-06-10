@@ -67,10 +67,24 @@ local function setup_telescope()
 		return ret
 	end
 
+	local function get_heading()
+		local ret = {
+			treesitter = true,
+			picker_opts = {
+				layout_config = { width = 0.9, preview_width = 0.7 },
+				layout_strategy = 'horizontal',
+				sorting_strategy = 'ascending',
+			},
+		}
+
+		return ret
+	end
+
 	local extensions = {
 		live_grep_args = get_live_grep_args(),
 		file_browser = get_file_browser(),
 		bookmarks = get_bookmark(),
+		heading = get_heading(),
 	}
 
 	local telescope = require("telescope")
@@ -240,6 +254,10 @@ local function setup_extension_bookmarks()
 	require('telescope').load_extension('bookmarks')
 end
 
+local function setup_extension_heading()
+	require('telescope').load_extension('heading')
+end
+
 setup_telescope()
 setting_key_telescope()
 
@@ -247,6 +265,7 @@ local ret = {
 	Buffer = telescope_buffer,
 	setup_file_browser = setup_extension_file_browser,
 	setup_bookmarks = setup_extension_bookmarks,
+	setup_heading = setup_extension_heading,
 }
 
 return ret

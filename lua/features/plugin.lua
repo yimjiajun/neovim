@@ -97,7 +97,13 @@ require("lazy").setup({
 			build = "pip3 install buku",
 			config = function ()
 				require('setup.telescope').setup_bookmarks()
+			end
+		},
 
+		{ 'crispgm/telescope-heading.nvim',
+			dependencies = { 'nvim-telescope/telescope.nvim' },
+			config = function ()
+				require('setup.telescope').setup_heading()
 			end
 		},
 
