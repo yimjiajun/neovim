@@ -54,15 +54,6 @@ require("lazy").setup({
 			end
 		},
 
-		{ "bluz71/vim-moonfly-colors",
-			name = "moonfly", lazy = false, priority = 1000,
-			config = function()
-				vim.cmd([[autocmd ColorScheme * highlight NormalFloat guibg=none]])
-				vim.cmd([[autocmd ColorScheme * highlight FloatBorder guibg=none]])
-				vim.cmd([[colorscheme moonfly]])
-			end
-		},
-
 		{ 'williamboman/mason-lspconfig.nvim',
 			after = { "mason.nvim", "nvim-lspconfig" },
 			dependencies = { "williamboman/mason.nvim" },
@@ -211,6 +202,12 @@ require("lazy").setup({
 			config = function ()
 				require('setup.oil')
 			end
+		},
+
+		{ 'rebelot/kanagawa.nvim',
+			config = function ()
+				require('setup.kanagawa')
+			end,
 		},
 	},
 
