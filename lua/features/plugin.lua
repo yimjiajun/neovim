@@ -87,13 +87,6 @@ require("lazy").setup({
 			end
 		},
 
-		{ "nvim-telescope/telescope-file-browser.nvim",
-			dependencies = { 'nvim-telescope/telescope.nvim' },
-			config = function ()
-				require('setup.telescope').setup_file_browser()
-			end
-		},
-
 		{ 'dhruvmanila/telescope-bookmarks.nvim',
 			dependencies = {
 				'nvim-telescope/telescope.nvim',
@@ -210,6 +203,14 @@ require("lazy").setup({
 				})
 			end,
 			cmd = 'Glow'
+		},
+
+		{ 'stevearc/oil.nvim',
+			dependencies = { "nvim-tree/nvim-web-devicons" },
+			opts = {},
+			config = function ()
+				require('setup.oil')
+			end
 		},
 	},
 

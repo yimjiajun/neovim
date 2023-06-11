@@ -22,20 +22,6 @@ local function setup_telescope()
 		return ret
 	end
 
-	local function get_file_browser()
-		local ret = {
-			layout_strategy = 'horizontal',
-			layout_config = {
-				preview_width = 0.7,
-				prompt_position = 'bottom',
-			},
-			-- disables netrw and use telescope-file-browser in its place
-			hijack_netrw = true,
-		}
-
-		return ret
-	end
-
 	local function get_bookmark()
 		local function get_browser()
 			if vim.fn.executable("buku") == 1 then
@@ -92,7 +78,6 @@ local function setup_telescope()
 
 	local extensions = {
 		live_grep_args = get_live_grep_args(),
-		file_browser = get_file_browser(),
 		bookmarks = get_bookmark(),
 		heading = get_heading(),
 	}
@@ -250,18 +235,6 @@ local function telescope_buffer()
 	return m
 end
 
-local function setup_extension_file_browser()
-	vim.api.nvim_set_keymap('n', "<leader>e",
-		[[<cmd> Telescope file_browser <CR>]],
-		{ silent = true, desc = 'Explorer' })
-
-	vim.api.nvim_set_keymap('n', "<leader>E",
-		[[<cmd> Telescope file_browser path=%:p:h select_buffer=true <cr>]],
-		{ silent = true, desc = 'explorer from current buffer path' })
-
-	require('telescope').load_extension('file_browser')
-end
-
 local function setup_extension_bookmarks()
 	vim.api.nvim_set_keymap('n', "<leader>vl",
 		[[<cmd> Telescope bookmarks <cr>]],
@@ -288,7 +261,6 @@ local ret = {
 	setup = setup_telescope,
 	setup_keymapping = setting_key_telescope,
 	setup_live_grep_args = setup_extension_live_grep_args,
-	setup_file_browser = setup_extension_file_browser,
 	setup_bookmarks = setup_extension_bookmarks,
 	setup_heading = setup_extension_heading,
 }
