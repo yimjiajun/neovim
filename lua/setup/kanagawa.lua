@@ -17,6 +17,9 @@ require('kanagawa').setup({
 		return {
 			LineNr = { bg = 'none' },
 			SignColumn = { bg = 'none' },
+			FloatBorder = { bg = 'none' },
+			NormalFloat = { bg = 'none' },
+			TelescopeBorder = { bg = 'none' },
 		}
 	end,
 	theme = "wave",              -- Load "wave" theme when 'background' option is not set
