@@ -186,9 +186,14 @@ require("lazy").setup({
 
 		{ "ellisonleao/glow.nvim",
 			config = function ()
+				local current_window = vim.api.nvim_get_current_win()
+				local window_width = vim.api.nvim_win_get_width(current_window)
+				local padding_ratio = 0.8
+
 				require('glow').setup({
 					border = "shadow", -- floating window border config
 					style = "dark", -- filled automatically with your current editor background, you can override using glow json style
+					width = math.ceil(window_width * padding_ratio),
 					width_ratio = 0.9, -- maximum width of the glow window compared to the nvim window size (overrides `width`)
 					height_ratio = 0.9,
 				})

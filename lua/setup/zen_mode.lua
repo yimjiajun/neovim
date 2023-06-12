@@ -1,5 +1,9 @@
 local ret = {}
 
+local current_window = vim.api.nvim_get_current_win()
+local window_width = vim.api.nvim_win_get_width(current_window)
+local padding_ratio = 0.6
+
 local M = {
   window = {
     backdrop = 0.95, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
@@ -7,7 +11,7 @@ local M = {
     -- * an absolute number of cells when > 1
     -- * a percentage of the width / height of the editor when <= 1
     -- * a function that returns the width or the height
-    width = 120, -- width of the Zen window
+    width = math.ceil(window_width * padding_ratio), -- width of the Zen window
     height = 1, -- height of the Zen window
     -- by default, no options are changed for the Zen window
     -- uncomment any of the options below, or add other vim.wo options you want to apply
