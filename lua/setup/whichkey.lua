@@ -133,6 +133,24 @@ wk.register({
 	g = { name = 'Global Plug' },
 }, { mode = 'v',  prefix = "<leader>" })
 
+local function setup_indicate_system_key()
+	local wk_sys = require("which-key")
+	local wk_mode = { mode = 'n', prefix = "<leader>g" }
+	local system = {
+		{ key = 'N', cmd = 'ncdu' },
+		{ key = 'H', cmd = 'htop' },
+		{ key = 'L', cmd = 'lazygit' },
+	}
+
+	for _, v in ipairs(system) do
+		if vim.fn.executable(v.cmd) then
+			wk_sys.register({ [v.key] = v.cmd }, wk_mode)
+		end
+	end
+end
+
+setup_indicate_system_key()
+
 ret.setup = M
 ret.register = wk.register
 

@@ -53,11 +53,6 @@ local function setup_lazygit()
 		return
 	end
 
-	if pcall(require, "which-key") then
-		local wk = require("which-key")
-		wk.register({ L = "lazygit", }, { mode = 'n', prefix = "<leader>g" })
-	end
-
 	if vim.fn.exists(':ToggleTerm') then
 		vim.api.nvim_set_keymap('n', '<leader>gL', [[<cmd> TermExec cmd="lazygit; exit" <CR>]], { silent = true })
 		return
@@ -71,11 +66,6 @@ local function setup_htop()
 		return
 	end
 
-	if pcall(require, "which-key") then
-		local wk = require("which-key")
-		wk.register({ H = "htop", }, { mode = 'n', prefix = "<leader>g" })
-	end
-
 	if vim.fn.exists(':ToggleTerm') then
 		vim.api.nvim_set_keymap('n', '<leader>gH', [[<cmd> TermExec cmd="htop; exit" <CR>]], { silent = true })
 		return
@@ -87,11 +77,6 @@ end
 local function setup_ncdu()
 	if vim.fn.executable('ncdu') == 0 then
 		return
-	end
-
-	if pcall(require, "which-key") then
-		local wk = require("which-key")
-		wk.register({ N = "ncdu", }, { mode = 'n', prefix = "<leader>g" })
 	end
 
 	if vim.fn.exists(':ToggleTerm') then
