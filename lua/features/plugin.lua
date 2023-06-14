@@ -214,6 +214,14 @@ require("lazy").setup({
 				require('setup.kanagawa')
 			end,
 		},
+
+		{ 'preservim/tagbar',
+			config = function ()
+				vim.api.nvim_set_keymap('n', '<leader>tt',
+					[[<cmd> TagbarToggle fc <CR>]],
+					{ silent = true, desc = 'tag lists'})
+			end
+		},
 	},
 
 	defaults = {
