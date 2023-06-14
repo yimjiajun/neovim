@@ -42,7 +42,7 @@ require("chatgpt").setup({
 			select_session = "<Space>",
 			rename_session = "r",
 			delete_session = "d",
-			draft_message = "<C-d>",
+			draft_message = "<C-x>",
 			toggle_settings = "<C-o>",
 			toggle_message_role = "<C-r>",
 			toggle_system_role_open = "<C-s>",
