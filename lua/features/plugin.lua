@@ -222,6 +222,18 @@ require("lazy").setup({
 					{ silent = true, desc = 'tag lists'})
 			end
 		},
+
+		{ "jackMort/ChatGPT.nvim",
+			dependencies = {
+				"nvim-telescope/telescope.nvim",
+				"MunifTanjim/nui.nvim",
+				"nvim-lua/plenary.nvim",
+			},
+			event = "VeryLazy",
+			config = function()
+				require('setup.chatgpt')
+			end,
+		},
 	},
 
 	defaults = {
