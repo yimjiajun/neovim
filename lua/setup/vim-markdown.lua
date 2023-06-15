@@ -64,6 +64,7 @@ local function setup_key_vim_table_mode()
 end
 
 vim.g.table_mode_disable_mappings = 1
+vim.g.table_mode_map_prefix = "<leader>gT"
 autocmd_vim_table_mode()
 setup_key_vim_table_mode()
 setup_key_tabular()
