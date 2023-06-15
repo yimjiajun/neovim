@@ -133,7 +133,7 @@ local function set_statusline(mode)
 	elseif mode == "byte" then
 		vim.o.statusline = " %<%f%=\\ [%1*%M%*%n%R%H]\\ %-19(%3l,%02c%03V%)%O'%02b'"
 	else
-		local git_branch = require('features.system').GetGitBranch()
+		local git_branch = require('features.system').GetGitInfo('branch', nil)
 		vim.o.statusline = " %<%t [" .. git_branch .. "] %h%m%r%w%= / %Y / 0x%02B / %-10.(%l,%c%V%) / %-4P"
 	end
 end

@@ -129,7 +129,24 @@ local function get_install_package_cmd()
 	return install_cmd
 end
 
-local function get_git_branch()
+local function get_git_info(cmd, arg)
+	local function remote_url(git_cmd, remote_name)
+		local url = vim.fn.system(git_cmd .. ' config --get remote.' .. remote_name ..'.url')
+		return vim.fn.trim(url)
+	end
+
+	local function branch(git_cmd)
+		local branch = vim.fn.system(git_cmd .. " branch --show-current")
+
+		if branch ~= '' then
+			return vim.fn.trim(branch)
+		end
+
+		local commita_hash = vim.fn.system(git_cmd .. " rev-parse --short HEAD")
+
+		return vim.fn.trim(commita_hash)
+	end
+
 	local current_file_path = vim.fn.expand('%:p:h')
 
 	if current_file_path == '' then
@@ -148,15 +165,15 @@ local function get_git_branch()
 		return ''
 	end
 
-	local branch = vim.fn.system(git_cmd .. " branch --show-current")
-
-	if branch ~= '' then
-		return vim.fn.trim(branch)
+	if cmd == 'branch' then
+		return branch(git_cmd)
 	end
 
-	local commita_hash = vim.fn.system(git_cmd .. " rev-parse --short HEAD")
+	if cmd == 'remote' then
+		return remote_url(git_cmd, arg)
+	end
 
-	return vim.fn.trim(commita_hash)
+	return ''
 end
 
 setup_lazygit()
@@ -172,7 +189,7 @@ local ret = {
 	GetOsLikeId = get_os_like_id,
 	ChkExtExist = check_extension_file_exist,
 	PwrshCmd = pwrsh_cmd,
-	GetGitBranch = get_git_branch,
+	GetGitInfo = get_git_info,
 }
 
 for name in pairs(ret) do
