@@ -175,7 +175,7 @@ local function setting_key_telescope()
 
 		vim.api.nvim_set_keymap('n', '<Leader>ggL', [[<cmd> lua require('telescope.builtin').git_commits() <CR>]], { silent = true })
 
-	if vim.fn.filereadable("tags") == 1 then
+	if vim.fn.filereadable("tags") == 1 and vim.fn.exists(':Tagbar') == 0 then
 		vim.api.nvim_set_keymap('n', "<leader>tt",
 			[[<cmd> lua require('telescope.builtin').current_buffer_tags() <CR>]],
 			{ silent = true, desc = 'buffer tags list' })
