@@ -3,6 +3,14 @@ local common = require("features.common")
 local display_tittle = common.DisplayTittle
 local display_delimited_line = common.DisplayDelimitedLine
 local group_selection = common.GroupSelection
+
+--define compiler data
+--@field name string tittle of build
+--@field cmd string command to run
+--@field desc string description of build
+--@field ext string file extension
+--@field build_type string build type: "make", "term", "term_full", "plugin"
+--@field group string group name
 vim.g.compiler_data = {}
 local compiler_build_data = {}
 
@@ -44,91 +52,11 @@ local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp)
 end
 
 local function setup_c()
-	local function setup_zephyr_project()
-		if vim.fn.executable('west') == 0 then
-			return
-		end
-
-		local cmd = "if [[ $(west config --local -l | grep -c 'manifest.path') -eq 0 ]] then;"
-					.. "echo -n 'current path contents > '; ls;"
-					.. "echo -n 'Enter project directory path: '; read;"
-					.. "cd $REPLY; west init -l; west update;"
-				.. "fi;"
-
-		local full_config = cmd .. "if [[ $((west config --local -l) | grep -c 'zephyr.base-prefer') -eq 0 ]] then;"
-					.. "west config --local zephyr.base-prefer configfile;"
-					.. "echo -n 'Enter zephyr base directory path: '; read;" .. "west config --local zephyr.base $REPLY;"
-					.. "echo -n 'Enter board name: ' ; read;" .. "west config --local build.board $REPLY;"
-				.. "fi;"
-
-		local pre_build_config = "if [[ $(west config --local -l | grep -c 'build.board') -eq 0 ]] then;"
-				.. "echo -n 'Enter board name: ' ; read;" .. "west config --local build.board $REPLY;"
-			.. "fi;"
-			.. "if [[ $(west config --local build.board | grep -c '^mec') ]] then;"
-				.. "if [[ ! -d $(west topdir)/CPGZephyrDocs ]] then;"
-					.. "git clone --depth 1 https://github.com/MicrochipTech/CPGZephyrDocs.git $(west topdir)/CPGZephyrDocs;"
-					.. "if [[ ! -d $(west topdir)/CPGZephyrDocs ]] then;"
-						.. "echo 'CPGZephyrDocs download failed for MicrochipTech';"
-						.. "exit 1;"
-					.. "fi;"
-					.. "spi_imgs=$(west topdir)/CPGZephyrDocs/MEC1501/SPI_image_gen/everglades_spi_gen_lin64 ;"
-					.. "sudo chmod +x ${spi_imgs};"
-					.. "spi_imgs=$(west topdir)/CPGZephyrDocs/MEC152x/SPI_image_gen/everglades_spi_gen_RomE ;"
-					.. "sudo chmod +x ${spi_imgs};"
-					.. "spi_imgs=$(west topdir)/CPGZephyrDocs/MEC172x/SPI_image_gen/mec172x_spi_gen_lin_x86_64 ;"
-					.. "sudo chmod +x ${spi_imgs};"
-				.. "fi;"
-				.. "if [[ $(west config --local build.board | grep -c '^mec15') ]] then;"
-						.. "if [[ $(west config --local build.board | grep -c '^mec150') ]] then;"
-							.. "spi_img_gen=$(west topdir)/CPGZephyrDocs/MEC1501/SPI_image_gen/everglades_spi_gen_lin64;"
-							.. "export EVERGLADES_SPI_GEN=${spi_img_gen};"
-						.. "elif [[ $(west config --local build.board | grep -c '^mec152') ]] then;"
-							.. "spi_img_gen=$(west topdir)/CPGZephyrDocs/MEC152x/SPI_image_gen/everglades_spi_gen_RomE;"
-							.. "export EVERGLADES_SPI_GEN=${spi_img_gen};"
-						.. "else"
-							.. "export EVERGLADES_SPI_GEN=$(west topdir)/CPGZephyrDocs/MEC1501/SPI_image_gen/everglades_spi_gen_lin64;"
-							.. "export EVERGLADES_SPI_GEN=${spi_img_gen};"
-						.. "fi;"
-				.. "elif [[ $(west config --local build.board | grep -c '^mec17') ]] then;"
-						.. "if [[ $(west config --local build.board | grep -c '^mec170') ]] then;"
-							.. "echo 'MEC170x not supported';"
-							.. "exit 1;"
-						.. "elif [[ $(west config --local build.board | grep -c '^mec172') ]] then;"
-							.. "spi_img_gen=$(west topdir)/CPGZephyrDocs/MEC172x/SPI_image_gen/mec172x_spi_gen_lin_x86_64;"
-							.. "export MEC172X_SPI_GEN=${spi_img_gen};"
-						.. "else"
-							.. "spi_img_gen=$(west topdir)/CPGZephyrDocs/MEC172x/SPI_image_gen/mec172x_spi_gen_lin_x86_64;"
-							.. "export MEC172X_SPI_GEN=${spi_img_gen};"
-						.. "fi;"
-				.. "fi;"
-			.. "elif [[ $(west config --local build.board | grep -c '^it') ]] then;"
-				.. "echo 'iTE boards not supported';"
-			.. "fi;"
-
-		compiler_insert_info("zephyr setup",
-			full_config .. "exit",
-			"setup zephyr configuration", "c", "term", "zephyr")
-		compiler_insert_info("zephyr board",
-			"echo -n 'Enter board name: ' ; read;" .. "west config --local build.board $REPLY; exit",
-			"setup zephyr boards", "c", "term", "zephyr")
-		compiler_insert_info("zephyr build",
-			"west build -d $(west config manifest.path)/build $(west config manifest.path);" .. "exit",
-			"build zephyr project", "c", "make", "zephyr")
-		compiler_insert_info("zephyr build all",
-			pre_build_config .. "west build -p=always -d $(west config manifest.path)/build $(west config manifest.path);" .. "exit",
-			"re-build zephyr project as pristine", "c", "make", "zephyr")
-		compiler_insert_info("zephyr menu",
-			"west build -t menuconfig $(west config manifest.path);" .. "exit",
-			"interactive config zephyr kconfig value", "c", "term_full", "zephyr")
-	end
-
-	setup_zephyr_project()
-
-	compiler_insert_info("gcc build", [[gcc % -o %:t:r ]], "gcc build c source", "make", "build")
-	compiler_insert_info("gcc run", [[./%:t:r]], "gcc run executable source", "make", "build")
+	compiler_insert_info("gcc build", [[gcc % -o %:t:r ]], "gcc build c source", "c", "make", "build")
+	compiler_insert_info("gcc run", [[./%:t:r]], "gcc run executable source", "c", "make", "build")
 	compiler_insert_info("gcc build & run",
 		[[gcc % -o %:t:r && mv %:t:r /tmp/%:t:r && /tmp/%:t:r && rm /tmp/%:t:r]],
-		"gcc build and run c source", "make", "build")
+		"gcc build and run c source", "c", "make", "build")
 end
 
 local function setup_markdown()
@@ -173,34 +101,40 @@ local function setup_rust()
 end
 
 local function get_compiler_build_data()
+	local function check_current_filetype(ext)
+		if vim.bo.filetype == ext then
+			return true
+		end
+
+		return false
+	end
 
 	compiler_build_data = {}
-	local check_ext_file_exist = sys_func.ChkExtExist
 
-	if check_ext_file_exist("c") == 1 then
+	if check_current_filetype("c") then
 		setup_c()
 	end
 
-	if check_ext_file_exist("md") == 1 then
+	if check_current_filetype("md") then
 		setup_markdown()
 	end
 
-	if check_ext_file_exist("py") == 1 then
+	if check_current_filetype("py") then
 		compiler_insert_info("run script", "python3 %" .. ";read;exit",
 			"run current python file", "py", "make", "build")
 	end
 
-	if check_ext_file_exist("sh") == 1 then
+	if check_current_filetype("sh") then
 		compiler_insert_info("run script", [[./%]],
 			"run current buffer bash script", "sh",  "make", "build")
 	end
 
-	if check_ext_file_exist("perl") == 1 then
+	if check_current_filetype("perl") then
 		compiler_insert_info("run script", [[perl %]],
 			"run current buffer perl script", "perl", "make", "build")
 	end
 
-	if check_ext_file_exist("rs") == 1 then
+	if check_current_filetype("rs") then
 		setup_rust()
 	end
 
@@ -214,7 +148,6 @@ local function get_compiler_build_data()
 end
 
 local function compiler_build_selection()
-
 	local tbl = get_compiler_build_data()
 
 	if tbl == nil then
@@ -233,7 +166,7 @@ local function compiler_build_selection()
 	display_tittle(display_msg)
 
 	for _, info in ipairs(tbl) do
-		if (info.ext ~= vim.bo.filetype) then
+		if (info.ext ~= 'any') and (info.ext ~= vim.bo.filetype) then
 			goto continue
 		end
 
