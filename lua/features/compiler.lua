@@ -102,7 +102,7 @@ end
 
 local function get_compiler_build_data()
 	local function check_current_filetype(ext)
-		if vim.bo.filetype == ext then
+		if vim.bo.filetype == tostring(ext) then
 			return true
 		end
 
@@ -113,28 +113,18 @@ local function get_compiler_build_data()
 
 	if check_current_filetype("c") then
 		setup_c()
-	end
-
-	if check_current_filetype("md") then
+	elseif check_current_filetype("markdown") then
 		setup_markdown()
-	end
-
-	if check_current_filetype("py") then
+	elseif check_current_filetype("py") then
 		compiler_insert_info("run script", "python3 %" .. ";read;exit",
 			"run current python file", "py", "make", "build")
-	end
-
-	if check_current_filetype("sh") then
+	elseif check_current_filetype("sh") then
 		compiler_insert_info("run script", [[./%]],
 			"run current buffer bash script", "sh",  "make", "build")
-	end
-
-	if check_current_filetype("perl") then
+	elseif check_current_filetype("perl") then
 		compiler_insert_info("run script", [[perl %]],
 			"run current buffer perl script", "perl", "make", "build")
-	end
-
-	if check_current_filetype("rs") then
+	elseif check_current_filetype("rs") then
 		setup_rust()
 	end
 
