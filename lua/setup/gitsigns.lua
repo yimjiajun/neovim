@@ -62,6 +62,8 @@ require('gitsigns').setup {
 		end, {expr=true})
 
 		-- Actions
+		map('n', '<leader>gGn', gs.next_hunk)
+		map('n', '<leader>gGp', gs.prev_hunk)
 		map({'n', 'v'}, '<leader>gGss', ':Gitsigns stage_hunk<CR>')
 		map({'n', 'v'}, '<leader>gGsr', ':Gitsigns reset_hunk<CR>')
 		map('n', '<leader>gGsS', gs.stage_buffer)
@@ -87,6 +89,8 @@ if pcall(require, "which-key") then
 	local wk = require("which-key")
 	wk.register({
 		G = { name = "GitSign",
+			p = 'previous hunk',
+			n = 'next hunk',
 			s = { name = "Stage",
 				s = 'hunk',
 				r = 'reset',
@@ -112,4 +116,13 @@ if pcall(require, "which-key") then
 			},
 		},
 	}, { prefix = "<leader>g" })
+
+	wk.register({
+		G = { name = "GitSign",
+			s = { name = "Stage",
+				s = 'hunk',
+				r = 'reset',
+			},
+		},
+	}, { mode = 'v', prefix = "<leader>g" })
 end
