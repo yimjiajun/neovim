@@ -15,12 +15,26 @@ end
 
 local function get_file_dir()
 	local current_file_dir = vim.fn.expand('%:p:h')
+	vim.fn.setreg('+', tostring(current_file_dir))
 	return current_file_dir
 end
 
 local function get_file_name()
 	local current_file_name = vim.fn.expand('%:t')
+	vim.fn.setreg('+', tostring(current_file_name))
 	return current_file_name
+end
+
+local function get_full_path()
+	local path = vim.fn.expand('%:p')
+	vim.fn.setreg('+', tostring(path))
+	return path
+end
+
+local function get_path()
+	local path = vim.fn.expand('%')
+	vim.fn.setreg('+', tostring(path))
+	return path
 end
 
 local function check_extension_file_exist(extension)
@@ -184,6 +198,8 @@ local ret = {
 	DoChgWd = do_chg_wd,
 	GetFileDir = get_file_dir,
 	GetFileName = get_file_name,
+	GetPath = get_path,
+	GetFullPath = get_full_path,
 	GetDirWithPattern = get_dirs_with_pattern,
 	GetInstallPackageCmd = get_install_package_cmd,
 	GetOsLikeId = get_os_like_id,
