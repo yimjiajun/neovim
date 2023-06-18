@@ -1,18 +1,3 @@
-local lfs = require("lfs")
-
-local function get_dirs_with_pattern(pattern)
-	for dir in lfs.dir(".") do
-		if dir ~= "." and dir ~= ".." then
-			local dir_path = "./" .. dir
-			local mode = lfs.attributes(dir_path, "mode")
-			if mode == "directory" and dir:match(pattern) then
-				return dir_path
-			end
-		end
-	end
-	return nil
-end
-
 local function get_file_dir()
 	local current_file_dir = vim.fn.expand('%:p:h')
 	vim.fn.setreg('+', tostring(current_file_dir))
@@ -200,7 +185,6 @@ local ret = {
 	GetFileName = get_file_name,
 	GetPath = get_path,
 	GetFullPath = get_full_path,
-	GetDirWithPattern = get_dirs_with_pattern,
 	GetInstallPackageCmd = get_install_package_cmd,
 	GetOsLikeId = get_os_like_id,
 	ChkExtExist = check_extension_file_exist,
@@ -212,7 +196,6 @@ for name in pairs(ret) do
 	vim.cmd("command! -nargs=0 -bang " .. name .. " lua print(" .. "require('features.system')." .. name .. "()" .. ")")
 end
 
-vim.cmd("command! -nargs=1 GetDirWithPattern lua print(require('features.system').GetDirWithPattern(<f-args>))")
 vim.cmd("command! -nargs=1 PwrshCmd lua require('features.system').PwrshCmd(<f-args>)")
 
 return ret
