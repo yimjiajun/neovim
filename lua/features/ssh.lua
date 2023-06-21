@@ -24,7 +24,7 @@ local function ssh_connect(user, host, port, password)
 	cmd = cmd .. " " .. user .. "@" .. host .. " -p " .. port
 
 	if vim.fn.exists('win32') or vim.fn.isdirectory('/run/WSL') then
-		cmd = "tabnew | " .. terminal .. " " .. "echo 'password: " .. password .. "';" .. " powershell.exe -C " .. cmd
+		cmd = terminal .. " " .. "echo 'password: " .. password .. "';" .. " powershell.exe -C " .. cmd
 	else
 		if vim.fn.executable('sshpass') == 1 then
 			cmd = "sshpass -p " .. password .. " " .. cmd
@@ -32,7 +32,7 @@ local function ssh_connect(user, host, port, password)
 			cmd = "echo 'password: " .. password .. "';" .. cmd
 		end
 
-		cmd = "tabnew | " .. terminal .. " " .. cmd
+		cmd = terminal .. " " .. cmd
 	end
 
 	vim.cmd(cmd)
@@ -107,7 +107,7 @@ local function ssh_get_list(save_file)
 
 	if save_file == true then
 		vim.cmd([[redir END]])
-		vim.cmd([[tabnew ]] .. vim.fn.getreg('"') .. " | setlocal readonly")
+		vim.cmd([[edit ]] .. vim.fn.getreg('"') .. " | setlocal readonly")
 	end
 
 	return ssh_sel_list
