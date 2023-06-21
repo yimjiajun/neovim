@@ -146,7 +146,7 @@ local function ssh_insert_info(username, hostname, port, password, description, 
 	vim.g.ssh_data = data
 end
 
-local function setting_key_ssh()
+local function ssh_setting_keymapping()
 	vim.api.nvim_set_keymap('n', '<leader>tS', [[<cmd> lua require('features.ssh').SshRun() <CR> ]], { silent = true })
 	if pcall(require, "which-key") then
 		local wk = require("which-key")
@@ -164,7 +164,7 @@ local function setting_key_ssh()
 	end
 end
 
-setting_key_ssh()
+ssh_setting_keymapping()
 
 local ret = {
 	SshConnect = ssh_connect,

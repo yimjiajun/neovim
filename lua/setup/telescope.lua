@@ -256,6 +256,72 @@ local function setup_extension_heading()
 	require('telescope').load_extension('heading')
 end
 
+local function ssh_get_list_in_telescope()
+	local pickers = require "telescope.pickers"
+	local finders = require "telescope.finders"
+	local conf = require("telescope.config").values
+	local action_state = require('telescope.actions.state')
+	local actions = require('telescope.actions')
+	local telescope_opts = {sorting_strategy = 'ascending'}
+
+	local select_connection = function(opts)
+		opts = opts or {}
+		local results = {}
+		for i, info in ipairs(vim.g.ssh_data) do
+
+			table.insert(results, {
+				string.format("%-20s", info.host),
+				string.format("%+25s", info.name),
+				string.format("%-3s", info.port),
+				string.format("%-s", info.description),
+				string.format("%-15s", info.group),
+				string.format("%-15s", info.pass),
+				string.format("%2s", i)
+			})
+		end
+
+		pickers.new(opts, {
+			prompt_title = 'SSH Connection',
+			finder = finders.new_table {
+			results = results,
+			entry_maker = function(entry)
+				return {
+					value = entry,
+					display = '| ' .. entry[7] ..' | ' ..
+						entry[5] .. ' || ' ..
+						entry[2] .. ' | ' .. entry[1] .. ' | ' ..
+						entry[3] .. ' | ' .. entry[4],
+					ordinal = entry[6],
+				}
+			end
+			},
+			sorter = conf.generic_sorter(opts),
+			attach_mappings = function(prompt_bufnr, map)
+				actions.select_default:replace(function()
+					actions.close(prompt_bufnr)
+					local selection = action_state.get_selected_entry()
+					local host = vim.fn.trim(selection.value[1])
+					local name = vim.fn.trim(selection.value[2])
+					local port = vim.fn.trim(selection.value[3])
+					local pass = vim.fn.trim(selection.value[6])
+					require('features.ssh').SshConnect(name, host, port, pass)
+					-- print(vim.inspect(selection))
+					-- vim.api.nvim_put({ selection[1] }, "", false, true)
+				end)
+				local call_help = function()
+					require('features.common').DisplayTittle(" Help")
+					local selection = action_state.get_selected_entry()
+					print(">> ", selection.value[4])
+				end
+				map('i', '<C-h>', call_help)
+				return true
+			end,
+		}):find()
+	end
+
+	select_connection(telescope_opts)
+end
+
 local ret = {
 	Buffer = telescope_buffer,
 	setup = setup_telescope,
@@ -263,6 +329,9 @@ local ret = {
 	setup_live_grep_args = setup_extension_live_grep_args,
 	setup_bookmarks = setup_extension_bookmarks,
 	setup_heading = setup_extension_heading,
+	SshList = ssh_get_list_in_telescope,
 }
+
+vim.cmd("command! -nargs=0 SshListTelescope lua require('setup.telescope').SshList()")
 
 return ret
