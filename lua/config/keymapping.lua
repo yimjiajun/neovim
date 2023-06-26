@@ -8,6 +8,7 @@ end
 local function setting_key_buffer()
   vim.api.nvim_set_keymap('i', '<C-s>', '<C-o>:w<CR>', { silent = true })
   vim.api.nvim_set_keymap('n', '<S-Tab>', ':bp<CR>', { silent = true })
+  vim.api.nvim_set_keymap('n', '<leader><BS>', [[<cmd>%bd|e#|bd#|'<CR>|<CR>]], { silent = true })
   vim.api.nvim_set_keymap('n', '<Tab>', ':bn<CR>', { silent = true })
   vim.api.nvim_set_keymap('n', '<C-c>', ':bd<CR>', { silent = true })
   vim.api.nvim_set_keymap('n', '<esc><BS>', ':cclose<CR>', { silent = true })
