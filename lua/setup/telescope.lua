@@ -291,7 +291,7 @@ local function ssh_get_list_in_telescope()
 						entry[5] .. ' || ' ..
 						entry[2] .. ' | ' .. entry[1] .. ' | ' ..
 						entry[3] .. ' | ' .. entry[4],
-					ordinal = entry[6],
+					ordinal = entry[7] .. ' ' .. entry[5] .. ' ' .. entry[2] .. ' ' .. entry[1] .. ' ' .. entry[3] .. ' ' .. entry[4],
 				}
 			end
 			},
