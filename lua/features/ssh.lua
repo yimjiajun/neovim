@@ -1,3 +1,5 @@
+vim.g.wsl_ssh_run_win = 0
+vim.g.ssh_run_sshpass = 1
 vim.g.ssh_data = {
 	{ host = "raspberrypi.local",
 		name = "jun",
@@ -23,10 +25,14 @@ local function ssh_connect(user, host, port, password)
 
 	cmd = cmd .. " " .. user .. "@" .. host .. " -p " .. port
 
-	if vim.fn.exists('win32') == 1 or (vim.fn.isdirectory('/run/WSL') and vim.fn.empty(vim.g.wsl_ssh_run_win) == 0) then
-		cmd = terminal .. " " .. "echo 'password: " .. password .. "';" .. " powershell.exe -C " .. cmd
+	if vim.fn.exists('win32') == 1 or (vim.fn.isdirectory('/run/WSL') == 1 and vim.g.wsl_ssh_run_win == 1) then
+		cmd = terminal .. " " ..
+			"echo 'password: " .. password .. "';" ..
+			" powershell.exe -C " .. cmd
 	else
-		if vim.fn.executable('sshpass') == 1 and password ~= "" and password ~= nil  then
+		if vim.fn.executable('sshpass') == 1 and
+			vim.g.ssh_run_sshpass == 1 and
+			password ~= "" and password ~= nil then
 			cmd = "sshpass -p '" .. password .. "' " .. cmd
 		else
 			cmd = "echo 'default password: " .. password .. "';" .. cmd
@@ -76,16 +82,21 @@ local function ssh_get_list(save_file)
 		vim.cmd([[redir! > ]] .. vim.fn.getreg('"'))
 	end
 
-	local display_msg = string.format("%3s| %-20s | %-20s | %-5s | %-s", "idx",  "hostname/ip", "username", "port", "description")
+	local display_msg = string.format("%3s| %-20s | %-20s | %-5s | %-s",
+		"idx",  "hostname/ip", "username", "port", "description")
+
 	display_tittle(display_msg)
 
 	local idx = 1
+
 	for _, info in ipairs(vim.g.ssh_data) do
 		if info.group ~= group then
 			goto continue
 		end
 
-		display_msg = string.format("%3d| %-20s | %-20s | %-5s | %-s", idx, info.host, info.name, info.port, info.description)
+		display_msg = string.format("%3d| %-20s | %-20s | %-5s | %-s",
+			idx, info.host, info.name, info.port, info.description)
+
 		if save_file == true and show_pass == true then
 			display_msg = display_msg .. "\t" .. "[" .. info.pass .. "]"
 		end
@@ -146,8 +157,74 @@ local function ssh_insert_info(username, hostname, port, password, description, 
 	vim.g.ssh_data = data
 end
 
+local function toggle_powershell_ssh()
+
+	if vim.fn.has('unix') == 1 and vim.fn.isdirectory('/run/WSL') == 1 then
+		local msg = "wsl"
+		vim.g.wsl_ssh_run_win = (vim.g.wsl_ssh_run_win == 1 and 0 or 1)
+
+		if vim.g.wsl_ssh_run_win == 1 then
+			msg = "windows"
+		end
+
+		vim.api.nvim_echo({{"ssh from " .. msg,
+			"WarningMsg"}}, true, {})
+	end
+
+end
+
+local function toggle_sshpass()
+	if vim.fn.executable('sshpass') == 0 or vim.g.wsl_ssh_run_win == 1 then
+		return
+	end
+
+	local msg = "normal"
+	vim.g.ssh_run_sshpass = (vim.g.ssh_run_sshpass == 1 and 0 or 1)
+
+	if vim.g.ssh_run_sshpass == 1 then
+		msg = "auto"
+	end
+
+	vim.api.nvim_echo({{"ssh credential: " .. msg,
+		"WarningMsg"}}, true, {})
+end
+
 local function ssh_setting_keymapping()
-	vim.api.nvim_set_keymap('n', '<leader>tS', [[<cmd> lua require('features.ssh').SshRun() <CR> ]], { silent = true })
+	vim.api.nvim_set_keymap('n', '<leader>tS',
+		[[<cmd> lua require('features.ssh').SshRun() <CR> ]],
+		{ silent = true })
+
+	if vim.fn.has('unix') == 1 then
+		if vim.fn.isdirectory('/run/WSL') == 1 then
+			vim.api.nvim_set_keymap('n', '<leader>mS',
+				[[<cmd> lua require('features.ssh').SshTogglePwrsh() <CR> ]],
+				{ silent = true })
+
+			if pcall(require, "which-key") then
+				local wk = require("which-key")
+				wk.register({
+					S = "toggle ssh on wsl/win",
+				}, { mode = "n", prefix = "<leader>m" })
+			end
+		end
+
+		if vim.fn.executable('sshpass') == 1 then
+			vim.api.nvim_set_keymap('n', '<leader>ms',
+				[[<cmd> lua require('features.ssh').SshToggleSshpass() <CR> ]],
+				{ silent = true })
+
+			if pcall(require, "which-key") then
+				local wk = require("which-key")
+				wk.register({
+					s = "toggle sshpass",
+				}, { mode = "n", prefix = "<leader>m" })
+			end
+		end
+	end
+end
+
+local function ssh_setting()
+
 	if pcall(require, "which-key") then
 		local wk = require("which-key")
 		wk.register({
@@ -164,6 +241,7 @@ local function ssh_setting_keymapping()
 	end
 end
 
+ssh_setting()
 ssh_setting_keymapping()
 
 local ret = {
@@ -172,10 +250,13 @@ local ret = {
 	SshRun = ssh_run,
 	SshInsertInfo = ssh_insert_info,
 	SshList = ssh_get_list,
+	SshTogglePwrsh = toggle_powershell_ssh,
+	SshToggleSshpass = toggle_sshpass,
 }
 
 vim.cmd("command! -nargs=0 SshReq lua require('features.ssh').SshConnectReq()")
 vim.cmd("command! -nargs=0 Ssh lua require('features.ssh').SshRun()")
 vim.cmd("command! -nargs=0 SshList lua require('features.ssh').SshList(true)")
+
 
 return ret
