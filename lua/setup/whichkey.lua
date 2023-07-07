@@ -143,7 +143,8 @@ local function setup_indicate_system_key()
 		{ key = 'N', cmd = 'ncdu' },
 		{ key = 'H', cmd = 'htop' },
 		{ key = 'L', cmd = 'lazygit' },
-	}
+		{ key = 'b', cmd = 'battery' },
+}
 
 	for _, v in ipairs(system) do
 		if vim.fn.executable(v.cmd) then

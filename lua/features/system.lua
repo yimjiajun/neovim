@@ -175,11 +175,90 @@ local function get_git_info(cmd, arg)
 	return ''
 end
 
+local function get_battery_info ()
+	if vim.fn.has('unix') == 0 then
+		return
+	end
+
+	local dir = '/sys/class/power_supply/'
+	local bat_pattern = 'BAT%d'
+	local bat_dir = {}
+
+	for i = 0, 2 do
+		if vim.fn.isdirectory(dir .. string.format(bat_pattern, i)) == 1 then
+			table.insert(bat_dir, dir .. string.format(bat_pattern, i))
+		end
+	end
+
+	if #bat_dir == 0 then
+		return
+	end
+
+	for _, v in ipairs(bat_dir) do
+		local bat_present = tonumber(vim.fn.trim(vim.fn.system('cat ' .. v .. '/present')))
+		local bat_status = vim.fn.trim(vim.fn.system('cat ' .. v .. '/status'))
+		local bat_capacity = tonumber(vim.fn.trim(vim.fn.system('cat ' .. v .. '/capacity')))
+		local current_window = vim.api.nvim_get_current_win()
+		local window_width = vim.api.nvim_win_get_width(current_window)
+
+		local bat_cap_hi_color = 'MoreMsg'
+		local bat_top_display =				' =========\n'
+		local bat_charging_display =		'|██▓▓▓▓▓██|'
+
+		if bat_present == 1 then
+			if bat_status == 'Full' then
+				bat_cap_hi_color = 'WarningMsg'
+				bat_charging_display =		'|█████████|'
+			elseif bat_status == 'Charging' or bat_status == 'Unknown' then
+				bat_cap_hi_color = 'ModeMsg'
+				bat_charging_display =		'|█▓▒░█░▒▓█|'
+			elseif bat_capacity <= 25  then
+				bat_cap_hi_color = 'errormsg'
+				bat_charging_display =		'|█▓▒░░░▒▓█|'
+			elseif bat_capacity <= 50  then
+				bat_cap_hi_color = 'MsgArea'
+				bat_charging_display =		'|█▓▒▒░▒▒▓█|'
+			end
+		else
+			 bat_charging_display =			'|         |'
+			 bat_capacity = 0
+		end
+
+		local bat_delimiter_display =		'|- - - - -|\n'
+		local bat_empty_display =			'|         |'
+		local bat_bottom_display =			' =========\n'
+
+		bat_top_display = string.rep(' ', window_width/2.5) .. bat_top_display
+		bat_charging_display = string.rep(' ', window_width/2.5) .. bat_charging_display
+		bat_delimiter_display = string.rep(' ', window_width/2.5) .. bat_delimiter_display
+		bat_empty_display = string.rep(' ', window_width/2.5) .. bat_empty_display
+		bat_bottom_display = string.rep(' ', window_width/2.5) .. bat_bottom_display
+
+		print(bat_top_display)
+		for percent = 100, 0, -10 do
+			if bat_capacity >= percent - 1 then
+				vim.api.nvim_echo({{bat_charging_display, bat_cap_hi_color}}, false, {})
+			else
+				print(bat_empty_display)
+			end
+
+			print(bat_delimiter_display)
+		end
+		print(bat_bottom_display)
+	end
+end
+
+local function setup_keymapping()
+	vim.api.nvim_set_keymap('n', '<leader>vsb', [[<cmd> lua require('features.system').GetBatInfo() <CR>]], { silent = true })
+end
+
 setup_lazygit()
 setup_htop()
 setup_ncdu()
+setup_keymapping()
 
 local ret = {
+	GetBatInfo = get_battery_info,
 	DoChgWd = do_chg_wd,
 	GetFileDir = get_file_dir,
 	GetFileName = get_file_name,
