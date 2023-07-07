@@ -53,11 +53,11 @@ local function setup_lazygit()
 	end
 
 	if vim.fn.exists(':ToggleTerm') then
-		vim.api.nvim_set_keymap('n', '<leader>gL', [[<cmd> TermExec cmd="lazygit; exit" <CR>]], { silent = true })
+		vim.api.nvim_set_keymap('n', '<leader>vsL', [[<cmd> TermExec cmd="lazygit; exit" <CR>]], { silent = true })
 		return
 	end
 
-	vim.api.nvim_set_keymap('n', '<leader>gL', [[<cmd> tabnew | term lazygit; exit <CR>]], { silent = true })
+	vim.api.nvim_set_keymap('n', '<leader>vsL', [[<cmd> tabnew | term lazygit; exit <CR>]], { silent = true })
 end
 
 local function setup_htop()
@@ -66,11 +66,11 @@ local function setup_htop()
 	end
 
 	if vim.fn.exists(':ToggleTerm') then
-		vim.api.nvim_set_keymap('n', '<leader>gH', [[<cmd> TermExec cmd="htop; exit" <CR>]], { silent = true })
+		vim.api.nvim_set_keymap('n', '<leader>vsH', [[<cmd> TermExec cmd="htop; exit" <CR>]], { silent = true })
 		return
 	end
 
-	vim.api.nvim_set_keymap('n', '<leader>gH', [[<cmd> tab term htop; exit <CR>]], { silent = true })
+	vim.api.nvim_set_keymap('n', '<leader>vsH', [[<cmd> tab term htop; exit <CR>]], { silent = true })
 end
 
 local function setup_ncdu()
@@ -79,11 +79,11 @@ local function setup_ncdu()
 	end
 
 	if vim.fn.exists(':ToggleTerm') then
-		vim.api.nvim_set_keymap('n', '<leader>gN', [[<cmd> TermExec cmd="ncdu; exit" <CR>]], { silent = true })
+		vim.api.nvim_set_keymap('n', '<leader>vsN', [[<cmd> TermExec cmd="ncdu; exit" <CR>]], { silent = true })
 		return
 	end
 
-	vim.api.nvim_set_keymap('n', '<leader>gN', [[<cmd> tab term ncdu; exit <CR>]], { silent = true })
+	vim.api.nvim_set_keymap('n', '<leader>vsN', [[<cmd> tab term ncdu; exit <CR>]], { silent = true })
 end
 
 local function get_os_like_id()

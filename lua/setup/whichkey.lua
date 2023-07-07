@@ -85,7 +85,9 @@ wk.register({
 	C = 'quickfix (close)',
 	j = 'quickfix (next)',
 	k = 'quickfix (previous)',
-	v = { name = 'View' },
+	v = { name = 'View',
+		s = { name = 'System'},
+	},
 	m = { name = 'Mode' },
 	f = { name = 'Find',
 		f = 'file',
@@ -136,7 +138,7 @@ wk.register({
 
 local function setup_indicate_system_key()
 	local wk_sys = require("which-key")
-	local wk_mode = { mode = 'n', prefix = "<leader>g" }
+	local wk_mode = { mode = 'n', prefix = "<leader>vs" }
 	local system = {
 		{ key = 'N', cmd = 'ncdu' },
 		{ key = 'H', cmd = 'htop' },
