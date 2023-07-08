@@ -235,8 +235,8 @@ local function get_battery_info ()
 		bat_bottom_display = string.rep(' ', window_width/2.5) .. bat_bottom_display
 
 		print(bat_top_display)
-		for percent = 100, 0, -10 do
-			if bat_capacity >= percent - 1 then
+		for percent = 100, 1, -10 do
+			if bat_capacity >= percent then
 				vim.api.nvim_echo({{bat_charging_display, bat_cap_hi_color}}, false, {})
 			else
 				print(bat_empty_display)
