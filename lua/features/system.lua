@@ -248,24 +248,34 @@ local function get_battery_info ()
 	end
 end
 
+local function calendar_interactive()
+	local terminal = 'term'
+
+	if (vim.fn.exists(":ToggleTerm") ~= 0) and (vim.fn.exists(":TermCmd") ~= 0) then
+		terminal = 'TermCmd'
+	end
+
+	if vim.fn.executable('khal') == 0 then
+		vim.cmd(terminal .. ' khal interactive ; exit')
+	else
+		 vim.cmd(terminal .. ' khal interactive ; exit')
+	end
+end
+
 local function setup_keymapping()
 	local function setup_calander()
 		if vim.fn.executable('khal') == 0 then
 			return
 		end
 
-		local terminal = 'term'
-
-		if vim.fn.exists(":ToggleTerm") and vim.fn.exists(":TermCmd") then
-			terminal = 'TermCmd'
-		end
-
 		vim.api.nvim_set_keymap('n', '<leader>vct',
 			[[<cmd> sp | term khal list today <CR>]],
 			{ silent = true })
+
 		vim.api.nvim_set_keymap('n', '<leader>vci',
-			[[<cmd> ]] .. terminal .. [[ khal interactive ; exit <CR>]],
-			{ silent = true })
+			[[<cmd> lua require('features.system').GetCalendar() <CR>]],
+		{ silent = true })
+
 		vim.api.nvim_set_keymap('n', '<leader>vcc',
 			[[<cmd> sp | term khal calendar --format '● {start-time} | {title}' <CR>]],
 			{ silent = true })
@@ -292,6 +302,7 @@ local ret = {
 	ChkExtExist = check_extension_file_exist,
 	PwrshCmd = pwrsh_cmd,
 	GetGitInfo = get_git_info,
+	GetCalendar = calendar_interactive,
 }
 
 for name in pairs(ret) do
