@@ -87,6 +87,7 @@ wk.register({
 	k = 'quickfix (previous)',
 	v = { name = 'View',
 		s = { name = 'System'},
+		c = { name = 'Calendar'},
 	},
 	m = { name = 'Mode' },
 	f = { name = 'Find',
@@ -150,6 +151,14 @@ local function setup_indicate_system_key()
 		if vim.fn.executable(v.cmd) then
 			wk_sys.register({ [v.key] = v.cmd }, wk_mode)
 		end
+	end
+
+	if vim.fn.executable('khal') == 1 then
+		wk_sys.register({
+			t = 'today',
+			i = 'interactive',
+			c = 'agenda'
+		}, { mode = 'n', prefix = '<leader>vc' })
 	end
 end
 

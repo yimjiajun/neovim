@@ -249,7 +249,30 @@ local function get_battery_info ()
 end
 
 local function setup_keymapping()
+	local function setup_calander()
+		if vim.fn.executable('khal') == 0 then
+			return
+		end
+
+		local terminal = 'term'
+
+		if vim.fn.exists(":ToggleTerm") and vim.fn.exists(":TermCmd") then
+			terminal = 'TermCmd'
+		end
+
+		vim.api.nvim_set_keymap('n', '<leader>vct',
+			[[<cmd> sp | term khal list today <CR>]],
+			{ silent = true })
+		vim.api.nvim_set_keymap('n', '<leader>vci',
+			[[<cmd> ]] .. terminal .. [[ khal interactive ; exit <CR>]],
+			{ silent = true })
+		vim.api.nvim_set_keymap('n', '<leader>vcc',
+			[[<cmd> sp | term khal calendar --format '● {start-time} | {title}' <CR>]],
+			{ silent = true })
+	end
+
 	vim.api.nvim_set_keymap('n', '<leader>vsb', [[<cmd> lua require('features.system').GetBatInfo() <CR>]], { silent = true })
+	setup_calander()
 end
 
 setup_lazygit()
