@@ -138,24 +138,6 @@ require("lazy").setup({
 			end
 		},
 
-		{ 'nvim-orgmode/orgmode',
-			dependencies = "nvim-treesitter/nvim-treesitter",
-			build = function()
-				vim.cmd[[TSUpdate org]]
-			end,
-			config = function()
-				require('setup.orgmode')
-			end
-		},
-
-		{ "akinsho/org-bullets.nvim",
-			ft = {'org'},
-			dependencies = "nvim-orgmode/orgmode",
-			config = function()
-				require('setup.orgmode').SetupOrgBullets()
-			end,
-		},
-
 		{ "folke/which-key.nvim",
 			config = function()
 				require('setup.whichkey')
