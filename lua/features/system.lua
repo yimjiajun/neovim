@@ -255,11 +255,17 @@ local function calendar_interactive()
 		terminal = 'TermCmd'
 	end
 
-	if vim.fn.executable('khal') == 0 then
+	if vim.fn.executable('khal') == 1 then
 		vim.cmd(terminal .. ' khal interactive ; exit')
-	else
-		 vim.cmd(terminal .. ' khal interactive ; exit')
+		return
 	end
+
+	if vim.fn.executable('cal') == 1 then
+		vim.cmd(terminal .. ' cal -y; exit')
+		return
+	end
+
+	vim.cmd('!date')
 end
 
 local function setup_keymapping()
