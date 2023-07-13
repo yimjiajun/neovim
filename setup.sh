@@ -120,7 +120,7 @@ function install_python {
 }
 
 function install_ctags {
-	path="/tmp/ctags"
+	path="$(mktemp -d)"
 	install_path="/usr/local"
 
 	if [[ "$(command -v ctags)" ]]; then
@@ -196,6 +196,7 @@ function install_ncdu {
 }
 
 function install_lazygit {
+	local tmp_path="$(mktemp -d)"
 	if [[ $(command -v lazygit) ]]; then
 		return 0
 	fi
@@ -203,7 +204,7 @@ function install_lazygit {
 	echo -e "Install lazygit ..." >&1
 
 	if [[ $OSTYPE == linux-gnu* ]]; then
-		cd /tmp
+		cd $tmp_path
 		LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
 		curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
 		tar xf lazygit.tar.gz lazygit
@@ -216,7 +217,7 @@ function install_lazygit {
 }
 
 function main {
-	local neovim_install_path='/tmp/neovim'
+	local neovim_install_path="$(mktemp -d)"
 	local neovim_config_path="$HOME/.config/nvim"
 
 	echo -e "\033[33mSetup Neovim\033[0m" >&1
