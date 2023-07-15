@@ -1,0 +1,44 @@
+name: main
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  focal:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        git-depth: [1]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: ${{ matrix.git-depth }}
+      - name: setup NeoVim and install dependencies in Focal
+        run: |
+          sudo apt-get update && sudo apt-get -y install sudo apt-utils
+          echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
+          sudo apt-get install -y -q
+          ./setup.sh
+
+  jammy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        git-depth: [1]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: ${{ matrix.git-depth }}
+      - name: setup NeoVim and install dependencies in Jammy
+        run: |
+          sudo apt-get update 1>/dev/null && sudo apt-get -y install sudo apt-utils 1>/dev/null
+          echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
+          sudo apt-get install -y -q 1>/dev/null
+          ./setup.sh
