@@ -6,6 +6,8 @@
   <img src="https://github.com/yimjiajun/neovim/wiki/images/neovim_home.png" alt="Neovim Home" width="1000">
 </div>
 
+![github_workflow_status](https://github.com/yimjiajun/neovim/actions/workflows/main.yml/badge.svg)
+
 # 下載
 
 1. 透過git repository 下載安裝工具
