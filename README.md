@@ -26,7 +26,7 @@
     透過該`setup.sh`下載一切所需要的內容
 
     ```bash
-    "$HOME/.config/nvim/setup.sh install"
+    "$HOME/.config/nvim/install.sh"
     ```
 
 3. 開始使用

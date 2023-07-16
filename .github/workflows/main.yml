@@ -24,7 +24,7 @@ jobs:
           sudo apt-get update && sudo apt-get -y install sudo apt-utils
           echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
           sudo apt-get install -y -q
-          ./setup.sh
+          ./install.sh
 
   jammy:
     runs-on: ubuntu-latest
@@ -41,4 +41,4 @@ jobs:
           sudo apt-get update 1>/dev/null && sudo apt-get -y install sudo apt-utils 1>/dev/null
           echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
           sudo apt-get install -y -q 1>/dev/null
-          ./setup.sh
+          ./install.sh

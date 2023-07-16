@@ -301,12 +301,21 @@ function install_bpytop {
 	}
 }
 
-function display_title {
-	local title="$1"
-	local display_width="$(tput cols)"
+display_center() {
+	local text="$1"
+	local text_width=${#text}
+	local screen_width="$(tput cols)"
+	local padding_width=$(( ($screen_width - $text_width) / 2 ))
+	printf "%${padding_width}s" " "
+	printf "%s\n" "$text"
+}
+
+display_title () {
+	local text="$1"
+	local screen_width="$(tput cols)"
 
 	for delimiter in {1..2}; do
-		for ((i=0; i<display_width; i++)); do
+		for ((i=0; i<$screen_width; i++)); do
 			echo -n "="
 		done
 
@@ -314,7 +323,7 @@ function display_title {
 
 		echo -e -n "\e[1;33m"
 		if [ $delimiter -eq 1 ]; then
-			printf "%$(($display_width - 1))s\n" "$title"
+			display_center "$text"
 		fi
 		echo -e -n "\e[0m"
 	done
