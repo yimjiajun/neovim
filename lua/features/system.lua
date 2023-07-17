@@ -29,7 +29,7 @@ local function check_extension_file_exist(extension)
 	return result
 end
 
-local function do_chg_wd()
+local function set_workding_directory()
 	local current_file_dir = get_file_dir()
 	print('Changing working directory to: ' .. current_file_dir)
 	vim.loop.chdir(current_file_dir)
@@ -298,7 +298,7 @@ setup_keymapping()
 
 local ret = {
 	GetBatInfo = get_battery_info,
-	DoChgWd = do_chg_wd,
+	SetWD = set_workding_directory,
 	GetFileDir = get_file_dir,
 	GetFileName = get_file_name,
 	GetPath = get_path,
