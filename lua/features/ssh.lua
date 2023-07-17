@@ -69,7 +69,7 @@ local function ssh_get_list(save_file)
 	end
 
 	if save_file == true then
-		local file = '/tmp/ssh_list.txt'
+		local file = vim.fn.tempname() .. ".txt"
 
 		if vim.fn.tolower(vim.fn.trim(
 			vim.fn.input("view password? (y/n): ", 'y'))) == 'y' then

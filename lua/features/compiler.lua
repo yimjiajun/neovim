@@ -55,7 +55,7 @@ local function setup_c()
 	compiler_insert_info("gcc build", [[gcc % -o %:t:r ]], "gcc build c source", "c", "make", "build")
 	compiler_insert_info("gcc run", [[./%:t:r]], "gcc run executable source", "c", "make", "build")
 	compiler_insert_info("gcc build & run",
-		[[gcc % -o %:t:r && mv %:t:r /tmp/%:t:r && /tmp/%:t:r && rm /tmp/%:t:r]],
+		[[gcc % -o %:t:r && ./%:t:r && rm %:t:r]],
 		"gcc build and run c source", "c", "make", "build")
 end
 
