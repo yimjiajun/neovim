@@ -130,6 +130,7 @@ wk.register({
 		s = 'terminal split',
 		v = 'terminal vsplit',
 		c = 'ctags generator',
+		m = 'file format',
 	},
 }, { mode = "n", prefix = "<leader>", })
 

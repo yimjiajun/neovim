@@ -187,6 +187,47 @@ local function build()
 	vim.cmd("make")
 end
 
+local function setup_file_format()
+	if vim.fn.filetype == "c" or vim.fn.filetype == "cpp" then
+		vim.cmd('setlocal cindent')
+		vim.cmd('setlocal softtabstop=4')
+		vim.cmd('setlocal tabstop=4')
+		vim.cmd('setlocal shiftwidth=4')
+		vim.cmd('setlocal noexpandtab')
+	elseif vim.fn.filetype == "markdown" then
+		vim.cmd('setlocal softtabstop=2')
+		vim.cmd('setlocal tabstop=2')
+		vim.cmd('setlocal shiftwidth=2')
+		vim.cmd('setlocal expandtab')
+		vim.cmd('setlocal spell')
+		vim.cmd('highlight MarkdownHeading guifg=Black guibg=DarkOrange')
+		vim.cmd([[match MarkdownHeading /^#\s.*/]])
+	elseif vim.fn.filetype == "py" then
+		vim.cmd('setlocal softtabstop=2')
+		vim.cmd('setlocal tabstop=2')
+		vim.cmd('setlocal shiftwidth=2')
+		vim.cmd('setlocal expandtab')
+	elseif vim.fn.filetype == "bin" then
+		vim.cmd([[
+		augroup Binary
+			autocmd!
+			autocmd BufReadPre *.bin let &bin=1
+			autocmd BufReadPost *.bin if &bin | %!xxd
+			autocmd BufReadPost *.bin set ft=xxd | endif
+			autocmd BufWritePre *.bin if &bin | %!xxd -r
+			autocmd BufWritePre *.bin endif
+			autocmd BufWritePost *.bin if &bin | %!xxd
+			autocmd BufWritePost *.bin set nomod | endif
+		augroup END
+		]])
+	else
+		vim.cmd('setlocal softtabstop=4')
+		vim.cmd('setlocal tabstop=4')
+		vim.cmd('setlocal shiftwidth=4')
+		vim.cmd('setlocal noexpandtab')
+	end
+end
+
 local M = {
 	SearchFile = search_file,
 	SearchWord = search_word,
@@ -201,9 +242,14 @@ local M = {
 	GetJumplist = get_jumplist,
 	GetRegisterList = get_register_list,
 	SetStatusline = set_statusline,
+	SetFileFormat = setup_file_format,
 	Session = session,
 	CreateCtags = create_ctags,
 	Build = build,
 }
+
+for name in pairs(M) do
+	vim.cmd("command! -nargs=0 -bang " .. name .. " lua print(" .. "require('config.function')." .. name .. "()" .. ")")
+end
 
 return M

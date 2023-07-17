@@ -20,6 +20,7 @@ local function setting_key_buffer()
   vim.api.nvim_set_keymap('n', '<leader>q', [[<cmd> lua KeyFunc.GetMarks("default") <CR>]], { silent = true })
   vim.api.nvim_set_keymap('n', '<leader>h', [[<cmd> lua KeyFunc.GetJumplist("default") <CR>]], { silent = true })
   vim.api.nvim_set_keymap('n', '<leader>r', [[<cmd> lua KeyFunc.GetRegisterList("default") <CR>]], { silent = true })
+  vim.api.nvim_set_keymap('n', '<leader>tm', [[<cmd> lua KeyFunc.SetFileFormat() <CR>]], { silent = true })
 end
 
 local function setting_key_view()
