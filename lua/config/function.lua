@@ -188,13 +188,15 @@ local function build()
 end
 
 local function setup_file_format()
-	if vim.fn.filetype == "c" or vim.fn.filetype == "cpp" then
+	vim.api.nvim_echo({{"Setup File Format: " .. vim.bo.filetype, "Normal"}}, false, {})
+
+	if vim.bo.filetype == "c" or vim.bo.filetype == "cpp" then
 		vim.cmd('setlocal cindent')
 		vim.cmd('setlocal softtabstop=4')
 		vim.cmd('setlocal tabstop=4')
 		vim.cmd('setlocal shiftwidth=4')
 		vim.cmd('setlocal noexpandtab')
-	elseif vim.fn.filetype == "markdown" then
+	elseif vim.bo.filetype == "markdown" then
 		vim.cmd('setlocal softtabstop=2')
 		vim.cmd('setlocal tabstop=2')
 		vim.cmd('setlocal shiftwidth=2')
@@ -202,12 +204,12 @@ local function setup_file_format()
 		vim.cmd('setlocal spell')
 		vim.cmd('highlight MarkdownHeading guifg=Black guibg=DarkOrange')
 		vim.cmd([[match MarkdownHeading /^#\s.*/]])
-	elseif vim.fn.filetype == "py" then
+	elseif vim.bo.filetype == "py" then
 		vim.cmd('setlocal softtabstop=2')
 		vim.cmd('setlocal tabstop=2')
 		vim.cmd('setlocal shiftwidth=2')
 		vim.cmd('setlocal expandtab')
-	elseif vim.fn.filetype == "bin" then
+	elseif vim.bo.filetype == "bin" then
 		vim.cmd([[
 		augroup Binary
 			autocmd!
@@ -226,6 +228,14 @@ local function setup_file_format()
 		vim.cmd('setlocal shiftwidth=4')
 		vim.cmd('setlocal noexpandtab')
 	end
+
+	vim.cmd([[setlocal expandtab? |
+		setlocal cindent? |
+		setlocal spell? |
+		setlocal softtabstop? |
+		setlocal tabstop? |
+		setlocal shiftwidth?
+	]])
 end
 
 local M = {
