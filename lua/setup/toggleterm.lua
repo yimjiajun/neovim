@@ -69,7 +69,28 @@ local function toggleterm_setup_global_variable()
 	end
 end
 
+local function toggleterm_setup_autocmd()
+	-- vim.cmd("autocmd TermOpen * setlocal nonumber norelativenumber")
+	vim.api.nvim_create_augroup( "toggleterm", { clear = true })
+	vim.api.nvim_create_autocmd( "FileType", {
+		desc = "Hide Toggle Term",
+		group = "toggleterm",
+		pattern = "toggleterm",
+		callback = function()
+			local current_buf = vim.api.nvim_get_current_buf()
+			vim.api.nvim_buf_set_keymap(current_buf, 't',
+				'jkl', '<c-\\><c-n>', { noremap = true, silent = true })
+			vim.api.nvim_buf_set_keymap(current_buf, 't',
+				'lkj', '<c-\\><c-n><cmd>ToggleTerm<CR>', { noremap = true, silent = true })
+			vim.api.nvim_buf_set_keymap(current_buf, 't',
+				'<c-w>', '<c-\\><c-n><c-w>', { noremap = true, silent = true })
+		  end,
+	})
+
+end
+
 toggleterm_setup_keymapping()
 toggleterm_setup_global_variable()
+toggleterm_setup_autocmd()
 
 vim.cmd("command! -nargs=1 TermCmd lua require'toggleterm'.exec(<q-args>)")
