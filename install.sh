@@ -1,6 +1,7 @@
 #!/bin/bash
 
 function install_build_prerequisites {
+	echo -e "● Install build prerequisites..." >&1
 
 	if [[ $OSTYPE == "linux-gnu" ]]; then
 		$pkg_install_cmd \
@@ -35,8 +36,15 @@ function install_build_prerequisites {
 				exit 1
 			}
 	elif [[ $OSTYPE == "darwin"* ]]; then
-		brew tap universal-ctags/universal-ctags
-		brew install --head universal-ctags
+		brew tap universal-ctags/universal-ctags 1>/dev/null || {
+			echo -e "\033[31mError: Install build prerequisites failed!\033[0m" >&2
+			exit 1
+		}
+
+		brew install --head universal-ctags 1>/dev/null || {
+			echo -e "\033[31mError: Install build prerequisites failed!\033[0m" >&2
+			exit 1
+		}
 	fi
 }
 
@@ -262,10 +270,21 @@ function install_lazygit {
 			echo -e "\033[31mError: Download lazygit failed!\033[0m" >&2
 			exit 1
 		}
-		tar xf $tmp_path/lazygit.tar.gz $tmp_path/lazygit
-		sudo install $tmp_path/lazygit /usr/local/bin
+
+		tar xf $tmp_path/lazygit.tar.gz $tmp_path/lazygit || {
+			echo -e "\033[31mError: Extract lazygit failed!\033[0m" >&2
+			exit 1
+		}
+
+		sudo install $tmp_path/lazygit /usr/local/bin || {
+			echo -e "\033[31mError: Install lazygit failed!\033[0m" >&2
+			exit 1
+		}
 	else
-		$pkg_install_cmd lazygit
+		$pkg_install_cmd lazygit 1>/dev/null || {
+			echo -e "\033[31mError: Install lazygit failed!\033[0m" >&2
+			exit 1
+		}
 	fi
 }
 
@@ -363,16 +382,23 @@ display_title "Setup Neovim"
 
 case "$OSTYPE" in
 	"linux-gnu"*)
-		sudo apt-get update -y 1>/dev/null && sudo apt-get upgrade -y 1>/dev/null
+		sudo apt-get update -y 1>/dev/null && sudo apt-get upgrade -y 1>/dev/null || {
+			echo -e "\033[31mError: Update apt failed!\033[0m" >&2
+			exit 1
+		}
 
 		if [[ "$(command -v nala)" ]]; then
-			pkg_install_cmd="sudo nala -y install"
+			pkg_install_cmd="sudo nala install -y"
 		else
 			pkg_install_cmd="sudo apt-get install -y"
 		fi
 		;;
 	"darwin"*)
-		brew update 1>/dev/null
+		brew update 1>/dev/null || {
+			echo -e "\033[31mError: Update brew failed!\033[0m" >&2
+			exit 1
+		}
+
 		pkg_install_cmd="brew install"
 		;;
 	*)
