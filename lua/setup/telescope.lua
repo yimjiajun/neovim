@@ -230,6 +230,7 @@ local function telescope_buffer()
 				local selection = action_state.get_selected_entry()
 				actions.close(prompt_bufnr)
 				vim.api.nvim_buf_delete(selection.bufnr, { force = true })
+				vim.cmd([[lua require('setup.telescope').Buffer().buffer_with_del()]])
 			end
 			map('i', '<del>', delete_buf)
 			return true
