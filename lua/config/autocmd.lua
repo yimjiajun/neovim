@@ -146,6 +146,16 @@ vim.api.nvim_create_autocmd( "FileType", {
 	end,
 })
 
+vim.api.nvim_create_augroup( "terminal", { clear = true })
+vim.api.nvim_create_autocmd( "TermOpen", {
+	desc = "Terminal",
+	group = "terminal",
+	callback = function()
+		vim.cmd('setlocal nonumber')
+		vim.cmd('setlocal norelativenumber')
+	end,
+})
+
 vim.cmd([[
 augroup Binary
     autocmd!
