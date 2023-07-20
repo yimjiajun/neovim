@@ -261,20 +261,25 @@ function install_lazygit {
 		return 0
 	fi
 
-	echo -e "● Install lazygit ..." >&1
+	echo -e "● lazygit installation" >&1
 
 	if [[ $OSTYPE == linux-gnu* ]]; then
 		cd $tmp_path
+		echo -e "● Download lazygit ..." >&1
 		LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
 		curl -Lo $tmp_path/lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" 1>/dev/null || {
 			echo -e "\033[31mError: Download lazygit failed!\033[0m" >&2
 			exit 1
 		}
 
-		tar xf $tmp_path/lazygit.tar.gz $tmp_path/lazygit || {
+		echo -e "● Extract lazygit ..." >&1
+
+		tar xf $tmp_path/lazygit.tar.gz -C $tmp_path || {
 			echo -e "\033[31mError: Extract lazygit failed!\033[0m" >&2
 			exit 1
 		}
+
+		echo -e "● Install lazygit ..." >&1
 
 		sudo install $tmp_path/lazygit /usr/local/bin || {
 			echo -e "\033[31mError: Install lazygit failed!\033[0m" >&2
