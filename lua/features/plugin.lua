@@ -191,12 +191,6 @@ require("lazy").setup({
 			end
 		},
 
-		{ 'rebelot/kanagawa.nvim',
-			config = function ()
-				require('setup.kanagawa')
-			end,
-		},
-
 		{ 'preservim/tagbar',
 			config = function ()
 				vim.api.nvim_set_keymap('n', '<leader>tt',
@@ -216,6 +210,13 @@ require("lazy").setup({
 				require('setup.chatgpt')
 			end,
 		},
+
+		{ "luisiacc/gruvbox-baby",
+			config = function()
+				require('setup.gruvbox')
+			end,
+		},
+
 	},
 
 	defaults = {

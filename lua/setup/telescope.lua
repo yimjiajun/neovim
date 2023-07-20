@@ -99,6 +99,10 @@ local function setup_telescope()
 					["<C-h>"] = "which_key"
 				},
 			},
+			borderchars = {
+				prompt = { "─", " ", " ", " ", "─", "─", " ", " " },
+				results = { "─", " ", " ", " ", "─", "─", " ", " " },
+			},
 			prompt_prefix=' > ',
 		},
 		extensions = extensions,
