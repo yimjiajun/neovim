@@ -9,13 +9,13 @@ vim.g.gruvbox_baby_use_original_palette = 0
 
 if vim.g.gruvbox_baby_transparent_mode == 0 then
 	vim.g.gruvbox_baby_highlights = {
-		Visual = {bg = colors.dark},
+		Visual = {bg = colors.background},
 		CursorLine = {bg = colors.dark},
 
 		Normal = {bg = colors.dark0},
 		NormalFloat = {bg = 'none'},
 		FloatBorder = {bg = 'none'},
-		StatusLine = {fg = colors.dark0, bg = colors.forest_green},
+		StatusLine = {bg = 'none'},
 		SignColumn = {bg ='none'},
 		TelescopePreviewTitle = {fg = colors.dark0, bg = colors.forest_green},
 		TelescopePreviewNormal = {bg = colors.dark0},
@@ -29,7 +29,7 @@ if vim.g.gruvbox_baby_transparent_mode == 0 then
 	}
 else
 	vim.g.gruvbox_baby_highlights = {
-		Visual = {bg = colors.dark},
+		Visual = {bg = colors.background},
 		CursorLine = {bg = colors.dark},
 
 		StatusLine = {bg = 'none'},
