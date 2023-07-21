@@ -84,8 +84,6 @@ local function toggleterm_setup_autocmd()
 				'jkl', '<c-\\><c-n>', { noremap = true, silent = true })
 			vim.api.nvim_buf_set_keymap(current_buf, 't',
 				'lkj', '<c-\\><c-n><cmd>ToggleTerm<CR>', { noremap = true, silent = true })
-			vim.api.nvim_buf_set_keymap(current_buf, 't',
-				'<c-w>', '<c-\\><c-n><c-w>', { noremap = true, silent = true })
 		  end,
 	})
 
