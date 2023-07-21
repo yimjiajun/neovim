@@ -47,43 +47,81 @@ local function pwrsh_cmd(cmd)
 	return cmd
 end
 
-local function setup_lazygit()
-	if vim.fn.executable('lazygit') == 0 then
+local function setup_ui_git()
+	local git_cmd = nil
+
+	if vim.fn.executable('lazygit') == 1 then
+		git_cmd = 'lazygit'
+	end
+
+	if vim.fn.executable('gitui') == 1 then
+		git_cmd = 'gitui'
+	end
+
+	if git_cmd == nil then
+		if vim.fn.exists(':Git') then
+			vim.api.nvim_set_keymap('n', '<leader>vsG',
+				[[<cmd> Git <CR>]], { silent = true })
+		end
+
 		return
 	end
 
 	if vim.fn.exists(':ToggleTerm') then
-		vim.api.nvim_set_keymap('n', '<leader>vsL', [[<cmd> TermExec cmd="lazygit; exit" <CR>]], { silent = true })
+		vim.api.nvim_set_keymap('n', '<leader>vsG',
+			[[<cmd> TermExec cmd="]] .. git_cmd .. [[; exit" <CR>]],
+			{ silent = true })
 		return
 	end
 
-	vim.api.nvim_set_keymap('n', '<leader>vsL', [[<cmd> tabnew | term lazygit; exit <CR>]], { silent = true })
+	vim.api.nvim_set_keymap('n', '<leader>vsG',
+		[[<cmd> ]] .. git_cmd .. [[; exit <CR>]],
+		{ silent = true })
 end
 
-local function setup_htop()
-	if vim.fn.executable('htop') == 0 then
-		return
+local function setup_top()
+	local top_cmd = 'top'
+
+	if vim.fn.executable('htop') == 1 then
+		top_cmd = 'htop'
+	end
+
+	if vim.fn.executable('bpytop') == 1 then
+		top_cmd = 'bpytop'
 	end
 
 	if vim.fn.exists(':ToggleTerm') then
-		vim.api.nvim_set_keymap('n', '<leader>vsH', [[<cmd> TermExec cmd="htop; exit" <CR>]], { silent = true })
+		vim.api.nvim_set_keymap('n', '<leader>vsT',
+			[[<cmd> TermExec cmd="]] .. top_cmd .. [[; exit" <CR>]],
+			{ silent = true })
 		return
 	end
 
-	vim.api.nvim_set_keymap('n', '<leader>vsH', [[<cmd> tab term htop; exit <CR>]], { silent = true })
+	vim.api.nvim_set_keymap('n', '<leader>vsT',
+	[[<cmd> term ]] .. top_cmd .. [[; exit <CR>]], { silent = true })
 end
 
-local function setup_ncdu()
-	if vim.fn.executable('ncdu') == 0 then
-		return
+local function setup_disk_usage()
+	local du_cmd='du -h --max-depth=1'
+
+	if vim.fn.executable('ncdu') == 1 then
+		du_cmd='ncdu'
+	end
+
+	if vim.fn.executable('dutree') == 1 then
+		du_cmd='dutree -d1'
 	end
 
 	if vim.fn.exists(':ToggleTerm') then
-		vim.api.nvim_set_keymap('n', '<leader>vsN', [[<cmd> TermExec cmd="ncdu; exit" <CR>]], { silent = true })
+		vim.api.nvim_set_keymap('n', '<leader>vsD',
+			[[<cmd> TermExec cmd="]] .. du_cmd .. [[; exit" <CR>]],
+			{ silent = true })
 		return
 	end
 
-	vim.api.nvim_set_keymap('n', '<leader>vsN', [[<cmd> tab term ncdu; exit <CR>]], { silent = true })
+	vim.api.nvim_set_keymap('n', '<leader>vsD',
+		[[<cmd> term ]] .. du_cmd .. [[; exit <CR>]],
+		{ silent = true })
 end
 
 local function get_os_like_id()
@@ -291,9 +329,9 @@ local function setup_keymapping()
 	setup_calander()
 end
 
-setup_lazygit()
-setup_htop()
-setup_ncdu()
+setup_ui_git()
+setup_top()
+setup_disk_usage()
 setup_keymapping()
 
 local ret = {

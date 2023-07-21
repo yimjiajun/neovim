@@ -142,9 +142,9 @@ local function setup_indicate_system_key()
 	local wk_sys = require("which-key")
 	local wk_mode = { mode = 'n', prefix = "<leader>vs" }
 	local system = {
-		{ key = 'N', cmd = 'ncdu' },
-		{ key = 'H', cmd = 'htop' },
-		{ key = 'L', cmd = 'lazygit' },
+		{ key = 'D', cmd = 'disk usage' },
+		{ key = 'T', cmd = 'process' },
+		{ key = 'G', cmd = 'git' },
 		{ key = 'b', cmd = 'battery' },
 }
 
