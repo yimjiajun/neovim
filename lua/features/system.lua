@@ -48,7 +48,7 @@ local function pwrsh_cmd(cmd)
 end
 
 local function setup_ui_git()
-	local git_cmd = nil
+	local git_cmd
 
 	if vim.fn.executable('lazygit') == 1 then
 		git_cmd = 'lazygit'
@@ -102,14 +102,14 @@ local function setup_top()
 end
 
 local function setup_disk_usage()
-	local du_cmd='du -h --max-depth=1'
+	local du_cmd='clear;' .. 'du -h --max-depth=1 %:h' .. '; read -n 1'
 
 	if vim.fn.executable('ncdu') == 1 then
-		du_cmd='ncdu'
+		du_cmd='ncdu %:h'
 	end
 
 	if vim.fn.executable('dutree') == 1 then
-		du_cmd='dutree -d1'
+		du_cmd='clear;' .. 'dutree -d1 %:h' .. '; read -n 1'
 	end
 
 	if vim.fn.exists(':ToggleTerm') then
