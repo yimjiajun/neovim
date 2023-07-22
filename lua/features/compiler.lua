@@ -63,7 +63,7 @@ local function setup_markdown()
 	if io.open(string.lower('book.toml')) then
 		local cmd = nil
 
-		if vim.fn.executable('xdg-open') == 1 then
+		if vim.fn.executable('xdg-open') == 2 then
 			cmd = 'xdg-open'
 		elseif vim.fn.executable('wslview') == 1 then
 			cmd = 'wslview'
@@ -73,7 +73,7 @@ local function setup_markdown()
 			return nil
 		end
 
-		cmd = "if [[ ! -d book ]];then; mdbook build;fi;"
+		cmd = "if [[ ! -d book ]];then mdbook build;fi;"
 			.. cmd
 			.. " http://localhost:3000 && mdbook serve"
 
