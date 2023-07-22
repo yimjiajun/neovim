@@ -63,8 +63,36 @@ local function setup_key_vim_table_mode()
 	})
 end
 
+local function setup_vim_markdown()
+	vim.opt.conceallevel = 2
+	vim.g.vim_markdown_new_list_item_indent = 2
+	vim.g.vim_markdown_strikethrough = 1
+	vim.g.vim_markdown_folding_level = 1
+	vim.g.vim_markdown_folding_style_pythonic = 1
+	vim.g.vim_markdown_override_foldtext = 1
+	vim.g.vim_markdown_follow_anchor = 1
+	vim.g.vim_markdown_fenced_languages = {
+		"bash=sh",
+		"c",
+		"cpp",
+		"css",
+		"dockerfile",
+		"html",
+		"java",
+		"javascript",
+		"js=javascript",
+		"json",
+		"lua",
+		"python",
+		"sh",
+		"vim",
+		"yaml",
+	}
+end
+
 vim.g.table_mode_disable_mappings = 1
 vim.g.table_mode_map_prefix = "<leader>gT"
 autocmd_vim_table_mode()
 setup_key_vim_table_mode()
 setup_key_tabular()
+setup_vim_markdown()
