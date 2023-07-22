@@ -1,4 +1,4 @@
-local chatgpt_key = vim.fn.system("gpg --decrypt ~/.chatgpt_secret.txt.gpg 2>/dev/null")
+local chatgpt_key = vim.fn.system("pass show chatgpt/nvim 2>/dev/null")
 
 require("chatgpt").setup({
 	api_key_cmd = "echo " .. chatgpt_key,
