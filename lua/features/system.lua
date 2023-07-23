@@ -1,3 +1,6 @@
+local uv = vim.loop
+local work_dirs = {uv.cwd()}
+
 local function get_file_dir()
 	local current_file_dir = vim.fn.expand('%:p:h')
 	vim.fn.setreg('+', tostring(current_file_dir))
@@ -29,10 +32,36 @@ local function check_extension_file_exist(extension)
 	return result
 end
 
-local function set_workding_directory()
+local function set_working_directory()
 	local current_file_dir = get_file_dir()
-	print('Changing working directory to: ' .. current_file_dir)
-	vim.loop.chdir(current_file_dir)
+
+	print('change working directory to: ')
+	vim.api.nvim_echo({{current_file_dir, "WarningMsg"}}, true, {})
+
+	require('config.function').Session('save')
+	vim.cmd('cd ' .. current_file_dir)
+	table.insert(work_dirs, current_file_dir)
+end
+
+local function set_current_working_directory()
+	local current_file_dir = uv.cwd()
+
+	print('save working directory: ')
+	vim.api.nvim_echo({{current_file_dir, "WarningMsg"}}, true, {})
+
+	require('config.function').Session('save')
+	table.insert(work_dirs, current_file_dir)
+end
+local function change_working_directory()
+	local chg_work_dir = require('features.common').TableSelection(
+		work_dirs, "Change Working Directory")
+
+	require('config.function').Session('save')
+	vim.cmd('cd ' .. chg_work_dir)
+end
+
+local function clear_working_directory_history()
+	work_dirs = {uv.cwd()}
 end
 
 local function pwrsh_cmd(cmd)
@@ -307,6 +336,22 @@ local function calendar_interactive()
 end
 
 local function setup_keymapping()
+	local function setup_working_directory()
+		vim.api.nvim_set_keymap('n', '<leader>tww',
+			[[<cmd> lua require('features.system').SetWD() <CR>]],
+			{ silent = true, desc = 'set working directory'})
+		vim.api.nvim_set_keymap('n', '<leader>tws',
+			[[<cmd> lua require('features.system').SetCurrentWD() <CR>]],
+			{ silent = true, desc = 'set current working directory'})
+		vim.api.nvim_set_keymap('n', '<leader>twg',
+			[[<cmd> lua require('features.system').GetWD() <CR>]],
+			{ silent = true, desc = 'get working directory'})
+
+		vim.api.nvim_set_keymap('n', '<leader>twc',
+			[[<cmd> lua require('features.system').ClrWD() <CR>]],
+			{ silent = true, desc = 'clear working directory'})
+	end
+
 	local function setup_calander()
 		if vim.fn.executable('khal') == 0 then
 			return
@@ -314,18 +359,21 @@ local function setup_keymapping()
 
 		vim.api.nvim_set_keymap('n', '<leader>vct',
 			[[<cmd> sp | term khal list today <CR>]],
-			{ silent = true })
+			{ silent = true, desc = 'khal list today'})
 
 		vim.api.nvim_set_keymap('n', '<leader>vci',
 			[[<cmd> lua require('features.system').GetCalendar() <CR>]],
-		{ silent = true })
+		{ silent = true, desc = 'show calendar' })
 
 		vim.api.nvim_set_keymap('n', '<leader>vcc',
 			[[<cmd> sp | term khal calendar --format '● {start-time} | {title}' <CR>]],
-			{ silent = true })
+			{ silent = true, desc = 'khal calendar agenda'})
 	end
 
-	vim.api.nvim_set_keymap('n', '<leader>vsb', [[<cmd> lua require('features.system').GetBatInfo() <CR>]], { silent = true })
+	vim.api.nvim_set_keymap('n', '<leader>vsb',
+		[[<cmd> lua require('features.system').GetBatInfo() <CR>]],
+		{ silent = true, desc = 'show battery info'})
+	setup_working_directory()
 	setup_calander()
 end
 
@@ -336,7 +384,10 @@ setup_keymapping()
 
 local ret = {
 	GetBatInfo = get_battery_info,
-	SetWD = set_workding_directory,
+	SetWD = set_working_directory,
+	SetCurrentWD = set_current_working_directory,
+	GetWD = change_working_directory,
+	ClrWD = clear_working_directory_history,
 	GetFileDir = get_file_dir,
 	GetFileName = get_file_name,
 	GetPath = get_path,
