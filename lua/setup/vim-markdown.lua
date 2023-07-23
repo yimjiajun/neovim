@@ -1,3 +1,8 @@
+local function init()
+	vim.g.table_mode_disable_mappings = 1
+	vim.g.table_mode_map_prefix = "<leader>gT"
+end
+
 local function setup_key_tabular()
 	if pcall(require, "tabular") == 0 then
 		return
@@ -90,9 +95,13 @@ local function setup_vim_markdown()
 	}
 end
 
-vim.g.table_mode_disable_mappings = 1
-vim.g.table_mode_map_prefix = "<leader>gT"
 autocmd_vim_table_mode()
 setup_key_vim_table_mode()
 setup_key_tabular()
 setup_vim_markdown()
+
+local ret = {
+	init = init,
+}
+
+return ret

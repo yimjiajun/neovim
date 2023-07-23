@@ -155,6 +155,9 @@ require("lazy").setup({
 				"godlygeek/tabular",
 				'dhruvasagar/vim-table-mode' },
 			ft = { "markdown" },
+			init = function ()
+				require('setup.vim-markdown').init()
+			end,
 			config = function()
 				require('setup.vim-markdown')
 			end,
