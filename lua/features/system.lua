@@ -25,6 +25,27 @@ local function get_path()
 	return path
 end
 
+local function get_files(path)
+	local files = {}
+	local handle = uv.fs_scandir(path)
+
+	if handle then
+		while true do
+			local name, type = uv.fs_scandir_next(handle)
+
+			if not name then
+				break
+			end
+
+			if type == "file" then
+				table.insert(files, name)
+			end
+		end
+	end
+
+	return files
+end
+
 local function check_extension_file_exist(extension)
 	local cmd = "find . -type f -name " .. '"*."' .. extension .. " -print -quit | wc -l"
 	local result = tonumber(vim.fn.system(cmd))
@@ -392,6 +413,7 @@ local ret = {
 	GetFileName = get_file_name,
 	GetPath = get_path,
 	GetFullPath = get_full_path,
+	GetFiles = get_files,
 	GetInstallPackageCmd = get_install_package_cmd,
 	GetOsLikeId = get_os_like_id,
 	ChkExtExist = check_extension_file_exist,
