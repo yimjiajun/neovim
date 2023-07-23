@@ -149,6 +149,21 @@ local function session(mode)
 		end
 
 		vim.cmd("mksession! " .. src)
+
+	elseif mode == "selection" then
+		local sessions = require('features.system').GetFiles(path)
+		local lists = {}
+
+		for i, v in ipairs(sessions) do
+			lists[i] = string.format("%3d. %s", i, v)
+		end
+
+		require('features.common').DisplayTittle("Select Session to Load")
+		local s = vim.fn.inputlist(lists)
+
+		if s > 0 then
+			vim.cmd("source " .. path .. '/' .. sessions[s])
+		end
 	else
 		if vim.fn.isdirectory(path) == 1 and vim.fn.filereadable(src) == 1 then
 			vim.cmd("source " .. src)

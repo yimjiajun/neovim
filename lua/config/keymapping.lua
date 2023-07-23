@@ -111,6 +111,7 @@ end
 
 local function setting_key_session()
   vim.api.nvim_set_keymap('n', '<leader>s', [[<cmd> lua KeyFunc.Session("load") <CR>]], {silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>S', [[<cmd> lua KeyFunc.Session("selection") <CR>]], {silent = true})
 end
 
 local function setting_key_features()
