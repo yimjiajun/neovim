@@ -60,7 +60,7 @@ require("toggleterm").setup{
 }
 
 local function toggleterm_setup_keymapping()
-  vim.api.nvim_set_keymap('n', "<leader>tf", ":ToggleTerm <CR>", { silent = true, noremap = true })
+  vim.api.nvim_set_keymap('n', "<leader>tf", ":ToggleTerm direction=float <CR>", { silent = true, noremap = true })
   vim.api.nvim_set_keymap('n', "<leader>ts", ":ToggleTerm direction=horizontal<CR>", { silent = true, noremap = true })
   vim.api.nvim_set_keymap('n', "<leader>tv", ":ToggleTerm direction=vertical<CR>", { silent = true, noremap = true })
 end
