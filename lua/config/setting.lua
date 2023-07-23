@@ -3,7 +3,13 @@ local function Setting_view()
 	if vim.fn.trim(vim.fn.execute('colorscheme')) == 'default' then
 		vim.cmd('colorscheme habamax')
 	end
-	vim.opt.timeoutlen = 300
+
+	if vim.o.loadplugins == true then
+		vim.opt.timeoutlen = 100
+	else
+		vim.opt.timeoutlen = 300
+	end
+
 	vim.opt.updatetime = 400
 	vim.opt.showmode = true
 	vim.opt.laststatus = 2
