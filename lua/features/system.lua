@@ -364,7 +364,7 @@ local function setup_keymapping()
 		vim.api.nvim_set_keymap('n', '<leader>tws',
 			[[<cmd> lua require('features.system').SetCurrentWD() <CR>]],
 			{ silent = true, desc = 'set current working directory'})
-		vim.api.nvim_set_keymap('n', '<leader>twg',
+		vim.api.nvim_set_keymap('n', '<leader>twr',
 			[[<cmd> lua require('features.system').GetWD() <CR>]],
 			{ silent = true, desc = 'get working directory'})
 

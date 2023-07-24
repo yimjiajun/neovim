@@ -131,6 +131,12 @@ wk.register({
 		v = 'terminal vsplit',
 		c = 'ctags generator',
 		e = 'file format',
+		w = { name = 'working directory',
+			w = 'chg & save current path',
+			s = 'save current path',
+			r = 'restore from saved path',
+			c = 'clear saved path',
+		},
 	},
 }, { mode = "n", prefix = "<leader>", })
 
