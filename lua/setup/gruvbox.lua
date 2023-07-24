@@ -13,6 +13,7 @@ if vim.g.gruvbox_baby_transparent_mode == 0 then
 		CursorLine = {bg = colors.dark},
 
 		Normal = {bg = colors.dark0},
+		NormalNC = {bg = '#000000'},
 		NormalFloat = {bg = 'none'},
 		FloatBorder = {bg = 'none'},
 		StatusLine = {bg = 'none'},
