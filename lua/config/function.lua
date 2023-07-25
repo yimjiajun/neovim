@@ -151,7 +151,7 @@ local function session(mode)
 		vim.cmd("mksession! " .. src)
 
 	elseif mode == "selection" then
-		local sessions = require('features.system').GetFiles(path)
+		local sessions = vim.fn.systemlist("ls -t " .. path)
 		local lists = {}
 
 		for i, v in ipairs(sessions) do
