@@ -202,7 +202,7 @@ local function setting_key_telescope()
 		{ silent = true, desc = 'search files' })
 
 	vim.api.nvim_set_keymap('n', "<leader>fF",
-		[[<cmd> lua require('telescope.builtin').find_files({hidden=false, no_ignore=true, no_ignore_parent=true}) <CR>]],
+		[[<cmd> lua require('telescope.builtin').find_files({hidden=true, no_ignore=true, no_ignore_parent=true}) <CR>]],
 		{ silent = true, desc = 'search all files' })
 
 	if pcall(require, "which-key") then
