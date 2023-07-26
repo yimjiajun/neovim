@@ -4,7 +4,7 @@ display_center() {
 	local text="$1"
 	local text_width=${#text}
 	local screen_width="$(tput cols)"
-	local padding_width=$(( ($screen_width - $text_width) / 2 ))
+	local padding_width=$(( (screen_width - text_width) / 2 ))
 	printf "%${padding_width}s" " "
 	printf "%s\n" "$text"
 }
@@ -21,7 +21,7 @@ display_title () {
 		echo ""
 
 		echo -e -n "\e[1;33m"
-		if [ $delimiter -eq 1 ]; then
+		if [ "$delimiter" -eq 1 ]; then
 			display_center "$text"
 		fi
 		echo -e -n "\e[0m"
@@ -86,19 +86,19 @@ function install_nvim {
 	local path=$(mktemp -d)
 
 	echo -e "● Download neovim repository..." >&1
-	git clone --depth 1 https://github.com/neovim/neovim -b stable ${path} || {
+	git clone --depth 1 https://github.com/neovim/neovim -b stable "${path}" || {
 		echo -e "\033[31mError: git clone neovim failed!\033[0m" >&2
 		exit 1
 	}
 
 	echo -e "● Build neovim..." >&1
-	make -C ${path} CMAKE_BUILD_TYPE=RelWithDebInfo 1>/dev/null || {
+	make -C "${path}" CMAKE_BUILD_TYPE=RelWithDebInfo 1>/dev/null || {
 		echo -e "\033[31mError: make neovim failed!\033[0m" >&2
 		exit 1
 	}
 
 	echo -e "● Install neovim..." >&1
-	sudo make -C ${path} install 1>/dev/null || {
+	sudo make -C "${path}" install 1>/dev/null || {
 		echo -e "\033[31mError: make install neovim failed!\033[0m" >&2
 		exit 1
 	}
@@ -139,7 +139,7 @@ function install_node {
 		return 1
 	}
 
-	$SHELL -c "source ${HOME}/.$(basename $SHELL)rc"
+	$SHELL -c "source ${HOME}/.$(basename "$SHELL")rc"
 
 	local version=$(node --version | sed 's/^v\([0-9]\{1,\}\)\..*/\1/')
 
@@ -188,12 +188,12 @@ function install_ctags {
 
 	echo -e "● Install ctags ..." >&1
 
-	git clone https://github.com/universal-ctags/ctags.git $path 1>/dev/null || {
+	git clone https://github.com/universal-ctags/ctags.git "$path" 1>/dev/null || {
 		echo -e "\033[31mError: git clone ctags failed!\033[0m" >&2
 		return 1
 	}
 
-	cd $path
+	cd "$path" || exit
 
 	echo -e "● ctags auto generation ..." >&1
 	./autogen.sh 1>/dev/null || {
@@ -298,24 +298,24 @@ function install_lazygit {
 	echo -e "● lazygit installation" >&1
 
 	if [[ $OSTYPE == linux-gnu* ]]; then
-		cd $tmp_path
+		cd "$tmp_path" || exit
 		echo -e "● Download lazygit ..." >&1
 		LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-		curl -Lo $tmp_path/lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" 1>/dev/null || {
+		curl -Lo "$tmp_path"/lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz" 1>/dev/null || {
 			echo -e "\033[31mError: Download lazygit failed!\033[0m" >&2
 			return 1
 		}
 
 		echo -e "● Extract lazygit ..." >&1
 
-		tar xf $tmp_path/lazygit.tar.gz -C $tmp_path || {
+		tar xf "$tmp_path"/lazygit.tar.gz -C "$tmp_path" || {
 			echo -e "\033[31mError: Extract lazygit failed!\033[0m" >&2
 			return 1
 		}
 
 		echo -e "● Install lazygit ..." >&1
 
-		sudo install $tmp_path/lazygit /usr/local/bin || {
+		sudo install "$tmp_path"/lazygit /usr/local/bin || {
 			echo -e "\033[31mError: Install lazygit failed!\033[0m" >&2
 			return 1
 		}
@@ -368,28 +368,28 @@ function install_cargo {
 	display_center "Install cargo"
 
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain none -y || {
-		$common display_error "install $tool failed !"
+		echo -e "\033[31mError: Install rustup failed!\033[0m" >&2
 		return 1
 	}
 
 	if [[ -f "$HOME/.cargo/env" ]]; then
-		if [[ -f "$HOME/.$(basename $SHELL)rc" ]] && \
-			[[ $(grep -c "source $HOME/.cargo/env" "$HOME/.$(basename $SHELL)rc") -eq 0 ]]; \
+		if [[ -f "$HOME/.$(basename "$SHELL")rc" ]] && \
+			[[ $(grep -c "source $HOME/.cargo/env" "$HOME/.$(basename "$SHELL")rc") -eq 0 ]]; \
 		then
-			echo "source $HOME/.cargo/env" >> $HOME/.$(basename $SHELL)rc
+			echo "source $HOME/.cargo/env" >> "$HOME"/".$(basename "$SHELL")rc"
 		fi
 
 		source "$HOME/.cargo/env" || {
-			$common display_error "source $HOME/.cargo/env failed !"
+			echo -e "\033[31mError: source $HOME/.cargo/env failed!\033[0m" >&2
 			return 1
 		}
 
 		rustup default stable || {
-			$common display_error "install stable failed !"
+			echo -e "\033[31mError: rustup default stable failed!\033[0m" >&2
 			return 1
 		}
 	else
-		$common display_error ".cargo/eve not found !"
+		echo -e "\033[31mError: $HOME/.cargo/env not found!\033[0m" >&2
 		return 1
 	fi
 }
@@ -408,7 +408,7 @@ function install_dutree {
 	fi
 
 	cargo install dutree 1>/dev/null || {
-		$common display_error "install dutree failed !"
+		echo -e "\033[31mError: Install dutree failed!\033[0m" >&2
 		return 1
 	}
 
@@ -423,7 +423,7 @@ function install_gitui {
 
 	display_center "Install gitui"
 
-	local arch=$(uname -m)
+	local arch="$(uname -m)"
 	local pkg=nil
 	local ver='v0.23.0'
 
@@ -445,13 +445,13 @@ function install_gitui {
 
 	local tmp_path=$(mktemp -d)
 
-	curl -Lo $tmp_path/$pkg "https://github.com/extrawurst/gitui/releases/download/${ver}/${pkg}" || {
-		$common display_error "download gitui failed !"
+	curl -Lo "$tmp_path"/"$pkg" "https://github.com/extrawurst/gitui/releases/download/${ver}/${pkg}" || {
+		echo -e "\033[31mError: download gitui failed!\033[0m" >&2
 		return 1
 	}
 
-	tar -zxf $tmp_path/$pkg -C $HOME/.local/bin/ || {
-		$common display_error "install gitui failed !"
+	tar -zxf "$tmp_path"/"$pkg" -C "$HOME"/.local/bin/ || {
+		echo -e "\033[31mError: Extract gitui failed!\033[0m" >&2
 		return 1
 	}
 
@@ -471,17 +471,17 @@ function main {
 		'install_cargo'		'install_dutree'	'install_gitui' \
 	)
 
-	for func in ${intsall_pkgs[@]}; do
+	for func in "${intsall_pkgs[@]}"; do
 		display_title "$func"
 		$func || {
-			display_center '\e[31minstall $func failed !\e[0m'
-			failed_pkgs+=($func)
+			echo --e "\e[31mError: $func failed !\e[0m" >&2
+			failed_pkgs+=("$func")
 			install_failed=1
 		}
 
 	done
 
-	$SHELL -c "source ${HOME}/.$(basename $SHELL)rc"
+	$SHELL -c "source ${HOME}/.$(basename "$SHELL")rc"
 
 	if [[ $install_failed -eq 1 ]]; then
 		echo -e "\e[31mError: install failed !\e[0m" >&2
@@ -496,7 +496,7 @@ display_title "Setup Neovim"
 
 case "$OSTYPE" in
 	"linux-gnu"*)
-		sudo apt-get update -y 1>/dev/null && sudo apt-get upgrade -y 1>/dev/null || {
+		(sudo apt-get update -y 1>/dev/null && sudo apt-get upgrade -y 1>/dev/null) || {
 			echo -e "\033[31mError: Update apt failed!\033[0m" >&2
 			exit 1
 		}
