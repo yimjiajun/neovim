@@ -3,3 +3,4 @@ plugin
 *.log
 usr
 spell
+node_modules

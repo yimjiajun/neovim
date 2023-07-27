@@ -17,27 +17,15 @@ require("lazy").setup({
 				vim.cmd([[TSUpdateSync]])
 			end,
 		},
-		{ 'neovim/nvim-lspconfig' },
-		{ "hrsh7th/nvim-cmp",
-			after = { "nvim-lspconfig" },
-			dependencies = {
-				"onsails/lspkind-nvim",
-				"hrsh7th/cmp-buffer",
-				"hrsh7th/cmp-path",
-				"hrsh7th/cmp-nvim-lsp",
-				"hrsh7th/cmp-nvim-lua",
-				"hrsh7th/cmp-calc",
-				"hrsh7th/cmp-emoji",
-				"hrsh7th/cmp-vsnip",
-				"hrsh7th/vim-vsnip-integ",
-				"hrsh7th/vim-vsnip",
-				"haorenW1025/completion-nvim",
-				"ray-x/lsp_signature.nvim",
-			},
-			event = "VimEnter",
-			config = function()
-				require ("setup.cmp")
-			end,
+
+		{ 'neoclide/coc.nvim',
+			branch = 'release',
+			build = ':CocInstall coc-clangd coc-lua coc-markdownlint ' ..
+				'@yaegassy/coc-marksman coc-rust-analyzer ' ..
+				'coc-pyright coc-sh coc-snippet',
+			init = function ()
+				require('setup.coc')
+			end
 		},
 
 		{ "iamcco/markdown-preview.nvim",
