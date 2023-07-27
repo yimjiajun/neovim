@@ -176,6 +176,10 @@ function install_python {
 		echo -e "Install python env for cmake and py lsp ..." >&1
 		$pkg_install_cmd python3.10-venv
 	fi
+
+   python3 -m pip install --user --upgrade pynvim 1>/dev/null || {
+	   echon -e "\033[31mError: Install pynvim failed!\033[0m" >&2
+   }
 }
 
 function install_ctags {

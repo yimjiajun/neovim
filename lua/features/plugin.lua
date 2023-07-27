@@ -22,7 +22,7 @@ require("lazy").setup({
 			branch = 'release',
 			build = ':CocInstall coc-clangd coc-lua coc-markdownlint ' ..
 				'@yaegassy/coc-marksman coc-rust-analyzer ' ..
-				'coc-pyright coc-sh coc-snippet',
+				'coc-pyright coc-sh coc-snippets',
 			init = function ()
 				require('setup.coc')
 			end
