@@ -100,8 +100,9 @@ local function setup_telescope()
 				},
 			},
 			borderchars = {
-				prompt = { "─", " ", " ", " ", "─", "─", " ", " " },
-				results = { "─", " ", " ", " ", "─", "─", " ", " " },
+				prompt = { " ", " ", " ", " ", " ", " ", " ", " " },
+				results = { " ", " ", " ", " ", " ", " ", " ", " " },
+				preview = { " ", " ", " ", " ", " ", " ", " ", " " },
 			},
 			prompt_prefix=' > ',
 		},
