@@ -104,7 +104,7 @@ local function setup_telescope()
 				results = { " ", " ", " ", " ", " ", " ", " ", " " },
 				preview = { " ", " ", " ", " ", " ", " ", " ", " " },
 			},
-			prompt_prefix=' > ',
+			prompt_prefix=' ★ ',
 		},
 		extensions = extensions,
 	}

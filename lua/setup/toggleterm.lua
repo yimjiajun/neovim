@@ -19,13 +19,13 @@ require("toggleterm").setup{
 		-- highlights which map to a highlight group name and a table of it's values
 		-- NOTE: this is only a subset of values, any group placed here will be set for the terminal window split
 		Normal = {
-			link = "Normal",
+			link = "NormalFloat",
 		},
 		NormalFloat = {
-			link = 'Normal'
+			link = 'NormalFloat'
 		},
 		FloatBorder = {
-			-- link = "NormalFloat",
+			link = "NormalFloat",
 		},
 	},
 	shade_terminals = true, -- NOTE: this option takes priority over highlights specified so if you specify Normal highlights you should set this to false
