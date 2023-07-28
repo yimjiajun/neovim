@@ -42,14 +42,6 @@ require("lazy").setup({
 			end
 		},
 
-		{ 'williamboman/mason-lspconfig.nvim',
-			after = { "mason.nvim", "nvim-lspconfig" },
-			dependencies = { "williamboman/mason.nvim" },
-			config = function()
-				require('setup.mason')
-			end
-		},
-
 		{	'nvim-telescope/telescope.nvim',
 			tag = '0.1.1',
 			dependencies = { 'nvim-lua/plenary.nvim' },
@@ -207,7 +199,6 @@ require("lazy").setup({
 				require('setup.gruvbox')
 			end,
 		},
-
 	},
 
 	defaults = {
