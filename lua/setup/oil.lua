@@ -76,9 +76,9 @@ require("oil").setup({
     padding = 2,
     max_width = 100,
     max_height = 0,
-    border = "rounded",
+    border = "shadow",
     win_options = {
-      winblend = 20,
+      winblend = 0,
     },
   },
   -- Configuration for the actions floating preview window
@@ -121,8 +121,8 @@ require("oil").setup({
 })
 
 local function setup_keymapping()
-	vim.api.nvim_set_keymap('n', '<leader>e', [[<cmd> lua require("oil").toggle_float(vim.fn.getcwd()) <CR>]], { silent = true })
-	vim.api.nvim_set_keymap('n', '<leader>E', [[<cmd> lua require("oil").toggle_float(require("oil").get_current_dir()) <CR>]], { silent = true })
+	vim.api.nvim_set_keymap('n', '<leader>e', [[<cmd> lua require("oil").open(vim.fn.getcwd()) <CR>]], { silent = true })
+	vim.api.nvim_set_keymap('n', '<leader>E', [[<cmd> lua require("oil").open() <CR>]], { silent = true })
 end
 
 setup_keymapping()
