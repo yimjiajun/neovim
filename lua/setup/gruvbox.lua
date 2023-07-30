@@ -9,7 +9,7 @@ vim.g.gruvbox_baby_use_original_palette = 0
 
 if vim.g.gruvbox_baby_transparent_mode == 0 then
 	vim.g.gruvbox_baby_highlights = {
-		Visual = {bg = colors.background},
+		Visual = {bg = colors.medium_gray},
 		CursorLine = {bg = '#273842'},
 		NormalFloat = {bg = colors.background},
 		FloatBorder = {bg = colors.dark},
