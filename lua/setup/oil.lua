@@ -121,8 +121,25 @@ require("oil").setup({
 })
 
 local function setup_keymapping()
-	vim.api.nvim_set_keymap('n', '<leader>e', [[<cmd> lua require("oil").open(vim.fn.getcwd()) <CR>]], { silent = true })
-	vim.api.nvim_set_keymap('n', '<leader>E', [[<cmd> lua require("oil").open() <CR>]], { silent = true })
+	vim.keymap.set('n', '<leader>e',
+	function()
+		if vim.bo.filetype == "oil" then
+			require("oil").close()
+			return
+		end
+
+		require("oil").open(vim.fn.getcwd())
+	end, { silent = true })
+
+	vim.keymap.set('n', '<leader>E',
+	function ()
+		if vim.bo.filetype == "oil" then
+			require("oil").close()
+			return
+		end
+
+		require("oil").open()
+	end, { silent = true })
 end
 
 setup_keymapping()
