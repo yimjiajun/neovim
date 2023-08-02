@@ -129,7 +129,7 @@ vim.api.nvim_create_autocmd( "FileType", {
 		vim.cmd('setlocal shiftwidth=2')
 		vim.cmd('setlocal expandtab')
 		vim.cmd('setlocal spell')
-		vim.cmd('highlight MarkdownHeading guifg=Black guibg=DarkOrange')
+		vim.cmd('highlight MarkdownHeading guifg=Black guibg=DarkOrange gui=bold')
 		vim.cmd([[match MarkdownHeading /^#\s.*/]])
 	end,
 })

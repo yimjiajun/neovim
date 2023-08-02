@@ -73,7 +73,8 @@ require("lazy").setup({
 			dependencies = { 'nvim-telescope/telescope.nvim' },
 			config = function ()
 				require('setup.telescope').setup_heading()
-			end
+			end,
+			ft = { "markdown" },
 		},
 
 		{ 'numToStr/Comment.nvim',
@@ -157,7 +158,8 @@ require("lazy").setup({
 					height_ratio = 0.9,
 				})
 			end,
-			cmd = 'Glow'
+			cmd = 'Glow',
+			ft = { "markdown" },
 		},
 
 		{ 'stevearc/oil.nvim',
