@@ -143,12 +143,6 @@ require("lazy").setup({
 			end,
 		},
 
-		{ 'rmagatti/goto-preview',
-			config = function()
-				require('setup.goto-preview')
-			end
-		},
-
 		{ "ellisonleao/glow.nvim",
 			config = function ()
 				local current_window = vim.api.nvim_get_current_win()

@@ -197,3 +197,16 @@ vim.cmd([[
 		\ set eventignore-=FileType |
 		\ endif
 ]])
+
+vim.api.nvim_create_augroup( "plugin", { clear = true })
+
+vim.api.nvim_create_autocmd( "BufWinEnter", {
+	desc = "Treesitter plugin highlight",
+	group = "plugin",
+	pattern = "*",
+	callback = function()
+		if vim.fn.exists(":TSBufEnable") then
+			vim.cmd('TSBufEnable highlight')
+		end
+	end,
+})
