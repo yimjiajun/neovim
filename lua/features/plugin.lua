@@ -236,3 +236,5 @@ require("lazy").setup({
 		},
 	},
 })
+
+require('config.autocmd').plugin_autocmd_setup()
