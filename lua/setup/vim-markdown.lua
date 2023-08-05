@@ -76,6 +76,7 @@ local function setup_vim_markdown()
 	vim.g.vim_markdown_folding_style_pythonic = 1
 	vim.g.vim_markdown_override_foldtext = 1
 	vim.g.vim_markdown_follow_anchor = 1
+	vim.g.vim_markdown_toc_autofit = 1
 	vim.g.vim_markdown_fenced_languages = {
 		"bash=sh",
 		"c",
