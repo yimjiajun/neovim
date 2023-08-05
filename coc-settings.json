@@ -10,31 +10,31 @@
 				"buildDirectory": "build"
 			}
 		},
-		 "vimls": {
-		    "command": "vim-language-server",
-		    "args": ["--stdio"],
-		    "initializationOptions": {
-		      "isNeovim": false,
-		      "iskeyword": "@,48-57,_,192-255,-#",
-		      "vimruntime": "",
-		      "runtimepath": "",
-		      "diagnostic": {
-			"enable": true
-		      },
-		      "indexes": {
-			"runtimepath": true,
-			"gap": 100,
-			"count": 3,
-			"projectRootPatterns" : ["strange-root-pattern", ".git", "autoload", "plugin"]
-		      },
-		      "suggest": {
-			"fromVimruntime": true,
-			"fromRuntimepath": false
-		      }
-		    },
-		    "filetypes": [ "vim" ]
+		"vimls": {
+			"command": "vim-language-server",
+			"args": ["--stdio"],
+			"filetypes": [ "vim" ],
+			"initializationOptions": {
+				"isNeovim": false,
+				"iskeyword": "@,48-57,_,192-255,-#",
+				"vimruntime": "",
+				"runtimepath": "",
+				"diagnostic": {
+					"enable": true
+				},
+				"indexes": {
+					"runtimepath": true,
+					"gap": 100,
+					"count": 3,
+					"projectRootPatterns" : ["strange-root-pattern", ".git", "autoload", "plugin"]
+				},
+				"suggest": {
+					"fromVimruntime": true,
+					"fromRuntimepath": false
+				},
+			},
 		},
-
-		"snippets.ultisnips.pythonPrompt": false
 	},
+
+	"snippets.ultisnips.pythonPrompt": false,
 }
