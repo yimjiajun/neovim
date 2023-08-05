@@ -31,7 +31,7 @@ keyset("i", "<c-p>", [[coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"]], opts)
 keyset("i", "<cr>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], opts)
 
 -- Use <c-space> to trigger completion
-keyset("i", "<c-j>", "coc#refresh()", {silent = true, expr = true})
+keyset("i", "<c-l>", "coc#refresh()", {silent = true, expr = true})
 -- Use `[g` and `]g` to navigate diagnostics
 -- Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
 keyset("n", "[g", "<Plug>(coc-diagnostic-prev)", {silent = true})
