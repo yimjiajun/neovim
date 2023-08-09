@@ -85,6 +85,7 @@ wk.register({
 	C = 'quickfix (close)',
 	j = 'quickfix (next)',
 	k = 'quickfix (previous)',
+	d = 'Debugger',
 	v = { name = 'View',
 		s = { name = 'System'},
 		c = { name = 'Calendar'},

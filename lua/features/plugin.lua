@@ -195,6 +195,39 @@ require("lazy").setup({
 				require('setup.gruvbox')
 			end,
 		},
+
+		{ "mfussenegger/nvim-dap",
+			build = "pip3 install debugpy",
+			config = function()
+				require('setup.dap').SetupKeymap()
+			end,
+		},
+
+		{ "mfussenegger/nvim-dap-python",
+			dependencies = { "mfussenegger/nvim-dap" },
+			build = function ()
+				os.execute([[
+					mkdir ~/.local/share/.virtualenvs
+					cd ~/.local/share/.virtualenvs
+					python -m venv debugpy
+					debugpy/bin/python -m pip install debugpy
+				]])
+			end,
+			ft = { "python" },
+			config = function()
+				require('dap-python').setup('~/.local/share/.virtualenvs/debugpy/bin/python')
+				require('setup.dap').SetupKeymap('python')
+				require('setup.dap').SetupPython()
+			end,
+		},
+
+		{ "rcarriga/nvim-dap-ui",
+			dependencies = { "mfussenegger/nvim-dap" },
+			config = function()
+				require('dapui').setup()
+				require('setup.dap').SetupUI()
+			end,
+		},
 	},
 
 	defaults = {
