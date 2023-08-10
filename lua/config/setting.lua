@@ -1,7 +1,8 @@
 local function Setting_view()
 	vim.opt.background = "dark"
+
 	if vim.fn.trim(vim.fn.execute('colorscheme')) == 'default' then
-		vim.cmd('colorscheme habamax')
+		vim.cmd('colorscheme default')
 	end
 
 	if vim.o.loadplugins == true then
@@ -74,6 +75,7 @@ local function Setting_netrw()
 end
 
 vim.opt.compatible = false
+
 Setting_view()
 Setting_editor()
 Setting_buffer()

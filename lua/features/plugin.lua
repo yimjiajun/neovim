@@ -190,12 +190,6 @@ require("lazy").setup({
 			end,
 		},
 
-		{ "luisiacc/gruvbox-baby",
-			config = function()
-				require('setup.gruvbox')
-			end,
-		},
-
 		{ "mfussenegger/nvim-dap",
 			build = "pip3 install debugpy",
 			config = function()
@@ -228,6 +222,21 @@ require("lazy").setup({
 				require('setup.dap').SetupUI()
 			end,
 		},
+
+		{ "olimorris/onedarkpro.nvim",
+			priority = 1000,
+			config = function()
+				require('setup.color_scheme').OneDarkPro()
+			end,
+		},
+
+		{ "luisiacc/gruvbox-baby",
+			priority = 1000,
+			config = function()
+				require('setup.color_scheme').GruvboxBaby()
+			end,
+		},
+
 	},
 
 	defaults = {

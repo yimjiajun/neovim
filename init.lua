@@ -1,3 +1,10 @@
+vim.g.custom = {
+	colorscheme = {
+		theme = 'onedarkpro',
+		transparency = false,
+	},
+}
+
 local config_path = vim.fn.stdpath("config")
 local config_dir = {"config", "features", "usr"}
 
