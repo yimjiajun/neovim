@@ -192,7 +192,6 @@ require("lazy").setup({
 		},
 
 		{ "mfussenegger/nvim-dap",
-			build = "pip3 install debugpy",
 			config = function()
 				require('setup.dap').SetupKeymap()
 			end,
@@ -202,7 +201,7 @@ require("lazy").setup({
 			dependencies = { "mfussenegger/nvim-dap" },
 			build = function ()
 				os.execute([[
-					mkdir ~/.local/share/.virtualenvs
+					mkdir ~/.local/share/.virtualenvs 1>/dev/null 2>&1
 					cd ~/.local/share/.virtualenvs
 					python -m venv debugpy
 					debugpy/bin/python -m pip install debugpy
