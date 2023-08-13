@@ -1,5 +1,16 @@
 {
 	"languageserver": {
+		"bash": {
+			"command": "bash-language-server",
+			"args": ["start"],
+			"filetypes": ["sh"],
+			"ignoredRootPaths": ["~"],
+		},
+		"clangd": {
+			"command": "clangd",
+			"rootPatterns": ["compile_flags.txt", "compile_commands.json"],
+			"filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"]
+		},
 		"cmake": {
 			"command": "cmake-language-server",
 			"filetypes": ["cmake"],
@@ -9,6 +20,20 @@
 			"initializationOptions": {
 				"buildDirectory": "build"
 			}
+		},
+		"lua": {
+			"command": "lua-lsp",
+			"filetypes": ["lua"]
+		},
+		"rust": {
+			"command": "rust-analyzer",
+			"filetypes": ["rust"],
+			"rootPatterns": ["Cargo.toml"],
+			"workspace.ignoredFolders": [
+				"$HOME",
+				"$HOME/.cargo/**",
+				"$HOME/.rustup/**"
+			],
 		},
 		"vimls": {
 			"command": "vim-language-server",

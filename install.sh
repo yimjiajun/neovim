@@ -28,8 +28,7 @@ display_title () {
 	done
 }
 
-
-function install_build_prerequisites {
+function pre_install_build_prerequisites {
 	echo -e "● Install build prerequisites..." >&1
 
 	if [[ $OSTYPE == "linux-gnu" ]]; then
@@ -52,6 +51,7 @@ function install_build_prerequisites {
 			git cmake ninja-build gperf \
 			ccache dfu-util device-tree-compiler wget \
 			python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file \
+			python-is-python3 \
 			make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1 \
 			1>/dev/null || {
 				echo -e "\033[31mError: Install build prerequisites failed!\033[0m" >&2
@@ -60,6 +60,7 @@ function install_build_prerequisites {
 
 		$pkg_install_cmd \
 			build-essential libncurses-dev libjansson-dev \
+			libreadline-dev \
 			1>/dev/null || {
 				echo -e "\033[31mError: Install build prerequisites failed!\033[0m" >&2
 				exit 1
@@ -77,7 +78,7 @@ function install_build_prerequisites {
 	fi
 }
 
-function install_nvim {
+function post_install_nvim {
 
 	if [[ $(command -v nvim) ]]; then
 		return 0
@@ -106,7 +107,7 @@ function install_nvim {
 	echo -e "● NeoVim installed on /usr/local/" >&1
 }
 
-function install_node {
+function pre_install_node {
 	if [[ "$(command -v node)" ]]; then
 		return 0
 	fi
@@ -151,30 +152,25 @@ function install_node {
 	return 0
 }
 
-function install_clangd {
-	if [[ "$(command -v clangd)" ]]; then
-		return 0
-	fi
+function pre_install_python {
+	$pkg_install_cmd python3 1>/dev/null || {
+		echo -e "\033[31mError: Install python3 failed!\033[0m" >&2
+		return 1
+	}
 
-	echo -e "Install clangd ..." >&1
-
-	if [[ "$OSTYPE" == "linux-gnu" ]]; then
-		sudo apt install -y clangd-12
-		sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-12 100
-	elif [[ "$OSTYPE" == "darwin"* ]]; then
-		brew install llvm
-	fi
-}
-
-function install_python {
-	$pkg_install_cmd python3
-	$pkg_install_cmd python3-pip
+	$pkg_install_cmd python3-pip 1>/dev/null || {
+		echo -e "\033[31mError: Install python3-pip failed!\033[0m" >&2
+		return 1
+	}
 
 	version=$(lsb_release -rs)
 
 	if awk 'BEGIN { exit !('"$version"' >= 22.04) }'; then
 		echo -e "Install python env for cmake and py lsp ..." >&1
-		$pkg_install_cmd python3.10-venv
+		$pkg_install_cmd python3.10-venv 1>/dev/null || {
+			echo -e "\033[31mError: Install python3.10-venv failed!\033[0m" >&2
+			return 1
+		}
 	fi
 
    python3 -m pip install --user --upgrade pynvim 1>/dev/null || {
@@ -363,7 +359,7 @@ function install_bpytop {
 	}
 }
 
-function install_cargo {
+function pre_install_cargo {
 
 	if [[ $(command -v rustup) ]]; then
 		return 0
@@ -462,34 +458,263 @@ function install_gitui {
 	return 0
 }
 
-function main {
-	local install_failed=0
-	local failed_pkgs=()
-	local intsall_pkgs=(\
-		'install_build_prerequisites' \
-		'install_nvim' \
-		'install_node'		'install_clangd'	'install_python' \
-		'install_ctags'		'install_ripgrep'	'install_ranger' \
-		'install_htop'		'install_fzf'		'install_ncdu' \
-		'install_lazygit'	'install_khal'		'install_bpytop' \
-		'install_cargo'		'install_dutree'	'install_gitui' \
-	)
+function pre_install_luarocks() {
+	local lua_version='5.3.5'
+	local luarocks_version='3.9.2'
+	local temp_path=$(mktemp -d)
 
-	for func in "${intsall_pkgs[@]}"; do
-		display_title "$func"
-		$func || {
-			echo --e "\e[31mError: $func failed !\e[0m" >&2
-			failed_pkgs+=("$func")
-			install_failed=1
+	if [[ $(command -v luarocks) ]]; then
+		return 0
+	fi
+
+	if [[ "$OSTYPE" == darwin* ]]; then
+	   brew install luarocks || {
+		   return 1
+	   }
+	fi
+
+	version="$lua_version"
+
+	curl -Lo $temp_path/lua-${version}.tar.gz \
+		http://www.lua.org/ftp/lua-${version}.tar.gz || {
+		echo -e "\033[31mError: Download luarocks failed!\033[0m" >&2
+		return 1
+	}
+
+	cd $temp_path || {
+		echo -e "\033[31mError: cd $temp_path failed!\033[0m" >&2
+		return 1
+	}
+
+	tar -zxf lua-${version}.tar.gz || {
+		echo -e "\033[31mError: Extract luarocks failed!\033[0m" >&2
+		return 1
+	}
+
+	cd lua-${version} || {
+		echo -e "\033[31mError: cd luarocks-${version} failed!\033[0m" >&2
+		return 1
+	}
+
+	make linux test 1>dev/null || {
+		echo -e "\033[31mError: configure luarocks failed!\033[0m" >&2
+		return 1
+	}
+
+	sudo make install 1>/dev/null || {
+		echo -e "\033[31mError: make luarocks failed!\033[0m" >&2
+		return 1
+	}
+
+	version="$luarocks_version"
+
+	curl -Lo $temp_path/luarocks-${version}.tar.gz \
+		https://luarocks.org/releases/luarocks-${version}.tar.gz || {
+		echo -e "\033[31mError: Download luarocks failed!\033[0m" >&2
+		return 1
+	}
+
+	cd $temp_path || {
+		echo -e "\033[31mError: cd $temp_path failed!\033[0m" >&2
+		return 1
+	}
+
+	tar zxpf luarocks-${version}.tar.gz || {
+		echo -e "\033[31mError: Extract luarocks failed!\033[0m" >&2
+		return 1
+	}
+
+	cd luarocks-${version} || {
+		echo -e "\033[31mError: cd luarocks-${version} failed!\033[0m" >&2
+		return 1
+	}
+
+	./configure 1>/dev/null || {
+		echo -e "\033[31mError: configure luarocks failed!\033[0m" >&2
+		return 1
+	}
+
+	make 1>/dev/null || {
+		echo -e "\033[31mError: make luarocks failed!\033[0m" >&2
+		return 1
+	}
+
+	sudo make install 1>/dev/null || {
+		echo -e "\033[31mError: make luarocks failed!\033[0m" >&2
+		return 1
+	}
+
+	sudo luarocks install luasocket 1>/dev/null || {
+		echo -e "\033[31mError: install luasocket failed!\033[0m" >&2
+		return 1
+	}
+}
+
+function coc_nodejs() {
+	if [[ "$(command -v node)" ]]; then
+		return 0
+	fi
+
+	curl -sL install-node.vercel.app/lts | bash || {
+		echo -e "\033[31mError: Install nodejs failed!\033[0m" >&2
+			return 1
+		}
+}
+
+function install_lsp_bash() {
+	if [[ "$(command -v bash-language-server)" ]]; then
+		return 0
+	fi
+
+	echo -e "● Install bash-language-server ..." >&1
+	npm install -g bash-language-server 1>/dev/null || {
+		echo -e "\033[31mError: Install bash-language-server failed!\033[0m" >&2
+		return 1
+	}
+}
+
+function install_lsp_clangd() {
+	if [[ "$(command -v clangd)" ]]; then
+		return 0
+	fi
+
+	if [[ "$OSTYPE" == "darwin"* ]]; then
+		brew install llvm || {
+			echo -e "\033[31mError: Install llvm failed!\033[0m" >&2
+			return 1
+		}
+	fi
+
+	sudo apt-get install clangd-12 || {
+		echo -e "\033[31mError: Install clangd failed!\033[0m" >&2
+
+		sudo apt-get install clangd-9 \
+			|| sudo apt-get install clangd-8 \
+			|| sudo apt-get install clangd || {
+			echo -e "\033[31mError: Install clangd failed!\033[0m" >&2
+			return 1
+
 		}
 
+		sudo update-alternatives --install \
+			/usr/bin/clangd clangd /usr/bin/clangd-12 100 \
+		|| {
+			echo -e "\033[31mError: update-alternatives clangd failed!\033[0m" >&2
+			return 1
+		}
+	}
+}
+
+function install_lsp_cmake() {
+	if [[ "$(command -v cmake-language-server)" ]]; then
+		return 0
+	fi
+
+	pip install cmake-language-server 1>/dev/null || {
+		echo -e "\033[31mError: Install cmake-language-server failed!\033[0m" >&2
+		return 1
+	}
+}
+
+function install_lsp_lua() {
+	if [[ "$(command -v lua-lsp)" ]]; then
+		return 0
+	fi
+
+	if [[ -z "$(command -v luarocks)" ]]; then
+		echo -e "\033[31mError: Install lua-language-server failed!\033[0m" >&2
+		return 1
+	fi
+
+	sudo luarocks install --server=http://luarocks.org/dev lua-lsp 1>/dev/null || {
+		echo -e "\033[31mError: Install lua-language-server failed!\033[0m" >&2
+		return 1
+	}
+
+	sudo luarocks install luacheck 1>/dev/null || {
+		echo -e "\033[31mError: Install luacheck failed!\033[0m" >&2
+		return 1
+	}
+}
+
+function install_lsp_python() {
+	if [[ "$(command -v pyright)" ]]; then
+		return 0
+	fi
+
+	pip install pyright 1>/dev/null || {
+		echo -e "\033[31mError: Install pyright failed!\033[0m" >&2
+		return 1
+	}
+}
+
+function install_lsp_rust() {
+	if [[ "$(command -v rust-analyzer)" ]]; then
+		return 0
+	fi
+
+	if [[ -z "$(command -v rustup)" ]]; then
+		echo -e "\033[31mError: Install rust-analyzer failed!\033[0m" >&2
+		return 1
+	fi
+
+	rustup component add rust-src || {
+		echo -e "\033[31mError: rustup component add rust-src failed!\033[0m" >&2
+		return 1
+	}
+}
+
+function main {
+	local install_failed=0
+	local status_pkgs=()
+	local pre_install_pkgs=( $(declare -F | awk '{print $3}' | grep -E "^pre_install_"))
+	local intsall_pkgs=( $(declare -F | awk '{print $3}' | grep -E "^install_"))
+	local post_install_pkgs=( $(declare -F | awk '{print $3}' | grep -E "^post_install_"))
+	local pkgs=( "${pre_install_pkgs[@]}" "${intsall_pkgs[@]}" "${post_install_pkgs[@]}" )
+
+
+	for pkg in "${pkgs[@]}"; do
+		display_title "Install $(sed 's/\w*install_//g' <<< "$pkg")"
+		$pkg
+		ret=$?
+
+		if [[ $ret -ne 0 ]]; then
+			if [[ $ret -eq 3 ]]; then
+				echo -e "\e[33mWarning: skip install $(sed 's/\w*install_//g' <<< "$pkg")\e[0m" >&2
+				status_pkgs+=("skip")
+			else
+				echo -e "\e[31mError: install $(sed 's/\w*install_//g' <<< "$pkg") failed!\e[0m" >&2
+				install_failed=1
+				status_pkgs+=("fail")
+			fi
+		else
+			echo -e "\e[32mSuccess: install $(sed 's/\w*install_//g' <<< "$pkg") success!\e[0m" >&2
+			status_pkgs+=("ok")
+		fi
 	done
 
 	$SHELL -c "source ${HOME}/.$(basename "$SHELL")rc"
 
+	display_title "Installation Status"
+
+	for ((i=0; i<${#pkgs[@]}; i++)); do
+		pkg=${pkgs[$i]}
+		status=${status_pkgs[$i]}
+		printf "%-2d %20s" "$(($i+1))" "$(sed 's/\w*install_//g' <<< "$pkg")"
+
+		if [[ "$status" == fail ]]; then
+			echo -e -n "\e[31m"
+		elif [[ "$status" == skip ]]; then
+			echo -e -n "\e[33m"
+		else
+			echo -e -n "\e[32m"
+		fi
+
+		echo -e "\t[ $status ]\e[0m"
+	done
+
 	if [[ $install_failed -eq 1 ]]; then
-		echo -e "\e[31mError: install failed !\e[0m" >&2
-		echo -e "\e[31mFailed packages: $(sed 's/\w*_//g' <<< ${failed_pkgs[@]})\e[0m" >&2
+		echo -e "\e[31mError: install failed !\e[0m"
 		return 1
 	fi
 

@@ -20,9 +20,10 @@ require("lazy").setup({
 
 		{ 'neoclide/coc.nvim',
 			branch = 'release',
-			build = ':CocInstall coc-clangd coc-lua coc-markdownlint ' ..
-				'@yaegassy/coc-marksman coc-rust-analyzer ' ..
-				'coc-pyright coc-sh coc-snippets',
+			build = ':CocInstall coc-clangd coc-lua ' ..
+				'coc-markdownlint @yaegassy/coc-marksman ' ..
+				'coc-rust-analyzer coc-cmake ' ..
+				'coc-pyright coc-snippets',
 			init = function ()
 				require('setup.coc')
 			end
