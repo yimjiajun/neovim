@@ -496,7 +496,7 @@ function pre_install_luarocks() {
 		return 1
 	}
 
-	make linux test 1>dev/null || {
+	make linux test 1>/dev/null || {
 		echo -e "\033[31mError: configure luarocks failed!\033[0m" >&2
 		return 1
 	}
