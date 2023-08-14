@@ -626,12 +626,12 @@ function install_lsp_lua() {
 		return 1
 	fi
 
-	sudo luarocks install --server=http://luarocks.org/dev lua-lsp 1>/dev/null || {
+	luarocks install --local --server=http://luarocks.org/dev lua-lsp 1>/dev/null || {
 		echo -e "\033[31mError: Install lua-language-server failed!\033[0m" >&2
 		return 1
 	}
 
-	sudo luarocks install luacheck 1>/dev/null || {
+	luarocks install --local luacheck 1>/dev/null || {
 		echo -e "\033[31mError: Install luacheck failed!\033[0m" >&2
 		return 1
 	}
