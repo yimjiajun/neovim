@@ -11,10 +11,13 @@ vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 require("lazy").setup({
 	spec = {
 		{ 'nvim-treesitter/nvim-treesitter',
-			run = function()
+			build = function()
 				require('nvim-treesitter.install').update({ with_sync = true })
 				require("setup.treesitter")
 				vim.cmd([[TSUpdateSync]])
+			end,
+			config = function()
+				require("setup.treesitter")
 			end,
 		},
 
@@ -291,5 +294,3 @@ require("lazy").setup({
 		},
 	},
 })
-
-require('config.autocmd').plugin_autocmd_setup()
