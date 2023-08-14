@@ -244,6 +244,12 @@ require("lazy").setup({
 			end,
 		},
 
+		{ "sainnhe/gruvbox-material",
+			priority = 1000,
+			config = function()
+				require('setup.color_scheme').GruvboxMaterial()
+			end,
+		},
 	},
 
 	defaults = {

@@ -123,18 +123,19 @@ local function setup_gruvbox()
 		palette_overrides = {},
 		overrides = {
 			SignColumn = { bg = c.dark0_hard },
-			NormalFloat = { bg = c.dark0_soft },
+			NormalFloat = { bg = c.dark0 },
 			FloatShadow = { bg = '#000000' },
 			Search = { bold = true },
 			Pmenu = { bg = c.dark0 },
-			PmenuSel = { bg = c.light2, fg = c.dark0 },
+			PmenuSel = { bg = c.bright_orange, fg = c.dark0 },
 			StatusLine = { bg = c.dark0_hard, fg = c.light2, bold = true, reverse = false},
 			StatusLineNC = { bg = c.dark0_hard, fg = c.light4, italic = true, reverse = false},
+			Visual = { bg = c.dark0_soft, bold = true },
 			TabLine = { bg = c.dark0, fg = c.light4,  reverse = false},
 			TabLineNC = { bg = c.dark0, fg = c.light4,  reverse = false},
 			TabLineFill = { bg = c.dark0_hard, reverse = false},
 			TabLineSel = { bold = true, reverse = true },
-			TelescopeSelection = {bg = c.light2, fg = c.dark0_hard, bold = true},
+			TelescopeSelection = {bg = c.bright_orange, fg = c.dark0_hard, bold = true},
 			TelescopePreviewTitle = {bg = c.dark0_hard, bold = true},
 			TelescopePreviewNormal = {bg = c.dark0},
 			TelescopePreviewBorder = {bg = c.dark0},
@@ -161,8 +162,40 @@ local function setup_gruvbox()
 	end
 end
 
+local function setup_gruvbox_material()
+	local cs = vim.g.custom.colorscheme
+
+	vim.g.gruvbox_material_background = 'hard'
+	vim.g.gruvbox_material_better_performance = 1
+	vim.g.gruvbox_material_foreground = 'meterial'
+	vim.g.gruvbox_material_disable_italic_comment = 0
+	vim.g.gruvbox_material_enable_bold = 1
+	vim.g.gruvbox_material_enable_italic = 1
+	vim.g.gruvbox_material_transparent_background = 0
+	vim.g.gruvbox_material_dim_inactive_windows = 0
+	vim.g.gruvbox_material_visual = 'reverse'
+	vim.g.gruvbox_material_menu_selection_background = 'orange'
+	vim.g.gruvbox_material_sign_column_background = 'none'
+	vim.g.gruvbox_material_spell_foreground = 'none'
+	vim.g.gruvbox_material_ui_contrast = 'low'
+	vim.g.gruvbox_material_show_eob = 1
+	vim.g.gruvbox_material_float_style = ''
+	vim.g.gruvbox_material_diagnostic_line_highlight = 0
+	vim.g.gruvbox_material_diagnostic_virtual_text = 'grey'
+	vim.g.gruvbox_material_current_word = 'grey background'
+	vim.g.gruvbox_material_disable_terminal_colors = 1
+	vim.g.gruvbox_material_statusline_style = 'default'
+	vim.g.gruvbox_material_lightline_disable_bold = 0
+
+	if cs.theme == "gruvbox-material" then
+		vim.cmd("colorscheme gruvbox-material")
+	end
+end
+
 return {
 	GruvboxBaby = setup_gruvbox_baby,
 	Gruvbox = setup_gruvbox,
+	GruvboxMaterial = setup_gruvbox_material,
 	OneDarkPro = setup_onedark_pro,
+
 }
