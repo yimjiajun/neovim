@@ -153,6 +153,8 @@ local function setup_gruvbox()
 			CocWarningSign = {bg = c.dark0_hard, fg = c.neutral_yellow},
 			CocInfoSign = {bg = c.dark0_hard, fg = c.neutral_blue},
 			CocHintSign = {bg = c.dark0_hard, fg = c.neutral_aqua},
+			Function = {bold = true},
+			Keywords = {bold = true, italic = true},
 		},
 		dim_inactive = false,
 		transparent_mode = false,
