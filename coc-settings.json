@@ -4,7 +4,7 @@
 			"command": "bash-language-server",
 			"args": ["start"],
 			"filetypes": ["sh"],
-			"ignoredRootPaths": ["~"],
+			"ignoredRootPaths": ["~"]
 		},
 		"clangd": {
 			"command": "clangd",
@@ -33,7 +33,7 @@
 				"$HOME",
 				"$HOME/.cargo/**",
 				"$HOME/.rustup/**"
-			],
+			]
 		},
 		"vimls": {
 			"command": "vim-language-server",
@@ -56,10 +56,10 @@
 				"suggest": {
 					"fromVimruntime": true,
 					"fromRuntimepath": false
-				},
-			},
-		},
+				}
+			}
+		}
 	},
 
-	"snippets.ultisnips.pythonPrompt": false,
+	"snippets.ultisnips.pythonPrompt": false
 }
