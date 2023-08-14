@@ -1,6 +1,6 @@
 vim.g.custom = {
 	colorscheme = {
-		theme = 'onedarkpro',
+		theme = 'gruvbox',
 		transparency = false,
 	},
 }

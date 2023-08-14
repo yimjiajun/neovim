@@ -136,6 +136,7 @@ local function setup_gruvbox()
 			TabLineFill = { bg = c.dark0_hard, reverse = false},
 			TabLineSel = { bold = true, reverse = true },
 			TelescopeSelection = {bg = c.bright_orange, fg = c.dark0_hard, bold = true},
+			TelescopeMatching = {bg = c.bright_yellow, fg = c.dark0_hard, bold = true, italic = true},
 			TelescopePreviewTitle = {bg = c.dark0_hard, bold = true},
 			TelescopePreviewNormal = {bg = c.dark0},
 			TelescopePreviewBorder = {bg = c.dark0},
