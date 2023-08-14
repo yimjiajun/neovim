@@ -237,6 +237,13 @@ require("lazy").setup({
 			end,
 		},
 
+		{ "ellisonleao/gruvbox.nvim",
+			priority = 1000,
+			config = function()
+				require('setup.color_scheme').Gruvbox()
+			end,
+		},
+
 	},
 
 	defaults = {
