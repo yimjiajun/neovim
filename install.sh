@@ -664,6 +664,79 @@ function install_lsp_rust() {
 	}
 }
 
+function install_linter_python() {
+	if [[ $(command -v pydocstyle) \
+		&& $(command -v pycodestyle) \
+		&& $(command -v flake8) \
+		&& $(command -v pylint) ]];
+	then
+		return 0
+	fi
+
+	if [[ -z $(command -v pydocstyle) \
+		|| -z $(command -v pycodestyle) \
+		|| -z $(command -v flake8) ]];
+	then
+		pip install pydocstyle pycodestyle flake8 || {
+			echo -e "\033[31mError: Install python linter failed!\033[0m" >&2
+			return 1
+		}
+	fi
+
+	if [[ $(command -v pylint) ]]; then
+		return 0
+	fi
+
+	if [[ $OSTYPE == "linux-gnu"* ]]; then
+		sudo apt-get install pylint || {
+			echo -e "\033[31mError: Install python linter failed!\033[0m" >&2
+			return 1
+		}
+	elif [[ $OSTYPE == "darwin"* ]]; then
+		pip install pylint || {
+			echo -e "\033[31mError: Install python linter failed!\033[0m" >&2
+			return 1
+		}
+	else
+		return 3
+	fi
+
+	return 0
+}
+
+function install_linter_markdown() {
+	if [[ $(command -v markdownlint) ]]; then
+		return 0
+	fi
+
+	npm install markdownlint --save-dev || {
+		echo -e "\033[31mError: Install markdownlint failed!\033[0m" >&2
+		return 1
+	}
+}
+
+function install_linter_cmake() {
+	if [[ $(command -v cmakelint.py) ]]; then
+		return 0
+	fi
+
+	pip install cmakelint || {
+		echo -e "\033[31mError: Install cmake linter failed!\033[0m" >&2
+		return 1
+	}
+}
+
+function install_linter_cpplint() {
+	if [[ $(command -v cpplint) ]]; then
+		return 0
+	fi
+
+	pip install cpplint || {
+		echo -e "\033[31mError: Install cpplint failed!\033[0m" >&2
+		return 1
+	}
+}
+
 function main {
 	local install_failed=0
 	local status_pkgs=()
