@@ -137,6 +137,10 @@ local function setup_gruvbox()
 		DiagnosticSignWarn = {bg = 'none'},
 		DiagnosticSignInfo = {bg = 'none'},
 		DiagnosticSignHint = {bg = 'none'},
+		DiagnosticVirtualTextError = {link = 'Comment'},
+		DiagnosticVirtualTextWarn = {link = 'Comment'},
+		DiagnosticsVirtualTextInfo = {link = 'Comment'},
+		DiagnosticsVirtualTextHint = {link = 'Comment'},
 	}
 
 	if cs.transparency == true
