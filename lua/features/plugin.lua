@@ -61,6 +61,8 @@ require("lazy").setup({
 			end,
 		},
 
+		{ 'p00f/clangd_extensions.nvim' },
+
 		{ "iamcco/markdown-preview.nvim",
 			build = "cd app && npm install",
 			config = function()

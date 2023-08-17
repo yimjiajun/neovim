@@ -11,6 +11,32 @@ for _, lsp in ipairs(servers) do
   }
 end
 
+lspconfig.clangd.setup {
+	capabilities = capabilities,
+	cmd = { "clangd" },
+	filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+	root_dir = lspconfig.util.root_pattern(
+		'.clangd',
+		'.clang-tidy',
+		'.clang-format',
+		'compile_commands.json',
+		'compile_flags.txt',
+		'configure.ac',
+		'.git'
+	),
+	single_file = true,
+	init_options = {
+		clangdFileStatus = true,
+		usePlaceholders = true,
+		completeUnimported = true,
+		semanticHighlighting = true,
+	  },
+	on_attach = function ()
+		require("clangd_extensions.inlay_hints").setup_autocmd()
+		require("clangd_extensions.inlay_hints").set_inlay_hints()
+	end,
+}
+
 -- luasnip setup
 local luasnip = require 'luasnip'
 
