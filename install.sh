@@ -713,6 +713,11 @@ function install_linter_markdown() {
 		echo -e "\033[31mError: Install markdownlint failed!\033[0m" >&2
 		return 1
 	}
+
+	npm install -g markdownlint-cli || {
+		echo -e "\033[31mError: Install markdownlint-cli failed!\033[0m" >&2
+		return 1
+	}
 }
 
 function install_linter_cmake() {
