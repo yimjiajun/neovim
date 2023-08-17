@@ -3,6 +3,14 @@ vim.g.custom = {
 		theme = 'gruvbox',
 		transparency = false,
 	},
+	lsp = {
+		"bashls",
+		"clangd", "cmake",
+		"lua_ls",
+		"marksman",
+		"pyright",
+		"rust_analyzer",
+	},
 }
 
 local config_path = vim.fn.stdpath("config")

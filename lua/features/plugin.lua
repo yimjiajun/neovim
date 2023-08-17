@@ -10,6 +10,46 @@ vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
 require("lazy").setup({
 	spec = {
+
+		{ 'neovim/nvim-lspconfig',
+			config = function ()
+				require('setup.lsp')
+			end
+		},
+
+		{ 'williamboman/mason.nvim',
+			dependencies = {
+				"williamboman/mason-lspconfig.nvim",
+				"neovim/nvim-lspconfig",
+			},
+
+			config = function ()
+				require("mason").setup()
+				require("mason-lspconfig").setup {
+					ensure_installed = vim.g.custom.lsp,
+				}
+			end
+		},
+
+		{ 'hrsh7th/nvim-cmp',
+			dependencies = {
+				'neovim/nvim-lspconfig',
+				'hrsh7th/cmp-buffer',
+				'hrsh7th/cmp-nvim-lsp',
+				'saadparwaiz1/cmp_luasnip',
+				'L3MON4D3/LuaSnip'
+			},
+			config = function ()
+				require('setup.cmp')
+			end
+		},
+
+		{ 'rmagatti/goto-preview',
+			config = function()
+				require('setup.goto_preview')
+			end,
+		},
+
 		{ 'nvim-treesitter/nvim-treesitter',
 			build = function()
 				require('nvim-treesitter.install').update({ with_sync = true })
@@ -19,17 +59,6 @@ require("lazy").setup({
 			config = function()
 				require("setup.treesitter")
 			end,
-		},
-
-		{ 'neoclide/coc.nvim',
-			branch = 'release',
-			build = ':CocInstall coc-clangd coc-lua ' ..
-				'coc-markdownlint @yaegassy/coc-marksman ' ..
-				'coc-rust-analyzer coc-cmake ' ..
-				'coc-pyright coc-snippets',
-			init = function ()
-				require('setup.coc')
-			end
 		},
 
 		{ "iamcco/markdown-preview.nvim",
@@ -124,6 +153,7 @@ require("lazy").setup({
 		},
 
 		{ "folke/which-key.nvim",
+			priority = 1000,
 			config = function()
 				require('setup.whichkey')
 			end
