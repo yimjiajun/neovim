@@ -61,7 +61,7 @@ local function setup_onedark_pro()
 		colors = {
 		},
 		options = {
-			transparency = cs.transparency and 1 or 0,
+			transparency = cs.transparency,
 			cursorline = true
 		},
 		highlights = {
@@ -149,12 +149,12 @@ local function setup_gruvbox()
 			GitSignsAdd = {bg = c.dark0_hard, fg = c.neutral_yellow},
 			GitSignsChange = {bg = c.dark0_hard, fg = c.neutral_orange},
 			GitSignsDelete = {bg = c.dark0_hard, fg = c.neutral_red},
-			CocErrorSign = {bg = c.dark0_hard, fg = c.neutral_red},
-			CocWarningSign = {bg = c.dark0_hard, fg = c.neutral_yellow},
-			CocInfoSign = {bg = c.dark0_hard, fg = c.neutral_blue},
-			CocHintSign = {bg = c.dark0_hard, fg = c.neutral_aqua},
 			Function = {bold = true},
 			Keywords = {bold = true, italic = true},
+			DiagnosticSignError = {bg = 'none'},
+			DiagnosticSignWarn = {bg = 'none'},
+			DiagnosticSignInfo = {bg = 'none'},
+			DiagnosticSignHint = {bg = 'none'},
 		},
 		dim_inactive = false,
 		transparent_mode = false,
