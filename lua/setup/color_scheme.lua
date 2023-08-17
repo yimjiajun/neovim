@@ -101,8 +101,53 @@ end
 local function setup_gruvbox()
 	local c = require("gruvbox.palette").colors
 	local cs = vim.g.custom.colorscheme
-	-- setup must be called before loading the colorscheme
-	-- Default options:
+	local overrides_colors = {
+		SignColumn = { bg = c.dark0_hard },
+		NormalFloat = { bg = c.dark0 },
+		FloatShadow = { bg = '#000000' },
+		Search = { bg = c.bright_orange, fg = c.dark0_hard, bold = true },
+		CurSearch = { bg = c.bright_yellow, fg = c.dark0_hard, bold = true, italic = true },
+		MatchParen = { bg = c.dark2, bold = true},
+		Pmenu = { bg = c.dark0 },
+		PmenuSel = { bg = c.bright_orange, fg = c.dark0 },
+		StatusLine = { bg = c.dark0_hard, fg = c.light2, bold = true, reverse = false},
+		StatusLineNC = { bg = c.dark0_hard, fg = c.light4, italic = true, reverse = false},
+		Visual = { bg = c.dark0_soft, bold = true },
+		TabLine = { bg = c.dark0, fg = c.light4,  reverse = false},
+		TabLineNC = { bg = c.dark0, fg = c.light4,  reverse = false},
+		TabLineFill = { bg = c.dark0_hard, reverse = false},
+		TabLineSel = { bold = true, reverse = true },
+		TelescopeSelection = {bg = c.bright_orange, fg = c.dark0_hard, bold = true},
+		TelescopeMatching = {bg = 'none', fg = c.neutral_red, bold = true, italic = true},
+		TelescopePreviewTitle = {bg = c.dark0_hard, bold = true},
+		TelescopePreviewNormal = {bg = c.dark0},
+		TelescopePreviewBorder = {bg = c.dark0},
+		TelescopeResultsTitle = {bg = c.dark0, bold = true},
+		TelescopeResultsNormal = {bg = c.dark0_soft},
+		TelescopeResultsBorder = {bg = c.dark0_soft},
+		TelescopePromptTitle = {bg = c.dark0_soft, bold = true},
+		TelescopePromptNormal = {bg = c.dark1,  bold = true},
+		TelescopePromptBorder = {bg = c.dark1},
+		GitSignsAdd = {bg = c.dark0_hard, fg = c.neutral_yellow},
+		GitSignsChange = {bg = c.dark0_hard, fg = c.neutral_orange},
+		GitSignsDelete = {bg = c.dark0_hard, fg = c.neutral_red},
+		Function = {bold = true},
+		Keywords = {bold = true, italic = true},
+		DiagnosticSignError = {bg = 'none'},
+		DiagnosticSignWarn = {bg = 'none'},
+		DiagnosticSignInfo = {bg = 'none'},
+		DiagnosticSignHint = {bg = 'none'},
+	}
+
+	if cs.transparency == true
+	then
+		overrides_colors = {
+			StatusLine = { bg = 'none' },
+			StatusLineNC = { bg = 'none' },
+			Pmenu = { bg = 'none' },
+		}
+	end
+
 	require("gruvbox").setup({
 		undercurl = true,
 		underline = true,
@@ -118,46 +163,12 @@ local function setup_gruvbox()
 		invert_signs = false,
 		invert_tabline = true,
 		invert_intend_guides = false,
-		inverse = true, -- invert background for search, diffs, statuslines and errors
+		inverse = false, -- invert background for search, diffs, statuslines and errors
 		contrast = "hard", -- can be "hard", "soft" or empty string
 		palette_overrides = {},
-		overrides = {
-			SignColumn = { bg = c.dark0_hard },
-			NormalFloat = { bg = c.dark0 },
-			FloatShadow = { bg = '#000000' },
-			Search = { bold = true },
-			Pmenu = { bg = c.dark0 },
-			PmenuSel = { bg = c.bright_orange, fg = c.dark0 },
-			StatusLine = { bg = c.dark0_hard, fg = c.light2, bold = true, reverse = false},
-			StatusLineNC = { bg = c.dark0_hard, fg = c.light4, italic = true, reverse = false},
-			Visual = { bg = c.dark0_soft, bold = true },
-			TabLine = { bg = c.dark0, fg = c.light4,  reverse = false},
-			TabLineNC = { bg = c.dark0, fg = c.light4,  reverse = false},
-			TabLineFill = { bg = c.dark0_hard, reverse = false},
-			TabLineSel = { bold = true, reverse = true },
-			TelescopeSelection = {bg = c.bright_orange, fg = c.dark0_hard, bold = true},
-			TelescopeMatching = {bg = c.bright_yellow, fg = c.dark0_hard, bold = true, italic = true},
-			TelescopePreviewTitle = {bg = c.dark0_hard, bold = true},
-			TelescopePreviewNormal = {bg = c.dark0},
-			TelescopePreviewBorder = {bg = c.dark0},
-			TelescopeResultsTitle = {bg = c.dark0, bold = true},
-			TelescopeResultsNormal = {bg = c.dark0_soft},
-			TelescopeResultsBorder = {bg = c.dark0_soft},
-			TelescopePromptTitle = {bg = c.dark0_soft, bold = true},
-			TelescopePromptNormal = {bg = c.dark1,  bold = true},
-			TelescopePromptBorder = {bg = c.dark1},
-			GitSignsAdd = {bg = c.dark0_hard, fg = c.neutral_yellow},
-			GitSignsChange = {bg = c.dark0_hard, fg = c.neutral_orange},
-			GitSignsDelete = {bg = c.dark0_hard, fg = c.neutral_red},
-			Function = {bold = true},
-			Keywords = {bold = true, italic = true},
-			DiagnosticSignError = {bg = 'none'},
-			DiagnosticSignWarn = {bg = 'none'},
-			DiagnosticSignInfo = {bg = 'none'},
-			DiagnosticSignHint = {bg = 'none'},
-		},
+		overrides = overrides_colors,
 		dim_inactive = false,
-		transparent_mode = false,
+		transparent_mode = cs.transparency,
 	})
 
 	if cs.theme == "gruvbox" then
