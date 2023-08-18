@@ -251,6 +251,23 @@ require("lazy").setup({
 			end,
 		},
 
+		{ 'chrisbra/csv.vim',
+			config = function ()
+				vim.api.nvim_create_autocmd( "BufRead,BufNewFile", {
+					desc = "csv format display",
+					group = "format",
+					pattern = "{*.csv,*.dat}",
+					callback = function()
+						if vim.fn.exists('did_load_csvfiletype') then
+							return
+						end
+						local did_load_csvfiletype = 1
+						vim.bo.filetype = 'csv'
+					end,
+				})
+			end,
+		},
+
 		{ "mfussenegger/nvim-dap",
 			config = function()
 				require('setup.dap').SetupKeymap()
