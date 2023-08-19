@@ -11,6 +11,9 @@ vim.g.custom = {
 		"pyright",
 		"rust_analyzer",
 	},
+	format = {
+		kill_whitespace = 1,
+	},
 }
 
 local config_path = vim.fn.stdpath("config")

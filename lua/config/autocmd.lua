@@ -23,7 +23,9 @@ vim.api.nvim_create_autocmd( "BufWritePre", {
 	group = "format",
 	pattern = "*",
 	callback = function()
-		vim.cmd([[%s/\s\+$//e]])
+		if vim.g.custom.format.kill_whitespace == 1 then
+			vim.cmd([[%s/\s\+$//e]])
+		end
 	end,
 })
 
