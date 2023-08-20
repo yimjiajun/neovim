@@ -1,6 +1,6 @@
 local sys_func = require("features.system")
 local common = require("features.common")
-local display_tittle = common.DisplayTittle
+local display_title = common.DisplayTitle
 local display_delimited_line = common.DisplayDelimitedLine
 local group_selection = common.GroupSelection
 
@@ -153,7 +153,7 @@ local function compiler_build_selection()
 	local target_tbl = {}
 	local target_tbl_cnt = 0
 	local display_msg = string.format("%3s| %-20s | %-s", "idx",  "name", "description")
-	display_tittle(display_msg)
+	display_title(display_msg)
 
 	for _, info in ipairs(tbl) do
 		if (info.ext ~= 'any') and (info.ext ~= vim.bo.filetype) then

@@ -22,7 +22,7 @@ local function display_seperate_line_on_count(idx, seperator_count)
 		end
 end
 
-local function display_tittle(tittle)
+local function display_title(tittle)
 	local current_window = vim.api.nvim_get_current_win()
 	local window_width = vim.api.nvim_win_get_width(current_window)
 	local string_len = string.len(tittle)
@@ -61,7 +61,7 @@ local function group_selection(tbl)
 		until (cnt - 1) > group_total
 	end
 
-	display_tittle(" Group List")
+	display_title(" Group List")
 
 	for idx, grp in ipairs(group_list) do
 		print(string.format("%3d| %s", idx, grp))
@@ -81,7 +81,7 @@ local function group_selection(tbl)
 end
 
 local function table_selection(tbl, name)
-	display_tittle(name)
+	display_title(name)
 
 	for idx, info in ipairs(tbl) do
 		vim.api.nvim_echo({
@@ -110,7 +110,7 @@ end
 
 local ret = {
 	DisplayDelimitedLine = display_delimited_line,
-	DisplayTittle = display_tittle,
+	DisplayTitle = display_title,
 	GroupSelection = group_selection,
 	TableSelection = table_selection,
 }

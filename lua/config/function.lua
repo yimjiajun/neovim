@@ -158,7 +158,7 @@ local function session(mode)
 			lists[i] = string.format("%3d. %s", i, v)
 		end
 
-		require('features.common').DisplayTittle("Select Session to Load")
+		require('features.common').DisplayTitle("Select Session to Load")
 		local s = vim.fn.inputlist(lists)
 
 		if s > 0 then

@@ -315,7 +315,7 @@ local function ssh_get_list_in_telescope()
 					-- vim.api.nvim_put({ selection[1] }, "", false, true)
 				end)
 				local call_help = function()
-					require('features.common').DisplayTittle(" Help")
+					require('features.common').DisplayTitle(" Help")
 					local selection = action_state.get_selected_entry()
 					print(">> ", selection.value[4])
 				end

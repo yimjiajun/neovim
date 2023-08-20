@@ -11,7 +11,7 @@ vim.g.ssh_data = {
 }
 
 local common = require("features.common")
-local display_tittle = common.DisplayTittle
+local display_title = common.DisplayTitle
 local display_delimited_line = common.DisplayDelimitedLine
 local ssh_list_get_group = common.GroupSelection
 
@@ -84,7 +84,7 @@ local function ssh_get_list(save_file)
 	local display_msg = string.format("%3s| %-20s | %-20s | %-5s | %-s",
 		"idx",  "hostname/ip", "username", "port", "description")
 
-	display_tittle(display_msg)
+	display_title(display_msg)
 
 	local idx = 1
 
