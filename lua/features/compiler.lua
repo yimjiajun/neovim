@@ -1,7 +1,6 @@
 local sys_func = require("features.system")
 local common = require("features.common")
 local display_title = common.DisplayTitle
-local display_delimited_line = common.DisplayDelimitedLine
 local group_selection = common.GroupSelection
 
 --define compiler data
@@ -151,11 +150,9 @@ local function compiler_build_selection()
 	end
 
 	local target_tbl = {}
-	local target_tbl_cnt = 0
-	local display_msg = string.format("%3s| %-20s | %-s", "idx",  "name", "description")
-	display_title(display_msg)
+	local msg = {}
 
-	for _, info in ipairs(tbl) do
+	for idx, info in ipairs(tbl) do
 		if (info.ext ~= 'any') and (info.ext ~= vim.bo.filetype) then
 			goto continue
 		end
@@ -164,32 +161,27 @@ local function compiler_build_selection()
 			goto continue
 		end
 
-		target_tbl_cnt = target_tbl_cnt + 1
-		display_msg = string.format("%3d| %-20s | %5s\t", target_tbl_cnt, info.name, info.desc)
-		vim.api.nvim_echo({{display_msg, "none"}}, true, {})
+		msg[idx] = string.format(
+			"%3d | %-20s | %5s\t", idx, info.name, info.desc
+		)
 		table.insert(target_tbl, info)
-
-		 if target_tbl_cnt % 2 == 0 then
-			 if target_tbl_cnt % 4 == 0 then
-				 display_delimited_line("~")
-			 else
-				 display_delimited_line("-")
-			 end
-		 end
 
 		::continue::
 	end
 
-	local sel_idx = tonumber(vim.fn.input("Enter number to run build: "))
-
-	if sel_idx == nil then
+	if #target_tbl == 0 then
 		return false
 	end
 
+	display_title(string.format(
+		"%3s| %-20s | %-s", "idx",  "name", "description")
+	)
+
+	local sel_idx = vim.fn.inputlist(msg)
 	local sel_tbl = target_tbl[sel_idx]
 
-	if sel_tbl == nil then
-		vim.api.nvim_echo({{"\nInvalid index", "WarningMsg"}}, true, {})
+	if sel_idx == nil or sel_tbl == nil
+	then
 		return false
 	end
 

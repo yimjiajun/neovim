@@ -195,7 +195,9 @@ local function build()
 	local compiler = require('features.compiler')
 	local status = compiler.Selection()
 
-	if status == false then
+	if status == false or status == nil
+	then
+		vim.api.nvim_echo({{"\nBuild not found", "ErrorMsg"}}, false, {})
 		return
 	end
 

@@ -2,7 +2,9 @@ local function dispatch_build()
 	local compiler = require('features.compiler')
 	local status = compiler.Selection()
 
-	if status == false then
+	if status == false or status == nil
+	then
+		vim.api.nvim_echo({{"\n" .. "Build not found", "ErrorMsg"}}, true, {})
 		return
 	end
 
