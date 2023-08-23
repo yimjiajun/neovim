@@ -255,6 +255,90 @@ local function setup_file_format()
 	]])
 end
 
+local function check_quickfix_win_exists()
+    local windows = vim.api.nvim_list_wins()
+
+    for _, win in ipairs(windows) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        local buftype = vim.api.nvim_buf_get_option(buf, 'buftype')
+        if buftype == 'quickfix' then
+            return true
+        end
+    end
+
+    return false
+end
+
+local function toggle_quickfix()
+	if check_quickfix_win_exists() then
+		vim.cmd('silent! cclose')
+	else
+		vim.cmd('silent! copen')
+	end
+end
+
+
+local function files_bank(act)
+	local title = 'Files Bank'
+	local file = vim.fn.expand('%:#')
+	local items = {}
+
+	if act == nil or act == ''
+	then
+		items = vim.fn.getqflist({ title = title, items = 0 }).items
+
+		vim.fn.setqflist({}, 'a', {
+			title = title,
+		})
+
+		vim.cmd([[silent! copen]])
+
+		return
+	end
+
+	if file == ''
+	then
+		return
+	end
+
+
+	local std_item = {
+		filename = file,
+		text = vim.fn.getline('.'),
+		lnum = vim.fn.line('.'),
+		col = vim.fn.col('.'),
+		type = 'f',
+		bufnr = nil,
+	}
+
+	local prev_item_found = false
+
+	for _, v in ipairs(vim.fn.getqflist({ title = title, items = 0 }).items)
+	do
+		if v.bufnr == vim.fn.bufnr('%') then
+			prev_item_found = true
+
+			if act == 'save' then
+				v = std_item
+			elseif act == 'remove' then
+				v = nil
+			end
+		end
+
+		if v ~= nil then
+			table.insert(items, v)
+		end
+	end
+
+	if (#items == 0 and act == 'save')
+		or prev_item_found == false
+	then
+		table.insert(items, std_item)
+	end
+
+	vim.fn.setqflist({}, 'r', { title = title, items = items })
+end
+
 local M = {
 	SearchFile = search_file,
 	SearchWord = search_word,
@@ -273,6 +357,8 @@ local M = {
 	Session = session,
 	CreateCtags = create_ctags,
 	Build = build,
+	ToggleQuickFix = toggle_quickfix,
+	FilesBank = files_bank,
 }
 
 for name in pairs(M) do
