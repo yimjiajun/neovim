@@ -191,13 +191,26 @@ local function create_ctags()
 	end
 end
 
-local function build()
+local function build(mode)
 	local compiler = require('features.compiler')
-	local status = compiler.Selection()
+	local status
 
-	if status == false or status == nil
+	if mode == "latest"
 	then
-		vim.api.nvim_echo({{"\nBuild not found", "ErrorMsg"}}, false, {})
+		status = compiler.LatestSetup()
+	else
+		status = compiler.Setup()
+	end
+
+	if status == nil
+	then
+		local msg = "\nBuild not found\n"
+		vim.api.nvim_echo({{msg, "ErrorMsg"}}, false, {})
+		return
+	end
+
+	if status == false
+	then
 		return
 	end
 

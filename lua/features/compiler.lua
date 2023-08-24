@@ -12,6 +12,7 @@ local group_selection = common.GroupSelection
 --@field group string group name
 vim.g.compiler_data = {}
 local compiler_build_data = {}
+local compiler_latest_build_data = {}
 
 -- compiler selection
 -- @param extension file extension
@@ -20,7 +21,7 @@ local compiler_build_data = {}
 -- @param .desc description of build (string)
 -- @param .ext file extension (string)
 -- @param .type build type: "make", "term", "term_full" (string)
-local function compiler_insert_info(name, cmd, desc, ext, type, grp)
+local function compiler_insert_info(name, cmd, desc, ext, type, grp, efm)
 	local data = compiler_build_data
 	local info = {
 		name = name,
@@ -29,13 +30,14 @@ local function compiler_insert_info(name, cmd, desc, ext, type, grp)
 		ext = ext,
 		build_type = type,
 		group = grp,
+		efm = efm,
 	}
 
 	table.insert(data, info)
 	compiler_build_data = data
 end
 
-local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp)
+local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp, efm)
 	local data = vim.g.compiler_data
 	local info = {
 		name = name,
@@ -44,6 +46,7 @@ local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp)
 		ext = ext,
 		build_type = type,
 		group = grp,
+		efm = efm,
 	}
 
 	table.insert(data, info)
@@ -136,7 +139,73 @@ local function get_compiler_build_data()
 	return compiler_build_data
 end
 
-local function compiler_build_selection()
+local function compiler_setup_makeprg(tbl)
+	if tbl == nil then
+		return false
+	end
+
+	local bufnr = vim.api.nvim_get_current_buf()
+	vim.api.nvim_buf_set_option(bufnr, 'makeprg', tbl.cmd)
+
+	if tbl.efm ~= nil
+	then
+		vim.api_nvim_buf_set_option(bufnr, 'errorformat', tbl.efm)
+	end
+
+	compiler_latest_build_data = tbl
+
+	return true
+end
+
+local function compiler_latest_makeprg_setup()
+	if compiler_latest_build_data == nil
+	then
+		return nil
+	end
+
+	local info = compiler_latest_build_data
+
+	if (info.ext ~= 'any') and (info.ext ~= vim.bo.filetype) then
+		return false
+	end
+
+	return compiler_setup_makeprg(info)
+end
+
+local function compiler_tbl_makeprg_setup(tbl)
+	if tbl == nil
+	then
+		return false
+	end
+
+	if tbl.build_type == "term"
+	then
+		vim.cmd("5split | terminal " .. tbl.cmd)
+		return false
+	end
+
+	if tbl.build_type == "term_full"
+	then
+		if vim.fn.exists(":ToggleTerm") and vim.fn.exists(":TermCmd")
+		then
+			vim.cmd("TermCmd " .. tbl.cmd)
+		else
+			vim.cmd("tabnew | terminal " .. tbl.cmd)
+		end
+
+		return false
+	end
+
+	if tbl.build_type == "builtin"
+	then
+		vim.cmd(tbl.cmd)
+		return false
+	end
+
+	return compiler_setup_makeprg(tbl)
+end
+
+local function compiler_build_setup_selection()
 	local tbl = get_compiler_build_data()
 
 	if tbl == nil then
@@ -151,8 +220,9 @@ local function compiler_build_selection()
 
 	local target_tbl = {}
 	local msg = {}
+	local idx = 0
 
-	for idx, info in ipairs(tbl) do
+	for _, info in ipairs(tbl) do
 		if (info.ext ~= 'any') and (info.ext ~= vim.bo.filetype) then
 			goto continue
 		end
@@ -161,9 +231,12 @@ local function compiler_build_selection()
 			goto continue
 		end
 
+		idx = idx + 1
+
 		msg[idx] = string.format(
 			"%3d | %-20s | %5s\t", idx, info.name, info.desc
 		)
+
 		table.insert(target_tbl, info)
 
 		::continue::
@@ -174,45 +247,22 @@ local function compiler_build_selection()
 	end
 
 	display_title(string.format(
-		"%3s| %-20s | %-s", "idx",  "name", "description")
+		"%3s | %-20s | %-s", "idx",  "name", "description")
 	)
 
 	local sel_idx = vim.fn.inputlist(msg)
 	local sel_tbl = target_tbl[sel_idx]
 
-	if sel_idx == nil or sel_tbl == nil
-	then
+	if sel_tbl == nil then
 		return false
 	end
 
-	if sel_tbl.build_type == "term" then
-		vim.cmd("5split | terminal " .. sel_tbl.cmd)
-		return false
-	end
-
-	if sel_tbl.build_type == "term_full" then
-		if vim.fn.exists(":ToggleTerm") and vim.fn.exists(":TermCmd") then
-			vim.cmd("TermCmd " .. sel_tbl.cmd)
-		end
-
-		vim.cmd("tabnew | terminal " .. sel_tbl.cmd)
-		return false
-	end
-
-	if sel_tbl.build_type == "builtin" then
-		vim.cmd(sel_tbl.cmd)
-		return false
-	end
-
-	local bufnr = vim.api.nvim_get_current_buf()
-	vim.api.nvim_buf_set_option(bufnr, 'makeprg', sel_tbl.cmd)
-
-	return true
+	return compiler_tbl_makeprg_setup(sel_tbl)
 end
 
-
 local ret = {
-	Selection = compiler_build_selection,
+	Setup = compiler_build_setup_selection,
+	LatestSetup = compiler_latest_makeprg_setup,
 	InsertInfo = compiler_insert_info_permanent,
 }
 

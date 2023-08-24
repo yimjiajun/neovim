@@ -80,6 +80,7 @@ wk.register({
 	e = 'explorer',
 	E = 'explorer File',
 	b = 'build',
+	B = 'build latest',
 	c = 'quickfix',
 	d = 'Debugger',
 	s = 'files bank',

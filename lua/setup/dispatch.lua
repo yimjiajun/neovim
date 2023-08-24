@@ -1,23 +1,36 @@
-local function dispatch_build()
+local function dispatch_build(mode)
 	local compiler = require('features.compiler')
-	local status = compiler.Selection()
+	local status
 
-	if status == false or status == nil
+	if mode == "latest"
 	then
-		vim.api.nvim_echo({{"\n" .. "Build not found", "ErrorMsg"}}, true, {})
+		status = compiler.LatestSetup()
+	else
+		status = compiler.Setup()
+	end
+
+	if status == nil
+	then
+		local msg = "\nBuild not found\n"
+		vim.api.nvim_echo({{msg, "ErrorMsg"}}, true, {})
 		return
 	end
 
-	if vim.fn.exists(':Make') and vim.fn.exists("$TMUX") then
-		vim.cmd("Make")
+	if status == false
+	then
 		return
 	end
 
-	vim.cmd("make")
+	vim.cmd("Make")
 end
 
 local function dispatch_setup_kepmapping()
-	vim.api.nvim_set_keymap('n', '<leader>b', [[<cmd> lua require('setup.dispatch').Build() <CR>]], {silent = true})
+	vim.api.nvim_set_keymap('n', '<leader>b',
+		[[<cmd> lua require('setup.dispatch').Build() <CR>]],
+		{silent = true})
+	vim.api.nvim_set_keymap('n', '<leader>B',
+		[[<cmd> lua require('setup.dispatch').Build("latest") <CR>]],
+		{silent = true})
 end
 
 dispatch_setup_kepmapping()
