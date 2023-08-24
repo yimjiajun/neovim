@@ -117,9 +117,9 @@ local function get_compiler_build_data()
 		setup_c()
 	elseif check_current_filetype("markdown") then
 		setup_markdown()
-	elseif check_current_filetype("py") then
+	elseif check_current_filetype("python") then
 		compiler_insert_info("run script", "python3 %" .. ";read;exit",
-			"run current python file", "py", "make", "build")
+			"run current python file", "python", "make", "build")
 	elseif check_current_filetype("sh") then
 		compiler_insert_info("run script", [[./%]],
 			"run current buffer bash script", "sh",  "make", "build")
