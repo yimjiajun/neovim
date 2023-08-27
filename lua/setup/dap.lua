@@ -1,3 +1,7 @@
+local dap_info = {
+	python = {},
+}
+
 local dap = require('dap')
 
 local function setup_dap_python()
@@ -27,6 +31,10 @@ local function setup_dap_python()
 				},
 			})
 		end
+	end
+
+	for _, v in pairs(dap_info.python) do
+		table.insert(dap.configurations.python, v)
 	end
 end
 
@@ -94,8 +102,19 @@ local function setup_keymapping(lang)
 	end
 end
 
+local function dap_insert_info(tbl, client)
+	if (client == nil) or (tbl == nil) then
+		return
+	end
+
+	if client == 'python' then
+		table.insert(dap_info.python, tbl)
+	end
+end
+
 return {
 	SetupKeymap = setup_keymapping,
 	SetupUI = setup_dap_ui,
 	SetupPython = setup_dap_python,
+	InsertInfo = dap_insert_info,
 }
