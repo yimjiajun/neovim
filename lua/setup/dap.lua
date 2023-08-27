@@ -77,20 +77,44 @@ local function setup_keymapping(lang)
 	else
 		vim.api.nvim_set_keymap('n', '<leader>db', '<cmd>lua require"dap".toggle_breakpoint()<CR>', opts)
 		vim.api.nvim_set_keymap('n', '<leader>dB', '<cmd>lua require"dap".set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>', opts)
-		vim.api.nvim_set_keymap('n', '<leader>dc', '<cmd>lua require"dap".continue()<CR>', opts)
-		vim.api.nvim_set_keymap('n', '<leader>dr', '<cmd>lua require"dap".repl.open()<CR>', opts)
+		vim.api.nvim_set_keymap('n', '<leader>dd', '<cmd>lua require"dap".continue()<CR>', opts)
+		vim.api.nvim_set_keymap('n', '<leader>dD', '<cmd>lua require"dap".disconnect()<CR>', opts)
+		vim.api.nvim_set_keymap('n', '<leader>do', '<cmd>lua require"dap".repl.toggle()<CR>', opts)
 		vim.api.nvim_set_keymap('n', '<leader>ds', '<cmd>lua require"dap".step_over()<CR>', opts)
 		vim.api.nvim_set_keymap('n', '<leader>di', '<cmd>lua require"dap".step_into()<CR>', opts)
+		vim.api.nvim_set_keymap('n', '<leader>dQ', '<cmd>lua require"dap".step_back()<CR>', opts)
+		vim.api.nvim_set_keymap('n', '<leader>dq', '<cmd>lua require"dap".step_out()<CR>', opts)
+		vim.api.nvim_set_keymap('n', '<leader>dT', '<cmd>lua require"dap".terminate()<CR>', opts)
+		vim.api.nvim_set_keymap('n', '<leader>dR', '<cmd>lua require"dap".restart()<CR>', opts)
+		vim.api.nvim_set_keymap('n', '<leader>dC', '<cmd>lua require"dap".clear_breakpoints()<CR>', opts)
+		vim.api.nvim_set_keymap('n', '<leader>dl', '<cmd>lua require"dap".list_breakpoints()<CR>', opts)
+		vim.api.nvim_set_keymap('n', '<leader>da', '<cmd>lua require"dap".run()<CR>', opts)
+		vim.api.nvim_set_keymap('n', '<leader>dA', '<cmd>lua require"dap".run_last()<CR>', opts)
+		vim.api.nvim_set_keymap('n', '<leader>dp', '<cmd>lua require"dap".pause()<CR>', opts)
+		vim.api.nvim_set_keymap('n', '<leader>dg', '<cmd>lua require"dap".goto_()<CR>', opts)
+		vim.api.nvim_set_keymap('n', '<leader>dS', '<cmd>lua require"dap".status()<CR>', opts)
+		vim.api.nvim_set_keymap('n', '<leader>dp', '<cmd>lua require"dap".pause()<CR>', opts)
 
 		if pcall(require, 'which-key') then
 			local wk = require('which-key')
 			local keymap = {
 				b = 'toggle breakpoint',
 				B = 'toggle conditional breakpoint',
-				c = 'continue',
+				d = 'continue',
 				s = 'step over',
 				i = 'step into',
-				r = 'open repl',
+				q = 'step out',
+				Q = 'step back',
+				o = 'open repl',
+				T = 'terminate',
+				R = 'restart',
+				C = 'clear all breakpoints',
+				l = 'list breakpoints',
+				a = 'run',
+				A = 'run last',
+				D = 'disconnect',
+				p = 'pause',
+				g = 'goto',
 			}
 
 			wk.register(keymap,
