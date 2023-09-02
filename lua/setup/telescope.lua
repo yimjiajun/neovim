@@ -89,6 +89,7 @@ local function setup_telescope()
 			theme = "dropdown",
 			layout_strategy = 'vertical',
 			layout_config = {
+				preview_cutoff = 10,
 				height = 0.95,
 				width = 0.90,
 				prompt_position = 'bottom',
