@@ -300,8 +300,9 @@ local function files_bank(act)
 	then
 		items = vim.fn.getqflist({ title = title, items = 0 }).items
 
-		vim.fn.setqflist({}, 'a', {
+		vim.fn.setqflist({}, 'r', {
 			title = title,
+			items = items,
 		})
 
 		vim.cmd([[silent! copen]])
