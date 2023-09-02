@@ -149,7 +149,7 @@ local function compiler_setup_makeprg(tbl)
 
 	if tbl.efm ~= nil
 	then
-		vim.api_nvim_buf_set_option(bufnr, 'errorformat', tbl.efm)
+		vim.api.nvim_buf_set_option(bufnr, 'errorformat', tbl.efm)
 	end
 
 	compiler_latest_build_data = tbl
