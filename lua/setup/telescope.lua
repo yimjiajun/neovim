@@ -130,11 +130,11 @@ local function setup_extension_live_grep_args()
 		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='word', default_text=vim.fn.expand('<cword>')})<CR>]],
 		{ silent = true, desc = 'search word under cursor' })
 
-	vim.api.nvim_set_keymap('n', "<leader>fA",
+	vim.api.nvim_set_keymap('n', "<leader>fa",
 		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='ALL'})<CR>]],
 		{ silent = true, desc = 'search all from user input' })
 
-	vim.api.nvim_set_keymap('n', "<leader>fa",
+	vim.api.nvim_set_keymap('n', "<leader>fA",
 		[[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='all', default_text='"' .. vim.fn.expand('<cword>')  .. '"' ..  " --glob '!{.*,  tags}'"})<CR>]],
 		{ silent = true, desc = 'search all from cursor' })
 
