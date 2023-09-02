@@ -95,6 +95,13 @@ local function setup_telescope()
 				prompt_position = 'bottom',
 				mirror = false,
 			},
+			wrap_results = true,
+			path_display = {
+				shorten = {
+					len = 1,
+					exclude = {1, -2, -1},
+				},
+			},
 			mappings = {
 				i = {
 					["<C-h>"] = "which_key"
