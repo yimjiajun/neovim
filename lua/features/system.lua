@@ -301,7 +301,7 @@ local function get_battery_info ()
 				bat_cap_hi_color = 'ModeMsg'
 				bat_charging_display =		'|█▓▒░█░▒▓█|'
 			elseif bat_capacity <= 25  then
-				bat_cap_hi_color = 'errormsg'
+				bat_cap_hi_color = 'Error'
 				bat_charging_display =		'|█▓▒░░░▒▓█|'
 			elseif bat_capacity <= 50  then
 				bat_cap_hi_color = 'MsgArea'
