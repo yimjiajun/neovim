@@ -742,6 +742,104 @@ function install_linter_cpplint() {
 	}
 }
 
+function install_neovide() {
+	if [[ $(command -v neovide) ]]; then
+		return 0
+	fi
+
+	local dotfiles="$DOTFILES"
+
+	if [[ -z "$dotfiles" ]]; then
+		dotfiles="$HOME/.dotfiles"
+	fi
+
+	local neovide_config="$dotfiles/data/neovide.toml"
+
+	if [[ ! -f "$neovide_config" ]]; then
+		echo -e "warning: neovide configuration file not found!" >&2
+	fi
+
+	if [[ -d '/run/WSL' ]] && [[ $(command -v powershell.exe) ]]; then
+		if [[ $(command -v neovide.exe) ]]; then
+			return 0
+		fi
+
+		local download_link='https://github.com/neovide/neovide/releases/download/0.11.2/neovide.msi'
+
+		powershell.exe curl -v -o '~\Downloads\neovide.msi' "$download_link" || {
+			echo -e "\033[31mError: Windows Download neovide failed!\033[0m" >&2
+			return 1
+		}
+
+		powershell.exe start '~\Downloads\neovide.msi' || {
+			echo -e "\033[31mError: Windows Install neovide failed!\033[0m" >&2
+			return 1
+		}
+
+		if [[ -d '/mnt/c/Users' ]] && [[ -f "$neovide_config" ]]; then
+			local win_usr="$(powershell.exe -C 'echo $env:USERNAME' | tr -d '\r')"
+			local win_usr_path="/mnt/c/Users/$win_usr"
+			local win_roaming_path="$win_usr_path/AppData/Roaming"
+
+			if [[ ! -d "$win_roaming_path" ]]; then
+				echo -e "\033[33mWarning: Windows roaming path not found!\033[0m" >&2
+			else
+				local win_neovide_path="$win_roaming_path/neovide"
+
+				mkdir -p "$win_neovide_path" 2>/dev/null
+				cp -f "$neovide_config" "$win_neovide_path/config.toml"
+
+				if [[ ! -f "$win_neovide_path/config.toml" ]]; then
+					echo -e "\033[33mWarning: Copy Neovide configuration file failed!\033[0m" >&2
+				else
+					echo -e "copy Neovide configuration file to Windows roaming path:\n"\
+						"$win_neovide_path/config.toml"
+					sed -i '/^wsl\s*=.*$/d' "$win_neovide_path/config.toml"
+					echo 'wsl = true' >> "$win_neovide_path/config.toml"
+				fi
+			fi
+		fi
+
+		return 0
+	elif [[ $OSTYPE == "linux-gnu"* ]]; then
+		sudo apt install -y curl \
+			gnupg ca-certificates git \
+			gcc-multilib g++-multilib cmake libssl-dev pkg-config \
+			libfreetype6-dev libasound2-dev libexpat1-dev libxcb-composite0-dev \
+			libbz2-dev libsndio-dev freeglut3-dev libxmu-dev libxi-dev libfontconfig1-dev \
+			libxcursor-dev 1>/dev/null || {
+			echo -e "\033[31mError: Install neovide failed!\033[0m" >&2
+			return 1
+		}
+
+		if [[ -z $(command -v rustc) ]]; then
+			curl --proto '=https' --tlsv1.2 -sSf "https://sh.rustup.rs" | sh || {
+				echo -e "\033[31mError: Install rust failed!\033[0m" >&2
+				return 1
+			}
+		fi
+
+		cargo install --git https://github.com/neovide/neovide 1>/dev/null || {
+				echo -e "\033[31mError: Install neovide via cargo failed!\033[0m" >&2
+				return 1
+			}
+	elif [[ $OSTYPE == "darwin"* ]]; then
+		brew install --cask neovide || {
+			echo -e "\033[31mError: Install neovide failed!\033[0m" >&2
+			return 1
+		}
+	else
+		return 3
+	fi
+
+	if [[ -f "$neovide_config" ]]; then
+		mkdir -p "$HOME/.config/neovide" 2>/dev/null
+		ln -sfr "$neovide_config" "$HOME/.config/neovide/config.toml"
+	fi
+
+	return 0
+}
+
 function main {
 	local install_failed=0
 	local status_pkgs=()
