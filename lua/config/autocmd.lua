@@ -18,14 +18,15 @@ vim.api.nvim_create_autocmd( "BufRead", {
 
 vim.api.nvim_create_augroup( "format", { clear = true })
 
-vim.api.nvim_create_autocmd( "BufWritePre", {
+vim.api.nvim_create_autocmd( "InsertLeave", {
 	desc = "Killing whitespace trailing",
 	group = "format",
 	pattern = "*",
 	callback = function()
-		if vim.g.custom.format.kill_whitespace == 1 then
-			vim.cmd([[%s/\s\+$//e]])
-		end
+		local row = vim.api.nvim_win_get_cursor(0)[1]
+		local col = vim.api.nvim_win_get_cursor(0)[2]
+		vim.cmd([[s/\s\+$//e]])
+		vim.fn.setpos('.', {0, row, col+1, 0})
 	end,
 })
 

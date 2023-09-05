@@ -11,9 +11,6 @@ vim.g.custom = {
 		"pyright",
 		"rust_analyzer",
 	},
-	format = {
-		kill_whitespace = 1,
-	},
 }
 
 if vim.g.neovide ~= nil then
