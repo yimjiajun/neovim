@@ -117,9 +117,20 @@ local function set_current_working_directory()
 	require('config.function').Session('save')
 	table.insert(work_dirs, current_file_dir)
 end
+
 local function change_working_directory()
+	local lists = {}
+
+	for i, v in ipairs(work_dirs) do
+		lists[i] = string.format("%s", v)
+	end
+
 	local chg_work_dir = require('features.common').TableSelection(
-		work_dirs, "Change Working Directory")
+		work_dirs, lists, "Change Working Directory")
+
+	if chg_work_dir == nil then
+		return
+	end
 
 	require('config.function').Session('save')
 	vim.cmd('cd ' .. chg_work_dir)
