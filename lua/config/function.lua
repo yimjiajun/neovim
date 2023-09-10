@@ -36,6 +36,12 @@ local function search_file()
 end
 
 local function search_word(extension, mode)
+	local word
+
+	if extension == nil then
+		extension = "*"
+	end
+
 	if extension == "" then
 		if vim.fn.executable("rg") == 1 then
 			extension = vim.fn.input("Enter filetype to search: ", '-g "*.' .. vim.fn.expand("%:e") .. '"')
@@ -48,7 +54,9 @@ local function search_word(extension, mode)
 		end
 	end
 
-	local word = vim.fn.input("Enter word to search: ")
+	if mode ~= 'cursor' then
+		word = vim.fn.input("Enter word to search: ")
+	end
 
 	if word == "" then
 		word = vim.fn.expand("<cword>")
@@ -61,10 +69,9 @@ local function search_word(extension, mode)
 
 	if vim.fn.executable("rg") == 1 then
 		cmd = [[cexpr system('rg --vimgrep --smart-case ' .. ' "' .. getreg('-') .. '" ' .. getreg('"'))]]
-
 	end
 
-	vim.cmd("silent! " .. cmd  .. " | silent! +copen 20")
+	vim.cmd("silent! " .. cmd  .. " | silent! +copen 5")
 end
 
 local function git_diff(mode)
