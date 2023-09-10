@@ -36,7 +36,7 @@ local function search_file()
 end
 
 local function search_word(extension, mode)
-	local word
+	local word = ""
 
 	if extension == nil then
 		extension = "*"
