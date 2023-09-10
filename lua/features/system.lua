@@ -1,5 +1,49 @@
 local uv = vim.loop
 local work_dirs = {uv.cwd()}
+local files_search_found = {}
+
+local function recursive_file_search(directry, pattern)
+	files_search_found = {}
+
+	local function file_search(directory, pattern)
+		local lfs = require('lfs')
+
+		if directory == nil or vim.fn.len(directory) == 0 then
+			directory = uv.cwd()
+		end
+
+		if pattern == nil then
+			pattern = "*"
+		end
+
+		for file in lfs.dir(directory) do
+			if file ~= "." and file ~= ".." then
+				local delim = "/"
+
+				if vim.fn.has('unix') ~= 1 then
+					delim = "\\"
+				end
+
+				local filePath = directory .. delim .. file
+				local attributes = lfs.attributes(filePath)
+
+				if attributes.mode == "file" and file:match(pattern) then
+					if #files_search_found == 0 then
+						files_search_found = { filePath }
+					else
+						table.insert(files_search_found, filePath)
+					end
+				elseif attributes.mode == "directory" then
+					file_search(filePath, pattern)
+				end
+			end
+		end
+	end
+
+	file_search(directory, pattern)
+
+	return files_search_found
+end
 
 local function get_file_dir()
 	local current_file_dir = vim.fn.expand('%:p:h')
@@ -420,6 +464,7 @@ local ret = {
 	PwrshCmd = pwrsh_cmd,
 	GetGitInfo = get_git_info,
 	GetCalendar = calendar_interactive,
+	SearchFile = recursive_file_search,
 }
 
 for name in pairs(ret) do
