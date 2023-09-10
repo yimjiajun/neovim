@@ -327,7 +327,7 @@ local function toggle_quickfix()
 	end
 end
 
-
+local files_in_bank = {}
 local function files_bank(act)
 	local title = 'Files Bank'
 	local file = vim.fn.expand('%:#')
@@ -335,9 +335,9 @@ local function files_bank(act)
 
 	if act == nil or act == ''
 	then
-		items = vim.fn.getqflist({ title = title, items = 0 }).items
+		items = files_in_bank
 
-		vim.fn.setqflist({}, 'r', {
+		vim.fn.setqflist({}, ' ', {
 			title = title,
 			items = items,
 		})
@@ -352,19 +352,18 @@ local function files_bank(act)
 		return
 	end
 
-
 	local std_item = {
 		filename = file,
 		text = vim.fn.getline('.'),
 		lnum = vim.fn.line('.'),
 		col = vim.fn.col('.'),
-		type = 'f',
-		bufnr = nil,
+		type = 'c',
+		bufnr = vim.fn.bufnr('%'),
 	}
 
 	local prev_item_found = false
 
-	for _, v in ipairs(vim.fn.getqflist({ title = title, items = 0 }).items)
+	for _, v in ipairs(files_in_bank)
 	do
 		if v.bufnr == vim.fn.bufnr('%') then
 			prev_item_found = true
@@ -387,7 +386,7 @@ local function files_bank(act)
 		table.insert(items, std_item)
 	end
 
-	vim.fn.setqflist({}, 'r', { title = title, items = items })
+	files_in_bank = items
 end
 
 local M = {
