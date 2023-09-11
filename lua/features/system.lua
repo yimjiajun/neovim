@@ -453,6 +453,61 @@ local function setup_keymapping()
 	setup_calander()
 end
 
+local function json_file_write(tbl, path)
+	if tbl == nil then
+		vim.api.nvim_echo({{"empty table ...",
+			"ErrorMsg"}}, false, {})
+		return false
+	end
+
+	if path == nil or #path == 0 then
+		vim.api.nvim_echo({{"file path is empty ...",
+			"ErrorMsg"}}, false, {})
+		return false
+	end
+
+	local json_format = vim.json.encode(tbl)
+	local file = io.open(path, "w")
+
+	if file == nil then
+		vim.api.nvim_echo({{"file open failed ...",
+			"ErrorMsg"}}, false, {})
+		return false
+	end
+
+	file:write(json_format)
+	file:close()
+
+	return true
+end
+
+local function json_file_read(path)
+	if path == nil or #path == 0 then
+		vim.api.nvim_echo({{"file path is empty ...",
+			"ErrorMsg"}}, false, {})
+		return false
+	end
+
+	local file = io.open(path, "r")
+
+	if file == nil then
+		vim.api.nvim_echo({{"file open failed ...",
+			"ErrorMsg"}}, false, {})
+		return nil
+	end
+
+	local json_format = file:read("*a")
+	file:close()
+
+	if #json_format == 0 then
+		vim.api.nvim_echo({{"file is empty ...",
+			"ErrorMsg"}}, false, {})
+		return nil
+	end
+
+	return vim.json.decode(json_format)
+end
+
 setup_ui_git()
 setup_top()
 setup_disk_usage()
@@ -476,6 +531,8 @@ local ret = {
 	GetGitInfo = get_git_info,
 	GetCalendar = calendar_interactive,
 	SearchFile = recursive_file_search,
+	GetJsonFile = json_file_read,
+	SetJsonFile = json_file_write,
 }
 
 for name in pairs(ret) do
