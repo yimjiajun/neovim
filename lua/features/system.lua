@@ -100,10 +100,10 @@ end
 local function set_working_directory()
 	local current_file_dir = get_file_dir()
 
-	print('change working directory to: ')
+	vim.api.nvim_echo({{'change working directory to: ', "None"}}, true, {})
 	vim.api.nvim_echo({{current_file_dir, "WarningMsg"}}, true, {})
 
-	require('config.function').Session('save')
+	require('config.function').SaveSession()
 	vim.cmd('cd ' .. current_file_dir)
 	table.insert(work_dirs, current_file_dir)
 end
@@ -111,10 +111,10 @@ end
 local function set_current_working_directory()
 	local current_file_dir = uv.cwd()
 
-	print('save working directory: ')
+	vim.api.nvim_echo({{'save working directory: ', "None"}}, true, {})
 	vim.api.nvim_echo({{current_file_dir, "WarningMsg"}}, true, {})
 
-	require('config.function').Session('save')
+	require('config.function').SaveSession()
 	table.insert(work_dirs, current_file_dir)
 end
 
@@ -132,7 +132,7 @@ local function change_working_directory()
 		return
 	end
 
-	require('config.function').Session('save')
+	require('config.function').SaveSession()
 	vim.cmd('cd ' .. chg_work_dir)
 end
 

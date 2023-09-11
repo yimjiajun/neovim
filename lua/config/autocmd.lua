@@ -4,7 +4,7 @@ vim.api.nvim_create_autocmd( "VimLeavePre", {
 	group = "session",
 	pattern = "*.*",
 	callback = function()
-		require("config.function").Session("save")
+		require("config.function").SaveSession()
 	end,
 })
 

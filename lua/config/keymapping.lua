@@ -110,8 +110,8 @@ local function setting_key_terminal()
 end
 
 local function setting_key_session()
-  vim.api.nvim_set_keymap('n', '<leader>Ls', [[<cmd> lua KeyFunc.Session("load") <CR>]], {silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>LS', [[<cmd> lua KeyFunc.Session("selection") <CR>]], {silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>Ls', [[<cmd> lua KeyFunc.GetSession() <CR>]], {silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>LS', [[<cmd> lua KeyFunc.SelSession() <CR>]], {silent = true})
 end
 
 local function setting_key_features()

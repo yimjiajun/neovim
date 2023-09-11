@@ -176,38 +176,99 @@ local function set_statusline(mode)
 end
 
 local function session(mode)
-	local path = vim.fn.stdpath('data') .. '/sessions'
-	local session_name = vim.fn.substitute(vim.fn.expand(vim.fn.getcwd()), '/', '_', 'g') .. ".vim"
-	local src = path .. '/' .. session_name
+	local delim = vim.fn.has('win32') ~= 0 and "\\" or "/"
+	local path = vim.fn.stdpath('data') .. delim .. 'sessions'
+	local session_name = vim.fn.substitute(vim.fn.expand(vim.fn.getcwd()), delim, '_', 'g') .. ".vim"
+	local src = path .. delim .. session_name
+	local json_file = path .. delim .. "sessions.json"
+	local format = {
+		path = nil,
+		src = nil,
+		name = nil,
+		date = nil,
+	}
+	if vim.fn.filereadable(json_file) == 0 then
+		vim.fn.writefile({}, json_file)
+	end
 
-	if mode == "save" then
+	local json_lua_tbl = require('features.system').GetJsonFile(json_file) or {}
+	local function save_session()
+		format = {
+			path = vim.fn.getcwd(),
+			src = src,
+			name = vim.fn.fnamemodify(vim.fn.getcwd(), ':t'),
+			date = os.date("%Y/%h/%d")
+		}
+
 		if vim.fn.isdirectory(path) == 0 then
 			vim.fn.mkdir(path, "p")
 		end
 
+		vim.fn.sessionoptions = {
+			"buffers", "curdir", "folds", "tabpages", "winsize"
+		}
+
 		vim.cmd("mksession! " .. src)
 
-	elseif mode == "selection" then
-		local sessions = vim.fn.systemlist("ls -t " .. path)
-		local lists = {}
+		for i, v in ipairs(json_lua_tbl) do
+			if v.path == format.path then
+				table.remove(json_lua_tbl, i)
+				break
+			end
+		end
 
-		for i, v in ipairs(sessions) do
-			lists[i] = string.format("%3d. %s", i, v)
+		table.insert(json_lua_tbl, format)
+		require('features.system').SetJsonFile(json_lua_tbl, json_file)
+	end
+
+	local function load_session()
+		if (vim.fn.isdirectory(path) == 1) and (vim.fn.filereadable(src) == 1) then
+			vim.cmd("source " .. src)
+		else
+			vim.api.nvim_echo({{"Session not found !", "ErrorMsg"}}, false, {})
+		end
+	end
+
+	local function select_session()
+		local lists = {}
+		for i, v in ipairs(json_lua_tbl) do
+			lists[i] = string.format("%2d. [%s]:\t%s\t{%s}",
+				i, v.name, v.path, v.date)
+		end
+
+		if #lists == 0 then
+			vim.api.nvim_echo({{"Session not found !", "ErrorMsg"}}, false, {})
+			return
 		end
 
 		require('features.common').DisplayTitle("Select Session to Load")
+
 		local s = vim.fn.inputlist(lists)
 
 		if s > 0 then
-			vim.cmd("source " .. path .. '/' .. sessions[s])
-		end
-	else
-		if vim.fn.isdirectory(path) == 1 and vim.fn.filereadable(src) == 1 then
-			vim.cmd("source " .. src)
-		else
-			vim.cmd("echohl WarningMsg | echo 'src not found!' | echohl none")
+			vim.cmd("source " .. json_lua_tbl[s].src)
 		end
 	end
+
+	if mode == "save" then
+		save_session()
+	elseif mode == "selection" then
+		select_session()
+	else
+		load_session()
+	end
+end
+
+local function save_session()
+	session("save")
+end
+
+local function load_session()
+	session("load")
+end
+
+local function select_session()
+	session("selection")
 end
 
 local function create_ctags()
@@ -622,7 +683,9 @@ local M = {
 	GetRegisterList = get_register_list,
 	SetStatusline = set_statusline,
 	SetFileFormat = setup_file_format,
-	Session = session,
+	SaveSession = save_session,
+	GetSession = load_session,
+	SelSession = select_session,
 	CreateCtags = create_ctags,
 	Build = build,
 	ToggleQuickFix = toggle_quickfix,

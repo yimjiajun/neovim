@@ -195,7 +195,7 @@ local buttons = {
     val = {
         button("`", "  Configuration", "<cmd> e ~/.config/nvim/init.lua  <CR>"),
         button("0", "  Recently opened files", "<cmd> lua require('telescope.builtin').oldfiles()<CR>"),
-        button("1", "  Sessions", [[<cmd> lua require('config.function').Session('selection') <CR>]]),
+        button("1", "  Sessions", [[<cmd> lua require('config.function').SelSession() <CR>]]),
         button("2", "󰥨  Find file", [[<cmd> lua require('config.function').SearchFile("") <CR>]]),
         button("3", "󱙓  Find word",  [[<cmd> lua require('config.function').SearchWord("") <CR>]]),
         button("4", "  Jump to bookmarks", [[<cmd> lua require('config.function').GetMarks("default") <CR>]]),
