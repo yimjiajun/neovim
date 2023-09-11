@@ -330,8 +330,6 @@ local function setup_file_format()
 		vim.cmd('setlocal shiftwidth=2')
 		vim.cmd('setlocal expandtab')
 		vim.cmd('setlocal spell')
-		vim.cmd('highlight MarkdownHeading guifg=Black guibg=DarkOrange')
-		vim.cmd([[match MarkdownHeading /^#\s.*/]])
 	elseif vim.bo.filetype == "py" then
 		vim.cmd('setlocal softtabstop=2')
 		vim.cmd('setlocal tabstop=2')
