@@ -588,7 +588,7 @@ function install_lsp_clangd() {
 	sudo apt-get install clangd-12 || {
 		echo -e "\033[31mError: Install clangd failed!\033[0m" >&2
 
-		sudo apt-get install clangd-9 \
+		sudo apt-get install -y clangd-9 \
 			|| sudo apt-get install clangd-8 \
 			|| sudo apt-get install clangd || {
 			echo -e "\033[31mError: Install clangd failed!\033[0m" >&2
@@ -688,7 +688,7 @@ function install_linter_python() {
 	fi
 
 	if [[ $OSTYPE == "linux-gnu"* ]]; then
-		sudo apt-get install pylint || {
+		sudo apt-get install -y pylint || {
 			echo -e "\033[31mError: Install python linter failed!\033[0m" >&2
 			return 1
 		}
@@ -802,7 +802,7 @@ function install_neovide() {
 
 		return 0
 	elif [[ $OSTYPE == "linux-gnu"* ]]; then
-		sudo apt install -y curl \
+		sudo apt-get install -y curl \
 			gnupg ca-certificates git \
 			gcc-multilib g++-multilib cmake libssl-dev pkg-config \
 			libfreetype6-dev libasound2-dev libexpat1-dev libxcb-composite0-dev \
