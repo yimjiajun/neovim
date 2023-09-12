@@ -3,6 +3,8 @@ KeyFunc = require("config.function")
 local function setting_key_move()
   vim.api.nvim_set_keymap('i', '<C-b>', '<Left>', { silent = true })
   vim.api.nvim_set_keymap('i', '<C-f>', '<Right>', { silent = true })
+  vim.api.nvim_set_keymap('n', '<C-u>', '<C-u>zz', { silent = true })
+  vim.api.nvim_set_keymap('n', '<C-d>', '<C-d>zz', { silent = true })
 end
 
 local function setting_key_buffer()
