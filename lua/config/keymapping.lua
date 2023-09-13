@@ -120,9 +120,22 @@ local function setting_key_features()
   vim.api.nvim_set_keymap('n', '<leader>tc', [[<cmd> lua KeyFunc.CreateCtags() <CR>]], {silent = true})
   vim.api.nvim_set_keymap('n', '<leader>b', [[<cmd> lua KeyFunc.Build() <CR>]], {silent = true})
   vim.api.nvim_set_keymap('n', '<leader>B', [[<cmd> lua KeyFunc.Build("latest") <CR>]], {silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>sb', ':lua KeyFunc.FilesBank("save") <CR>', { silent = true })
-  vim.api.nvim_set_keymap('n', '<leader>Sb', ':lua KeyFunc.FilesBank("remove") <CR>', { silent = true })
-  vim.api.nvim_set_keymap('n', '<leader>ob', ':lua KeyFunc.FilesBank("") <CR>', { silent = true })
+  vim.api.nvim_set_keymap('n', '<leader>sb',
+		[[<cmd> lua require("config.function").Bookmarks().Save() <CR>]],{silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>sB',
+		[[<cmd> lua require("config.function").Bookmarks().Rename() <CR>]],{silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>Sb',
+		[[<cmd> lua require("config.function").Bookmarks().Remove() <CR>]],{silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>SB',
+		[[<cmd> lua require("config.function").Bookmarks().Clear() <CR>]],{silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>ob',
+		[[<cmd> lua require("config.function").Bookmarks().Get() <CR>]],{silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>oB',
+		[[<cmd> lua require("config.function").Bookmarks().GetAll() <CR>]],{silent = true})
+  vim.api.nvim_set_keymap('n', '<M-n>',
+		[[<cmd> lua require("config.function").Bookmarks().Next() <CR>]],{silent = true})
+  vim.api.nvim_set_keymap('n', '<M-p>',
+		[[<cmd> lua require("config.function").Bookmarks().Prev() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>sm', [[<cmd> lua KeyFunc.MarkBuf('save') <CR>]], {silent = true})
   vim.api.nvim_set_keymap('n', '<leader>Sm', [[<cmd> lua KeyFunc.MarkBuf('remove') <CR>]], {silent = true})
   vim.api.nvim_set_keymap('n', '<leader>Su', [[<cmd> lua KeyFunc.MarkBuf('clear') <CR>]], {silent = true})
