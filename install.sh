@@ -794,8 +794,6 @@ function install_neovide() {
 				else
 					echo -e "copy Neovide configuration file to Windows roaming path:\n"\
 						"$win_neovide_path/config.toml"
-					sed -i '/^wsl\s*=.*$/d' "$win_neovide_path/config.toml"
-					echo 'wsl = true' >> "$win_neovide_path/config.toml"
 				fi
 			fi
 		fi
