@@ -136,6 +136,10 @@ local function setting_key_features()
 		[[<cmd> lua require("config.function").Bookmarks().Next() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<M-p>',
 		[[<cmd> lua require("config.function").Bookmarks().Prev() <CR>]],{silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>ot',
+		[[<cmd> lua require("features.todo").Get() <CR>]],{silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>st',
+		[[<cmd> lua require("features.todo").Add() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>sm', [[<cmd> lua KeyFunc.MarkBuf('save') <CR>]], {silent = true})
   vim.api.nvim_set_keymap('n', '<leader>Sm', [[<cmd> lua KeyFunc.MarkBuf('remove') <CR>]], {silent = true})
   vim.api.nvim_set_keymap('n', '<leader>Su', [[<cmd> lua KeyFunc.MarkBuf('clear') <CR>]], {silent = true})
