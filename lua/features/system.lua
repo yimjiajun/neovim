@@ -482,7 +482,7 @@ local function json_file_write(tbl, path)
 end
 
 local function json_file_read(path)
-	if path == nil or #path == 0 then
+	if path == nil then
 		vim.api.nvim_echo({{"file path is empty ...",
 			"ErrorMsg"}}, false, {})
 		return false
