@@ -147,6 +147,7 @@ local function read_todo_list()
 		col = qf_col,
 	}
 end
+
 local function get_todo_list()
 	local lists, items = {}, {}
 	local file, text = nil, ''
@@ -183,9 +184,14 @@ local function get_todo_list()
 	todo_lists = lists
 
 	local qf_title = vim.fn.getqflist({ title = 0 }).title
+	local action = ' '
+
+	if qf_title == todo_list_title then
+		action = 'r'
+	end
 
 	if #items > 0 then
-		vim.fn.setqflist({}, ' ', {
+		vim.fn.setqflist({}, action, {
 			title = todo_list_title,
 			items = items,
 		})
