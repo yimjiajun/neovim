@@ -121,21 +121,21 @@ local function setting_key_features()
   vim.api.nvim_set_keymap('n', '<leader>b', [[<cmd> lua KeyFunc.Build() <CR>]], {silent = true})
   vim.api.nvim_set_keymap('n', '<leader>B', [[<cmd> lua KeyFunc.Build("latest") <CR>]], {silent = true})
   vim.api.nvim_set_keymap('n', '<leader>sb',
-		[[<cmd> lua require("config.function").Bookmarks().Save() <CR>]],{silent = true})
+		[[<cmd> lua require('features.bookmarks').Save() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>sB',
-		[[<cmd> lua require("config.function").Bookmarks().Rename() <CR>]],{silent = true})
+		[[<cmd> lua require('features.bookmarks').Rename() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>Sb',
-		[[<cmd> lua require("config.function").Bookmarks().Remove() <CR>]],{silent = true})
+		[[<cmd> lua require('features.bookmarks').Remove() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>SB',
-		[[<cmd> lua require("config.function").Bookmarks().Clear() <CR>]],{silent = true})
+		[[<cmd> lua require('features.bookmarks').Clear() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>ob',
-		[[<cmd> lua require("config.function").Bookmarks().Get() <CR>]],{silent = true})
+		[[<cmd> lua require('features.bookmarks').Get() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>oB',
-		[[<cmd> lua require("config.function").Bookmarks().GetAll() <CR>]],{silent = true})
+		[[<cmd> lua require('features.bookmarks').GetAll() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<M-n>',
-		[[<cmd> lua require("config.function").Bookmarks().Next() <CR>]],{silent = true})
+		[[<cmd> lua require('features.bookmarks').Next() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<M-p>',
-		[[<cmd> lua require("config.function").Bookmarks().Prev() <CR>]],{silent = true})
+		[[<cmd> lua require('features.bookmarks').Prev() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>ot',
 		[[<cmd> lua require("features.todo").Get() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>st',
