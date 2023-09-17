@@ -121,6 +121,7 @@ local function setting_key_features()
   vim.api.nvim_set_keymap('n', '<leader>b', [[<cmd> lua KeyFunc.Build() <CR>]], {silent = true})
   vim.api.nvim_set_keymap('n', '<leader>B', [[<cmd> lua KeyFunc.Build("latest") <CR>]], {silent = true})
   vim.api.nvim_set_keymap('n', '<leader>vb',
+
 		[[<cmd> lua require("features.bookmarks").Review() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>sb',
 		[[<cmd> lua require("features.bookmarks").Save() <CR>]],{silent = true})
@@ -138,20 +139,32 @@ local function setting_key_features()
 		[[<cmd> lua require("features.bookmarks").Next() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<M-p>',
 		[[<cmd> lua require("features.bookmarks").Prev() <CR>]],{silent = true})
+
   vim.api.nvim_set_keymap('n', '<leader>ot',
 		[[<cmd> lua require("features.todo").Get() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>st',
 		[[<cmd> lua require("features.todo").Add() <CR>]],{silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>sm', [[<cmd> lua KeyFunc.MarkBuf('save') <CR>]], {silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>Sm', [[<cmd> lua KeyFunc.MarkBuf('remove') <CR>]], {silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>Su', [[<cmd> lua KeyFunc.MarkBuf('clear') <CR>]], {silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>om', [[<cmd> lua KeyFunc.MarkBuf() <CR>]], {silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>ou', [[<cmd> lua KeyFunc.MarkBuf('sort') <CR>]], {silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>sM', [[<cmd> lua KeyFunc.MarkCwd('save') <CR>]], {silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>SM', [[<cmd> lua KeyFunc.MarkCwd('remove') <CR>]], {silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>SU', [[<cmd> lua KeyFunc.MarkCwd('clear') <CR>]], {silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>oM', [[<cmd> lua KeyFunc.MarkCwd() <CR>]], {silent = true})
-  vim.api.nvim_set_keymap('n', '<leader>oU', [[<cmd> lua KeyFunc.MarkCwd('universal') <CR>]], {silent = true})
+
+  vim.api.nvim_set_keymap('n', '<leader>sm',
+		[[<cmd> lua require('features.marks').Buffer('save') <CR>]], {silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>Sm',
+		[[<cmd> lua require('features.marks').Buffer('remove') <CR>]], {silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>Su',
+		[[<cmd> lua require('features.marks').Buffer('clear') <CR>]], {silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>om',
+		[[<cmd> lua require('features.marks').Buffer() <CR>]], {silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>ou',
+		[[<cmd> lua require('features.marks').Buffer('sort') <CR>]], {silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>sM',
+		[[<cmd> lua require('features.marks').All('save') <CR>]], {silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>SM',
+		[[<cmd> lua require('features.marks').All('remove') <CR>]], {silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>SU',
+		[[<cmd> lua require('features.marks').All('clear') <CR>]], {silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>oM',
+		[[<cmd> lua require('features.marks').All() <CR>]], {silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>oU',
+		[[<cmd> lua require('features.marks').All('universal') <CR>]], {silent = true})
 end
 
 setting_key_leader()
