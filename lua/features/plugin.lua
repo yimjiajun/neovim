@@ -327,6 +327,13 @@ require("lazy").setup({
 				require('setup.color_scheme').GruvboxMaterial()
 			end,
 		},
+
+		{ 'sam4llis/nvim-tundra',
+			priority = 1000,
+			config = function()
+				require('setup.color_scheme').Tundra()
+			end,
+		},
 	},
 
 	defaults = {
