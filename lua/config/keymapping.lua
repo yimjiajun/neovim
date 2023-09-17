@@ -120,22 +120,24 @@ local function setting_key_features()
   vim.api.nvim_set_keymap('n', '<leader>tc', [[<cmd> lua KeyFunc.CreateCtags() <CR>]], {silent = true})
   vim.api.nvim_set_keymap('n', '<leader>b', [[<cmd> lua KeyFunc.Build() <CR>]], {silent = true})
   vim.api.nvim_set_keymap('n', '<leader>B', [[<cmd> lua KeyFunc.Build("latest") <CR>]], {silent = true})
+  vim.api.nvim_set_keymap('n', '<leader>vb',
+		[[<cmd> lua require("features.bookmarks").Review() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>sb',
-		[[<cmd> lua require('features.bookmarks').Save() <CR>]],{silent = true})
+		[[<cmd> lua require("features.bookmarks").Save() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>sB',
-		[[<cmd> lua require('features.bookmarks').Rename() <CR>]],{silent = true})
+		[[<cmd> lua require("features.bookmarks").Rename() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>Sb',
-		[[<cmd> lua require('features.bookmarks').Remove() <CR>]],{silent = true})
+		[[<cmd> lua require("features.bookmarks").Remove() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>SB',
-		[[<cmd> lua require('features.bookmarks').Clear() <CR>]],{silent = true})
+		[[<cmd> lua require("features.bookmarks").Clear() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>ob',
-		[[<cmd> lua require('features.bookmarks').Get() <CR>]],{silent = true})
+		[[<cmd> lua require("features.bookmarks").Get() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>oB',
-		[[<cmd> lua require('features.bookmarks').GetAll() <CR>]],{silent = true})
+		[[<cmd> lua require("features.bookmarks").GetAll() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<M-n>',
-		[[<cmd> lua require('features.bookmarks').Next() <CR>]],{silent = true})
+		[[<cmd> lua require("features.bookmarks").Next() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<M-p>',
-		[[<cmd> lua require('features.bookmarks').Prev() <CR>]],{silent = true})
+		[[<cmd> lua require("features.bookmarks").Prev() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>ot',
 		[[<cmd> lua require("features.todo").Get() <CR>]],{silent = true})
   vim.api.nvim_set_keymap('n', '<leader>st',

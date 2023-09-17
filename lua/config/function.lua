@@ -689,7 +689,6 @@ local M = {
 	FilesBank = files_bank,
 	MarkBuf = buffer_marks,
 	MarkCwd = working_directory_marks,
-	Bookmarks = bookmarks,
 }
 
 for name in pairs(M) do
