@@ -106,8 +106,6 @@ wk.register({
 		b = 'bookmarks',
 		B = 'bookmarks (all)',
 		t = 'todo lists',
-	},
-	L = { name = 'Load',
 		s = 'session',
 		S = 'session (selection)',
 	},
