@@ -37,7 +37,7 @@ local function compiler_insert_info(name, cmd, desc, ext, type, grp, efm)
 	compiler_build_data = data
 end
 
-local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp, efm)
+local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp, efm, opts)
 	local data = vim.g.compiler_data
 	local info = {
 		name = name,
@@ -47,6 +47,7 @@ local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp, e
 		build_type = type,
 		group = grp,
 		efm = efm,
+		opts = opts,
 	}
 
 	table.insert(data, info)
@@ -173,19 +174,33 @@ local function compiler_latest_makeprg_setup()
 end
 
 local function compiler_tbl_makeprg_setup(tbl)
-	if tbl == nil
-	then
+	if tbl == nil then
 		return false
 	end
 
-	if tbl.build_type == "term"
-	then
+	if tbl.opts ~= nil then
+		if tbl.opts.callback ~= nil and tbl.opts.dofile ~= nil
+			and vim.fn.filereadable(tbl.opts.dofile) > 0
+		then
+			local callback = tbl.opts.callback
+			dofile(tbl.opts.dofile)
+
+			if type(callback) == "string" then
+				callback = _G[callback]
+			end
+
+			if type(callback) == "function" then
+				callback()
+			end
+		end
+	end
+
+	if tbl.build_type == "term" then
 		vim.cmd("5split | terminal " .. tbl.cmd)
 		return false
 	end
 
-	if tbl.build_type == "term_full"
-	then
+	if tbl.build_type == "term_full" then
 		if vim.fn.exists(":ToggleTerm") and vim.fn.exists(":TermCmd")
 		then
 			vim.cmd("TermCmd " .. tbl.cmd)
@@ -196,8 +211,7 @@ local function compiler_tbl_makeprg_setup(tbl)
 		return false
 	end
 
-	if tbl.build_type == "builtin"
-	then
+	if tbl.build_type == "builtin" then
 		vim.cmd(tbl.cmd)
 		return false
 	end
