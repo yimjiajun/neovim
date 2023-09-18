@@ -280,18 +280,18 @@ end
 
 local function remove_bookmark_in_buffer()
 	local items = {}
-	local filenmae = vim.fn.expand('%:p')
-	local current_line = vim.fn.getline('.')
+	local filename = vim.fn.expand('%:p')
+	local current_line = vim.fn.line('.')
 	local remove_bookmark_content = nil
 
-	if vim.bo.filetype == 'qf' then
+	if vim.bo.filetype == 'qf' or filename == '' then
 		return
 	end
 
 	BookMarks = require('features.system').GetJsonFile(bookmarks_json_file) or {}
 
 	for _, v in ipairs(BookMarks) do
-		if v.lnum == current_line and v.filename == filenmae then
+		if v.lnum == current_line and v.filename == filename then
 			remove_bookmark_content = v.text
 			goto continue
 		end
