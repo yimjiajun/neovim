@@ -18,11 +18,15 @@ vim.api.nvim_create_autocmd( "BufRead", {
 
 vim.api.nvim_create_augroup( "format", { clear = true })
 
-vim.api.nvim_create_autocmd( "InsertLeave", {
+vim.api.nvim_create_autocmd("InsertLeave", {
 	desc = "Killing whitespace trailing",
 	group = "format",
 	pattern = "*",
 	callback = function()
+		if vim.fn.expand('%:p') == '' then
+			return
+		end
+
 		local row = vim.api.nvim_win_get_cursor(0)[1]
 		local col = vim.api.nvim_win_get_cursor(0)[2]
 		vim.cmd([[s/\s\+$//e]])
