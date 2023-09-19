@@ -295,9 +295,9 @@ local function build(mode)
 
 	if mode == "latest"
 	then
-		status = compiler.LatestSetup()
+		status = compiler.LastSelect()
 	else
-		status = compiler.Setup()
+		status = compiler.Selection()
 	end
 
 	if status == nil
@@ -386,7 +386,18 @@ local function toggle_quickfix()
 	end
 end
 
-local M = {
+local function setup()
+	local callback = ''
+
+	for name in pairs(require('config.function')) do
+		callback = "require('config.function')." .. name .. "()"
+		callback = "lua print(" .. callback .. ")"
+		vim.cmd("command! -nargs=0 -bang " .. name .. " " .. callback)
+	end
+end
+
+return {
+	Setup = setup,
 	SearchFile = search_file,
 	SearchWord = search_word,
 	GitAdd = git_add,
@@ -409,8 +420,3 @@ local M = {
 	ToggleQuickFix = toggle_quickfix,
 }
 
-for name in pairs(M) do
-	vim.cmd("command! -nargs=0 -bang " .. name .. " lua print(" .. "require('config.function')." .. name .. "()" .. ")")
-end
-
-return M

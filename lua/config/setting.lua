@@ -29,6 +29,7 @@ local function Setting_view()
 	vim.opt.syntax = "on"
 	vim.opt.listchars = { tab = "| ", trail = "·", extends = "…", precedes = "…", nbsp = "␣" }
 	vim.opt.list = true
+
 	if vim.fn.has("termguicolors") == 1 then
 		vim.opt.termguicolors = true
 	end
@@ -74,9 +75,14 @@ local function Setting_netrw()
 	vim.g.netrw_winsize = 25
 end
 
-vim.opt.compatible = false
+local function setup()
+	vim.opt.compatible = false
+	Setting_view()
+	Setting_editor()
+	Setting_buffer()
+	Setting_netrw()
+end
 
-Setting_view()
-Setting_editor()
-Setting_buffer()
-Setting_netrw()
+return {
+	Setup = setup
+}

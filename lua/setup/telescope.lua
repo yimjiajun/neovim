@@ -117,7 +117,7 @@ local function setup_telescope()
 		extensions = extensions,
 	}
 
-
+	vim.cmd("command! -nargs=0 SshListTelescope lua require('setup.telescope').SshList()")
 	require('telescope').load_extension('live_grep_args')
 end
 
@@ -345,7 +345,5 @@ local ret = {
 	setup_heading = setup_extension_heading,
 	SshList = ssh_get_list_in_telescope,
 }
-
-vim.cmd("command! -nargs=0 SshListTelescope lua require('setup.telescope').SshList()")
 
 return ret

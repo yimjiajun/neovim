@@ -216,7 +216,12 @@ local function buffer_marks(act)
 	end
 end
 
+local function setup()
+	return nil
+end
+
 return {
+	Setup = setup,
 	All = all_marks,
 	Buffer = buffer_marks,
 }

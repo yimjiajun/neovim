@@ -4,9 +4,9 @@ local function dispatch_build(mode)
 
 	if mode == "latest"
 	then
-		status = compiler.LatestSetup()
+		status = compiler.LastSelect()
 	else
-		status = compiler.Setup()
+		status = compiler.Selection()
 	end
 
 	if status == nil

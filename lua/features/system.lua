@@ -508,12 +508,23 @@ local function json_file_read(path)
 	return vim.json.decode(json_format)
 end
 
-setup_ui_git()
-setup_top()
-setup_disk_usage()
-setup_keymapping()
+local function setup()
+	local callback = ''
+	setup_ui_git()
+	setup_top()
+	setup_disk_usage()
+	setup_keymapping()
 
-local ret = {
+	for name in pairs(require('features.system')) do
+		callback = "require('features.system')." .. name .. "()"
+		vim.cmd("command! -nargs=0 -bang " .. name .. " lua print(" .. callback .. ")" )
+	end
+
+	vim.cmd("command! -nargs=1 PwrshCmd lua require('features.system').PwrshCmd(<f-args>)")
+end
+
+return {
+	Setup = setup,
 	GetBatInfo = get_battery_info,
 	SetWD = set_working_directory,
 	SetCurrentWD = set_current_working_directory,
@@ -532,13 +543,5 @@ local ret = {
 	GetCalendar = calendar_interactive,
 	SearchFile = recursive_file_search,
 	GetJsonFile = json_file_read,
-	SetJsonFile = json_file_write,
+	SetJsonFile = json_file_write
 }
-
-for name in pairs(ret) do
-	vim.cmd("command! -nargs=0 -bang " .. name .. " lua print(" .. "require('features.system')." .. name .. "()" .. ")")
-end
-
-vim.cmd("command! -nargs=1 PwrshCmd lua require('features.system').PwrshCmd(<f-args>)")
-
-return ret

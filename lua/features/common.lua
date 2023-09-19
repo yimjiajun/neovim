@@ -93,11 +93,14 @@ local function table_selection(tbl, display_lists, name)
 	return sel_tbl
 end
 
-local ret = {
+local function setup()
+	return nil
+end
+
+return {
 	DisplayDelimitedLine = display_delimited_line,
 	DisplayTitle = display_title,
 	GroupSelection = group_selection,
 	TableSelection = table_selection,
+	Setup = setup
 }
-
-return ret

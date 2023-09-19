@@ -1,4 +1,3 @@
-local sys_func = require("features.system")
 local common = require("features.common")
 local display_title = common.DisplayTitle
 local group_selection = common.GroupSelection
@@ -274,10 +273,13 @@ local function compiler_build_setup_selection()
 	return compiler_tbl_makeprg_setup(sel_tbl)
 end
 
-local ret = {
-	Setup = compiler_build_setup_selection,
-	LatestSetup = compiler_latest_makeprg_setup,
+local function setup()
+	return nil
+end
+
+return {
+	Setup = setup,
+	Selection = compiler_build_setup_selection,
+	LastSelect = compiler_latest_makeprg_setup,
 	InsertInfo = compiler_insert_info_permanent,
 }
-
-return ret

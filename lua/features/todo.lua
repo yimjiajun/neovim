@@ -344,7 +344,7 @@ local function update_todo_list()
 end
 
 
-local function init_todo_list()
+local function setup()
 	if vim.fn.filereadable(vim.fn.expand(todo_list_json)) == 0 then
 		vim.fn.mkdir(todo_lists_path, 'p')
 		vim.fn.writefile({}, todo_list_json)
@@ -372,9 +372,8 @@ local function init_todo_list()
 	require('features.system').SetJsonFile(todo_lists, todo_list_json)
 end
 
-init_todo_list()
-
 return {
+	Setup = setup,
 	Add = add_todo_list,
 	Get = get_todo_list,
 	Read = read_todo_list,

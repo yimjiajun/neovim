@@ -515,7 +515,7 @@ local function review_bookmark_content()
 	end
 end
 
-local function init_bookmarks()
+local function setup()
 	if vim.fn.isdirectory(bookmarks_dir) == 0 then
 		vim.fn.mkdir(bookmarks_dir, 'p')
 	end
@@ -527,9 +527,8 @@ local function init_bookmarks()
 	BookMarks = require('features.system').GetJsonFile(bookmarks_json_file) or {}
 end
 
-init_bookmarks()
-
 return {
+	Setup = setup,
 	Save = save_bookmark,
 	Get = load_local_bookmarks,
 	GetAll = load_bookmarks,
