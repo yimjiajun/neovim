@@ -508,6 +508,23 @@ local function json_file_read(path)
 	return vim.json.decode(json_format)
 end
 
+local function run_system_command(cmd)
+	local handle, result
+
+	handle = io.popen(tostring(cmd))
+
+	if handle == nil then
+		vim.api.nvim_echo({{"run system command failed ...",
+			"ErrorMsg"}}, false, {})
+		return ''
+	end
+
+	result = handle:read("*a")
+	handle:close()
+
+	return result
+end
+
 local function setup()
 	local callback = ''
 	setup_ui_git()
@@ -543,5 +560,6 @@ return {
 	GetCalendar = calendar_interactive,
 	SearchFile = recursive_file_search,
 	GetJsonFile = json_file_read,
-	SetJsonFile = json_file_write
+	SetJsonFile = json_file_write,
+	RunSysCmd = run_system_command
 }
