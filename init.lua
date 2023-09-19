@@ -14,7 +14,7 @@ vim.g.custom = {
 }
 
 if vim.g.neovide ~= nil then
-	require('setup.neovide').setup()
+	require('setup.neovide').Setup()
 end
 
 local config_path = vim.fn.stdpath("config")
