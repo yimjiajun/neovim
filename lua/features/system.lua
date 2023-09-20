@@ -2,7 +2,7 @@ local uv = vim.loop
 local work_dirs = {uv.cwd()}
 local files_search_found = {}
 
-local function recursive_file_search(directry, pattern)
+local function recursive_file_search(dir, file_pattern)
 	files_search_found = {}
 
 	local function file_search(directory, pattern)
@@ -40,7 +40,7 @@ local function recursive_file_search(directry, pattern)
 		end
 	end
 
-	file_search(directory, pattern)
+	file_search(dir, file_pattern)
 
 	return files_search_found
 end
@@ -230,7 +230,8 @@ local function setup_disk_usage()
 end
 
 local function get_os_like_id()
-	local id = ''
+	local id
+
 	if vim.fn.has('mac') == 1 then
 		id = vim.fn.system("echo $OSTYPE")
 	elseif vim.fn.has('unix') == 1 then
@@ -278,10 +279,10 @@ local function get_git_info(cmd, arg)
 	end
 
 	local function branch(git_cmd)
-		local branch = vim.fn.system(git_cmd .. " branch --show-current")
+		local b = vim.fn.system(git_cmd .. " branch --show-current")
 
-		if branch ~= '' then
-			return vim.fn.trim(branch)
+		if b ~= '' then
+			return vim.fn.trim(b)
 		end
 
 		local commita_hash = vim.fn.system(git_cmd .. " rev-parse --short HEAD")
@@ -526,14 +527,13 @@ local function run_system_command(cmd)
 end
 
 local function setup()
-	local callback = ''
 	setup_ui_git()
 	setup_top()
 	setup_disk_usage()
 	setup_keymapping()
 
 	for name in pairs(require('features.system')) do
-		callback = "require('features.system')." .. name .. "()"
+		local callback = "require('features.system')." .. name .. "()"
 		vim.cmd("command! -nargs=0 -bang " .. name .. " lua print(" .. callback .. ")" )
 	end
 

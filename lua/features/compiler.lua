@@ -63,7 +63,7 @@ end
 
 local function setup_markdown()
 	if io.open(string.lower('book.toml')) then
-		local cmd = nil
+		local cmd
 
 		if vim.fn.executable('xdg-open') == 2 then
 			cmd = 'xdg-open'

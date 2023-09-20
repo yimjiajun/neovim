@@ -1,7 +1,4 @@
-local ret = {}
-local M = require("which-key").setup
-
-M = {
+require("which-key").setup({
 	plugins = {
 		marks = true, -- shows a list of your marks on ' and `
 		registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
@@ -67,107 +64,7 @@ M = {
 		-- customize
 		l = { "k", "j" },
 	},
-}
-
-require("which-key").setup(M)
-
-local wk = require("which-key")
-wk.register({
-	w = 'buffer',
-	q = 'marks',
-	h = 'jumplist',
-	r = 'registers',
-	e = 'explorer',
-	E = 'explorer File',
-	b = 'build',
-	B = 'build latest',
-	c = 'quickfix',
-	d = 'Debugger',
-	s = { name = 'Save',
-		m = 'mark (buffer)',
-		M = 'mark (local)',
-		b = 'bookmarks',
-		B = 'bookmarks (rename)',
-		t = 'todo lists',
-	},
-	S = { name = 'Unload',
-		m = 'mark (buffer)',
-		M = 'mark (local)',
-		u = 'mark (buffers)',
-		U = 'mark (universal)',
-		b = 'bookmarks',
-		B = 'bookmarks (cwd)',
-	},
-	o = { name = 'Open',
-		m = 'mark (buffer)',
-		u = 'mark (sort buffer)',
-		M = 'mark (local)',
-		U = 'mark (universal)',
-		b = 'bookmarks',
-		B = 'bookmarks (all)',
-		t = 'todo lists',
-		s = 'session',
-		S = 'session (selection)',
-	},
-	v = { name = 'View',
-		s = { name = 'System'},
-		c = { name = 'Calendar'},
-		b = 'bookmarks',
-	},
-	m = { name = 'Mode' },
-	f = { name = 'Find',
-		f = 'file',
-		w = 'word',
-		c = 'c',
-		C = 'c, cpp, h',
-		h = 'h',
-		d = 'dts{i}',
-		A = 'all (usr input)',
-		a = 'all',
-		q = 'customize search word',
-		k = 'conf',
-		K = 'Kconfig',
-		m = 'CMakeLists',
-		v = 'Vimgrep',
-		V = 'Vimgrep - complete word',
-	},
-	g = { name = 'Global Plug',
-		g = { name = 'Git',
-			l = 'log Graph',
-			L = 'log',
-			H = 'log patch',
-			C = 'commit count',
-			d = 'diff',
-			D = 'diff previous',
-			h = 'diff staging',
-			s = 'status',
-			S = 'status short',
-			w = 'white space check',
-			p = 'add patch',
-			a = 'add',
-			A = 'add all',
-			c = 'commit',
-		},
-	},
-	t = { name = 'Toggle',
-		f = 'terminal',
-		F = 'terminal shell',
-		s = 'terminal split',
-		v = 'terminal vsplit',
-		c = 'ctags generator',
-		e = 'file format',
-		w = { name = 'working directory',
-			w = 'chg & save current path',
-			s = 'save current path',
-			r = 'restore from saved path',
-			c = 'clear saved path',
-		},
-	},
-}, { mode = "n", prefix = "<leader>", })
-
-wk.register({
-	g = { name = 'Global Plug' },
-}, { mode = 'v',  prefix = "<leader>" })
+})
 
 local function setup_indicate_system_key()
 	local wk_sys = require("which-key")
@@ -194,9 +91,109 @@ local function setup_indicate_system_key()
 	end
 end
 
-setup_indicate_system_key()
+local function setup()
+	local wk = require("which-key")
 
-ret.setup = M
-ret.register = wk.register
+	wk.register({
+		w = 'buffer',
+		q = 'marks',
+		h = 'jumplist',
+		r = 'registers',
+		e = 'explorer',
+		E = 'explorer File',
+		b = 'build',
+		B = 'build latest',
+		c = 'quickfix',
+		d = 'Debugger',
+		s = { name = 'Save',
+			m = 'mark (buffer)',
+			M = 'mark (local)',
+			b = 'bookmarks',
+			B = 'bookmarks (rename)',
+			t = 'todo lists',
+		},
+		S = { name = 'Unload',
+			m = 'mark (buffer)',
+			M = 'mark (local)',
+			u = 'mark (buffers)',
+			U = 'mark (universal)',
+			b = 'bookmarks',
+			B = 'bookmarks (cwd)',
+		},
+		o = { name = 'Open',
+			m = 'mark (buffer)',
+			u = 'mark (sort buffer)',
+			M = 'mark (local)',
+			U = 'mark (universal)',
+			b = 'bookmarks',
+			B = 'bookmarks (all)',
+			t = 'todo lists',
+			s = 'session',
+			S = 'session (selection)',
+		},
+		v = { name = 'View',
+			s = { name = 'System'},
+			c = { name = 'Calendar'},
+			b = 'bookmarks',
+		},
+		m = { name = 'Mode' },
+		f = { name = 'Find',
+			f = 'file',
+			w = 'word',
+			c = 'c',
+			C = 'c, cpp, h',
+			h = 'h',
+			d = 'dts{i}',
+			A = 'all (usr input)',
+			a = 'all',
+			q = 'customize search word',
+			k = 'conf',
+			K = 'Kconfig',
+			m = 'CMakeLists',
+			v = 'Vimgrep',
+			V = 'Vimgrep - complete word',
+		},
+		g = { name = 'Global Plug',
+			g = { name = 'Git',
+				l = 'log Graph',
+				L = 'log',
+				H = 'log patch',
+				C = 'commit count',
+				d = 'diff',
+				D = 'diff previous',
+				h = 'diff staging',
+				s = 'status',
+				S = 'status short',
+				w = 'white space check',
+				p = 'add patch',
+				a = 'add',
+				A = 'add all',
+				c = 'commit',
+			},
+		},
+		t = { name = 'Toggle',
+			f = 'terminal',
+			F = 'terminal shell',
+			s = 'terminal split',
+			v = 'terminal vsplit',
+			c = 'ctags generator',
+			e = 'file format',
+			w = { name = 'working directory',
+				w = 'chg & save current path',
+				s = 'save current path',
+				r = 'restore from saved path',
+				c = 'clear saved path',
+			},
+		},
+	}, { mode = "n", prefix = "<leader>", })
 
-return ret
+	wk.register({
+		g = { name = 'Global Plug' },
+	}, { mode = 'v',  prefix = "<leader>" })
+
+	setup_indicate_system_key()
+end
+
+return {
+	Setup = setup,
+}

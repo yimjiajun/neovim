@@ -3,18 +3,19 @@ local function init()
 	vim.g.table_mode_map_prefix = "<leader>gT"
 end
 
+local function tabular_align()
+	local delimiter = vim.fn.input('Enter delimiter: ')
+	vim.cmd('Tabularize /' .. delimiter)
+end
+
 local function setup_key_tabular()
 	if pcall(require, "tabular") == 0 then
 		return
 	end
 
-	function Tabular_align()
-		local delimiter = vim.fn.input('Enter delimiter: ')
-		vim.cmd('Tabularize /' .. delimiter)
-	end
+	vim.api.nvim_set_keymap('n', '<Leader>gt', [[<cmd> lua require('setup.vim-markdown').Align() <CR>]], { silent = true })
+	vim.api.nvim_set_keymap('v', '<Leader>gt', [[<cmd> lua require('setup.vim-markdown').Align() <CR>]], { silent = true })
 
-	vim.api.nvim_set_keymap('n', '<Leader>gt', [[<cmd> lua Tabular_align() <CR>]], { silent = true })
-	vim.api.nvim_set_keymap('v', '<Leader>gt', [[<cmd> lua Tabular_align() <CR>]], { silent = true })
 	if pcall(require, "which-key") then
 		local wk = require("which-key")
 		wk.register({ t = "TableMode" }, { mode ='n', prefix = "<leader>g" })
@@ -103,6 +104,7 @@ setup_vim_markdown()
 
 local ret = {
 	init = init,
+	Align = tabular_align,
 }
 
 return ret

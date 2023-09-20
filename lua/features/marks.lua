@@ -1,12 +1,10 @@
 local function all_marks(act)
 	local skip_mark = { 'E', 'I', 'N', 'W' }
 	local items = {}
-	local item = {}
-	local mark = {}
-	local row, col, bufnr = 0, 0, 0
-	local filepath = ''
-	local mark_empty = true
-	local cwd = vim.fn.getcwd()
+	local item
+	local mark
+	local row, col, bufnr
+	local filepath
 
 	if act == nil then
 		act = ''
@@ -18,7 +16,7 @@ local function all_marks(act)
 		mark = vim.api.nvim_get_mark(string.char(mark_to_insert), {})
 		row, col, bufnr = mark[1], mark[2], mark[3]
 		filepath = mark[4]
-		mark_empty = ((row or col or bufnr) == 0) and (filepath == '')
+		local mark_empty = ((row or col or bufnr) == 0) and (filepath == '')
 
 		if act == 'save' then
 			if (mark_empty == false) and (string.char(mark_to_insert) ~= 'Z') then
@@ -64,7 +62,7 @@ local function all_marks(act)
 				goto continue
 			end
 
-			if vim.fn.match(vim.fn.fnamemodify(filepath, ':p'), cwd) == -1
+			if vim.fn.match(vim.fn.fnamemodify(filepath, ':p'), vim.fn.getcwd()) == -1
 				and act ~= 'universal' then
 				goto continue
 			end
@@ -93,10 +91,10 @@ end
 local function buffer_marks(act)
 	local skip_mark = { 'e', 'i', 'n', 'w' }
 	local items = {}
-	local item = {}
-	local mark = {}
-	local row, col = 0, 0
-	local mark_empty = true
+	local item
+	local mark
+	local row, col
+	local mark_empty
 	local bufnr = vim.fn.bufnr('%')
 
 	if act == nil then
@@ -104,8 +102,6 @@ local function buffer_marks(act)
 	else
 		act = string.lower(act)
 	end
-
-	bufnr = vim.fn.bufnr('%')
 
 	for mark_to_insert = string.byte('a'), string.byte('z'), 1 do
 		mark = vim.api.nvim_buf_get_mark(0, string.char(mark_to_insert))

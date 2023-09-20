@@ -10,9 +10,12 @@ require("toggleterm").setup{
 	-- open_mapping = [[<c-\>]],
 	-- on_open = fun(t: Terminal), -- function to run when the terminal opens
 	-- on_close = fun(t: Terminal), -- function to run when the terminal closes
-	-- on_stdout = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stdout
-	-- on_stderr = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stderr
-	-- on_exit = fun(t: Terminal, job: number, exit_code: number, name: string) -- function to run when terminal process exits
+	-- on_stdout = fun(t: Terminal, job: number, data: string[], name: string)
+		-- callback for processing output on stdout
+	-- on_stderr = fun(t: Terminal, job: number, data: string[], name: string)
+		-- callback for processing output on stderr
+	-- on_exit = fun(t: Terminal, job: number, exit_code: number, name: string)
+		-- function to run when terminal process exits
 	hide_numbers = true, -- hide the number column in toggleterm buffers
 	shade_filetypes = {},
 	highlights = {
@@ -28,7 +31,7 @@ require("toggleterm").setup{
 			link = "NormalFloat",
 		},
 	},
-	shade_terminals = true, -- NOTE: this option takes priority over highlights specified so if you specify Normal highlights you should set this to false
+	shade_terminals = true,
 	shading_factor = '1', -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
 	start_in_insert = true,
 	insert_mappings = true, -- whether or not the open mapping applies in insert mode

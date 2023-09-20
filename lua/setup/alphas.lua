@@ -15,9 +15,8 @@ local hour = tonumber(os.date("%H"))
 local day = tonumber(os.date("%w"))
 local month = tonumber(os.date("%m"))
 local year = tonumber(os.date("%Y"))
-local date = os.date("%d")
-local display = nil
-local msg_display = {}
+local display
+local msg_display
 
 if day <= 5 then
 	if hour > 9 and hour < 17 then

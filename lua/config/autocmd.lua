@@ -32,16 +32,16 @@ local function format()
 		group = "format",
 		pattern = "*",
 		callback = function()
-			local row, col = 0, 0
-
 			if vim.fn.expand('%:p') == '' then
 				return
 			end
 
-			row = vim.api.nvim_win_get_cursor(0)[1]
-			col = vim.api.nvim_win_get_cursor(0)[2]
 			vim.cmd([[s/\s\+$//e]])
-			vim.fn.setpos('.', {0, row, col+1, 0})
+			vim.fn.setpos('.', { 0,
+				vim.api.nvim_win_get_cursor(0)[1],
+				vim.api.nvim_win_get_cursor(0)[2] + 1,
+				0}
+			)
 		end,
 	})
 

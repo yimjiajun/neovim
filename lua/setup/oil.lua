@@ -62,11 +62,11 @@ require("oil").setup({
     -- Show files and directories that start with "."
     show_hidden = false,
     -- This function defines what is considered a "hidden" file
-    is_hidden_file = function(name, bufnr)
+    is_hidden_file = function(name, _bufnr)
       return vim.startswith(name, ".")
     end,
     -- This function defines what will never be shown, even when `show_hidden` is set
-    is_always_hidden = function(name, bufnr)
+    is_always_hidden = function(_name, _bufnr)
       return false
     end,
   },

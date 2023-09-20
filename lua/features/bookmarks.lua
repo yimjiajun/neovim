@@ -2,7 +2,6 @@ local delim = vim.fn.has('win32') == 1 and '\\' or '/'
 local bookmarks_dir = vim.fn.stdpath('data') .. delim .. 'bookmarks'
 local bookmarks_json_file = bookmarks_dir .. delim .. 'bookmarks.json'
 local BookMarks = {}
-BookMarks = {}
 local bookmarks_qf_title = "bookmarks"
 
 local function load_qf_bookmark_keymap()
@@ -58,7 +57,7 @@ local function save_bookmark()
 		item.content = content
 	end
 
-	for i, v in ipairs(BookMarks) do
+	for _, v in ipairs(BookMarks) do
 		if v.lnum == item.lnum and v.filename == item.filename then
 			goto continue
 		end
@@ -215,7 +214,7 @@ end
 local function rename_bookmark()
 	local filename = vim.fn.expand('%:p')
 	local lnum = vim.fn.line('.')
-	local items = {}
+	local items
 
 	if vim.bo.filetype == 'qf' then
 		local qf_title = vim.fn.getqflist({ title = 0 }).title
@@ -254,7 +253,7 @@ local function rename_bookmark()
 		return
 	end
 
-	for i, v in ipairs(BookMarks) do
+	for _, v in ipairs(BookMarks) do
 		if v.lnum == lnum and v.filename == filename then
 			local bookmark = vim.fn.input('Update bookmark: ', v.text)
 
@@ -334,7 +333,7 @@ local function remove_bookmark()
 
 	local qf_index = vim.fn.line('.')
 	local remove_item = qf_items[qf_index]
-	local remove_filename = ''
+	local remove_filename
 
 	BookMarks = require('features.system').GetJsonFile(bookmarks_json_file) or {}
 
@@ -489,8 +488,8 @@ local function review_bookmark_content()
 		return
 	end
 
-	local filename = ''
-	local lnum = vim.fn.line('.')
+	local filename
+	local lnum
 
 	if vim.bo.filetype == 'qf' then
 		if vim.fn.getqflist({ title = 0 }).title ~= bookmarks_qf_title then

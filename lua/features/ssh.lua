@@ -157,27 +157,23 @@ local function ssh_insert_info(username, hostname, port, password, description, 
 end
 
 local function toggle_powershell_ssh()
-	local msg = ''
-
 	if vim.fn.has('unix') == 1 and vim.fn.isdirectory('/run/WSL') == 0 then
 		return
 	end
 
 	vim.g.wsl_ssh_run_win = (vim.g.wsl_ssh_run_win == 1 and 0 or 1)
-	msg = (vim.g.wsl_ssh_run_win == 1) and "powershell" or "wsl"
+	local msg = (vim.g.wsl_ssh_run_win == 1) and "powershell" or "wsl"
 	vim.api.nvim_echo({{"[ SSH ]" .. " -> " .. msg,
 		"WarningMsg"}}, false, {})
 end
 
 local function toggle_sshpass()
-	local msg = ''
-
 	if vim.fn.executable('sshpass') == 0 or vim.g.wsl_ssh_run_win == 1 then
 		return
 	end
 
 	vim.g.ssh_run_sshpass = (vim.g.ssh_run_sshpass == 1 and 0 or 1)
-	msg = (vim.g.ssh_run_sshpass == 1) and "on" or "off"
+	local msg = (vim.g.ssh_run_sshpass == 1) and "on" or "off"
 	vim.api.nvim_echo({{"[ SSHpass ]" .. " credential -> " .. msg,
 		"WarningMsg"}}, false, {})
 end

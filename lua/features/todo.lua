@@ -83,7 +83,7 @@ local function add_todo_list()
 	local done_items = {}
 	local items = {}
 
-	for i, v in ipairs(todo_lists) do
+	for _, v in ipairs(todo_lists) do
 		if v.type == 'd' then
 			table.insert(done_items, v)
 		else
@@ -150,7 +150,8 @@ end
 
 local function get_todo_list()
 	local lists, items = {}, {}
-	local file, text = nil, ''
+	local file, text
+
 	for _, v in ipairs(todo_lists) do
 		file = io.open(v.filename, 'r')
 
@@ -355,7 +356,7 @@ local function setup()
 	local done_items = {}
 	local items = {}
 
-	for i, v in ipairs(todo_lists) do
+	for _, v in ipairs(todo_lists) do
 		if v.type == 'd' then
 			table.insert(done_items, v)
 		else

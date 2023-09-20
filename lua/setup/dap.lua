@@ -76,7 +76,8 @@ local function setup_keymapping(lang)
 		end
 	else
 		vim.api.nvim_set_keymap('n', '<leader>db', '<cmd>lua require"dap".toggle_breakpoint()<CR>', opts)
-		vim.api.nvim_set_keymap('n', '<leader>dB', '<cmd>lua require"dap".set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>', opts)
+		vim.api.nvim_set_keymap('n', '<leader>dB',
+			'<cmd>lua require"dap".set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>', opts)
 		vim.api.nvim_set_keymap('n', '<leader>dd', '<cmd>lua require"dap".continue()<CR>', opts)
 		vim.api.nvim_set_keymap('n', '<leader>dD', '<cmd>lua require"dap".disconnect()<CR>', opts)
 		vim.api.nvim_set_keymap('n', '<leader>do', '<cmd>lua require"dap".repl.toggle()<CR>', opts)

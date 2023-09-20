@@ -160,7 +160,7 @@ local function setup()
 			{ "folke/which-key.nvim",
 				priority = 1000,
 				config = function()
-					require('setup.whichkey')
+					require('setup.whichkey').Setup()
 				end
 			},
 			{ "tpope/vim-surround",
@@ -188,7 +188,7 @@ local function setup()
 
 					require('glow').setup({
 						border = "shadow", -- floating window border config
-						style = "dark", -- filled automatically with your current editor background, you can override using glow json style
+						style = "dark",
 						width = math.ceil(window_width * padding_ratio),
 						width_ratio = 0.9, -- maximum width of the glow window compared to the nvim window size (overrides `width`)
 						height_ratio = 0.9,
@@ -229,11 +229,17 @@ local function setup()
 						group = "format",
 						pattern = "{*.csv,*.dat}",
 						callback = function()
+							local did_load_csvfiletype
+
 							if vim.fn.exists('did_load_csvfiletype') then
 								return
 							end
-							local did_load_csvfiletype = 1
-							vim.bo.filetype = 'csv'
+
+							did_load_csvfiletype = 1
+
+							if did_load_csvfiletype == 1 then
+								vim.bo.filetype = 'csv'
+							end
 						end,
 					})
 				end,

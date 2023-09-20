@@ -148,19 +148,19 @@ local function terminal(mode)
 	end
 end
 
-local function get_buffers(mode)
+local function get_buffers(_mode)
 	vim.cmd("ls")
 end
 
-local function get_marks(mode)
+local function get_marks(_mode)
 	vim.cmd("marks")
 end
 
-local function get_jumplist(mode)
+local function get_jumplist(_mode)
 	vim.cmd("jump")
 end
 
-local function get_register_list(mode)
+local function get_register_list(_mode)
 	vim.cmd("registers")
 end
 
@@ -387,10 +387,8 @@ local function toggle_quickfix()
 end
 
 local function setup()
-	local callback = ''
-
 	for name in pairs(require('config.function')) do
-		callback = "require('config.function')." .. name .. "()"
+		local callback = "require('config.function')." .. name .. "()"
 		callback = "lua print(" .. callback .. ")"
 		vim.cmd("command! -nargs=0 -bang " .. name .. " " .. callback)
 	end

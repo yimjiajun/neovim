@@ -79,11 +79,14 @@ local function setting_key_search()
 	keymap('n', '<Leader>fc', [[<cmd> lua require("config.function").SearchWord("./**/*.c", "normal") <CR>]], opts)
 	keymap('n', '<Leader>fC', [[<cmd> lua require("config.function").SearchWord("./**/*.{c,h,cpp}", "normal") <CR>]], opts)
 	keymap('n', '<Leader>fh', [[<cmd> lua require("config.function").SearchWord("./**/*.h", "normal") <CR>]], opts)
-	keymap('n', '<Leader>fd', [[<cmd> lua require("config.function").SearchWord("./**/*.{dts,dtsi}", "normal") <CR>]], opts)
+	keymap('n', '<Leader>fd',
+		[[<cmd> lua require("config.function").SearchWord("./**/*.{dts,dtsi}", "normal") <CR>]], opts)
 	keymap('n', '<Leader>fK', [[<cmd> lua require("config.function").SearchWord("./**/Kconfig", "normal") <CR>]], opts)
 	keymap('n', '<Leader>fk', [[<cmd> lua require("config.function").SearchWord("./**/*.conf", "normal") <CR>]], opts)
-	keymap('n', '<Leader>fm', [[<cmd> lua require("config.function").SearchWord("./**/CMakeLists.txt", "normal") <CR>]], opts)
-	keymap('n', '<Leader>fM', [[<cmd> lua require("config.function").SearchWord("./**/*.{md,rst,txt}", "normal") <CR>]], opts)
+	keymap('n', '<Leader>fm',
+		[[<cmd> lua require("config.function").SearchWord("./**/CMakeLists.txt", "normal") <CR>]], opts)
+	keymap('n', '<Leader>fM',
+		[[<cmd> lua require("config.function").SearchWord("./**/*.{md,rst,txt}", "normal") <CR>]], opts)
 	keymap('n', '<Leader>fv', [[<cmd> lua require("config.function").SearchWord("", "normal") <CR>]], opts)
 	keymap('n', '<Leader>fV', [[<cmd> lua require("config.function").SearchWord("", "complete") <CR>]], opts)
 end
