@@ -134,7 +134,11 @@ local function read_todo_list()
 	local autocmd_id = vim.api.nvim_create_autocmd({"BufDelete"}, {
 		callback = function()
 			local bufnr = vim.fn.bufnr("%")
-			require('features.todo').RemoveAutoCmdId(bufnr)
+
+			if require('features.todo').RemoveAutoCmdId(bufnr) == false then
+				return
+			end
+
 			require('features.todo').Get()
 			vim.fn.cursor(qf_index, qf_col)
 		end
@@ -330,7 +334,11 @@ local function update_todo_list()
 	local autocmd_id = vim.api.nvim_create_autocmd({"BufDelete"}, {
 		callback = function()
 			local bufnr = vim.fn.bufnr("%")
-			require('features.todo').RemoveAutoCmdId(bufnr)
+
+			if require('features.todo').RemoveAutoCmdId(bufnr) == false then
+				return
+			end
+
 			require('features.todo').Get()
 			vim.fn.cursor(qf_index, qf_col)
 		end
