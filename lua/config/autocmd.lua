@@ -166,6 +166,17 @@ local function programming()
 			vim.cmd('setlocal expandtab')
 		end,
 	})
+
+	vim.api.nvim_create_autocmd( "FileType", {
+		desc = "lua",
+		group = "programming",
+		pattern = "lua",
+		callback = function()
+			vim.cmd('setlocal softtabstop=2')
+			vim.cmd('setlocal tabstop=2')
+			vim.cmd('setlocal shiftwidth=2')
+		end,
+	})
 end
 
 local function terminal()
