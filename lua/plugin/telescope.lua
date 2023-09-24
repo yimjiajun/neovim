@@ -117,7 +117,7 @@ local function setup_telescope()
 		extensions = extensions,
 	}
 
-	vim.cmd("command! -nargs=0 SshListTelescope lua require('setup.telescope').SshList()")
+	vim.cmd("command! -nargs=0 SshListTelescope lua require('plugin.telescope').SshList()")
 	require('telescope').load_extension('live_grep_args')
 end
 
@@ -193,7 +193,7 @@ local function setting_key_telescope()
 	local k = vim.api.nvim_set_keymap
 	local opts = { noremap = true, silent = true }
 
-	k('n', '<leader>w', [[<cmd> lua require('setup.telescope').Buffer().buffer_with_del() <CR>]], opts)
+	k('n', '<leader>w', [[<cmd> lua require('plugin.telescope').Buffer().buffer_with_del() <CR>]], opts)
 	k('n', '<Leader>ggs', [[<cmd> lua require('telescope.builtin').git_status() <CR>]], opts)
 	k('n', '<leader>q', [[<cmd> lua require('telescope.builtin').marks() <CR>]], opts)
 	k('n', '<leader>h', [[<cmd> lua require('telescope.builtin').jumplist() <CR>]], opts)
@@ -246,7 +246,7 @@ local function telescope_buffer()
 				local selection = action_state.get_selected_entry()
 				actions.close(prompt_bufnr)
 				vim.api.nvim_buf_delete(selection.bufnr, { force = true })
-				vim.cmd([[lua require('setup.telescope').Buffer().buffer_with_del()]])
+				vim.cmd([[lua require('plugin.telescope').Buffer().buffer_with_del()]])
 			end
 			map('i', '<del>', delete_buf)
 			return true

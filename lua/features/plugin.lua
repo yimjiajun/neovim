@@ -12,7 +12,7 @@ local function setup()
 		spec = {
 			{ 'neovim/nvim-lspconfig',
 				config = function ()
-					require('setup.lsp')
+					require('plugin.lsp')
 				end
 			},
 			{ 'williamboman/mason.nvim',
@@ -36,22 +36,22 @@ local function setup()
 					'L3MON4D3/LuaSnip'
 				},
 				config = function ()
-					require('setup.cmp')
+					require('plugin.cmp')
 				end
 			},
 			{ 'rmagatti/goto-preview',
 				config = function()
-					require('setup.goto_preview')
+					require('plugin.goto_preview')
 				end,
 			},
 			{ 'nvim-treesitter/nvim-treesitter',
 				build = function()
 					require('nvim-treesitter.install').update({ with_sync = true })
-					require("setup.treesitter")
+					require("plugin.treesitter")
 					vim.cmd([[TSUpdateSync]])
 				end,
 				config = function()
-					require("setup.treesitter")
+					require("plugin.treesitter")
 				end,
 			},
 			{ 'p00f/clangd_extensions.nvim' },
@@ -82,27 +82,27 @@ local function setup()
 			{ "iamcco/markdown-preview.nvim",
 				build = "cd app && npm install",
 				config = function()
-					require('setup.markdown-preview')
+					require('plugin.markdown-preview')
 				end,
 				ft = { "markdown" },
 			},
 			{ 'tpope/vim-fugitive',
 				config = function ()
-					require('setup.fugitive')
+					require('plugin.fugitive')
 				end
 			},
 			{	'nvim-telescope/telescope.nvim',
 				tag = '0.1.1',
 				dependencies = { 'nvim-lua/plenary.nvim' },
 				config = function()
-					require('setup.telescope').setup()
-					require('setup.telescope').setup_keymapping()
+					require('plugin.telescope').setup()
+					require('plugin.telescope').setup_keymapping()
 				end
 			},
 			{ "nvim-telescope/telescope-live-grep-args.nvim",
 				dependencies = { 'nvim-telescope/telescope.nvim' },
 				config = function()
-					require('setup.telescope').setup_live_grep_args()
+					require('plugin.telescope').setup_live_grep_args()
 				end
 			},
 			{ 'dhruvmanila/telescope-bookmarks.nvim',
@@ -112,13 +112,13 @@ local function setup()
 				},
 				build = "pip3 install buku",
 				config = function ()
-					require('setup.telescope').setup_bookmarks()
+					require('plugin.telescope').setup_bookmarks()
 				end
 			},
 			{ 'crispgm/telescope-heading.nvim',
 				dependencies = { 'nvim-telescope/telescope.nvim' },
 				config = function ()
-					require('setup.telescope').setup_heading()
+					require('plugin.telescope').setup_heading()
 				end,
 				ft = { "markdown" },
 			},
@@ -129,12 +129,12 @@ local function setup()
 			},
 			{ 'tpope/vim-dispatch',
 				config = function()
-					require('setup.dispatch')
+					require('plugin.dispatch')
 				end
 			},
 			{ "folke/zen-mode.nvim",
 				config = function()
-					require("setup.zen_mode")
+					require("plugin.zen_mode")
 				end
 			},
 			{ 'github/copilot.vim',
@@ -144,28 +144,28 @@ local function setup()
 			},
 			{ "akinsho/toggleterm.nvim",
 				config = function()
-					require('setup.toggleterm')
+					require('plugin.toggleterm')
 				end
 			},
 			{ 'lewis6991/gitsigns.nvim',
 				config = function()
-					require('setup.gitsigns')
+					require('plugin.gitsigns')
 				end
 			},
 			{ 'goolord/alpha-nvim',
 				config = function()
-					require('alpha').setup(require('setup.alphas').config)
+					require('alpha').setup(require('plugin.alphas').config)
 				end
 			},
 			{ "folke/which-key.nvim",
 				priority = 1000,
 				config = function()
-					require('setup.whichkey').Setup()
+					require('plugin.whichkey').Setup()
 				end
 			},
 			{ "tpope/vim-surround",
 				config = function()
-					require('setup.surround')
+					require('plugin.surround')
 				end
 			},
 			{ "plasticboy/vim-markdown",
@@ -174,10 +174,10 @@ local function setup()
 					'dhruvasagar/vim-table-mode' },
 				ft = { "markdown" },
 				init = function ()
-					require('setup.vim-markdown').init()
+					require('plugin.vim-markdown').init()
 				end,
 				config = function()
-					require('setup.vim-markdown')
+					require('plugin.vim-markdown')
 				end,
 			},
 			{ "ellisonleao/glow.nvim",
@@ -201,7 +201,7 @@ local function setup()
 				dependencies = { "nvim-tree/nvim-web-devicons" },
 				opts = {},
 				config = function ()
-					require('setup.oil')
+					require('plugin.oil')
 				end
 			},
 			{ 'preservim/tagbar',
@@ -219,7 +219,7 @@ local function setup()
 				},
 				event = "VeryLazy",
 				config = function()
-					require('setup.chatgpt')
+					require('plugin.chatgpt')
 				end,
 			},
 			{ 'chrisbra/csv.vim',
@@ -246,7 +246,7 @@ local function setup()
 			},
 			{ "mfussenegger/nvim-dap",
 				config = function()
-					require('setup.dap').SetupKeymap()
+					require('plugin.dap').SetupKeymap()
 				end,
 			},
 			{ "mfussenegger/nvim-dap-python",
@@ -262,45 +262,45 @@ local function setup()
 				ft = { "python" },
 				config = function()
 					require('dap-python').setup('~/.local/share/.virtualenvs/debugpy/bin/python')
-					require('setup.dap').SetupKeymap('python')
-					require('setup.dap').SetupPython()
+					require('plugin.dap').SetupKeymap('python')
+					require('plugin.dap').SetupPython()
 				end,
 			},
 			{ "rcarriga/nvim-dap-ui",
 				dependencies = { "mfussenegger/nvim-dap" },
 				config = function()
 					require('dapui').setup()
-					require('setup.dap').SetupUI()
+					require('plugin.dap').SetupUI()
 				end,
 			},
 			{ "olimorris/onedarkpro.nvim",
 				priority = 1000,
 				config = function()
-					require('setup.color_scheme').OneDarkPro()
+					require('plugin.color_scheme').OneDarkPro()
 				end,
 			},
 			{ "luisiacc/gruvbox-baby",
 				priority = 1000,
 				config = function()
-					require('setup.color_scheme').GruvboxBaby()
+					require('plugin.color_scheme').GruvboxBaby()
 				end,
 			},
 			{ "ellisonleao/gruvbox.nvim",
 				priority = 1000,
 				config = function()
-					require('setup.color_scheme').Gruvbox()
+					require('plugin.color_scheme').Gruvbox()
 				end,
 			},
 			{ "sainnhe/gruvbox-material",
 				priority = 1000,
 				config = function()
-					require('setup.color_scheme').GruvboxMaterial()
+					require('plugin.color_scheme').GruvboxMaterial()
 				end,
 			},
 			{ 'sam4llis/nvim-tundra',
 				priority = 1000,
 				config = function()
-					require('setup.color_scheme').Tundra()
+					require('plugin.color_scheme').Tundra()
 				end,
 			},
 		},

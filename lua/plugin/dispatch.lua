@@ -26,10 +26,10 @@ end
 
 local function dispatch_setup_kepmapping()
 	vim.api.nvim_set_keymap('n', '<leader>b',
-		[[<cmd> lua require('setup.dispatch').Build() <CR>]],
+		[[<cmd> lua require('plugin.dispatch').Build() <CR>]],
 		{silent = true})
 	vim.api.nvim_set_keymap('n', '<leader>B',
-		[[<cmd> lua require('setup.dispatch').Build("latest") <CR>]],
+		[[<cmd> lua require('plugin.dispatch').Build("latest") <CR>]],
 		{silent = true})
 end
 

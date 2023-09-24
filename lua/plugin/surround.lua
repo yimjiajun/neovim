@@ -29,11 +29,11 @@ local function setting_key_surround()
 	local k = vim.api.nvim_set_keymap
 	local opts = { noremap = true, silent = true }
 
-	k('n', '<leader>gsp', [[<cmd> lua require('setup.surround').change_pairs() <CR>]], opts)
-	k('n', '<leader>gsr', [[<cmd> lua require('setup.surround').remove_pairs() <CR>]], opts)
-	k('n', '<leader>gsf', [[<cmd> lua require('setup.surround').full_pairs() <CR>]], opts)
-	k('n', '<leader>gsw', [[<cmd> lua require('setup.surround').word_pairs() <CR>]], opts)
-	k('n', '<leader>gsl', [[<cmd> lua require('setup.surround').line_pairs() <CR>]], opts)
+	k('n', '<leader>gsp', [[<cmd> lua require('plugin.surround').change_pairs() <CR>]], opts)
+	k('n', '<leader>gsr', [[<cmd> lua require('plugin.surround').remove_pairs() <CR>]], opts)
+	k('n', '<leader>gsf', [[<cmd> lua require('plugin.surround').full_pairs() <CR>]], opts)
+	k('n', '<leader>gsw', [[<cmd> lua require('plugin.surround').word_pairs() <CR>]], opts)
+	k('n', '<leader>gsl', [[<cmd> lua require('plugin.surround').line_pairs() <CR>]], opts)
 
   if pcall(require, "which-key") then
 	  local wk = require("which-key")
