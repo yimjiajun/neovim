@@ -303,6 +303,11 @@ local function setup()
 					require('plugin.color_scheme').Tundra()
 				end,
 			},
+			{ "jbyuki/venn.nvim",
+				config = function()
+					require('plugin.venn').Setup()
+				end,
+			}
 		},
 		defaults = {
 			-- By default, Your custom plugins will load during startup.
