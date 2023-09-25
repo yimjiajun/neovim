@@ -13,8 +13,10 @@ local function setup_key_tabular()
 		return
 	end
 
-	vim.api.nvim_set_keymap('n', '<Leader>gt', [[<cmd> lua require('plugin.vim-markdown').Align() <CR>]], { silent = true })
-	vim.api.nvim_set_keymap('v', '<Leader>gt', [[<cmd> lua require('plugin.vim-markdown').Align() <CR>]], { silent = true })
+	vim.api.nvim_set_keymap('n', '<Leader>gt',
+		[[<cmd> lua require('plugin.vim-markdown').Align() <CR>]], { silent = true })
+	vim.api.nvim_set_keymap('v', '<Leader>gt',
+		[[<cmd> lua require('plugin.vim-markdown').Align() <CR>]], { silent = true })
 
 	if pcall(require, "which-key") then
 		local wk = require("which-key")
