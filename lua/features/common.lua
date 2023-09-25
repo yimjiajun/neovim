@@ -25,6 +25,14 @@ local function group_selection(tbl)
 	local group_list = {}
 	local group_total = 0
 
+	if tbl == nil then
+		return nil
+	end
+
+	table.sort(tbl, function(a, b)
+		return a.group < b.group
+	end)
+
 	for _, info in ipairs(tbl) do
 		local cnt = 1
 
