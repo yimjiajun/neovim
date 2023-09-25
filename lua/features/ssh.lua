@@ -10,6 +10,8 @@ vim.g.ssh_data = {
 	},
 }
 
+local delim = vim.fn.has('win32') == 1 and '\\' or '/'
+local ssh_data_dir = vim.fn.stdpath('data') .. delim .. 'ssh'
 local display_title = require("features.common").DisplayTitle
 local ssh_list_get_group = require("features.common").GroupSelection
 
@@ -234,9 +236,38 @@ local function ssh_setting()
 	end
 end
 
+local function ssh_read_json()
+	if vim.fn.isdirectory(ssh_data_dir) == 0 then
+		return
+	end
+
+	local ssh_data_files = require('features.system').SearchFile(ssh_data_dir, ".json")
+	local ssh_data = {}
+
+	for _, f in ipairs(ssh_data_files) do
+		local info = require('features.system').GetJsonFile(f)
+
+		if info == nil then
+			goto continue
+		end
+
+		table.insert(ssh_data, info)
+		::continue::
+	end
+
+	for _, grp in pairs(ssh_data) do
+		for grp_name, grp_info in pairs(grp) do
+			for _, i in pairs(grp_info) do
+				ssh_insert_info(i.username, i.hostname, i.port, i.pass, i.description, grp_name)
+			end
+		end
+	end
+end
+
 local function setup()
 	ssh_setting()
 	ssh_setting_keymapping()
+	ssh_read_json()
 
 	vim.cmd("command! -nargs=0 SshReq lua require('features.ssh').SshConnectReq()")
 	vim.cmd("command! -nargs=0 Ssh lua require('features.ssh').SshRun()")
