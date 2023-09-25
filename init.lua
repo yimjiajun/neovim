@@ -29,9 +29,9 @@ for _, dir in ipairs(config_dir) do
 		local source = dir .. "." .. string.match(script, "([^.]+)")
 		local status_ok, fault = pcall(require, source)
 		if not status_ok then
-			vim.api.nvim_err_writeln("Failed to load " .. source .. "\n\n" .. fault)
+			vim.api.nvim_err_writeln("Failed to load " .. source .. "\n\n" .. vim.inspect(fault))
 		elseif pcall(require(source).Setup) == false then
-			vim.api.nvim_err_writeln("Failed to load Setup " .. source .. "\n\n" .. fault)
+			vim.api.nvim_err_writeln("Failed to load Setup " .. source .. "\n\n" .. vim.inspect(fault))
 		end
 	end
 end
