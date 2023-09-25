@@ -1,6 +1,8 @@
+local delim = vim.fn.has('win32') == 1 and '\\' or '/'
 local common = require("features.common")
 local display_title = common.DisplayTitle
 local group_selection = common.GroupSelection
+local compiler_data_dir = vim.fn.stdpath('data') .. delim .. 'compilers'
 
 --define compiler data
 --@field name string tittle of build
@@ -51,6 +53,54 @@ local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp, e
 
 	table.insert(data, info)
 	vim.g.compiler_data = data
+end
+
+local function compiler_read_json()
+	local function check_git_remote_url_exists(remote, str)
+		local name = (type(str) == "table") and str or {str}
+
+		for _, n in pairs(name) do
+			local url = require('features.system').GetGitInfo('remote', remote)
+
+			if url == nil or vim.fn.len(url) == 0 or string.gmatch(url, n) == nil then
+				return false
+			end
+		end
+
+		return true
+	end
+
+	if vim.fn.isdirectory(compiler_data_dir) == 0 then
+		return
+	end
+
+	local compiler_data_files = require('features.system').SearchFile(compiler_data_dir, ".json")
+	local compiler_data = {}
+
+	for _, f in ipairs(compiler_data_files) do
+		local info = require('features.system').GetJsonFile(f)
+
+		if info == nil then
+			goto continue
+		end
+
+		table.insert(compiler_data, info)
+		::continue::
+	end
+
+	for _, grp in pairs(compiler_data) do
+		for grp_name, grp_info in pairs(grp) do
+			for _, i in pairs(grp_info) do
+				if i["git"] ~= nil and i["git"]["remote"] ~= nil and i["git"]["url"] ~= nil then
+					if check_git_remote_url_exists(i["git"]["remote"], i["git"]["url"]) == false then
+						goto skip_current_compiler_setup
+					end
+				end
+				compiler_insert_info_permanent(i.name, i.cmd, i.desc, i.ext, i.type, grp_name, i.efm, i.opts)
+				::skip_current_compiler_setup::
+			end
+		end
+	end
 end
 
 local function setup_c()
@@ -136,6 +186,10 @@ local function get_compiler_build_data()
 		end
 	end
 
+	table.sort(compiler_build_data, function(a, b)
+		return a.name > b.name
+	end)
+
 	return compiler_build_data
 end
 
@@ -173,24 +227,39 @@ local function compiler_latest_makeprg_setup()
 end
 
 local function compiler_tbl_makeprg_setup(tbl)
+	local function optional_setup()
+		if tbl.opts.callback == nil or tbl.opts.dofile == nil then
+			return nil
+		end
+
+		local callback_file = compiler_data_dir .. delim .. tbl.opts.dofile
+
+		if vim.fn.filereadable(callback_file) == 0 then
+			return nil
+		end
+
+		local callback = tbl.opts.callback
+		dofile(callback_file)
+
+		if type(callback) == "string" then
+			callback = _G[callback]
+		end
+
+		if type(callback) == "function" then
+			return callback()
+		end
+
+		return nil
+	end
+
 	if tbl == nil then
 		return false
 	end
 
 	if tbl.opts ~= nil then
-		if tbl.opts.callback ~= nil and tbl.opts.dofile ~= nil
-			and vim.fn.filereadable(tbl.opts.dofile) > 0
-		then
-			local callback = tbl.opts.callback
-			dofile(tbl.opts.dofile)
-
-			if type(callback) == "string" then
-				callback = _G[callback]
-			end
-
-			if type(callback) == "function" then
-				callback()
-			end
+		if optional_setup() == false then
+			vim.api.nvim_echo({{"compiler callback error", "ErrorMsg"}}, true, {})
+			return false
 		end
 	end
 
@@ -274,6 +343,8 @@ local function compiler_build_setup_selection()
 end
 
 local function setup()
+	compiler_read_json()
+
 	return nil
 end
 
