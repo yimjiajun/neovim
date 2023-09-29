@@ -6,6 +6,12 @@ local function setting_key_move()
 	keymap('i', '<C-f>', '<Right>', opts)
 	keymap('n', '<C-u>', '<C-u>zz', opts)
 	keymap('n', '<C-d>', '<C-d>zz', opts)
+	keymap('n', 'j', 'jzz', opts)
+	keymap('n', 'k', 'kzz', opts)
+	keymap('n', 'n', 'nzz', opts)
+	keymap('n', 'N', 'Nzz', opts)
+	keymap('n', '<C-]>', '<C-]>zz', opts)
+	keymap('n', 'gd', 'gdzz', opts)
 end
 
 local function setting_key_buffer()

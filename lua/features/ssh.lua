@@ -128,7 +128,6 @@ local function ssh_run()
 	local sel_ssh = ssh_get_list(false)
 
 	if sel_ssh == nil then
-		vim.api.nvim_echo({{"\nSsh not found", "ErrorMsg"}}, true, {})
 		return
 	end
 
