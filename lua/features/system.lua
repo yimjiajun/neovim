@@ -6,6 +6,12 @@ local function recursive_file_search(dir, file_pattern)
 	files_search_found = {}
 
 	local function file_search(directory, pattern)
+		if pcall(require, 'lfs') == false then
+			vim.api.nvim_echo({{"lfs not found ... recursive file search failed ...",
+				"ErrorMsg"}}, false, {})
+			return
+		end
+
 		local lfs = require('lfs')
 
 		if directory == nil or vim.fn.len(directory) == 0 then
