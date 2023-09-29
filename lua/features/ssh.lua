@@ -1,14 +1,6 @@
 vim.g.wsl_ssh_run_win = 0
 vim.g.ssh_run_sshpass = 1
-vim.g.ssh_data = {
-	{ host = "raspberrypi.local",
-		name = "jun",
-		pass = "jun",
-		port = "22",
-		description = "Raspberry Pi 4B",
-		group = "computer",
-	},
-}
+vim.g.ssh_data = {}
 
 local delim = vim.fn.has('win32') == 1 and '\\' or '/'
 local ssh_data_dir = vim.fn.stdpath('data') .. delim .. 'ssh'
@@ -265,6 +257,15 @@ local function ssh_read_json()
 end
 
 local function setup()
+	vim.g.ssh_data = {
+		{ host = "raspberrypi.local",
+			name = "jun",
+			pass = "jun",
+			port = "22",
+			description = "Raspberry Pi 4B",
+			group = "computer",
+		}
+	}
 	ssh_setting()
 	ssh_setting_keymapping()
 	ssh_read_json()
