@@ -1,24 +1,5 @@
-local function display_delimited_line(delimited_character)
-	local current_window = vim.api.nvim_get_current_win()
-	local window_width = vim.api.nvim_win_get_width(current_window)
-	local delimited_mark = tostring(delimited_character or "=")
-	local delimited_len = window_width - 1
-	local display_msg = ""
-
-	for _ = 1, delimited_len do
-		display_msg = display_msg .. delimited_mark
-	end
-
-	print(display_msg)
-end
-
 local function display_title(title)
-	display_delimited_line()
-	vim.api.nvim_echo({{
-		string.format("%-s", title),
-		"Title"}}, true, {})
-	display_delimited_line()
-
+	vim.api.nvim_echo({{string.format("%-s", title), "Title"}}, true, {})
 end
 
 local function group_selection(tbl)
@@ -106,7 +87,6 @@ local function setup()
 end
 
 return {
-	DisplayDelimitedLine = display_delimited_line,
 	DisplayTitle = display_title,
 	GroupSelection = group_selection,
 	TableSelection = table_selection,
