@@ -186,6 +186,13 @@ local function setup()
 					require('plugin.vim-markdown')
 				end,
 			},
+			{ "folke/noice.nvim",
+				event = "VeryLazy",
+				dependencies = { "MunifTanjim/nui.nvim" },
+				config = function()
+					require("plugin.noice").Setup()
+				end,
+			},
 			{ "ellisonleao/glow.nvim",
 				config = function ()
 					local current_window = vim.api.nvim_get_current_win()
