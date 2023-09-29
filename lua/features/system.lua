@@ -507,9 +507,7 @@ local function json_file_read(path)
 	file:close()
 
 	if #json_format == 0 then
-		vim.api.nvim_echo({{"file is empty ...",
-			"ErrorMsg"}}, false, {})
-		return nil
+		return {}
 	end
 
 	return vim.json.decode(json_format)
