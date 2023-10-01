@@ -52,11 +52,22 @@ function pre_install_build_prerequisites {
 			ccache dfu-util device-tree-compiler wget \
 			python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file \
 			python-is-python3 \
-			make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1 \
+			make gcc libsdl2-dev libmagic1 \
 			1>/dev/null || {
-				echo -e "\033[31mError: Install build prerequisites failed!\033[0m" >&2
+			echo -e "\033[31mError: Install build prerequisites failed!\033[0m" >&2
 				exit 1
 			}
+
+		if [[ $(uname -m) == 'aarch64' ]]; then
+			local gcc_multilib="gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf"
+		else
+			local gcc_multilib="gcc-multilib g++-multilib"
+		fi
+
+		$pkg_install_cmd "$gcc_multilib" 1>/dev/null || {
+			echo -e "\033[31mError: Install build prerequisites failed!\033[0m" >&2
+			exit 1
+		}
 
 		$pkg_install_cmd \
 			build-essential libncurses-dev libjansson-dev \
