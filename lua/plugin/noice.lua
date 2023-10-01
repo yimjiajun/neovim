@@ -186,7 +186,8 @@ local function setup()
 			-- add any filetypes here, that shouldn't trigger smart move.
 			excluded_filetypes = { "cmp_menu", "cmp_docs", "notify" },
 		},
-		throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
+		-- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
+		throttle = 1000 / 30,
 		---@type NoiceConfigViews
 		views = {}, ---@see section on views
 		---@type NoiceRouteConfig[]
