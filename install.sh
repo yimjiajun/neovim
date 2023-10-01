@@ -87,6 +87,11 @@ function pre_install_build_prerequisites {
 			echo -e "\033[31mError: Install build prerequisites failed!\033[0m" >&2
 			exit 1
 		}
+
+		$pkg_install_cmd ninja cmake gettext curl 1>/dev/null || {
+			echo -e "\033[31mError: Install neovim build prerequisites failed!\033[0m" >&2
+			exit 1
+		}
 	fi
 }
 
