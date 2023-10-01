@@ -30,6 +30,7 @@ display_title () {
 
 function pre_install_build_prerequisites {
 	echo -e "● Install build prerequisites..." >&1
+	echo -e "● $(uname -s) - $(uname -m)..." >&1
 
 	if [[ $OSTYPE == "linux-gnu" ]]; then
 		$pkg_install_cmd \
