@@ -65,7 +65,7 @@ function pre_install_build_prerequisites {
 			local gcc_multilib="gcc-multilib g++-multilib"
 		fi
 
-		$pkg_install_cmd "$gcc_multilib" 1>/dev/null || {
+		$pkg_install_cmd $gcc_multilib 1>/dev/null || {
 			echo -e "\033[31mError: Install build prerequisites failed!\033[0m" >&2
 			exit 1
 		}
