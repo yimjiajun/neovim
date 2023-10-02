@@ -21,10 +21,11 @@ jobs:
           fetch-depth: ${{ matrix.git-depth }}
       - name: setup NeoVim and install dependencies in Focal
         run: |
-          sudo apt-get update && sudo apt-get -y install sudo apt-utils
+          sudo apt-get update 1>/dev/null && sudo apt-get -y install sudo apt-utils 1>/dev/null
           echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
-          sudo apt-get install -y -q
-          ./install.sh
+          sudo apt-get install -y -q 1>/dev/null
+          sudo apt-get install curl 1>/dev/null
+          curl -sSL https://raw.githubusercontent.com/yimjiajun/.dotfiles/main/tools/nvim.sh | bash
 
   jammy:
     runs-on: ubuntu-latest
@@ -41,4 +42,5 @@ jobs:
           sudo apt-get update 1>/dev/null && sudo apt-get -y install sudo apt-utils 1>/dev/null
           echo 'debconf debconf/frontend select Noninteractive' | sudo debconf-set-selections
           sudo apt-get install -y -q 1>/dev/null
-          ./install.sh
+          sudo apt-get install curl 1>/dev/null
+          curl -sSL https://raw.githubusercontent.com/yimjiajun/.dotfiles/main/tools/nvim.sh | bash
