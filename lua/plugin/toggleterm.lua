@@ -49,7 +49,7 @@ require("toggleterm").setup{
 		-- the 'curved' border is a custom border type
 		-- not natively supported but implemented in this plugin.
 		--'single' | 'double' | 'shadow' | 'curved' | ... other options supported by win open
-		border = 'shadow',
+		border = 'curved',
 		-- like `size`, width and height can be a number or function which is passed the current terminal
 		-- width = <value>,
 		-- height = 50,
