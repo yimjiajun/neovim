@@ -60,30 +60,6 @@ local function setup()
 				end,
 			},
 			{ 'p00f/clangd_extensions.nvim' },
-			{ 'mfussenegger/nvim-lint',
-				dependencies = {
-					'neovim/nvim-lspconfig',
-					'hrsh7th/nvim-cmp',
-				},
-				init = function ()
-					vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-						callback = function()
-							require("lint").try_lint()
-						end,
-					})
-				end,
-				config = function()
-					require('lint').linters_by_ft = {
-						markdown = {'markdownlint'},
-						python = {'pylint', 'flake8',
-							'pydocstyle', 'pycodestyle'},
-						lua = {'luacheck'},
-						c = {'cpplint'},
-						cpp = {'cpplint'},
-						cmake = {'cmakelint'},
-					}
-				end
-			},
 			{ "folke/neodev.nvim",
 				opts = {},
 				config = function()
