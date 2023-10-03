@@ -44,6 +44,11 @@ local function setup()
 					require('plugin.goto_preview')
 				end,
 			},
+			{ 'nvimtools/none-ls.nvim',
+				config = function()
+					require('plugin.none_ls').Setup()
+				end,
+			},
 			{ 'nvim-treesitter/nvim-treesitter',
 				build = function()
 					require('nvim-treesitter.install').update({ with_sync = true })
