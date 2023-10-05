@@ -17,7 +17,7 @@ end
 local function setting_key_buffer()
 	keymap('i', '<C-s>', '<C-o>:w<CR>', opts)
 	keymap('n', '<S-Tab>', ':bp<CR>', opts)
-	keymap('n', '<leader><BS>', [[<cmd>%bd|e#|bd#|'<CR>|<CR>]], opts)
+	keymap('n', '<leader><BS>', [[<cmd>%bd|e#|bd#|'<CR>|<CR>|`"]], opts)
 	keymap('n', '<Tab>', ':bn<CR>', opts)
 	keymap('n', '<C-c>', ':bd<CR>', opts)
 	keymap('n', '<esc><BS>', ':cclose<CR>', opts)
