@@ -32,7 +32,7 @@ local function format()
 		group = "format",
 		pattern = "*",
 		callback = function()
-			if vim.fn.expand('%:p') == '' then
+			if vim.fn.expand('%:p') == '' or vim.bo.filetype == '' then
 				return
 			end
 
@@ -50,6 +50,10 @@ local function format()
 		group = "format",
 		pattern = "*",
 		callback = function()
+			if vim.fn.expand('%:p') == '' or vim.bo.filetype == '' then
+				return
+			end
+
 			vim.cmd([[%s/\r\+$//e]])
 		end,
 	})
