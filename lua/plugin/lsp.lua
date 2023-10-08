@@ -63,6 +63,7 @@ then
 	wk.register({
 		l = { name = "Lsp",
 			c = "code action",
+			f = "formatting",
 		},
 	}, { mode = "v", prefix = "<leader>" })
 end
@@ -74,3 +75,5 @@ vim.diagnostic.config({
     virtual_text = false,
     delay_until_save = true
 })
+
+vim.keymap.set("v", "<leader>lf", vim.lsp.buf.format, { remap = false })
