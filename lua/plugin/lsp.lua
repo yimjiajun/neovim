@@ -67,4 +67,10 @@ then
 	}, { mode = "v", prefix = "<leader>" })
 end
 
-vim.diagnostic.config({ virtual_text = false })
+vim.diagnostic.config({
+    signs = true,
+    underline = false,
+    update_in_insert = false,
+    virtual_text = false,
+    delay_until_save = true
+})
