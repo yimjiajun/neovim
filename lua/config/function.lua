@@ -187,6 +187,11 @@ local function session(mode)
 		name = nil,
 		date = nil,
 	}
+
+	if vim.fn.isdirectory(path) == 0 then
+		vim.fn.mkdir(path, "p")
+	end
+
 	if vim.fn.filereadable(json_file) == 0 then
 		vim.fn.writefile({}, json_file)
 	end
@@ -199,10 +204,6 @@ local function session(mode)
 			name = vim.fn.fnamemodify(vim.fn.getcwd(), ':t'),
 			date = os.date("%Y/%h/%d")
 		}
-
-		if vim.fn.isdirectory(path) == 0 then
-			vim.fn.mkdir(path, "p")
-		end
 
 		vim.fn.sessionoptions = {
 			"buffers", "curdir", "folds", "tabpages", "winsize"
