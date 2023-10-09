@@ -99,7 +99,7 @@ local function setup_onedark_pro()
 end
 
 local function setup_gruvbox()
-	local c = require("gruvbox.palette").colors
+	local c = require("gruvbox").palette
 	local cs = vim.g.custom.colorscheme
 	local overrides_colors = {
 		SignColumn = { bg = c.dark0_hard },
