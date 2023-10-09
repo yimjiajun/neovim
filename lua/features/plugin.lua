@@ -21,9 +21,18 @@ local function setup()
 					"neovim/nvim-lspconfig",
 				},
 				config = function ()
+					local install_lsp = {}
+					for _, lang in ipairs(vim.g.custom.lsp) do
+						if lang == 'clangd' and vim.loop.os_uname().machine == 'aarch64' then
+							goto continue
+						end
+						table.insert(install_lsp, lang)
+						::continue::
+					end
+
 					require("mason").setup()
 					require("mason-lspconfig").setup {
-						ensure_installed = vim.g.custom.lsp,
+						ensure_installed = install_lsp,
 					}
 				end
 			},
