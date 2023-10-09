@@ -69,11 +69,10 @@ then
 end
 
 vim.diagnostic.config({
-    signs = true,
-    underline = false,
-    update_in_insert = false,
-    virtual_text = false,
-    delay_until_save = true
+	signs = true,
+	underline = false,
+	update_in_insert = false,
+	virtual_text = false,
 })
 
 vim.keymap.set("v", "<leader>lf", vim.lsp.buf.format, { remap = false })
