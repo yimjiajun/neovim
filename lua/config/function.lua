@@ -1,4 +1,4 @@
-vim.g.vim_git = "!git"
+vim.g.vim_git = "git"
 
 local function search_file()
 	local regex_file = vim.fn.input("File to search (regex): ")
@@ -76,63 +76,98 @@ end
 
 local function git_diff(mode)
 	local cmd = vim.g.vim_git
+
+	if vim.fn.expand("%:h") ~= "" then
+		cmd = vim.g.vim_git .. " -C " .. vim.fn.expand("%:h")
+	end
+
 	if mode == "staging" then
-		vim.cmd(string.format("%s %s", cmd, "diff --staged"))
+		cmd = string.format("%s %s", cmd, "diff --staged")
 	elseif mode == "previous" then
-		vim.cmd(string.format("%s %s", cmd, "diff HEAD~"))
+		cmd = string.format("%s %s", cmd, "diff HEAD~")
 	elseif mode == "specify" then
 		local file = vim.fn.input("enter file to git diff: ")
-		vim.cmd(string.format("%s %s", cmd, "diff ./**/" .. file))
+		cmd = string.format("%s %s", cmd, "diff ./**/" .. file)
 	elseif mode == "staging_specify" then
 		local file = vim.fn.input("enter file to git diff: ")
-		vim.cmd(string.format("%s %s", cmd, "diff --staged ./**/" .. file))
+		cmd = string.format("%s %s", cmd, "diff --staged ./**/" .. file)
 	else
-		vim.cmd(string.format("%s %s", cmd, "diff"))
+		cmd = string.format("%s %s", cmd, "diff")
 	end
+
+	vim.cmd(string.format("%s %s %s", "term", cmd, "; exit"))
 end
 
 local function git_log(mode)
 	local cmd = vim.g.vim_git
+
+	if vim.fn.expand("%:h") ~= "" then
+		cmd = vim.g.vim_git .. " -C " .. vim.fn.expand("%:h")
+	end
+
 	if mode == "graph" then
-		vim.cmd(string.format("%s %s", cmd, "log --oneline --graph"))
+		cmd = string.format("%s %s", cmd, "log --oneline --graph")
 	elseif mode == "commit_count" then
-		vim.cmd(string.format("%s %s", cmd, "rev-list HEAD --count"))
+		cmd = string.format("%s %s", cmd, "rev-list HEAD --count")
 	elseif mode == "diff" then
-		vim.cmd(string.format("%s %s", cmd, "log --patch"))
+		cmd = string.format("%s %s", cmd, "log --patch")
 	else
-	  vim.cmd(string.format("%s %s", cmd, "log"))
+	  cmd = string.format("%s %s", cmd, "log")
   end
+
+	vim.cmd(string.format("%s %s %s", "term", cmd, "; exit"))
 end
 
 local function git_status(mode)
 	local cmd = vim.g.vim_git
-	if mode == "short" then
-		vim.cmd(string.format("%s %s", cmd, "status --short"))
-	elseif mode == "check_whitespace" then
-		vim.cmd(string.format("%s %s", cmd, "diff-tree --check $(git hash-object -t tree /dev/null) HEAD"))
-	else
-		vim.cmd(string.format("%s %s", cmd, "status"))
+
+	if vim.fn.expand("%:h") ~= "" then
+		cmd = vim.g.vim_git .. " -C " .. vim.fn.expand("%:h")
 	end
+
+	if mode == "short" then
+		cmd = string.format("%s %s", cmd, "status --short")
+	elseif mode == "check_whitespace" then
+		cmd = string.format("%s %s", cmd, "diff-tree --check $(git hash-object -t tree /dev/null) HEAD")
+	else
+		cmd = string.format("%s %s", cmd, "status")
+	end
+
+	vim.cmd(string.format("%s %s %s", "split | term", cmd, "; exit"))
 end
 
 local function git_add(mode)
 	local cmd = vim.g.vim_git
-	if mode == "patch" then
-		vim.cmd(string.format("%s %s", cmd, "add -p"))
-	elseif mode == "all" then
-		vim.cmd(string.format("%s %s", cmd, "add ."))
-	else
-		vim.cmd(string.format("%s %s", cmd, "add -i"))
+
+	if vim.fn.expand("%:h") ~= "" then
+		cmd = vim.g.vim_git .. " -C " .. vim.fn.expand("%:h")
 	end
+
+	if mode == "patch" then
+		cmd = string.format("%s %s", cmd, "add -p")
+	elseif mode == "all" then
+		cmd = string.format("%s %s", cmd, "add .")
+	else
+		cmd = string.format("%s %s", cmd, "add -i")
+	end
+
+	vim.cmd(string.format("%s %s %s", "term", cmd, "; exit"))
 end
 
 local function git_commit(mode)
 	local cmd = vim.g.vim_git
-	if mode == "amend" then
-		vim.cmd(string.format("%s %s", cmd, "commit --amend"))
-	else
-		vim.cmd(string.format("%s %s", cmd, "commit"))
+
+	if vim.fn.expand("%:h") ~= "" then
+		cmd = vim.g.vim_git .. " -C " .. vim.fn.expand("%:h")
 	end
+
+	if mode == "amend" then
+		cmd = string.format("%s %s", cmd, "commit --amend")
+	else
+		cmd = string.format("%s %s", cmd, "commit")
+	end
+
+	vim.cmd(string.format("%s %s %s", "term", cmd, "; exit"))
 end
 
 local function terminal(mode)
