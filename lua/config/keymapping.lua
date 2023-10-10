@@ -17,6 +17,8 @@ local function setting_key_move()
 	keymap('n', 'gd', 'gdzz', opts)
 	keymap('n', 'g;', 'g;z.', opts)
 	keymap('n', 'g,', 'g,z.', opts)
+	keymap('n', '#', '#z.', opts)
+	keymap('n', '*', '*z.', opts)
 end
 
 local function setting_key_buffer()
