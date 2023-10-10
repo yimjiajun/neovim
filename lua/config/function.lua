@@ -62,13 +62,13 @@ local function search_word(extension, mode)
 		word = vim.fn.expand("<cword>")
 	end
 
-	vim.fn.setreg('"', tostring(extension))
-	vim.fn.setreg('-', tostring(word))
+	vim.fn.setreg('e', tostring(extension))
+	vim.fn.setreg('w', tostring(word))
 
-	local cmd = [[silent! vimgrep /]] .. vim.fn.getreg('-') .. [[/gj ]] .. vim.fn.getreg('"')
+	local cmd = [[silent! vimgrep /]] .. vim.fn.getreg('w') .. [[/gj ]] .. vim.fn.getreg('e')
 
 	if vim.fn.executable("rg") == 1 then
-		cmd = [[cexpr system('rg --vimgrep --smart-case ' .. ' "' .. getreg('-') .. '" ' .. getreg('"'))]]
+		cmd = [[cexpr system('rg --vimgrep --smart-case ' .. ' "' .. getreg('w') .. '" ' .. getreg('e'))]]
 	end
 
 	vim.cmd("silent! " .. cmd  .. " | silent! +copen 5")
