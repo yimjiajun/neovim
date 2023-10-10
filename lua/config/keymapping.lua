@@ -161,6 +161,12 @@ local function setting_key_features()
 	keymap('n', '<leader>oU', [[<cmd> lua require('features.marks').All('universal') <CR>]], opts)
 end
 
+local function setting_abbreviations()
+	vim.cmd([[cnoremap <expr> / wildmenumode() ? "\<C-Y>" : "/"]])
+	vim.cmd([[cnoremap <expr> * getcmdline() =~ './\*$' ? '*/*' : '*']])
+	vim.cmd([[cnoreabbr <expr> %% fnameescape(expand('%:p'))]])
+end
+
 local function setup()
 	setting_key_leader()
 	setting_key_move()
@@ -174,6 +180,7 @@ local function setup()
 	setting_key_terminal()
 	setting_key_session()
 	setting_key_features()
+	setting_abbreviations()
 end
 
 return {
