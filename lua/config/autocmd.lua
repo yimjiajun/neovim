@@ -62,7 +62,16 @@ end
 local function cursor()
 	vim.api.nvim_create_augroup("cursor", { clear = true })
 
-	vim.api.nvim_create_autocmd("InsertLeave, WinEnter", {
+	vim.api.nvim_create_autocmd("WinEnter", {
+		desc = "Enable cursor line",
+		group = "cursor",
+		pattern = "*",
+		callback = function()
+			vim.cmd('set cursorline')
+		end,
+	})
+
+	vim.api.nvim_create_autocmd("InsertLeave", {
 		desc = "Enable cursor line",
 		group = "cursor",
 		pattern = "*",
