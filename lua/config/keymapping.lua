@@ -1,5 +1,6 @@
 local keymap = vim.api.nvim_set_keymap
 local opts = { noremap = true, silent = true }
+local opts_output = { noremap = true, silent = false }
 
 local function setting_key_move()
 	keymap('i', '<C-b>', '<Left>', opts)
@@ -81,7 +82,8 @@ local function setting_key_newtr()
 end
 
 local function setting_key_search()
-	keymap('n', '<Leader>ff', [[<cmd> lua require("config.function").SearchFile() <CR>]], opts)
+	keymap('n', '<Leader>ff', [[:find ./**/*]], opts_output)
+	keymap('n', '<Leader>fF', [[<cmd> lua require("config.function").SearchFile() <CR>]], opts)
 	keymap('n', '<Leader>fA', [[<cmd> lua require("config.function").SearchWord(nil, "normal") <CR>]], opts)
 	keymap('n', '<Leader>fa', [[<cmd> lua require("config.function").SearchWord("./**/*", "normal") <CR>]], opts)
 	keymap('n', '<Leader>fw', [[<cmd> lua require("config.function").SearchWord(nil, "cursor") <CR>]], opts)
