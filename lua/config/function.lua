@@ -68,7 +68,7 @@ local function search_word(extension, mode)
 	local cmd = [[silent! vimgrep /]] .. vim.fn.getreg('w') .. [[/gj ]] .. vim.fn.getreg('e')
 
 	if vim.fn.executable("rg") == 1 then
-		cmd = [[cexpr system('rg --vimgrep --smart-case ' .. ' "' .. getreg('w') .. '" ' .. getreg('e'))]]
+		cmd = [[cexpr system('rg --vimgrep --smart-case ' .. " '" .. getreg('w') .. "' " .. getreg('e'))]]
 	end
 
 	vim.cmd("silent! " .. cmd  .. " | silent! +copen 5")
