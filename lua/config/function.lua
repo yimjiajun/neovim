@@ -426,6 +426,24 @@ local function toggle_quickfix()
 	end
 end
 
+local function list_functions()
+	local regex = ""
+	local extensions = {}
+
+	extensions = {'c', 'cpp', 'lua', 'sh'}
+
+	if vim.tbl_contains(extensions, vim.bo.filetype) then
+		regex = [[^\w.*(.*)]]
+	end
+
+	if regex ~= "" then
+		vim.fn.setreg('/', regex)
+		vim.cmd("vimgrep /" .. regex .. "/j " .. vim.fn.expand("%"))
+	else
+		vim.api.nvim_echo({{"not supporting in " .. vim.bo.filetype}}, false, {})
+	end
+end
+
 local function setup()
 	for name in pairs(require('config.function')) do
 		local callback = "require('config.function')." .. name .. "()"
@@ -456,5 +474,6 @@ return {
 	CreateCtags = create_ctags,
 	Build = build,
 	ToggleQuickFix = toggle_quickfix,
+	ListFunctions = list_functions
 }
 

@@ -136,6 +136,7 @@ end
 
 local function setting_key_features()
 	keymap('n', '<leader>tc', [[<cmd> lua require("config.function").CreateCtags() <CR>]], opts)
+	keymap('n', '<leader>tt', [[<cmd> lua require("config.function").ListFunctions() <CR>]], opts)
 	keymap('n', '<leader>b', [[<cmd> lua require("config.function").Build() <CR>]], opts)
 	keymap('n', '<leader>B', [[<cmd> lua require("config.function").Build("latest") <CR>]], opts)
 	keymap('n', '<leader>vb', [[<cmd> lua require("features.bookmarks").Review() <CR>]], opts)
