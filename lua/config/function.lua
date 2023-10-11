@@ -472,6 +472,8 @@ local function list_functions()
 
 	if vim.tbl_contains({'c', 'cpp', 'lua', 'sh'}, vim.bo.filetype) then
 		regex = [[^\w.*(.*)]]
+	elseif vim.bo.filetype == 'python' then
+		regex = [[\<def .*(.*):]]
 	end
 
 	if regex ~= "" then
