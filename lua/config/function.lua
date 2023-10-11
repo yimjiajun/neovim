@@ -52,6 +52,10 @@ local function search_word(extension, mode)
 		else
 			extension = vim.fn.input("Enter filetype to search: ")
 		end
+	else
+		if vim.fn.executable("rg") == 1 then
+			extension = string.format("-g \"*.%s\"", vim.fn.fnamemodify(extension, ":e"))
+		end
 	end
 
 	if mode ~= 'cursor' then
