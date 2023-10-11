@@ -37,42 +37,87 @@ end
 
 local function search_word(extension, mode)
 	local word = ""
+	local cmd = ""
+	local opts = ""
 
 	if extension == nil then
-		extension = "*"
+		extension = vim.fn.input("Enter filetype to search: ", vim.fn.expand("%:e"))
 	end
 
 	if extension == "" then
-		if vim.fn.executable("rg") == 1 then
-			extension = vim.fn.input("Enter filetype to search: ", '-g "*.' .. vim.fn.expand("%:e") .. '"')
-
-			if mode == 'complete' then
-				extension = "--no-ignore " .. extension
-			end
-		else
-			extension = vim.fn.input("Enter filetype to search: ")
-		end
-	else
-		if vim.fn.executable("rg") == 1 then
-			extension = string.format("-g \"*.%s\"", vim.fn.fnamemodify(extension, ":e"))
-		end
+		extension = "*"
 	end
 
 	if mode ~= 'cursor' then
 		word = vim.fn.input("Enter word to search: ")
-	end
-
-	if word == "" then
+	else
 		word = vim.fn.expand("<cword>")
 	end
 
-	vim.fn.setreg('e', tostring(extension))
+	if word == "" then
+		return
+	end
+
 	vim.fn.setreg('w', tostring(word))
 
-	local cmd = [[silent! vimgrep /]] .. vim.fn.getreg('w') .. [[/gj ]] .. vim.fn.getreg('e')
+	if vim.fn.executable("rg") == 1 then
+		if extension == "*" then
+			extension = [[-g "*"]]
+		else
+			extension = string.format("-g \"*.%s\"", extension)
+		end
+
+		if mode == 'complete' then
+			opts = " --no-ignore "
+		end
+
+		vim.fn.setreg('e', opts .. extension)
+		cmd = [[cexpr system('rg --vimgrep --smart-case ' .. " '" .. getreg('w') .. "' " .. getreg('e'))]]
+	else
+		if extension ~= "*" then
+			extension = [[*.]] .. extension
+		end
+
+		vim.fn.setreg('e', tostring(extension))
+		cmd = [[silent! vimgrep /]] .. vim.fn.getreg('w') .. [[/gj ./**/]] .. vim.fn.getreg('e')
+	end
+
+	vim.cmd("silent! " .. cmd  .. " | silent! +copen 5")
+end
+
+local function search_word_by_file(file, mode)
+	local word = ""
+	local cmd = ""
+	local opts = ""
+	
+	if file == nil or file == "" then
+		search_word("*", "normal")
+	end
+
+	if mode ~= 'cursor' then
+		word = vim.fn.input("Enter word to search: ")
+	else
+		word = vim.fn.expand("<cword>")
+	end
+
+	if word == "" then
+		return
+	end
+
+	vim.fn.setreg('w', tostring(word))
 
 	if vim.fn.executable("rg") == 1 then
+		file = string.format("./**/%s", file)
+
+		if mode == 'complete' then
+			opts = " --no-ignore "
+		end
+
+		vim.fn.setreg('e', opts .. file)
 		cmd = [[cexpr system('rg --vimgrep --smart-case ' .. " '" .. getreg('w') .. "' " .. getreg('e'))]]
+	else
+		vim.fn.setreg('e', tostring(file))
+		cmd = [[silent! vimgrep /]] .. vim.fn.getreg('w') .. [[/gj ./**/]] .. vim.fn.getreg('e')
 	end
 
 	vim.cmd("silent! " .. cmd  .. " | silent! +copen 5")
@@ -456,6 +501,7 @@ return {
 	Setup = setup,
 	SearchFile = search_file,
 	SearchWord = search_word,
+	SearchWordByFile = search_word_by_file,
 	GitAdd = git_add,
 	GitCommit = git_commit,
 	GitDiff = git_diff,
