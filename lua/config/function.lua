@@ -36,7 +36,8 @@ local function search_file()
 end
 
 local function search_word(extension, mode)
-	local word, cmd, opts
+	local word, cmd
+	local opts = ""
 
 	if extension == nil then
 		extension = vim.fn.input("Enter filetype to search: ", vim.fn.expand("%:e"))
@@ -84,7 +85,8 @@ local function search_word(extension, mode)
 end
 
 local function search_word_by_file(file, mode)
-	local word, cmd, opts
+	local word, cmd
+	local opts = ""
 
 	if file == nil or file == "" then
 		search_word("*", "normal")
