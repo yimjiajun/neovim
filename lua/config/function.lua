@@ -58,7 +58,7 @@ local function search_word(extension, mode)
 		return
 	end
 
-	vim.fn.setreg('w', tostring(word))
+	vim.fn.setreg('/', tostring(word))
 
 	if vim.fn.executable("rg") == 1 then
 		if extension == "*" then
@@ -72,14 +72,14 @@ local function search_word(extension, mode)
 		end
 
 		vim.fn.setreg('e', opts .. extension)
-		cmd = [[cexpr system('rg --vimgrep --smart-case ' .. " '" .. getreg('w') .. "' " .. getreg('e'))]]
+		cmd = [[cexpr system('rg --vimgrep --smart-case' .. " '" .. getreg('/') .. "' " .. getreg('e'))]]
 	else
 		if extension ~= "*" then
 			extension = [[*.]] .. extension
 		end
 
 		vim.fn.setreg('e', tostring(extension))
-		cmd = [[silent! vimgrep /]] .. vim.fn.getreg('w') .. [[/gj ./**/]] .. vim.fn.getreg('e')
+		cmd = [[silent! vimgrep /]] .. vim.fn.getreg('/') .. [[/gj ./**/]] .. vim.fn.getreg('e')
 	end
 
 	vim.cmd("silent! " .. cmd  .. " | silent! +copen 5")
