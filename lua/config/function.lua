@@ -36,9 +36,7 @@ local function search_file()
 end
 
 local function search_word(extension, mode)
-	local word = ""
-	local cmd = ""
-	local opts = ""
+	local word, cmd, opts
 
 	if extension == nil then
 		extension = vim.fn.input("Enter filetype to search: ", vim.fn.expand("%:e"))
@@ -86,10 +84,8 @@ local function search_word(extension, mode)
 end
 
 local function search_word_by_file(file, mode)
-	local word = ""
-	local cmd = ""
-	local opts = ""
-	
+	local word, cmd, opts
+
 	if file == nil or file == "" then
 		search_word("*", "normal")
 	end
@@ -473,11 +469,8 @@ end
 
 local function list_functions()
 	local regex = ""
-	local extensions = {}
 
-	extensions = {'c', 'cpp', 'lua', 'sh'}
-
-	if vim.tbl_contains(extensions, vim.bo.filetype) then
+	if vim.tbl_contains({'c', 'cpp', 'lua', 'sh'}, vim.bo.filetype) then
 		regex = [[^\w.*(.*)]]
 	end
 
