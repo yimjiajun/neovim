@@ -479,6 +479,7 @@ local function list_functions()
 	if regex ~= "" then
 		vim.fn.setreg('/', regex)
 		vim.cmd("vimgrep /" .. regex .. "/j " .. vim.fn.expand("%"))
+		vim.cmd("silent! copen")
 	else
 		vim.api.nvim_echo({{"not supporting in " .. vim.bo.filetype}}, false, {})
 	end
