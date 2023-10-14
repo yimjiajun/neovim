@@ -124,8 +124,8 @@ end
 local function git_diff(mode)
 	local cmd = vim.g.vim_git
 
-	if vim.fn.expand("%:h") ~= "" then
-		cmd = vim.g.vim_git .. " -C " .. vim.fn.expand("%:h")
+	if vim.fn.expand("%:h") ~= "" and vim.g.vim_git == "git" then
+		cmd = cmd .. " -C " .. vim.fn.expand("%:h")
 	end
 
 	if mode == "staging" then
@@ -142,14 +142,18 @@ local function git_diff(mode)
 		cmd = string.format("%s %s", cmd, "diff")
 	end
 
-	vim.cmd(string.format("%s %s %s", "term", cmd, "; exit"))
+	if vim.g.vim_git == "git" then
+		vim.cmd(string.format("%s %s %s", "term", cmd, "; exit"))
+	else
+		vim.cmd(cmd);
+	end
 end
 
 local function git_log(mode)
 	local cmd = vim.g.vim_git
 
-	if vim.fn.expand("%:h") ~= "" then
-		cmd = vim.g.vim_git .. " -C " .. vim.fn.expand("%:h")
+	if vim.fn.expand("%:h") ~= "" and vim.g.vim_git == "git" then
+		cmd = cmd .. " -C " .. vim.fn.expand("%:h")
 	end
 
 	if mode == "graph" then
@@ -162,14 +166,18 @@ local function git_log(mode)
 	  cmd = string.format("%s %s", cmd, "log")
   end
 
-	vim.cmd(string.format("%s %s %s", "term", cmd, "; exit"))
+	if vim.g.vim_git == "git" then
+		vim.cmd(string.format("%s %s %s", "term", cmd, "; exit"))
+	else
+		vim.cmd(cmd);
+	end
 end
 
 local function git_status(mode)
 	local cmd = vim.g.vim_git
 
-	if vim.fn.expand("%:h") ~= "" then
-		cmd = vim.g.vim_git .. " -C " .. vim.fn.expand("%:h")
+	if vim.fn.expand("%:h") ~= "" and vim.g.vim_git == "git" then
+		cmd = cmd .. " -C " .. vim.fn.expand("%:h")
 	end
 
 	if mode == "short" then
@@ -180,14 +188,18 @@ local function git_status(mode)
 		cmd = string.format("%s %s", cmd, "status")
 	end
 
-	vim.cmd(string.format("%s %s %s", "split | term", cmd, "; exit"))
+	if vim.g.vim_git == "git" then
+		vim.cmd(string.format("%s %s %s", "split | term", cmd, "; exit"))
+	else
+		vim.cmd(cmd);
+	end
 end
 
 local function git_add(mode)
 	local cmd = vim.g.vim_git
 
-	if vim.fn.expand("%:h") ~= "" then
-		cmd = vim.g.vim_git .. " -C " .. vim.fn.expand("%:h")
+	if vim.fn.expand("%:h") ~= "" and vim.g.vim_git == "git" then
+		cmd = cmd .. " -C " .. vim.fn.expand("%:h")
 	end
 
 	if mode == "patch" then
@@ -198,14 +210,18 @@ local function git_add(mode)
 		cmd = string.format("%s %s", cmd, "add -i")
 	end
 
-	vim.cmd(string.format("%s %s %s", "term", cmd, "; exit"))
+	if vim.g.vim_git == "git" then
+		vim.cmd(string.format("%s %s %s", "term", cmd, "; exit"))
+	else
+		vim.cmd(cmd);
+	end
 end
 
 local function git_commit(mode)
 	local cmd = vim.g.vim_git
 
-	if vim.fn.expand("%:h") ~= "" then
-		cmd = vim.g.vim_git .. " -C " .. vim.fn.expand("%:h")
+	if vim.fn.expand("%:h") ~= "" and vim.g.vim_git == "git" then
+		cmd = cmd .. " -C " .. vim.fn.expand("%:h")
 	end
 
 	if mode == "amend" then
@@ -214,7 +230,11 @@ local function git_commit(mode)
 		cmd = string.format("%s %s", cmd, "commit")
 	end
 
-	vim.cmd(string.format("%s %s %s", "term", cmd, "; exit"))
+	if vim.g.vim_git == "git" then
+		vim.cmd(string.format("%s %s %s", "term", cmd, "; exit"))
+	else
+		vim.cmd(cmd);
+	end
 end
 
 local function terminal(mode)
