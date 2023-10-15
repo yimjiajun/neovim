@@ -1,5 +1,5 @@
 local function setup()
-	if vim.g.noplugin ~= nil then
+	if vim.g.enable_plugin == 0 then
 		return
 	end
 

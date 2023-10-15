@@ -5,7 +5,7 @@ local function Setting_view()
 		vim.cmd('colorscheme habamax')
 	end
 
-	if vim.o.loadplugins == true and vim.g.noplugin == nil then
+	if vim.o.loadplugins == true and vim.g.enable_plugin ~= 0 then
 		vim.opt.timeoutlen = 100
 	else
 		vim.opt.timeoutlen = 300
