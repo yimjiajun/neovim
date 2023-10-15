@@ -14,7 +14,7 @@ vim.g.custom = {
 }
 
 if vim.g.enable_plugin == nil then
-	vim.g.enable_plugin = 0
+	vim.g.enable_plugin = 1
 end
 
 if vim.g.neovide ~= nil then
