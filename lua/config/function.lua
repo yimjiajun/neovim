@@ -125,7 +125,7 @@ local function git_diff(mode)
 	local cmd = vim.g.vim_git
 
 	if vim.fn.expand("%:h") ~= "" and vim.g.vim_git == "git" then
-		cmd = cmd .. " -C " .. vim.fn.expand("%:h")
+		cmd = cmd .. " -C " .. vim.fn.expand("%:p:h")
 	end
 
 	if mode == "staging" then
@@ -153,7 +153,7 @@ local function git_log(mode)
 	local cmd = vim.g.vim_git
 
 	if vim.fn.expand("%:h") ~= "" and vim.g.vim_git == "git" then
-		cmd = cmd .. " -C " .. vim.fn.expand("%:h")
+		cmd = cmd .. " -C " .. vim.fn.expand("%:p:h")
 	end
 
 	if mode == "graph" then
@@ -177,7 +177,7 @@ local function git_status(mode)
 	local cmd = vim.g.vim_git
 
 	if vim.fn.expand("%:h") ~= "" and vim.g.vim_git == "git" then
-		cmd = cmd .. " -C " .. vim.fn.expand("%:h")
+		cmd = cmd .. " -C " .. vim.fn.expand("%:p:h")
 	end
 
 	if mode == "short" then
@@ -199,7 +199,7 @@ local function git_add(mode)
 	local cmd = vim.g.vim_git
 
 	if vim.fn.expand("%:h") ~= "" and vim.g.vim_git == "git" then
-		cmd = cmd .. " -C " .. vim.fn.expand("%:h")
+		cmd = cmd .. " -C " .. vim.fn.expand("%:p:h")
 	end
 
 	if mode == "patch" then
@@ -221,7 +221,7 @@ local function git_commit(mode)
 	local cmd = vim.g.vim_git
 
 	if vim.fn.expand("%:h") ~= "" and vim.g.vim_git == "git" then
-		cmd = cmd .. " -C " .. vim.fn.expand("%:h")
+		cmd = cmd .. " -C " .. vim.fn.expand("%:p:h")
 	end
 
 	if mode == "amend" then
