@@ -61,17 +61,22 @@ local function search_word(extension, mode)
 
 	if vim.fn.executable("rg") == 1 then
 		if extension == "*" then
-			extension = [[-g "*"]]
+			extension = [[--glob "*"]]
 		else
-			extension = string.format("-g \"*.%s\"", extension)
+			extension = string.format("--glob '*.%s'", extension)
 		end
+
+		opts = " --no-ignore "
 
 		if mode == 'complete' then
-			opts = " --no-ignore "
+			opts = opts .. " --case-sensitive "
+		else
+			opts = opts .. " --smart-case "
 		end
 
-		vim.fn.setreg('e', opts .. extension)
-		cmd = [[cexpr system('rg --vimgrep --smart-case' .. " '" .. getreg('/') .. "' " .. getreg('e'))]]
+		vim.fn.setreg('e', extension)
+		vim.fn.setreg('o', opts)
+		cmd = [[cexpr system('rg --vimgrep ' .. getreg('o') .. " --regexp " .. getreg('/') .. " " .. getreg('e'))]]
 	else
 		if extension ~= "*" then
 			extension = [[*.]] .. extension
@@ -102,20 +107,24 @@ local function search_word_by_file(file, mode)
 		return
 	end
 
-	vim.fn.setreg('w', tostring(word))
+	vim.fn.setreg('/', tostring(word))
 
 	if vim.fn.executable("rg") == 1 then
-		file = string.format("./**/%s", file)
+		file = string.format("{%s,./**/%s}", file, file)
+		opts = " --no-ignore "
 
 		if mode == 'complete' then
-			opts = " --no-ignore "
+			opts = opts .. " --case-sensitive "
+		else
+			opts = opts .. " --smart-case "
 		end
 
-		vim.fn.setreg('e', opts .. file)
-		cmd = [[cexpr system('rg --vimgrep --smart-case ' .. " '" .. getreg('w') .. "' " .. getreg('e'))]]
+		vim.fn.setreg('e', file)
+		vim.fn.setreg('o', opts)
+		cmd = [[cexpr system('rg --vimgrep ' .. getreg('o') .. " --regexp " .. getreg('/') .. " " .. getreg('e'))]]
 	else
 		vim.fn.setreg('e', tostring(file))
-		cmd = [[silent! vimgrep /]] .. vim.fn.getreg('w') .. [[/gj ./**/]] .. vim.fn.getreg('e')
+		cmd = [[silent! vimgrep /]] .. vim.fn.getreg('/') .. [[/gj ./**/]] .. vim.fn.getreg('e')
 	end
 
 	vim.cmd("silent! " .. cmd  .. " | silent! +copen 5")
