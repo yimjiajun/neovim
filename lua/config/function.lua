@@ -128,6 +128,12 @@ local function search_word_by_file(file, mode)
 	vim.cmd("silent! " .. cmd  .. " | silent! +copen 5")
 end
 
+local function search_word_by_buffer()
+	vim.fn.setreg('/', vim.fn.expand("<cword>"))
+	vim.cmd([[silent! vimgrep /]] .. vim.fn.getreg('/') .. [[/gj %]])
+	vim.cmd("silent! +copen 5")
+end
+
 local function git_diff(mode)
 	local cmd = vim.g.vim_git
 
@@ -527,6 +533,7 @@ return {
 	SearchFile = search_file,
 	SearchWord = search_word,
 	SearchWordByFile = search_word_by_file,
+	SearchWordByBuffer = search_word_by_buffer,
 	GitAdd = git_add,
 	GitCommit = git_commit,
 	GitDiff = git_diff,

@@ -104,6 +104,7 @@ local function setting_key_search()
 		[[<cmd> lua require("config.function").SearchWord("{md,rst,txt}", "normal") <CR>]], opts)
 	keymap('n', '<Leader>fv', [[<cmd> lua require("config.function").SearchWord(nil, "normal") <CR>]], opts)
 	keymap('n', '<Leader>fV', [[<cmd> lua require("config.function").SearchWord(nil, "complete") <CR>]], opts)
+	keymap('n', '<Leader>fb', [[<cmd> lua require("config.function").SearchWordByBuffer() <CR>]], opts)
 end
 
 local function setting_key_git()
