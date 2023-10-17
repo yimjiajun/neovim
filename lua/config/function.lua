@@ -62,7 +62,7 @@ local function search_word(extension, mode)
 		if extension == "*" then
 			extension = [[--glob "*"]]
 		else
-			extension = string.format("--glob '*.%s'", extension)
+			extension = string.format([[--glob "*.%s"]], extension)
 		end
 
 		local opts = " --no-ignore "
