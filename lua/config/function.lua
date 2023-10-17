@@ -86,6 +86,7 @@ local function search_word(extension, mode)
 	end
 
 	vim.cmd("silent! " .. cmd  .. " | silent! +copen 5")
+	vim.fn.setqflist({}, 'r', { title = "search word: " .. vim.fn.getreg('/') })
 end
 
 local function search_word_by_file(file, mode)
@@ -126,11 +127,13 @@ local function search_word_by_file(file, mode)
 	end
 
 	vim.cmd("silent! " .. cmd  .. " | silent! +copen 5")
+	vim.fn.setqflist({}, 'r', { title = "search word in file: " .. vim.fn.getreg('/') })
 end
 
 local function search_word_by_buffer()
 	vim.fn.setreg('/', vim.fn.expand("<cword>"))
 	vim.cmd([[silent! vimgrep /]] .. vim.fn.getreg('/') .. [[/gj %]])
+	vim.fn.setqflist({}, 'r', { title = "search buffer: " .. vim.fn.getreg('/') })
 	vim.cmd("silent! +copen 5")
 end
 
