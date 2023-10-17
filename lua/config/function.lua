@@ -37,7 +37,6 @@ end
 
 local function search_word(extension, mode)
 	local word, cmd
-	local opts = ""
 
 	if extension == nil then
 		extension = vim.fn.input("Enter filetype to search: ", vim.fn.expand("%:e"))
@@ -66,7 +65,7 @@ local function search_word(extension, mode)
 			extension = string.format("--glob '*.%s'", extension)
 		end
 
-		opts = " --no-ignore "
+		local opts = " --no-ignore "
 
 		if mode == 'complete' then
 			opts = opts .. " --case-sensitive "
@@ -91,7 +90,6 @@ end
 
 local function search_word_by_file(file, mode)
 	local word, cmd
-	local opts = ""
 
 	if file == nil or file == "" then
 		search_word("*", "normal")
@@ -111,7 +109,7 @@ local function search_word_by_file(file, mode)
 
 	if vim.fn.executable("rg") == 1 then
 		file = string.format("{%s,./**/%s}", file, file)
-		opts = " --no-ignore "
+		local opts = " --no-ignore "
 
 		if mode == 'complete' then
 			opts = opts .. " --case-sensitive "
