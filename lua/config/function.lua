@@ -413,26 +413,29 @@ local function build(mode)
 	local compiler = require('features.compiler')
 	local status
 
-	if mode == "latest"
-	then
+	if mode == "latest" then
 		status = compiler.LastSelect()
 	else
 		status = compiler.Selection()
 	end
 
-	if status == nil
-	then
+	if status == nil then
 		local msg = "\nBuild not found\n"
 		vim.api.nvim_echo({{msg, "ErrorMsg"}}, false, {})
 		return
 	end
 
-	if status == false
-	then
+	if status == false then
 		return
 	end
 
-	vim.cmd("make")
+	local cmd = "make"
+
+	if vim.fn.exists(":Make") > 0 then
+		cmd = "Make"
+	end
+
+	vim.cmd(cmd)
 end
 
 local function setup_file_format()
