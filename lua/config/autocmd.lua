@@ -249,6 +249,21 @@ local function file()
 	]])
 end
 
+local function package()
+	vim.api.nvim_create_augroup("package", { clear = true })
+	vim.api.nvim_create_autocmd("VimEnter", {
+		desc = "setup git wrapper, if vim-fugitive package exists",
+		group = "package",
+		callback = function()
+			if vim.fn.exists(":Git") then
+				vim.g.vim_git = "Git"
+			else
+				vim.g.vim_git = "git"
+			end
+		end,
+	})
+end
+
 local function setup()
 	session()
 	statusline()
@@ -257,6 +272,7 @@ local function setup()
 	programming()
 	terminal()
 	file()
+	package()
 end
 
 return {
@@ -268,4 +284,5 @@ return {
 	Programming = programming,
 	Terminal = terminal,
 	File = file,
+	Package = package,
 }
