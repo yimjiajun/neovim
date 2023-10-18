@@ -3,6 +3,9 @@ local function native_package_install()
 		{ name = "vim-dispatch",
 			url = [[https://github.com/tpope/vim-dispatch.git]]
 		},
+		{ name = "vim-fugitive",
+			url = [[https://github.com/tpope/vim-fugitive.git]]
+		}
 	}
 	local d = vim.fn.has('win32') ~= 0 and "\\" or "/"
 	local path = vim.fn.stdpath('data') .. d .. 'site' .. d .. 'pack' .. d .. 'jun' .. d .. 'start'
