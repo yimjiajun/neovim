@@ -290,6 +290,7 @@ local function set_statusline(mode)
 	else
 		local git_branch = require('features.system').GetGitInfo('branch', nil)
 		vim.o.statusline = " %<%t [" .. git_branch .. "] %h%m%r%w%= / %Y / 0x%02B / %-10.(%l,%c%V%) / %-4P"
+		vim.o.statusline = vim.o.statusline .. "/ %{strftime('%b %d / %H:%M')} "
 	end
 end
 
