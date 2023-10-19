@@ -15,7 +15,7 @@ local function native_package_install()
 		vim.fn.mkdir(path, "p")
 	end
 
-	for i, v in ipairs(packages) do
+	for _, v in ipairs(packages) do
 		local pack_dir = path .. d .. v.name
 		if vim.fn.isdirectory(pack_dir) == 0 then
 			vim.api.nvim_echo({ { "package: download " .. v.name } }, false, {})
