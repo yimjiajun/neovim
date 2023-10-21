@@ -21,7 +21,6 @@ local function setup()
 			d.pycodestyle,
 			d.luacheck,
 			d.shellcheck,
-			c.spell,
 			c.tags,
 			a.shellcheck,
 			a.gitsigns,
