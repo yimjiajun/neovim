@@ -37,7 +37,6 @@ end
 
 local function search_word(extension, mode)
 	local word, cmd
-	local opts = ""
 
 	if extension == nil then
 		extension = vim.fn.input("Enter filetype to search: ", vim.fn.expand("%:e"))
@@ -61,17 +60,22 @@ local function search_word(extension, mode)
 
 	if vim.fn.executable("rg") == 1 then
 		if extension == "*" then
-			extension = [[-g "*"]]
+			extension = [[--glob "*"]]
 		else
-			extension = string.format("-g \"*.%s\"", extension)
+			extension = string.format([[--glob "*.%s"]], extension)
 		end
+
+		local opts = " --no-ignore "
 
 		if mode == 'complete' then
-			opts = " --no-ignore "
+			opts = opts .. " --case-sensitive "
+		else
+			opts = opts .. " --smart-case "
 		end
 
-		vim.fn.setreg('e', opts .. extension)
-		cmd = [[cexpr system('rg --vimgrep --smart-case' .. " '" .. getreg('/') .. "' " .. getreg('e'))]]
+		vim.fn.setreg('e', extension)
+		vim.fn.setreg('o', opts)
+		cmd = [[cexpr system('rg --vimgrep ' .. getreg('o') .. " --regexp " .. getreg('/') .. " " .. getreg('e'))]]
 	else
 		if extension ~= "*" then
 			extension = [[*.]] .. extension
@@ -82,11 +86,11 @@ local function search_word(extension, mode)
 	end
 
 	vim.cmd("silent! " .. cmd  .. " | silent! +copen 5")
+	vim.fn.setqflist({}, 'r', { title = "search word: " .. vim.fn.getreg('/') })
 end
 
 local function search_word_by_file(file, mode)
 	local word, cmd
-	local opts = ""
 
 	if file == nil or file == "" then
 		search_word("*", "normal")
@@ -102,23 +106,35 @@ local function search_word_by_file(file, mode)
 		return
 	end
 
-	vim.fn.setreg('w', tostring(word))
+	vim.fn.setreg('/', tostring(word))
 
 	if vim.fn.executable("rg") == 1 then
-		file = string.format("./**/%s", file)
+		file = string.format("{%s,./**/%s}", file, file)
+		local opts = " --no-ignore "
 
 		if mode == 'complete' then
-			opts = " --no-ignore "
+			opts = opts .. " --case-sensitive "
+		else
+			opts = opts .. " --smart-case "
 		end
 
-		vim.fn.setreg('e', opts .. file)
-		cmd = [[cexpr system('rg --vimgrep --smart-case ' .. " '" .. getreg('w') .. "' " .. getreg('e'))]]
+		vim.fn.setreg('e', file)
+		vim.fn.setreg('o', opts)
+		cmd = [[cexpr system('rg --vimgrep ' .. getreg('o') .. " --regexp " .. getreg('/') .. " " .. getreg('e'))]]
 	else
 		vim.fn.setreg('e', tostring(file))
-		cmd = [[silent! vimgrep /]] .. vim.fn.getreg('w') .. [[/gj ./**/]] .. vim.fn.getreg('e')
+		cmd = [[silent! vimgrep /]] .. vim.fn.getreg('/') .. [[/gj ./**/]] .. vim.fn.getreg('e')
 	end
 
 	vim.cmd("silent! " .. cmd  .. " | silent! +copen 5")
+	vim.fn.setqflist({}, 'r', { title = "search word in file: " .. vim.fn.getreg('/') })
+end
+
+local function search_word_by_buffer()
+	vim.fn.setreg('/', vim.fn.expand("<cword>"))
+	vim.cmd([[silent! vimgrep /]] .. vim.fn.getreg('/') .. [[/gj %]])
+	vim.fn.setqflist({}, 'r', { title = "search buffer: " .. vim.fn.getreg('/') })
+	vim.cmd("silent! +copen 5")
 end
 
 local function git_diff(mode)
@@ -274,6 +290,7 @@ local function set_statusline(mode)
 	else
 		local git_branch = require('features.system').GetGitInfo('branch', nil)
 		vim.o.statusline = " %<%t [" .. git_branch .. "] %h%m%r%w%= / %Y / 0x%02B / %-10.(%l,%c%V%) / %-4P"
+		vim.o.statusline = vim.o.statusline .. "/ %{strftime('%b %d / %H:%M')} "
 	end
 end
 
@@ -396,26 +413,29 @@ local function build(mode)
 	local compiler = require('features.compiler')
 	local status
 
-	if mode == "latest"
-	then
+	if mode == "latest" then
 		status = compiler.LastSelect()
 	else
 		status = compiler.Selection()
 	end
 
-	if status == nil
-	then
+	if status == nil then
 		local msg = "\nBuild not found\n"
 		vim.api.nvim_echo({{msg, "ErrorMsg"}}, false, {})
 		return
 	end
 
-	if status == false
-	then
+	if status == false then
 		return
 	end
 
-	vim.cmd("make")
+	local cmd = "make"
+
+	if vim.fn.exists(":Make") > 0 then
+		cmd = "Make"
+	end
+
+	vim.cmd(cmd)
 end
 
 local function setup_file_format()
@@ -520,6 +540,7 @@ return {
 	SearchFile = search_file,
 	SearchWord = search_word,
 	SearchWordByFile = search_word_by_file,
+	SearchWordByBuffer = search_word_by_buffer,
 	GitAdd = git_add,
 	GitCommit = git_commit,
 	GitDiff = git_diff,
