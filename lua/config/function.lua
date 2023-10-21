@@ -75,7 +75,7 @@ local function search_word(extension, mode)
 
 		vim.fn.setreg('e', extension)
 		vim.fn.setreg('o', opts)
-		cmd = [[cexpr system('rg --vimgrep ' .. getreg('o') .. " --regexp " .. getreg('/') .. " " .. getreg('e'))]]
+		cmd = [[cgetexpr system('rg --vimgrep ' .. getreg('o') .. " --regexp " .. getreg('/') .. " " .. getreg('e'))]]
 	else
 		if extension ~= "*" then
 			extension = [[*.]] .. extension
@@ -120,7 +120,7 @@ local function search_word_by_file(file, mode)
 
 		vim.fn.setreg('e', file)
 		vim.fn.setreg('o', opts)
-		cmd = [[cexpr system('rg --vimgrep ' .. getreg('o') .. " --regexp " .. getreg('/') .. " " .. getreg('e'))]]
+		cmd = [[cgetexpr system('rg --vimgrep ' .. getreg('o') .. " --regexp " .. getreg('/') .. " " .. getreg('e'))]]
 	else
 		vim.fn.setreg('e', tostring(file))
 		cmd = [[silent! vimgrep /]] .. vim.fn.getreg('/') .. [[/gj ./**/]] .. vim.fn.getreg('e')
