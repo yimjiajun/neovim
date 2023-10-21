@@ -562,4 +562,3 @@ return {
 	ToggleQuickFix = toggle_quickfix,
 	ListFunctions = list_functions
 }
-

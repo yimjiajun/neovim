@@ -13,10 +13,6 @@ vim.g.custom = {
 	},
 }
 
-if vim.g.enable_plugin == nil then
-	vim.g.enable_plugin = 0
-end
-
 if vim.g.neovide ~= nil then
 	require('plugin.neovide').Setup()
 end
