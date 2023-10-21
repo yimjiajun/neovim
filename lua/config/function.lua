@@ -199,7 +199,8 @@ local function git_status(mode)
 	if mode == "short" then
 		cmd = string.format("%s %s", cmd, "status --short")
 	elseif mode == "check_whitespace" then
-		cmd = string.format("%s %s", cmd, "diff-tree --check $(git hash-object -t tree /dev/null) HEAD")
+		local commit = vim.fn.system('git hash-object -t tree /dev/null')
+		cmd = string.format("%s %s %s %s", cmd, "diff-tree --check", vim.fn.trim(commit), "HEAD")
 	else
 		cmd = string.format("%s %s", cmd, "status")
 	end
