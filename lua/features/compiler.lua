@@ -60,14 +60,18 @@ local function compiler_read_json()
 		local name = (type(str) == "table") and str or {str}
 
 		for _, n in pairs(name) do
-			local url = require('features.system').GetGitInfo('remote', remote)
+			local url = require('features.git').Remote().GetUrl(remote)
 
-			if url == nil or vim.fn.len(url) == 0 or string.gmatch(url, n) == nil then
+			if url == nil or vim.fn.len(url) == 0 then
 				return false
+			end
+
+			for _ in string.gmatch(url, n) do
+				return true
 			end
 		end
 
-		return true
+		return false
 	end
 
 	if vim.fn.isdirectory(compiler_data_dir) == 0 then

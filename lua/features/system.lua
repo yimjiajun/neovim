@@ -278,53 +278,6 @@ local function get_install_package_cmd()
 	return install_cmd
 end
 
-local function get_git_info(cmd, arg)
-	local function remote_url(git_cmd, remote_name)
-		local url = vim.fn.system(git_cmd .. ' config --get remote.' .. remote_name ..'.url')
-		return vim.fn.trim(url)
-	end
-
-	local function branch(git_cmd)
-		local b = vim.fn.system(git_cmd .. " branch --show-current")
-
-		if b ~= '' then
-			return vim.fn.trim(b)
-		end
-
-		local commita_hash = vim.fn.system(git_cmd .. " rev-parse --short HEAD")
-
-		return vim.fn.trim(commita_hash)
-	end
-
-	local current_file_path = vim.fn.expand('%:p:h')
-
-	if current_file_path == '' then
-		return ''
-	end
-
-	local git_cmd = 'git -C ' .. current_file_path
-	local git_rep_exists = vim.fn.system(
-		"if " .. git_cmd .. " rev-parse --is-inside-work-tree >/dev/null 2>&1 ; then\
-			echo 1;\
-		else \
-			echo 0;\
-		fi")
-
-	if tonumber(git_rep_exists) == 0 then
-		return ''
-	end
-
-	if cmd == 'branch' then
-		return branch(git_cmd)
-	end
-
-	if cmd == 'remote' then
-		return remote_url(git_cmd, arg)
-	end
-
-	return ''
-end
-
 local function get_battery_info ()
 	if vim.fn.has('unix') == 0 then
 		return

@@ -1,5 +1,3 @@
-vim.g.vim_git = "git"
-
 local function search_file()
 	local regex_file = vim.fn.input("File to search (regex): ")
 
@@ -137,123 +135,6 @@ local function search_word_by_buffer()
 	vim.cmd("silent! +copen 5")
 end
 
-local function git_diff(mode)
-	local cmd = vim.g.vim_git
-
-	if vim.fn.expand("%:h") ~= "" and vim.g.vim_git == "git" then
-		cmd = cmd .. " -C " .. vim.fn.expand("%:p:h")
-	end
-
-	if mode == "staging" then
-		cmd = string.format("%s %s", cmd, "diff --staged")
-	elseif mode == "previous" then
-		cmd = string.format("%s %s", cmd, "diff HEAD~")
-	elseif mode == "specify" then
-		local file = vim.fn.input("enter file to git diff: ")
-		cmd = string.format("%s %s", cmd, "diff ./**/" .. file)
-	elseif mode == "staging_specify" then
-		local file = vim.fn.input("enter file to git diff: ")
-		cmd = string.format("%s %s", cmd, "diff --staged ./**/" .. file)
-	else
-		cmd = string.format("%s %s", cmd, "diff")
-	end
-
-	if vim.g.vim_git == "git" then
-		vim.cmd(string.format("%s %s %s", "term", cmd, "; exit"))
-	else
-		vim.cmd(cmd);
-	end
-end
-
-local function git_log(mode)
-	local cmd = vim.g.vim_git
-
-	if vim.fn.expand("%:h") ~= "" and vim.g.vim_git == "git" then
-		cmd = cmd .. " -C " .. vim.fn.expand("%:p:h")
-	end
-
-	if mode == "graph" then
-		cmd = string.format("%s %s", cmd, "log --oneline --graph")
-	elseif mode == "commit_count" then
-		cmd = string.format("%s %s", cmd, "rev-list HEAD --count")
-	elseif mode == "diff" then
-		cmd = string.format("%s %s", cmd, "log --patch")
-	else
-	  cmd = string.format("%s %s", cmd, "log")
-  end
-
-	if vim.g.vim_git == "git" then
-		vim.cmd(string.format("%s %s %s", "term", cmd, "; exit"))
-	else
-		vim.cmd(cmd);
-	end
-end
-
-local function git_status(mode)
-	local cmd = vim.g.vim_git
-
-	if vim.fn.expand("%:h") ~= "" and vim.g.vim_git == "git" then
-		cmd = cmd .. " -C " .. vim.fn.expand("%:p:h")
-	end
-
-	if mode == "short" then
-		cmd = string.format("%s %s", cmd, "status --short")
-	elseif mode == "check_whitespace" then
-		local commit = vim.fn.system('git hash-object -t tree /dev/null')
-		cmd = string.format("%s %s %s %s", cmd, "diff-tree --check", vim.fn.trim(commit), "HEAD")
-	else
-		cmd = string.format("%s %s", cmd, "status")
-	end
-
-	if vim.g.vim_git == "git" then
-		vim.cmd(string.format("%s %s %s", "split | term", cmd, "; exit"))
-	else
-		vim.cmd(cmd);
-	end
-end
-
-local function git_add(mode)
-	local cmd = vim.g.vim_git
-
-	if vim.fn.expand("%:h") ~= "" and vim.g.vim_git == "git" then
-		cmd = cmd .. " -C " .. vim.fn.expand("%:p:h")
-	end
-
-	if mode == "patch" then
-		cmd = string.format("%s %s", cmd, "add -p")
-	elseif mode == "all" then
-		cmd = string.format("%s %s", cmd, "add .")
-	else
-		cmd = string.format("%s %s", cmd, "add -i")
-	end
-
-	if vim.g.vim_git == "git" then
-		vim.cmd(string.format("%s %s %s", "term", cmd, "; exit"))
-	else
-		vim.cmd(cmd);
-	end
-end
-
-local function git_commit(mode)
-	local cmd = vim.g.vim_git
-
-	if vim.fn.expand("%:h") ~= "" and vim.g.vim_git == "git" then
-		cmd = cmd .. " -C " .. vim.fn.expand("%:p:h")
-	end
-
-	if mode == "amend" then
-		cmd = string.format("%s %s", cmd, "commit --amend")
-	else
-		cmd = string.format("%s %s", cmd, "commit")
-	end
-
-	if vim.g.vim_git == "git" then
-		vim.cmd(string.format("%s %s %s", "term", cmd, "; exit"))
-	else
-		vim.cmd(cmd);
-	end
-end
-
 local function terminal(mode)
 	if mode == "split" then
 		vim.cmd("sp | term")
@@ -289,7 +170,7 @@ local function set_statusline(mode)
 	elseif mode == "byte" then
 		vim.o.statusline = " %<%f%=\\ [%1*%M%*%n%R%H]\\ %-19(%3l,%02c%03V%)%O'%02b'"
 	else
-		local git_branch = require('features.system').GetGitInfo('branch', nil)
+		local git_branch = require('features.git').Branch().Get()
 		vim.o.statusline = " %<%t [" .. git_branch .. "] %h%m%r%w%= / %Y / 0x%02B / %-10.(%l,%c%V%) / %-4P"
 		vim.o.statusline = vim.o.statusline .. "/ %{strftime('%b %d / %H:%M')} "
 	end
@@ -542,11 +423,6 @@ return {
 	SearchWord = search_word,
 	SearchWordByFile = search_word_by_file,
 	SearchWordByBuffer = search_word_by_buffer,
-	GitAdd = git_add,
-	GitCommit = git_commit,
-	GitDiff = git_diff,
-	GitLog = git_log,
-	GitStatus = git_status,
 	Terminal = terminal,
 	GetBuffers = get_buffers,
 	GetMarks = get_marks,
