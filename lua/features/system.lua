@@ -337,7 +337,6 @@ return {
 	GetBatInfo = get_battery_info,
 	GetInstallPackageCmd = get_install_package_cmd,
 	GetOsLikeId = get_os_like_id,
-	ChkExtExist = check_extension_file_exist,
 	PwrshCmd = pwrsh_cmd,
 	GetCalendar = calendar_interactive,
 	GetJsonFile = json_file_read,

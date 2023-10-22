@@ -23,6 +23,7 @@ local function get_path()
 end
 
 local function get_files(path)
+	local uv = vim.loop
 	local files = {}
 	local handle = uv.fs_scandir(path)
 
