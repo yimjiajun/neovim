@@ -236,7 +236,7 @@ local function ssh_read_json()
 	local ssh_data = {}
 
 	for _, f in ipairs(ssh_data_files) do
-		local info = require('features.system').GetJsonFile(f)
+		local info = require('features.files').GetJson(f)
 
 		if info == nil then
 			goto continue

@@ -98,7 +98,7 @@ local function add_todo_list()
 	todo_lists = items
 
 
-	 require('features.system').SetJsonFile(todo_lists, todo_list_json)
+	 require('features.files').SetJson(todo_lists, todo_list_json)
 end
 
 local function read_todo_list()
@@ -257,7 +257,7 @@ local function toggle_todo_list()
 	end
 
 	todo_lists = items
-	require('features.system').SetJsonFile(todo_lists, todo_list_json)
+	require('features.files').SetJson(todo_lists, todo_list_json)
 	get_todo_list()
 	vim.fn.cursor(qf_index, qf_col)
 end
@@ -294,7 +294,7 @@ local function remove_todo_list()
 		todo_lists = items
 	end
 
-	require('features.system').SetJsonFile(todo_lists, todo_list_json)
+	require('features.files').SetJson(todo_lists, todo_list_json)
 	get_todo_list()
 	vim.fn.cursor(qf_index, qf_col)
 end
@@ -359,7 +359,7 @@ local function setup()
 		vim.fn.writefile({}, todo_list_json)
 	end
 
-	 todo_lists = require('features.system').GetJsonFile(todo_list_json) or {}
+	 todo_lists = require('features.files').GetJson(todo_list_json) or {}
 
 	local done_items = {}
 	local items = {}
@@ -378,7 +378,7 @@ local function setup()
 
 	todo_lists = items
 
-	require('features.system').SetJsonFile(todo_lists, todo_list_json)
+	require('features.files').SetJson(todo_lists, todo_list_json)
 end
 
 return {

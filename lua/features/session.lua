@@ -15,7 +15,7 @@ local function get_session_tbl()
 		vim.fn.writefile({}, json_file)
 	end
 
-	return require('features.system').GetJsonFile(json_file) or {}
+	return require('features.files').GetJson(json_file) or {}
 end
 
 local function save_session()
@@ -41,7 +41,7 @@ local function save_session()
 	end
 
 	table.insert(json_lua_tbl, format)
-	require('features.system').SetJsonFile(json_lua_tbl, json_file)
+	require('features.files').SetJson(json_lua_tbl, json_file)
 end
 
 local function load_session()

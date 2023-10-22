@@ -104,7 +104,7 @@ local function load_qf_bookmark_keymap()
 end
 
 local function get_same_path_bookmarks(filepath)
-	BookMarks = require('features.system').GetJsonFile(bookmarks_json_file) or {}
+	BookMarks = require('features.files').GetJson(bookmarks_json_file) or {}
 	local items = {}
 
 	for _, v in ipairs(BookMarks) do
@@ -128,7 +128,7 @@ local function get_same_path_bookmarks(filepath)
 	end
 
 	BookMarks = items
-	require('features.system').SetJsonFile(BookMarks, bookmarks_json_file)
+	require('features.files').SetJson(BookMarks, bookmarks_json_file)
 
 	return items
 end
@@ -164,7 +164,7 @@ local function save_bookmark()
 	end
 
 	local items, other_file_items = {}, {}
-	BookMarks = require('features.system').GetJsonFile(bookmarks_json_file) or {}
+	BookMarks = require('features.files').GetJson(bookmarks_json_file) or {}
 
 	for _, v in ipairs(BookMarks) do
 		if v.filename == item.filename then
@@ -195,7 +195,7 @@ local function save_bookmark()
 	end
 
 	BookMarks = items
-	require('features.system').SetJsonFile(BookMarks, bookmarks_json_file)
+	require('features.files').SetJson(BookMarks, bookmarks_json_file)
 
 	return BookMarks
 end
@@ -203,7 +203,7 @@ end
 local function load_local_bookmarks(row, col)
 	local qf_title = vim.fn.getqflist({ title = 0 }).title
 
-	BookMarks = require('features.system').GetJsonFile(bookmarks_json_file) or {}
+	BookMarks = require('features.files').GetJson(bookmarks_json_file) or {}
 
 	if #BookMarks == 0 then
 		if qf_title == bookmarks_qf_title then
@@ -284,11 +284,11 @@ local function load_local_bookmarks(row, col)
 		vim.fn.cursor(row, col)
 	end
 
-	require('features.system').SetJsonFile(BookMarks, bookmarks_json_file)
+	require('features.files').SetJson(BookMarks, bookmarks_json_file)
 end
 
 local function load_bookmarks(row, col)
-	BookMarks = require('features.system').GetJsonFile(bookmarks_json_file) or {}
+	BookMarks = require('features.files').GetJson(bookmarks_json_file) or {}
 
 	local qf_title = vim.fn.getqflist({ title = 0 }).title
 	local filename = vim.fn.expand('%:p')
@@ -369,7 +369,7 @@ local function load_bookmarks(row, col)
 		vim.fn.cursor(row, col)
 	end
 
-	require('features.system').SetJsonFile(BookMarks, bookmarks_json_file)
+	require('features.files').SetJson(BookMarks, bookmarks_json_file)
 end
 
 local function rename_bookmark()
@@ -408,7 +408,7 @@ local function rename_bookmark()
 		end
 	end
 
-	BookMarks = require('features.system').GetJsonFile(bookmarks_json_file) or {}
+	BookMarks = require('features.files').GetJson(bookmarks_json_file) or {}
 
 	if #BookMarks == 0 then
 		return
@@ -420,7 +420,7 @@ local function rename_bookmark()
 
 			if bookmark ~= '' then
 				v.text = bookmark
-				require('features.system').SetJsonFile(BookMarks, bookmarks_json_file)
+				require('features.files').SetJson(BookMarks, bookmarks_json_file)
 			end
 
 			break;
@@ -448,7 +448,7 @@ local function remove_bookmark_in_buffer()
 		return
 	end
 
-	BookMarks = require('features.system').GetJsonFile(bookmarks_json_file) or {}
+	BookMarks = require('features.files').GetJson(bookmarks_json_file) or {}
 
 	for _, v in ipairs(BookMarks) do
 		if v.lnum == current_line and v.filename == filename then
@@ -469,7 +469,7 @@ local function remove_bookmark_in_buffer()
 	vim.api.nvim_echo({{ display_string }}, false, {})
 
 	BookMarks = items
-	require('features.system').SetJsonFile(BookMarks, bookmarks_json_file)
+	require('features.files').SetJson(BookMarks, bookmarks_json_file)
 end
 
 local function remove_bookmark()
@@ -496,7 +496,7 @@ local function remove_bookmark()
 	local remove_item = qf_items[qf_index]
 	local remove_filename
 
-	BookMarks = require('features.system').GetJsonFile(bookmarks_json_file) or {}
+	BookMarks = require('features.files').GetJson(bookmarks_json_file) or {}
 
 	for _, v in ipairs(BookMarks) do
 		if v.lnum == remove_item.lnum then
@@ -518,7 +518,7 @@ local function remove_bookmark()
 	local row, col = vim.fn.line('.'), vim.fn.col('.')
 	local is_local_bookmarks = #qf_items < #BookMarks
 	BookMarks = items
-	require('features.system').SetJsonFile(BookMarks, bookmarks_json_file)
+	require('features.files').SetJson(BookMarks, bookmarks_json_file)
 
 	row = row > 0 and row or  1
 	col = col > 0 and col or 1
@@ -531,7 +531,7 @@ local function remove_bookmark()
 end
 
 local function clear_local_bookmarks()
-	BookMarks = require('features.system').GetJsonFile(bookmarks_json_file) or {}
+	BookMarks = require('features.files').GetJson(bookmarks_json_file) or {}
 
 	local current_working_directory = vim.fn.getcwd()
 	local items = {}
@@ -544,7 +544,7 @@ local function clear_local_bookmarks()
 
 	BookMarks = items
 
-	require('features.system').SetJsonFile(BookMarks, bookmarks_json_file)
+	require('features.files').SetJson(BookMarks, bookmarks_json_file)
 end
 
 local function next_bookmark()
@@ -650,7 +650,7 @@ local function prev_bookmark()
 end
 
 local function review_bookmark_content()
-	BookMarks = require('features.system').GetJsonFile(bookmarks_json_file) or {}
+	BookMarks = require('features.files').GetJson(bookmarks_json_file) or {}
 
 	if #BookMarks == 0 then
 		return
@@ -691,7 +691,7 @@ local function setup()
 		vim.fn.writefile({}, bookmarks_json_file)
 	end
 
-	BookMarks = require('features.system').GetJsonFile(bookmarks_json_file) or {}
+	BookMarks = require('features.files').GetJson(bookmarks_json_file) or {}
 end
 
 return {

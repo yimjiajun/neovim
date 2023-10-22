@@ -148,6 +148,55 @@ local function setup()
 	end
 end
 
+local function json_write(tbl, path)
+	if tbl == nil then
+		vim.api.nvim_echo({{"empty table ...", "ErrorMsg"}}, false, {})
+		return false
+	end
+
+	if path == nil or #path == 0 then
+		vim.api.nvim_echo({{"file path is empty ...", "ErrorMsg"}}, false, {})
+		return false
+	end
+
+	local json_format = vim.json.encode(tbl)
+	local file = io.open(path, "w")
+
+	if file == nil then
+		vim.api.nvim_echo({{"file open failed ...",
+			"ErrorMsg"}}, false, {})
+		return false
+	end
+
+	file:write(json_format)
+	file:close()
+
+	return true
+end
+
+local function json_read(path)
+	if path == nil then
+		vim.api.nvim_echo({{"file path is empty ...", "ErrorMsg"}}, false, {})
+		return false
+	end
+
+	local file = io.open(path, "r")
+
+	if file == nil then
+		vim.api.nvim_echo({{"file open failed ...", "ErrorMsg"}}, false, {})
+		return nil
+	end
+
+	local json_format = file:read("*a")
+	file:close()
+
+	if #json_format == 0 then
+		return {}
+	end
+
+	return vim.json.decode(json_format)
+end
+
 return {
 	GetDir = get_dir,
 	GetName = get_name,
@@ -157,5 +206,7 @@ return {
 	ChkExtExist = check_extension_file_exist,
 	RecurSearch = recursive_file_search,
 	Search = search_file,
+	SetJson = json_write,
+	GetJson= json_read,
 	Setup = setup,
 }

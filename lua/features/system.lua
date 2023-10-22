@@ -248,59 +248,6 @@ local function setup_keymapping()
 	setup_calander()
 end
 
-local function json_file_write(tbl, path)
-	if tbl == nil then
-		vim.api.nvim_echo({{"empty table ...",
-			"ErrorMsg"}}, false, {})
-		return false
-	end
-
-	if path == nil or #path == 0 then
-		vim.api.nvim_echo({{"file path is empty ...",
-			"ErrorMsg"}}, false, {})
-		return false
-	end
-
-	local json_format = vim.json.encode(tbl)
-	local file = io.open(path, "w")
-
-	if file == nil then
-		vim.api.nvim_echo({{"file open failed ...",
-			"ErrorMsg"}}, false, {})
-		return false
-	end
-
-	file:write(json_format)
-	file:close()
-
-	return true
-end
-
-local function json_file_read(path)
-	if path == nil then
-		vim.api.nvim_echo({{"file path is empty ...",
-			"ErrorMsg"}}, false, {})
-		return false
-	end
-
-	local file = io.open(path, "r")
-
-	if file == nil then
-		vim.api.nvim_echo({{"file open failed ...",
-			"ErrorMsg"}}, false, {})
-		return nil
-	end
-
-	local json_format = file:read("*a")
-	file:close()
-
-	if #json_format == 0 then
-		return {}
-	end
-
-	return vim.json.decode(json_format)
-end
-
 local function run_system_command(cmd)
 	local handle, result
 
@@ -339,7 +286,5 @@ return {
 	GetOsLikeId = get_os_like_id,
 	PwrshCmd = pwrsh_cmd,
 	GetCalendar = calendar_interactive,
-	GetJsonFile = json_file_read,
-	SetJsonFile = json_file_write,
 	RunSysCmd = run_system_command
 }
