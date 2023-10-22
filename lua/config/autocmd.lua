@@ -6,7 +6,7 @@ local function session()
 		group = "session",
 		pattern = "*.*",
 		callback = function()
-			require("config.function").SaveSession()
+			require("features.session").Save()
 		end,
 	})
 end

@@ -132,8 +132,8 @@ local function setting_key_terminal()
 end
 
 local function setting_key_session()
-	keymap('n', '<leader>os', [[<cmd> lua require("config.function").GetSession() <CR>]], opts)
-	keymap('n', '<leader>oS', [[<cmd> lua require("config.function").SelSession() <CR>]], opts)
+	keymap('n', '<leader>os', [[<cmd> lua require("features.session").Get() <CR>]], opts)
+	keymap('n', '<leader>oS', [[<cmd> lua require("features.session").Select() <CR>]], opts)
 end
 
 local function setting_key_features()
@@ -172,6 +172,21 @@ local function setting_abbreviations()
 	vim.cmd([[cnoreabbr <expr> %% fnameescape(expand('%:p'))]])
 end
 
+local function setting_key_working_directory()
+	if pcall(require, 'features.session') == false then
+		return
+	end
+
+	keymap('n', '<leader>tww', [[<cmd> lua require('features.session').SaveWD() <CR>]],
+		{ silent = true, desc = 'save current working directory'})
+	keymap('n', '<leader>tws', [[<cmd> lua require('features.session').ChgSaveWD() <CR>]],
+		{ silent = true, desc = 'change to path as working directory and save previos working directory'})
+	keymap('n', '<leader>twS', [[<cmd> lua require('features.session').SelWD() <CR>]],
+		{ silent = true, desc = 'selection of saved working directory'})
+	keymap('n', '<leader>twC', [[<cmd> lua require('features.session').ClrWD() <CR>]],
+		{ silent = true, desc = 'clear all the saved working directory'})
+end
+
 local function setup()
 	setting_key_leader()
 	setting_key_move()
@@ -186,6 +201,7 @@ local function setup()
 	setting_key_session()
 	setting_key_features()
 	setting_abbreviations()
+	setting_key_working_directory()
 end
 
 return {

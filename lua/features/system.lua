@@ -1,5 +1,3 @@
-local uv = vim.loop
-local work_dirs = {uv.cwd()}
 local files_search_found = {}
 
 local function recursive_file_search(dir, file_pattern)
@@ -101,49 +99,6 @@ local function check_extension_file_exist(extension)
 	local result = tonumber(vim.fn.system(cmd))
 
 	return result
-end
-
-local function set_working_directory()
-	local current_file_dir = get_file_dir()
-
-	vim.api.nvim_echo({{'change working directory to: ', "None"}}, true, {})
-	vim.api.nvim_echo({{current_file_dir, "WarningMsg"}}, true, {})
-
-	require('config.function').SaveSession()
-	vim.cmd('cd ' .. current_file_dir)
-	table.insert(work_dirs, current_file_dir)
-end
-
-local function set_current_working_directory()
-	local current_file_dir = uv.cwd()
-
-	vim.api.nvim_echo({{'save working directory: ', "None"}}, true, {})
-	vim.api.nvim_echo({{current_file_dir, "WarningMsg"}}, true, {})
-
-	require('config.function').SaveSession()
-	table.insert(work_dirs, current_file_dir)
-end
-
-local function change_working_directory()
-	local lists = {}
-
-	for i, v in ipairs(work_dirs) do
-		lists[i] = string.format("%s", v)
-	end
-
-	local chg_work_dir = require('features.common').TableSelection(
-		work_dirs, lists, "Change Working Directory")
-
-	if chg_work_dir == nil then
-		return
-	end
-
-	require('config.function').SaveSession()
-	vim.cmd('cd ' .. chg_work_dir)
-end
-
-local function clear_working_directory_history()
-	work_dirs = {uv.cwd()}
 end
 
 local function pwrsh_cmd(cmd)
@@ -372,22 +327,6 @@ local function calendar_interactive()
 end
 
 local function setup_keymapping()
-	local function setup_working_directory()
-		vim.api.nvim_set_keymap('n', '<leader>tww',
-			[[<cmd> lua require('features.system').SetWD() <CR>]],
-			{ silent = true, desc = 'set working directory'})
-		vim.api.nvim_set_keymap('n', '<leader>tws',
-			[[<cmd> lua require('features.system').SetCurrentWD() <CR>]],
-			{ silent = true, desc = 'set current working directory'})
-		vim.api.nvim_set_keymap('n', '<leader>twr',
-			[[<cmd> lua require('features.system').GetWD() <CR>]],
-			{ silent = true, desc = 'get working directory'})
-
-		vim.api.nvim_set_keymap('n', '<leader>twc',
-			[[<cmd> lua require('features.system').ClrWD() <CR>]],
-			{ silent = true, desc = 'clear working directory'})
-	end
-
 	local function setup_calander()
 		if vim.fn.executable('khal') == 0 then
 			return
@@ -409,7 +348,6 @@ local function setup_keymapping()
 	vim.api.nvim_set_keymap('n', '<leader>vsb',
 		[[<cmd> lua require('features.system').GetBatInfo() <CR>]],
 		{ silent = true, desc = 'show battery info'})
-	setup_working_directory()
 	setup_calander()
 end
 
@@ -500,10 +438,6 @@ end
 return {
 	Setup = setup,
 	GetBatInfo = get_battery_info,
-	SetWD = set_working_directory,
-	SetCurrentWD = set_current_working_directory,
-	GetWD = change_working_directory,
-	ClrWD = clear_working_directory_history,
 	GetFileDir = get_file_dir,
 	GetFileName = get_file_name,
 	GetPath = get_path,
