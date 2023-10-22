@@ -139,15 +139,6 @@ local function search_file()
 	vim.cmd("silent! copen")
 end
 
-local function setup()
-	for name in pairs(require('features.files')) do
-		if name ~= 'Setup' then
-			local callback = "require('features.files')." .. name .. "()"
-			vim.cmd("command! -nargs=0 -bang " .. "File" .. name .. " lua print(" .. callback .. ")" )
-		end
-	end
-end
-
 local function json_write(tbl, path)
 	if tbl == nil then
 		vim.api.nvim_echo({{"empty table ...", "ErrorMsg"}}, false, {})
@@ -195,6 +186,22 @@ local function json_read(path)
 	end
 
 	return vim.json.decode(json_format)
+end
+
+local function setup()
+	local skip_functions = { '^Setup$', '^.*Json$' }
+
+	for name in pairs(require('features.files')) do
+		for _, skip in ipairs(skip_functions) do
+			if name:match(skip) ~= nil then
+				goto continue
+			end
+		end
+
+		local callback = "require('features.files')." .. name .. "()"
+		vim.cmd("command! -nargs=0 -bang " .. "File" .. name .. " lua print(" .. callback .. ")" )
+		::continue::
+	end
 end
 
 return {
