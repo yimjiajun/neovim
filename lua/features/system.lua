@@ -513,7 +513,6 @@ return {
 	GetOsLikeId = get_os_like_id,
 	ChkExtExist = check_extension_file_exist,
 	PwrshCmd = pwrsh_cmd,
-	GetGitInfo = get_git_info,
 	GetCalendar = calendar_interactive,
 	SearchFile = recursive_file_search,
 	GetJsonFile = json_file_read,

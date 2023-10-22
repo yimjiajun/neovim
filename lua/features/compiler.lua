@@ -63,11 +63,13 @@ local function compiler_read_json()
 			local url = require('features.git').Remote().GetUrl(remote)
 
 			if url == nil or vim.fn.len(url) == 0 then
-				return false
+				break
 			end
 
-			for _ in string.gmatch(url, n) do
-				return true
+			for w in string.gmatch(url, n) do
+				if w == n  then
+					return true
+				end
 			end
 		end
 
