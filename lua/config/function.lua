@@ -1,38 +1,3 @@
-local function search_file()
-	local regex_file = vim.fn.input("File to search (regex): ")
-
-	if regex_file == "" or regex_file == nil then
-		return
-	end
-
-	local files = require('features.system').SearchFile(vim.loop.cwd(), regex_file)
-	local msg = string.format("\tfound %d files", #files)
-
-	if #files == 0 or files == nil then
-		vim.api.nvim_echo({{"\tfiles not found", ""}}, false, {})
-		return
-	end
-
-	local items = {}
-	local std_item = {
-		filename = nil,
-		text = nil,
-		type = 'f',
-		bufnr = nil,
-	}
-
-	for _, file in ipairs(files) do
-		local item = vim.deepcopy(std_item)
-		item.filename = file
-		item.text = string.format("[%s]", vim.fn.fnamemodify(file, ':t'))
-		table.insert(items, item)
-	end
-
-	vim.fn.setqflist({}, ' ', { title = "Find Files", items = items })
-	vim.api.nvim_echo({{msg, "MoreMsg"}}, false, {})
-	vim.cmd("silent! copen")
-end
-
 local function search_word(extension, mode)
 	local word, cmd
 
@@ -273,17 +238,17 @@ local function setup_file_format()
 end
 
 local function check_quickfix_win_exists()
-    local windows = vim.api.nvim_list_wins()
+	local windows = vim.api.nvim_list_wins()
 
-    for _, win in ipairs(windows) do
-        local buf = vim.api.nvim_win_get_buf(win)
-        local buftype = vim.api.nvim_buf_get_option(buf, 'buftype')
-        if buftype == 'quickfix' then
-            return true
-        end
-    end
+	for _, win in ipairs(windows) do
+		local buf = vim.api.nvim_win_get_buf(win)
+		local buftype = vim.api.nvim_buf_get_option(buf, 'buftype')
+		if buftype == 'quickfix' then
+			return true
+		end
+	end
 
-    return false
+	return false
 end
 
 local function toggle_quickfix()
@@ -322,7 +287,6 @@ end
 
 return {
 	Setup = setup,
-	SearchFile = search_file,
 	SearchWord = search_word,
 	SearchWordByFile = search_word_by_file,
 	SearchWordByBuffer = search_word_by_buffer,

@@ -1,106 +1,3 @@
-local files_search_found = {}
-
-local function recursive_file_search(dir, file_pattern)
-	files_search_found = {}
-
-	local function file_search(directory, pattern)
-		if pcall(require, 'lfs') == false then
-			vim.api.nvim_echo({{"lfs not found ... recursive file search failed ...",
-				"ErrorMsg"}}, false, {})
-			return
-		end
-
-		local lfs = require('lfs')
-
-		if directory == nil or vim.fn.len(directory) == 0 then
-			directory = uv.cwd()
-		end
-
-		if pattern == nil then
-			pattern = "*"
-		end
-
-		for file in lfs.dir(directory) do
-			if file ~= "." and file ~= ".." then
-				local delim = "/"
-
-				if vim.fn.has('unix') ~= 1 then
-					delim = "\\"
-				end
-
-				local filePath = directory .. delim .. file
-				local attributes = lfs.attributes(filePath)
-
-				if attributes.mode == "file" and file:match(pattern) then
-					if #files_search_found == 0 then
-						files_search_found = { filePath }
-					else
-						table.insert(files_search_found, filePath)
-					end
-				elseif attributes.mode == "directory" then
-					file_search(filePath, pattern)
-				end
-			end
-		end
-	end
-
-	file_search(dir, file_pattern)
-
-	return files_search_found
-end
-
-local function get_file_dir()
-	local current_file_dir = vim.fn.expand('%:p:h')
-	vim.fn.setreg('+', tostring(current_file_dir))
-	return current_file_dir
-end
-
-local function get_file_name()
-	local current_file_name = vim.fn.expand('%:t')
-	vim.fn.setreg('+', tostring(current_file_name))
-	return current_file_name
-end
-
-local function get_full_path()
-	local path = vim.fn.expand('%:p')
-	vim.fn.setreg('+', tostring(path))
-	return path
-end
-
-local function get_path()
-	local path = vim.fn.expand('%')
-	vim.fn.setreg('+', tostring(path))
-	return path
-end
-
-local function get_files(path)
-	local files = {}
-	local handle = uv.fs_scandir(path)
-
-	if handle then
-		while true do
-			local name, type = uv.fs_scandir_next(handle)
-
-			if not name then
-				break
-			end
-
-			if type == "file" then
-				table.insert(files, name)
-			end
-		end
-	end
-
-	return files
-end
-
-local function check_extension_file_exist(extension)
-	local cmd = "find . -type f -name " .. '"*."' .. extension .. " -print -quit | wc -l"
-	local result = tonumber(vim.fn.system(cmd))
-
-	return result
-end
-
 local function pwrsh_cmd(cmd)
 	if vim.fn.executable('powershell.exe') == 0 then
 		vim.api.nvim_echo({{"powershell not supporting ...", "WarningMsg"}}, true, {})
@@ -438,17 +335,11 @@ end
 return {
 	Setup = setup,
 	GetBatInfo = get_battery_info,
-	GetFileDir = get_file_dir,
-	GetFileName = get_file_name,
-	GetPath = get_path,
-	GetFullPath = get_full_path,
-	GetFiles = get_files,
 	GetInstallPackageCmd = get_install_package_cmd,
 	GetOsLikeId = get_os_like_id,
 	ChkExtExist = check_extension_file_exist,
 	PwrshCmd = pwrsh_cmd,
 	GetCalendar = calendar_interactive,
-	SearchFile = recursive_file_search,
 	GetJsonFile = json_file_read,
 	SetJsonFile = json_file_write,
 	RunSysCmd = run_system_command

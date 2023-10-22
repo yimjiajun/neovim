@@ -85,7 +85,7 @@ end
 
 local function setting_key_search()
 	keymap('n', '<Leader>ff', [[:find ./**/*]], opts_output)
-	keymap('n', '<Leader>fF', [[<cmd> lua require("config.function").SearchFile() <CR>]], opts)
+	keymap('n', '<Leader>fF', [[<cmd> lua require("features.files").Search() <CR>]], opts)
 	keymap('n', '<Leader>fA', [[<cmd> lua require("config.function").SearchWord(nil, "normal") <CR>]], opts)
 	keymap('n', '<Leader>fa', [[<cmd> lua require("config.function").SearchWord(nil, "complete") <CR>]], opts)
 	keymap('n', '<Leader>fw',
