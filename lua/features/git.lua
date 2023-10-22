@@ -57,12 +57,12 @@ local function branch()
 end
 
 local function remote()
-	local function get_url(remote)
+	local function get_url(remote_name)
 		if check_repo_exists() == false then
 			return ''
 		end
 
-		return vim.fn.trim(vim.fn.system('git config --get remote.' .. remote ..'.url'))
+		return vim.fn.trim(vim.fn.system('git config --get remote.' .. remote_name ..'.url'))
 	end
 
 	local function default()
@@ -86,22 +86,22 @@ local function diff()
 
 	local function staged_extension()
 		local extension = vim.fn.input("Enter extension to git diff (staged): ", vim.fn.expand("%:e"))
-		run_git_cmd(string.format("%s %s", cmd, "diff ./**/*." .. extension))
+		run_git_cmd("diff ./**/*." .. extension)
 	end
 
 	local function working_directory_extension()
 		local extension = vim.fn.input("Enter extension to git diff (working directory): ", vim.fn.expand("%:e"))
-		run_git_cmd(string.format("%s %s", cmd, "diff ./**/*." .. extension))
+		run_git_cmd("diff ./**/*." .. extension)
 	end
 
 	local function working_directory_file()
 		local file = vim.fn.input("Enter file to git diff (working directory): ", vim.fn.expand("%:t"))
-		run_git_cmd(string.format("%s %s", cmd, "diff ./**/" .. file))
+		run_git_cmd("diff ./**/" .. file)
 	end
 
 	local function staged_file()
 		local file = vim.fn.input("Enter file to git diff (staged): ", vim.fn.expand("%:t"))
-		run_git_cmd(string.format("%s %s", cmd, "diff ./**/" .. file))
+		run_git_cmd("diff ./**/" .. file)
 	end
 
 	local function default()
@@ -111,7 +111,7 @@ local function diff()
 	return {
 		Staged = staged,
 		Latest = latest,
-		SExt = stage_extension,
+		SExt = staged_extension,
 		WExt = working_directory_extension,
 		SFile = staged_file,
 		WFile = working_directory_file,
