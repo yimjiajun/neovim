@@ -69,8 +69,7 @@ local function build(mode)
 	end
 
 	if status == nil then
-		local msg = "\nBuild not found\n"
-		vim.api.nvim_echo({{msg, "ErrorMsg"}}, false, {})
+		vim.api.nvim_echo({{"\nBuild not found\n", "ErrorMsg"}}, false, {})
 		return
 	end
 
