@@ -128,6 +128,10 @@ local function setting_key_terminal()
 end
 
 local function setting_key_session()
+	if pcall(require, 'features.session') == false then
+		return
+	end
+
 	keymap('n', '<leader>os', [[<cmd> lua require("features.session").Get() <CR>]], opts)
 	keymap('n', '<leader>oS', [[<cmd> lua require("features.session").Select() <CR>]], opts)
 end
@@ -183,6 +187,17 @@ local function setting_key_working_directory()
 		{ silent = true, desc = 'clear all the saved working directory'})
 end
 
+local function setting_key_system()
+	if pcall(require, 'features.system') == false then
+		return
+	end
+
+	keymap('n', '<leader>vci', [[<cmd> lua require('features.system').GetCalendar() <CR>]],
+		{ silent = true, desc = 'show calendar' })
+	keymap('n', '<leader>vsb', [[<cmd> lua require('features.system').GetBatInfo() <CR>]],
+		{ silent = true, desc = 'show battery info'})
+end
+
 local function setup()
 	setting_key_leader()
 	setting_key_move()
@@ -198,6 +213,7 @@ local function setup()
 	setting_key_features()
 	setting_abbreviations()
 	setting_key_working_directory()
+	setting_key_system()
 end
 
 return {
