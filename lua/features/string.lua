@@ -105,7 +105,7 @@ local function toggle_comment()
 	local comments_tbl = {
 		{ type = 'c', prefix = '//' },
 		{ type = 'lua', prefix = '--' },
-		{ type = 'py', prefix = '#' },
+		{ type = 'python', prefix = '#' },
 		{ type = 'sh', prefix = '#' },
 	}
 
