@@ -239,7 +239,7 @@ local function setup_calander()
 	if vim.fn.executable('khal') > 0 then
 		vim.api.nvim_set_keymap('n', '<leader>vct', [[<cmd> sp | term khal list today <CR>]],
 			{ silent = true, desc = 'khal list today'})
-		vim.api.nvim_set_keymap('n', '<leader>vcc', [[<cmd> sp | term khal calendar --format '● {start-time} | {title}' <CR>]],
+		vim.api.nvim_set_keymap('n', '<leader>vcc', [[<cmd> sp | term khal calendar --format '● {start-time} | {title}'<CR>]],
 			{ silent = true, desc = 'khal calendar agenda'})
 	end
 end
