@@ -101,6 +101,8 @@ local function setting_key_search()
 	keymap('n', '<Leader>fv', [[<cmd> lua require("features.string").Search(nil, "normal") <CR>]], opts)
 	keymap('n', '<Leader>fV', [[<cmd> lua require("features.string").Search(nil, "complete") <CR>]], opts)
 	keymap('n', '<Leader>fb', [[<cmd> lua require("features.string").SearchByBuffer() <CR>]], opts)
+	keymap('n', 'gcc', [[<cmd> lua require("features.string").ToggleComment() <CR>]], opts)
+	keymap('v', 'gcc', [[<ESC> | gv | <cmd> lua require("features.string").ToggleComment() <CR> | <ESC>]], opts)
 end
 
 local function setting_key_git()
