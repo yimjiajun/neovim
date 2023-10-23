@@ -224,8 +224,7 @@ local function run_system_command(cmd)
 	handle = io.popen(tostring(cmd))
 
 	if handle == nil then
-		vim.api.nvim_echo({{"run system command failed ...",
-			"ErrorMsg"}}, false, {})
+		vim.api.nvim_echo({{"run system command failed ...", "ErrorMsg"}}, false, {})
 		return ''
 	end
 
@@ -251,11 +250,16 @@ local function setup()
 	setup_calander()
 
 	for name in pairs(require('features.system')) do
-		local callback = "require('features.system')." .. name .. "()"
-		vim.cmd("command! -nargs=0 -bang " .. name .. " lua print(" .. callback .. ")" )
-	end
+		local callback
 
-	vim.cmd("command! -nargs=1 PwrshCmd lua require('features.system').PwrshCmd(<f-args>)")
+		if name:match('^Get.*$') then
+			callback = "require('features.system')." .. name .. "()"
+			vim.cmd("command! -nargs=0 -bang " .. "System" .. name .. " lua print(" .. callback .. ")" )
+		elseif name:match('^Run.*$') then
+			callback = "require('features.system')." .. name .. "(<f-args>)"
+			vim.cmd("command! -nargs=1 " .. "System" .. name .. " lua print(" .. callback .. ")" )
+		end
+	end
 end
 
 return {
@@ -263,7 +267,7 @@ return {
 	GetBatInfo = get_battery_info,
 	GetInstallPackageCmd = get_install_package_cmd,
 	GetOsLikeId = get_os_like_id,
-	PwrshCmd = pwrsh_cmd,
 	GetCalendar = calendar_interactive,
+	RunPwrshCmd = pwrsh_cmd,
 	RunSysCmd = run_system_command
 }
