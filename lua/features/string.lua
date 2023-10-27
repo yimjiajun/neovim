@@ -122,8 +122,8 @@ local function toggle_comment()
 		end
 
 		substitue_info = {
-			{ pattern = '^' .. prefix_char_wrapper..' .*$', substitue = 's/' .. prefix .. ' //' },
-			{ pattern = '^' .. prefix_char_wrapper..'.*$', substitue = 's/' .. prefix .. '//' }
+			{ pattern = '^' .. prefix_char_wrapper..' .*$', substitue = 's#' .. prefix .. ' ##' },
+			{ pattern = '^' .. prefix_char_wrapper..'.*$', substitue = 's#' .. prefix .. '##' }
 		}
 
 		trigger = true
@@ -141,7 +141,7 @@ local function toggle_comment()
 		end
 
 		if trigger == true and string.match(ltext, '^$') == nil then
-			vim.cmd(lnum .. 's/\\S/' .. prefix .. ' &/')
+			vim.cmd(lnum .. 's#\\S#' .. vim.fn.trim(prefix) .. ' &#')
 		end
 	end
 
