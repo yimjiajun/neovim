@@ -159,11 +159,20 @@ end
 
 local function list_functions()
 	local regex = ""
+	local info = {
+		{ ft = "c", regex = [[^\w.*(.*)]] },
+		{ ft = "cpp", regex = [[^\w.*(.*)]] },
+		{ ft = "lua", regex = [[^\w.*(.*)]] },
+		{ ft = "sh", regex = [[^\w.*(.*)]] },
+		{ ft = "python", regex = [[\<def .*(.*):]] },
+		{ ft = "markdown", regex = [[^#\+]] },
+	}
 
-	if vim.tbl_contains({'c', 'cpp', 'lua', 'sh'}, vim.bo.filetype) then
-		regex = [[^\w.*(.*)]]
-	elseif vim.bo.filetype == 'python' then
-		regex = [[\<def .*(.*):]]
+	for _, v in ipairs(info) do
+		if v.ft == vim.bo.filetype then
+			regex = v.regex
+			break
+		end
 	end
 
 	if regex ~= "" then
