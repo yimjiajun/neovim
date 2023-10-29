@@ -34,4 +34,8 @@ for _, dir in ipairs(config_dir) do
 			vim.api.nvim_err_writeln("Failed to load Setup " .. source .. "\n\n" .. vim.inspect(fault))
 		end
 	end
+
+	if dir == "config" and pcall(require, 'plugin.plugin') then
+		require('plugin.plugin').Setup()
+	end
 end
