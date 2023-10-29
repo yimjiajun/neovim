@@ -13,10 +13,6 @@ vim.g.custom = {
 	},
 }
 
-if vim.g.neovide ~= nil then
-	require('plugin.neovide').Setup()
-end
-
 local config_path = vim.fn.stdpath("config")
 local config_dir = {"config", "features", "usr"}
 

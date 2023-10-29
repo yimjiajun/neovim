@@ -269,6 +269,10 @@ local function setup()
 			},
 		},
 	})
+
+	if vim.g.neovide ~= nil and pcall(require, 'plugin.neovide') then
+		require('plugin.neovide').Setup()
+	end
 end
 
 return {
