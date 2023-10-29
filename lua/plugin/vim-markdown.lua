@@ -8,12 +8,13 @@ local function tabular_align()
 	vim.cmd('silent! Tabularize /' .. delimiter)
 end
 
-local function setup_key_tabular()
+local function setup_tabular()
 	local function setup_keymap()
-		local keymap = vim.api.nvim_set_keymap
+		local keymap = vim.api.nvim_buf_set_keymap
 		local opts = { noremap = true, silent = true }
-		keymap('n', '<Leader>gt', [[<cmd> lua require('plugin.vim-markdown').Align() <CR>]], opts)
-		keymap('v', '<Leader>gt', [[<cmd> lua require('plugin.vim-markdown').Align() <CR>]], opts)
+
+		keymap(0, 'n', '<Leader>gt', [[<cmd> lua require('plugin.vim-markdown').Align() <CR>]], opts)
+		keymap(0, 'v', '<Leader>gt', [[<cmd> lua require('plugin.vim-markdown').Align() <CR>]], opts)
 
 		if pcall(require, "which-key") then
 			local wk = require("which-key")
@@ -22,9 +23,7 @@ local function setup_key_tabular()
 		end
 	end
 
-	return {
-		Keymap = setup_keymap
-	}
+	setup_keymap()
 end
 
 local function setup_vim_table_mode()
@@ -44,14 +43,14 @@ local function setup_vim_table_mode()
 			group = "vim-markdown-plugin",
 			pattern = "markdown",
 			callback = function()
-				local keymap = vim.api.nvim_set_keymap
+				local keymap = vim.api.nvim_buf_set_keymap
 				local opts = { silent = true }
-				keymap('n', '<leader>gTt', [[<cmd> TableModeToggle <CR>]], opts)
-				keymap('n', '<leader>gTe', [[<cmd> TableEvalFormulaLine <CR>]], opts)
-				keymap('n', '<leader>gTa', [[<cmd> TableAddFormula <CR>]], opts)
-				keymap('n', '<leader>gTr', [[<cmd> TableAddFormula <CR>]], opts)
-				keymap('n', '<leader>gTs', [[<cmd> TableSort <CR>]], opts)
-				keymap('n', '<leader>gTS', [[<cmd> Tableize <CR>]], opts)
+				keymap(0, 'n', '<leader>gTt', [[<cmd> TableModeToggle <CR>]], opts)
+				keymap(0, 'n', '<leader>gTe', [[<cmd> TableEvalFormulaLine <CR>]], opts)
+				keymap(0, 'n', '<leader>gTa', [[<cmd> TableAddFormula <CR>]], opts)
+				keymap(0, 'n', '<leader>gTr', [[<cmd> TableAddFormula <CR>]], opts)
+				keymap(0, 'n', '<leader>gTs', [[<cmd> TableSort <CR>]], opts)
+				keymap(0, 'n', '<leader>gTS', [[<cmd> Tableize <CR>]], opts)
 
 				if pcall(require, "which-key") then
 					local wk = require("which-key")
@@ -68,10 +67,8 @@ local function setup_vim_table_mode()
 		})
 	end
 
-	return {
-		Autocmd = setup_autocmd,
-		Keymap = setup_keymap
-	}
+	setup_keymap()
+	setup_autocmd()
 end
 
 local function setup_vim_markdown()
@@ -103,20 +100,19 @@ local function setup_vim_markdown()
 end
 
 local function init()
-	if pcall(require, "vim-table-mode") then
+	if vim.fn.exists(':TableModeToggle') > 0 then
 		vim.g.table_mode_disable_mappings = 1
 		vim.g.table_mode_map_prefix = "<leader>gT"
 	end
 end
 
 local function setup()
-	if pcall(require, "vim-table-mode") then
-		setup_vim_table_mode.Autocmd()
-		setup_vim_table_mode.Keymap()
+	if vim.fn.exists(':TableModeToggle') > 0 then
+		setup_vim_table_mode()
 	end
 
-	if pcall(require, "tabular") then
-		setup_key_tabular().Keymap()
+	if vim.fn.exists(':Tabularize') > 0 then
+		setup_tabular()
 	end
 
 	setup_vim_markdown()
