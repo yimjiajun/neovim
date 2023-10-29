@@ -160,7 +160,6 @@ return {
 	GetBatInfo = get_battery_info,
 	GetInstallPackageCmd = get_install_package_cmd,
 	GetOsLikeId = get_os_like_id,
-	GetCalendar = calendar_interactive,
 	RunPwrshCmd = pwrsh_cmd,
 	RunSysCmd = run_system_command,
 	Setup = setup,

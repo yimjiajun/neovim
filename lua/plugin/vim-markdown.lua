@@ -10,8 +10,10 @@ end
 
 local function setup_key_tabular()
 	local function setup_keymap()
-		vim.api.nvim_set_keymap('n', '<Leader>gt', [[<cmd> lua require('plugin.vim-markdown').Align() <CR>]], { silent = true })
-		vim.api.nvim_set_keymap('v', '<Leader>gt', [[<cmd> lua require('plugin.vim-markdown').Align() <CR>]], { silent = true })
+		local keymap = vim.api.nvim_set_keymap
+		local opts = { noremap = true, silent = true }
+		keymap('n', '<Leader>gt', [[<cmd> lua require('plugin.vim-markdown').Align() <CR>]], opts)
+		keymap('v', '<Leader>gt', [[<cmd> lua require('plugin.vim-markdown').Align() <CR>]], opts)
 
 		if pcall(require, "which-key") then
 			local wk = require("which-key")
@@ -42,7 +44,7 @@ local function setup_vim_table_mode()
 			group = "vim-markdown-plugin",
 			pattern = "markdown",
 			callback = function()
-				local keympa = vim.api.nvim_set_keymap
+				local keymap = vim.api.nvim_set_keymap
 				local opts = { silent = true }
 				keymap('n', '<leader>gTt', [[<cmd> TableModeToggle <CR>]], opts)
 				keymap('n', '<leader>gTe', [[<cmd> TableEvalFormulaLine <CR>]], opts)
@@ -109,8 +111,8 @@ end
 
 local function setup()
 	if pcall(require, "vim-table-mode") then
-		setup_key_vim_table_mode.Autocmd()
-		setup_key_vim_table_mode.Keymap()
+		setup_vim_table_mode.Autocmd()
+		setup_vim_table_mode.Keymap()
 	end
 
 	if pcall(require, "tabular") then

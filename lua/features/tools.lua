@@ -147,8 +147,8 @@ local function setup()
 		setup_calendar
 	}
 
-	for _, setup in ipairs(tools_setup) do
-		setup()
+	for _, tool in ipairs(tools_setup) do
+		tool()
 	end
 end
 

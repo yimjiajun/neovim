@@ -1,4 +1,3 @@
-local dap = require('dap')
 local dap_info = {
 	python = {},
 }
