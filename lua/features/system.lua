@@ -10,78 +10,6 @@ local function pwrsh_cmd(cmd)
 	return cmd
 end
 
-local function setup_ui_git()
-	local git_cmd
-
-	if vim.fn.executable('lazygit') > 0 then
-		git_cmd = 'lazygit'
-	end
-
-	if vim.fn.executable('gitui') > 0 then
-		git_cmd = 'gitui'
-	end
-
-	if git_cmd == nil then
-		if vim.fn.exists(':Git') > 0 then
-			vim.api.nvim_set_keymap('n', '<leader>vsG', [[<cmd> Git <CR>]],
-				{ silent = true, desc = "open git wrapper" })
-		end
-
-		return
-	end
-
-	if vim.fn.exists(':ToggleTerm') > 0 then
-		vim.api.nvim_set_keymap('n', '<leader>vsG', [[<cmd> TermExec cmd="]] .. git_cmd .. [[; exit" <CR>]],
-			{ silent = true, desc = "open git gui" })
-		return
-	end
-
-	vim.api.nvim_set_keymap('n', '<leader>vsG', [[<cmd> ]] .. git_cmd .. [[<CR>]],
-		{ silent = true, desc = "open git gui" })
-end
-
-local function setup_top()
-	local top_cmd = 'top'
-
-	if vim.fn.executable('htop') == 1 then
-		top_cmd = 'htop'
-	end
-
-	if vim.fn.executable('bpytop') == 1 then
-		top_cmd = 'bpytop'
-	end
-
-	if vim.fn.exists(':ToggleTerm') > 0 then
-		vim.api.nvim_set_keymap('n', '<leader>vsT', [[<cmd> TermExec cmd="]] .. top_cmd .. [[; exit" <CR>]],
-			{ silent = true, desc = "display system resource" })
-		return
-	end
-
-	vim.api.nvim_set_keymap('n', '<leader>vsT', [[<cmd> term ]] .. top_cmd .. [[<CR>]],
-	{ silent = true, desc = "display system resource" })
-end
-
-local function setup_disk_usage()
-	local du_cmd='clear;' .. 'du -h --max-depth=1 %:h' .. '; read -n 1'
-
-	if vim.fn.executable('ncdu') > 0 then
-		du_cmd='ncdu %:h'
-	end
-
-	if vim.fn.executable('dutree') > 0 then
-		du_cmd='clear;' .. 'dutree -d1 %:h' .. '; read -n 1'
-	end
-
-	if vim.fn.exists(':ToggleTerm') > 0 then
-		vim.api.nvim_set_keymap('n', '<leader>vsD', [[<cmd> TermExec cmd="]] .. du_cmd .. [[; exit" <CR>]],
-			{ silent = true, desc = "display disk usage" })
-		return
-	end
-
-	vim.api.nvim_set_keymap('n', '<leader>vsD', [[<cmd> term ]] .. du_cmd .. [[<CR>]],
-		{ silent = true, desc = "display disk usage" })
-end
-
 local function get_os_like_id()
 	local id
 
@@ -198,26 +126,6 @@ local function get_battery_info ()
 	end
 end
 
-local function calendar_interactive()
-	local terminal = 'term'
-
-	if (vim.fn.exists(":ToggleTerm") > 0) and (vim.fn.exists(":TermCmd") > 0) then
-		terminal = 'TermCmd'
-	end
-
-	if vim.fn.executable('khal') > 0 then
-		vim.cmd(terminal .. ' khal interactive ; exit')
-		return
-	end
-
-	if vim.fn.executable('cal') == 1 then
-		vim.cmd(terminal .. ' cal -y; exit')
-		return
-	end
-
-	vim.cmd('!date')
-end
-
 local function run_system_command(cmd)
 	local handle, result
 
@@ -234,21 +142,7 @@ local function run_system_command(cmd)
 	return result
 end
 
-local function setup_calander()
-	if vim.fn.executable('khal') > 0 then
-		vim.api.nvim_set_keymap('n', '<leader>vct', [[<cmd> sp | term khal list today <CR>]],
-			{ silent = true, desc = 'khal list today'})
-		vim.api.nvim_set_keymap('n', '<leader>vcc', [[<cmd> sp | term khal calendar --format '● {start-time} | {title}'<CR>]],
-			{ silent = true, desc = 'khal calendar agenda'})
-	end
-end
-
 local function setup()
-	setup_ui_git()
-	setup_top()
-	setup_disk_usage()
-	setup_calander()
-
 	for name in pairs(require('features.system')) do
 		local callback
 
@@ -263,11 +157,11 @@ local function setup()
 end
 
 return {
-	Setup = setup,
 	GetBatInfo = get_battery_info,
 	GetInstallPackageCmd = get_install_package_cmd,
 	GetOsLikeId = get_os_like_id,
 	GetCalendar = calendar_interactive,
 	RunPwrshCmd = pwrsh_cmd,
-	RunSysCmd = run_system_command
+	RunSysCmd = run_system_command,
+	Setup = setup,
 }
