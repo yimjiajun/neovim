@@ -264,15 +264,43 @@ local function package()
 	})
 end
 
+local function highlight()
+	local grp_name = "highlight"
+
+	vim.api.nvim_create_augroup(grp_name, { clear = true })
+	vim.api.nvim_create_autocmd("VimEnter", {
+		desc = "setup highlight colors",
+		group = grp_name,
+		callback = function()
+			local h = vim.g.custom.colorscheme.highlight
+
+			if vim.fn.len(vim.g.custom.colorscheme.highlight) == 0 then
+				return
+			end
+
+			for n, c in pairs(h) do
+				vim.api.nvim_set_hl(0, tostring(n), c)
+			end
+		end,
+	})
+end
+
 local function setup()
-	session()
-	statusline()
-	format()
-	cursor()
-	programming()
-	terminal()
-	file()
-	package()
+	local setups = {
+		session,
+		statusline,
+		format,
+		cursor,
+		programming,
+		terminal,
+		file,
+		package,
+		highlight,
+	}
+
+	for _, exec in ipairs(setups) do
+		exec()
+	end
 end
 
 return {

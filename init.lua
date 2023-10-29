@@ -2,6 +2,9 @@ vim.g.custom = {
 	colorscheme = {
 		theme = 'gruvbox',
 		transparency = false,
+		highlight = {
+			FloatBorder = {},
+		}
 	},
 	lsp = {
 		"bashls",

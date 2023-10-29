@@ -1,3 +1,13 @@
+local function setup_highlight()
+	local colors = {
+		GitSignsChange = { link = 'Normal' },
+	}
+
+	for n, c in pairs(colors) do
+		vim.api.nvim_set_hl(0, tostring(n), c)
+	end
+end
+
 local function setup()
 	require('gitsigns').setup {
 		signs = {
@@ -127,6 +137,8 @@ local function setup()
 			},
 		}, { mode = 'v', prefix = "<leader>g" })
 	end
+
+	setup_highlight()
 end
 
 return {
