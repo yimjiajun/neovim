@@ -162,7 +162,7 @@ local function status()
 	end
 
 	local function default()
-		if vim.fn.exists(":Git") then
+		if vim.fn.exists(":Git") ~= 0 then
 			run_git_cmd("")
 		else
 			run_git_cmd("status")
