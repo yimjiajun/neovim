@@ -3,11 +3,13 @@ local function run_git_cmd(args)
 
 	if vim.fn.exists(":Git") > 0 then
 		cmd = "Git"
-	elseif vim.fn.expand("%:h") ~= "" then
-		cmd = string.format("%s %s %s", cmd, "-C", vim.fn.expand("%:p:h"))
 	end
 
 	if cmd == "git" then
+		if vim.fn.expand("%:h") ~= "" then
+			cmd = string.format("%s %s %s", cmd, "-C", vim.fn.expand("%:p:h"))
+		end
+
 		vim.cmd(string.format("%s %s %s", "term", cmd, args))
 	else
 		vim.cmd(string.format("%s %s", cmd, args))
