@@ -166,6 +166,7 @@ local function list_functions()
 		{ ft = "sh", regex = [[^\w.*(.*)]] },
 		{ ft = "python", regex = [[\<def .*(.*):]] },
 		{ ft = "markdown", regex = [[^#\+]] },
+		{ ft = "yaml", regex = [[^\w.*:\|-.*:]] },
 	}
 
 	for _, v in ipairs(info) do
