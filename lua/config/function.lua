@@ -101,7 +101,7 @@ local function setup_file_format()
 		vim.cmd('setlocal shiftwidth=2')
 		vim.cmd('setlocal expandtab')
 		vim.cmd('setlocal spell')
-	elseif vim.bo.filetype == "py" then
+	elseif vim.bo.filetype == "py" or vim.bo.filetype == "python" then
 		vim.cmd('setlocal softtabstop=2')
 		vim.cmd('setlocal tabstop=2')
 		vim.cmd('setlocal shiftwidth=2')
