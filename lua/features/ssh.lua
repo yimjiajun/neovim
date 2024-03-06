@@ -232,7 +232,7 @@ local function ssh_read_json()
 		return
 	end
 
-	local ssh_data_files = require('features.files').RecurSearch(ssh_data_dir, ".json")
+	local ssh_data_files = require('features.files').RecurSearch(ssh_data_dir, "*.json")
 	local ssh_data = {}
 
 	for _, f in ipairs(ssh_data_files) do

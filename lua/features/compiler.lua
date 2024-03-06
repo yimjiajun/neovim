@@ -80,7 +80,7 @@ local function compiler_read_json()
 		return
 	end
 
-	local compiler_data_files = require('features.files').RecurSearch(compiler_data_dir, ".json")
+	local compiler_data_files = require('features.files').RecurSearch(compiler_data_dir, "*.json")
 	local compiler_data = {}
 
 	for _, f in ipairs(compiler_data_files) do
