@@ -46,51 +46,20 @@ end
 
 local function recursive_file_search(dir, file_pattern)
 	local uv = vim.loop
-	local files_search_found = {}
 
-	local function file_search(directory, pattern)
-		if pcall(require, 'lfs') == false then
-			vim.api.nvim_echo({{"lfs not found ... recursive file search failed ...", "ErrorMsg"}}, false, {})
-			return
-		end
-
-		local lfs = require('lfs')
-
-		if directory == nil or vim.fn.len(directory) == 0 then
-			directory = uv.cwd()
-		end
-
-		if pattern == nil then
-			pattern = "*"
-		end
-
-		for file in lfs.dir(directory) do
-			if file ~= "." and file ~= ".." then
-				local delim = "/"
-
-				if vim.fn.has('unix') ~= 1 then
-					delim = "\\"
-				end
-
-				local filePath = directory .. delim .. file
-				local attributes = lfs.attributes(filePath)
-
-				if attributes.mode == "file" and file:match(pattern) then
-					if #files_search_found == 0 then
-						files_search_found = { filePath }
-					else
-						table.insert(files_search_found, filePath)
-					end
-				elseif attributes.mode == "directory" then
-					file_search(filePath, pattern)
-				end
-			end
-		end
+	if dir == nil or vim.fn.len(dir) == 0 then
+		dir = uv.cwd()
 	end
 
-	file_search(dir, file_pattern)
+	if file_pattern == nil then
+		file_pattern = "*"
+	end
 
-	return files_search_found
+	local cmd = "find " .. dir .. " -type f -name " .. '"' .. file_pattern .. '"' .. " -print"
+	local result = vim.fn.system(vim.fn.expand(cmd))
+	local files = vim.split(result, "\n")
+	table.remove(files, #files)
+	return files
 end
 
 local function check_extension_file_exist(extension)
