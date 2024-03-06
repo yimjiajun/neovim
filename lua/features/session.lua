@@ -117,6 +117,10 @@ end
 
 local function setup()
 	work_dirs = {uv.cwd()}
+
+	if vim.fn.isdirectory(path) == 0 then
+		vim.fn.mkdir(path, "p")
+	end
 end
 
 return {
