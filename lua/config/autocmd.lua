@@ -190,6 +190,18 @@ local function programming()
 			vim.cmd('setlocal shiftwidth=2')
 		end,
 	})
+
+	vim.api.nvim_create_autocmd( "FileType", {
+		desc = "shell script",
+		group = "programming",
+		pattern = "sh",
+		callback = function()
+			vim.cmd('setlocal softtabstop=4')
+			vim.cmd('setlocal tabstop=4')
+			vim.cmd('setlocal shiftwidth=4')
+			vim.cmd('setlocal expandtab')
+		end,
+	})
 end
 
 local function terminal()
