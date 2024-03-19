@@ -163,7 +163,7 @@ local function list_functions()
 		{ ft = "c", regex = [[^\w.*(.*)]] },
 		{ ft = "cpp", regex = [[^\w.*(.*)]] },
 		{ ft = "lua", regex = [[^\w.*(.*)]] },
-		{ ft = "sh", regex = [[^\w.*(.*)]] },
+		{ ft = "sh", regex = [[^\w.*()\|^function\ ]] },
 		{ ft = "python", regex = [[\<def .*(.*):]] },
 		{ ft = "markdown", regex = [[^#\+]] },
 		{ ft = "yaml", regex = [[^\w.*:\|-.*:]] },
