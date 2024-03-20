@@ -228,6 +228,13 @@ local function setup()
 				config = function()
 					require('plugin.venn').Setup()
 				end,
+			},
+			{ 'kepano/flexoki-neovim',
+				name = 'flexoki',
+				config = function ()
+					vim.cmd("colorscheme flexoki-dark")
+					vim.cmd("hi Pmenu blend=0")
+				end
 			}
 		},
 		defaults = {
