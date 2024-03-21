@@ -14,7 +14,6 @@ local function setup()
 			f.stylua,
 			d.cmake_lint,
 			d.pylint,
-			d.luacheck,
 			c.tags,
 			a.gitsigns,
 			a.gitrebase,
