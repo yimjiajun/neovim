@@ -177,7 +177,9 @@ local function setup()
 					require('plugin.whichkey').Setup()
 				end
 			},
-			{ "tpope/vim-surround",
+			{ "kylechui/nvim-surround",
+				version = "*",
+				event = "VeryLazy",
 				config = function()
 					require('plugin.surround').Setup()
 				end
