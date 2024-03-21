@@ -201,13 +201,6 @@ local function setup()
 					require('plugin.markdown-preview').Setup()
 				end,
 			},
-			{ "folke/noice.nvim",
-				event = "VeryLazy",
-				dependencies = { "MunifTanjim/nui.nvim" },
-				config = function()
-					require("plugin.noice").Setup()
-				end,
-			},
 			{ "jackMort/ChatGPT.nvim",
 				dependencies = {
 					"nvim-telescope/telescope.nvim",
