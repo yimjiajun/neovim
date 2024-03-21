@@ -105,8 +105,8 @@ local function toggle_comment()
 	local comments_tbl = {
 		{ type = 'c', prefix = '//' },
 		{ type = 'lua', prefix = '--' },
-		{ type = 'python', prefix = '#' },
-		{ type = 'sh', prefix = '#' },
+		{ type = 'python', prefix = "\\#" },
+		{ type = 'sh', prefix = "\\#" },
 	}
 
 	local function toggle(prefix, lnum, opts)
@@ -120,6 +120,8 @@ local function toggle_comment()
 			prefix_char_wrapper =  prefix_char_wrapper .. "[" .. vim.fn.strcharpart(prefix, idx-1, 1) .. "]"
 			idx = idx + 1
 		end
+		-- remove escape character. ex \# -> #
+		prefix_char_wrapper = string.gsub(prefix_char_wrapper, "[\\[\\]\\]", "")
 
 		substitue_info = {
 			{ pattern = '^' .. prefix_char_wrapper..' .*$', substitue = 's#' .. prefix .. ' ##' },
