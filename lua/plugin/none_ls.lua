@@ -8,21 +8,13 @@ local function setup()
 
 	null_ls.setup({
 		sources = {
-			f.autoflake,
 			f.clang_format,
 			f.cmake_format,
 			f.prettier,
 			f.stylua,
-			d.clang_check,
 			d.cmake_lint,
-			d.flake8,
-			d.pydocstyle,
 			d.pylint,
-			d.pycodestyle,
-			d.luacheck,
-			d.shellcheck,
 			c.tags,
-			a.shellcheck,
 			a.gitsigns,
 			a.gitrebase,
 			h.dictionary,
