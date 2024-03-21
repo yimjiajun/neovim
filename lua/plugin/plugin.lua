@@ -263,6 +263,10 @@ local function setup()
 				},
 			},
 		},
+		install = {
+			missing = true,
+			colorscheme = { "default" },
+		},
 	})
 
 	if vim.g.neovide ~= nil and pcall(require, 'plugin.neovide') then
