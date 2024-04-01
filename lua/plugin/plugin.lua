@@ -230,6 +230,13 @@ local function setup()
 					vim.cmd("colorscheme flexoki-dark")
 					vim.cmd("highlight Pmenu blend=0")
 				end
+			},
+			{ 'MeanderingProgrammer/markdown.nvim',
+				name = 'render-markdown', -- Only needed if you have another plugin named markdown.nvim
+				dependencies = { 'nvim-treesitter/nvim-treesitter' },
+				config = function()
+					require('render-markdown').setup({})
+				end,
 			}
 		},
 		defaults = {
