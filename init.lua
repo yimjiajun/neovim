@@ -13,6 +13,7 @@ vim.g.custom = {
 		"marksman",
 		"pyright",
 		"rust_analyzer",
+		"ruff_lsp"
 	},
 }
 
