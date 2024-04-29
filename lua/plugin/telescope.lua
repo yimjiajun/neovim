@@ -112,9 +112,7 @@ local function setup()
 
 	extensions = {
 		live_grep_args = get_live_grep_args(),
-		bookmarks = get_bookmark(),
 	}
-
 
 	telescope.setup {
 		defaults = {
@@ -151,6 +149,7 @@ local function setup()
 
 	setup_keymap()
 	require('telescope').load_extension('live_grep_args')
+	require('browser_bookmarks').setup(get_bookmark())
 	vim.cmd("command! -nargs=0 TelescopeSshList lua require('plugin.telescope').SshList()")
 end
 
