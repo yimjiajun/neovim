@@ -217,6 +217,11 @@ local config = {
 	},
 }
 
+vim.cmd [[
+    autocmd FileType * setlocal laststatus=2 noruler
+    autocmd FileType alpha setlocal laststatus=0
+]]
+
 return {
 	button = button,
 	section = section,
