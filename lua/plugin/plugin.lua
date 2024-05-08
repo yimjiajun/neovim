@@ -227,8 +227,15 @@ local function setup()
 			{ 'kepano/flexoki-neovim',
 				name = 'flexoki',
 				config = function ()
-					vim.cmd("colorscheme flexoki-dark")
-					vim.cmd("highlight Pmenu blend=0")
+					-- vim.cmd("colorscheme flexoki-dark")
+					-- vim.cmd("highlight Pmenu blend=0")
+				end
+			},
+			{ 'sam4llis/nvim-tundra',
+				config = function ()
+					vim.g.tundra_biome = 'jungle' -- 'arctic' or 'jungle'
+					vim.opt.background = 'dark'
+					vim.cmd("colorscheme tundra")
 				end
 			},
 			{ 'MeanderingProgrammer/markdown.nvim',
