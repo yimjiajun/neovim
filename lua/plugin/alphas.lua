@@ -191,21 +191,7 @@ end
 
 local buttons = {
 	type = "group",
-	val = {
-		button("+", "  Configuration", "<cmd> e ~/.config/nvim/init.lua  <CR>"),
-		button("0", "  Recently opened files", "<cmd> lua require('telescope.builtin').oldfiles()<CR>"),
-		button("1", "  Sessions", [[<cmd> lua require('config.function').SelSession() <CR>]]),
-		button("2", "󰥨  Find file", [[<cmd> lua require('config.function').SearchFile("") <CR>]]),
-		button("3", "󱙓  Find word",  [[<cmd> lua require('config.function').SearchWord("") <CR>]]),
-		button("4", "  Jump to bookmarks", [[<cmd> lua require('config.function').GetMarks("default") <CR>]]),
-		button("5", "󰍒  Frecency/MRU", [[<cmd> lua require('config.function').GetJumplist("default") <CR>]]),
-		button("6", "󱖫  Git Status",  [[<cmd>lua require('config.function').GitLog("") <CR>]]),
-		button("7", "  Git logs", [[<cmd> lua require('config.function').GitStatus("") <CR>]]),
-		button("8", "  Create ctags", [[<cmd> lua require('config.function').CreateCtags() <CR>]]),
-		button("c", "  Calendar", [[<cmd> lua require('features.system').GetCalendar() <CR>]]),
-		button("b", "  Battery", [[<cmd> lua require('features.system').GetBatInfo() <CR>]]),
-		button("SPC v s T", "  View process system"),
-	},
+	val = {},
 	opts = {
 		spacing = 1,
 	},
