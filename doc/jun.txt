@@ -1,0 +1,26 @@
+*jun*  My Personal Help Documentation
+
+NAME
+    jun - My Personal Help Documentation
+
+SYNOPSIS
+    :h |jun|
+
+DESCRIPTION
+    This is a personal help file containing documentation about myself.
+    You can use it to learn more about me and my preferences.
+
+OPTIONS
+    There are no options available for this help file.
+
+AUTHOR
+    JiaJun Yim <yimjiajun@vim.com>
+
+SEE ALSO
+    :helptags ALL
+    :lua vim.cmd("helptags ALL")
+
+REFERNECE
+    |jun_compiler| - customize compiler pre-setup
+
+ vim:tw=78:ts=8:noet:ft=help:norl:

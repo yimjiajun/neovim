@@ -79,6 +79,10 @@ local function setup()
 	Setting_editor()
 	Setting_buffer()
 	Setting_netrw()
+
+  if vim.fn.isdirectory(vim.fn.stdpath('config') .. '/doc') then
+    vim.cmd('helptags ALL')
+  end
 end
 
 return {
