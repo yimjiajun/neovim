@@ -1,3 +1,6 @@
+-- Compiler directory should be in the $HOME/.local/share/nvim/[compilers|compiler]
+-- 1. it will read the json file in the compiler directory
+--    the lua file will be used as callback function in the json file (optional)
 local delim = vim.fn.has('win32') == 1 and '\\' or '/'
 local common = require("features.common")
 local display_title = common.DisplayTitle
@@ -55,29 +58,48 @@ local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp, e
 	vim.g.compiler_data = data
 end
 
+local function check_git_remote_url_exists(remote, url)
+  if remote == nil or url == nil then
+    return false
+  end
+
+  local compare_remote = (type(remote) == "table") and remote or {remote}
+  local compare_url = (type(url) == "table") and url or {url}
+
+  for _, u in pairs(compare_url) do
+    for _, r in pairs(compare_remote) do
+      if r == nil or vim.fn.len(r) == 0 then
+        break
+      end
+
+      for _, local_remote in pairs(require('features.git').Remote().Get()) do
+        if local_remote ~= r then
+          goto continue_remote_get
+        end
+
+        local local_url = require('features.git').Remote().GetUrl(r)
+
+        if local_url == nil or vim.fn.len(local_url) == 0 then
+          break
+        end
+
+        for w in string.gmatch(local_url, u) do
+          if w == u then
+            return true
+          end
+        end
+
+        ::continue_remote_get::
+      end
+    end
+  end
+
+  return false
+end
+
 local function compiler_read_json()
-	local function check_git_remote_url_exists(remote, str)
-		local name = (type(str) == "table") and str or {str}
-
-		for _, n in pairs(name) do
-			local url = require('features.git').Remote().GetUrl(remote)
-
-			if url == nil or vim.fn.len(url) == 0 then
-				break
-			end
-
-			for w in string.gmatch(url, n) do
-				if w == n  then
-					return true
-				end
-			end
-		end
-
-		return false
-	end
-
 	if vim.fn.isdirectory(compiler_data_dir) == 0 then
-		return
+		return false
 	end
 
 	local compiler_data_files = require('features.files').RecurSearch(compiler_data_dir, "*.json")
@@ -107,6 +129,8 @@ local function compiler_read_json()
 			end
 		end
 	end
+
+  return true
 end
 
 local function setup_c()
@@ -209,8 +233,7 @@ local function compiler_setup_makeprg(tbl)
 	local bufnr = vim.api.nvim_get_current_buf()
 	vim.api.nvim_buf_set_option(bufnr, 'makeprg', tbl.cmd)
 
-	if tbl.efm ~= nil
-	then
+	if tbl.efm ~= nil then
 		vim.api.nvim_buf_set_option(bufnr, 'errorformat', tbl.efm)
 	end
 
@@ -234,38 +257,42 @@ local function compiler_latest_makeprg_setup()
 	return compiler_setup_makeprg(info)
 end
 
+local function compiler_optional_setup(tbl)
+  if tbl == nil or tbl.opts == nil or tbl.opts.callback == nil or tbl.opts.dofile == nil then
+    return nil
+  end
+
+  local callback_file = compiler_data_dir .. delim .. tbl.opts.dofile
+
+  if vim.fn.filereadable(callback_file) == 0 then
+    return nil
+  end
+
+  local callback = tbl.opts.callback
+  dofile(callback_file)
+
+  if type(callback) == "string" then
+    callback = _G[callback]
+  end
+
+  if type(callback) == "function" then
+    if tbl.opts.args ~= nil then
+      return callback(tbl.opts.args)
+    end
+
+    return callback()
+  end
+
+  return nil
+end
+
 local function compiler_tbl_makeprg_setup(tbl)
-	local function optional_setup()
-		if tbl.opts.callback == nil or tbl.opts.dofile == nil then
-			return nil
-		end
-
-		local callback_file = compiler_data_dir .. delim .. tbl.opts.dofile
-
-		if vim.fn.filereadable(callback_file) == 0 then
-			return nil
-		end
-
-		local callback = tbl.opts.callback
-		dofile(callback_file)
-
-		if type(callback) == "string" then
-			callback = _G[callback]
-		end
-
-		if type(callback) == "function" then
-			return callback()
-		end
-
-		return nil
-	end
-
 	if tbl == nil then
 		return false
 	end
 
 	if tbl.opts ~= nil then
-		if optional_setup() == false then
+		if compiler_optional_setup(tbl) == false then
 			vim.api.nvim_echo({{"compiler callback error", "ErrorMsg"}}, true, {})
 			return false
 		end
@@ -343,14 +370,19 @@ local function compiler_build_setup_selection()
 	local sel_idx = vim.fn.inputlist(msg)
 	local sel_tbl = target_tbl[sel_idx]
 
-	if sel_tbl == nil then
-		return false
-	end
-
 	return compiler_tbl_makeprg_setup(sel_tbl)
 end
 
 local function setup()
+  local compiler_dir = vim.fn.stdpath('data') .. delim
+
+  for _, dir in ipairs({'compiler', 'compilers'}) do
+    if vim.fn.isdirectory(compiler_dir .. dir) == 1 then
+      compiler_data_dir = compiler_dir .. dir
+      break
+    end
+  end
+
 	compiler_read_json()
 
 	return nil

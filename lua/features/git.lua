@@ -67,11 +67,22 @@ local function remote()
 		return vim.fn.trim(vim.fn.system('git config --get remote.' .. remote_name ..'.url'))
 	end
 
+  local function get_remote()
+    local remotes = vim.fn.system("git remote")
+
+    if remotes == '' then
+      return {}
+    end
+
+    return vim.fn.split(remotes, '\n')
+  end
+
 	local function default()
 		run_git_cmd("remote -v")
 	end
 
 	return {
+    Get = get_remote,
 		GetUrl = get_url,
 		Default = default
 	}
