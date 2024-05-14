@@ -231,6 +231,18 @@ local function setup()
 					vim.cmd("highlight Pmenu blend=0")
 				end
 			},
+      { 'itchyny/calendar.vim',
+        config = function ()
+          local credentials = os.getenv('HOME') .. "/.cache/calendar.vim/credentials.vim"
+
+          if vim.fn.filereadable(credentials) then
+            vim.g.calendar_google_calendar = 1
+            vim.g.calendar_google_task = 1
+            vim.g.calendar_frame ="unicode_round"
+            vim.cmd("source " .. credentials)
+          end
+        end
+      },
 			{ 'MeanderingProgrammer/markdown.nvim',
 				name = 'render-markdown', -- Only needed if you have another plugin named markdown.nvim
 				dependencies = { 'nvim-treesitter/nvim-treesitter' },

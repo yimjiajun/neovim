@@ -102,7 +102,7 @@ local function setup_calendar()
 	local opts = { silent = true, desc = desc }
 	local cmd
 
-	if vim.fn.executable('khal') > 0 then
+  if vim.fn.executable('khal') > 0 then
 		keymap('n', prefix_key .. 't', [[<cmd> sp | term khal list today; exit <CR>]],
 			{ silent = true, desc = 'khal list today'})
 		keymap('n', prefix_key .. 'i', [[<cmd> term khal interactive; exit <CR>]],
@@ -126,7 +126,19 @@ local function setup_calendar()
 		cmd = 'date'
 	end
 
-		cmd = [[<cmd> silent! sp | term ]] .. cmd .. [[<CR>]]
+  if vim.fn.exists(":Calendar") then
+		keymap('n', prefix_key .. 't', [[<cmd> Calendar -day <CR>]],
+			{ silent = true, desc = 'Vim google Calendar list today'})
+
+		if pcall(require, 'which-key') then
+			local wk = require("which-key")
+			local wk_mode = { mode = 'n', prefix = prefix_key }
+
+			wk.register({ [key] = desc, t = "list today (vim)" }, wk_mode)
+		end
+  end
+
+  cmd = [[<cmd> silent! sp | term ]] .. cmd .. [[<CR>]]
 
 	if pcall(require, 'which-key') then
 		local wk = require("which-key")
