@@ -340,7 +340,7 @@ local function compiler_build_setup_selection()
 	local idx = 0
 
 	for _, info in ipairs(tbl) do
-		if (info.ext ~= 'any') and (info.ext ~= vim.bo.filetype) then
+		if (info.ext ~= nil) and (info.ext ~= 'any') and (info.ext ~= vim.bo.filetype) then
 			goto continue
 		end
 
