@@ -1,10 +1,10 @@
-*jun_compiler*  Compiler Help Documentation
+*JunCompiler*  Compiler Help Documentation
 
 NAME
-    jun_compiler - Personal Compiler Documentation
+    JunCompiler - Personal Compiler Documentation
 
 SYNOPSIS
-    :h jun_compiler
+    :h JunCompiler
 
 DESCRIPTION
     This is a personal help file containing documentation about usage of compiler.
@@ -20,3 +20,60 @@ SEE ALSO
     $HOME/.config/nvim/lua/features/compiler.lua
 
 ==============================================================================
+
+CONTENTS                                                  *JunCompilerContents*
+
+1. Compiler Setup ..........................................|JunCompilerSetup|
+    1.1 File Structure..............................|JunCompilerFileStructure|
+
+==============================================================================
+
+1. Compiler Setup                                             *JunCompilerSetup*
+
+The compiler setup features is implemented in $HOME/.local/share/nvim/compiler
+
+------------------------------------------------------------------------------
+
+1.1 File Structure                                     *JunCompilerFileStructure*
+
+The supported compiler setup file structure is as follows:
+
+- json: it used to store the compilet setup in compiler features, which will passing to |compiler.lua|
+
+    >
+        [
+           "Group Name": {
+              "name": "Compiler Name",
+              "cmd": "Compiler Command",
+              "desc": "Compiler Description (Optional)",
+              "ext": "Compiler File Extension, this comoiler only visible when match the file extension (Optional)",
+              "efm": "Compiler Error Format, this is used to parse the error message from compiler output (Optional)",
+              "build_type": "Compiler Build Type, this is used to define the build type of compiler (Optional)("make", "term", "term_full", "builtin")",
+              "git": { "remote": "Remote repository object name (ex. origin, remote)", "url": "Link included as regex" (ex. ["neovim", "nvim", "github.com/neovim/neovim.git"] },
+              "opts": {
+                 "dofile": "Compiler Callback File, link to callback function existing .lua file (Optional, if callback not provided)",
+                 "callback": "Compiler Callback Function, this is used to pre-setup or callback function before run the compiler command, writting in "dofile" (Optional)"
+              }
+        ]
+    >
+
++ -------------- + ---------------------------------------------------------------------------------- +
+| Structure Name | Description                                                                        |
++ -------------- + ---------------------------------------------------------------------------------- +
+| Group Name     |                                                                                    |
+| name           | compiler name                                                                      |
+| cmd            | command to run                                                                     |
+| desc           | description the purpose                                                            |
+| ext            | compiler file extension, visible when match the file extension on build selection  |
+| efm            | compiler error format, used to parse the error message from compiler output        |
+| build_type     |                                                                                    |
+| git            |                                                                                    |
+| opts           |                                                                                    |
+| dotfile        |                                                                                    |
+| callback       |                                                                                    |
++ -------------- + ---------------------------------------------------------------------------------- +
+
+- lua: it used to pre-setup or callback function before rum the | JunCompilerJsonStruture_cmd|
+
+
+ vim:tw=78:ts=8:noet:ft=help:norl:
