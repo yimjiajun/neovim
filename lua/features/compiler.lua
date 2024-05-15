@@ -230,31 +230,17 @@ local function compiler_setup_makeprg(tbl)
 		return false
 	end
 
-	local bufnr = vim.api.nvim_get_current_buf()
-	vim.api.nvim_buf_set_option(bufnr, 'makeprg', tbl.cmd)
-
-	if tbl.efm ~= nil then
-		vim.api.nvim_buf_set_option(bufnr, 'errorformat', tbl.efm)
-	end
-
 	compiler_latest_build_data = tbl
 
+  if tbl.cmd ~= nil then
+    vim.api.nvim_set_option_value('makeprg', tbl.cmd, {})
+  end
+
+	if tbl.efm ~= nil then
+		vim.api.nvim_set_option_value('errorformat', tbl.efm, {})
+	end
+
 	return true
-end
-
-local function compiler_latest_makeprg_setup()
-	if compiler_latest_build_data == nil
-	then
-		return nil
-	end
-
-	local info = compiler_latest_build_data
-
-	if (info.ext ~= 'any') and (info.ext ~= vim.bo.filetype) then
-		return false
-	end
-
-	return compiler_setup_makeprg(info)
 end
 
 local function compiler_optional_setup(tbl)
@@ -286,10 +272,31 @@ local function compiler_optional_setup(tbl)
   return nil
 end
 
+local function compiler_latest_makeprg_setup()
+  if compiler_latest_build_data == nil then
+    return nil
+  end
+
+  local tbl = compiler_latest_build_data
+
+  if (tbl.ext ~= nil) and (tbl.ext ~= 'any') and (tbl.ext ~= vim.bo.filetype) then
+    return false
+  end
+
+  if (tbl.opt ~= nil) and (compiler_optional_setup(tbl) == false) then
+    vim.api.nvim_echo({{"compiler callback error", "ErrorMsg"}}, true, {})
+    return false
+  end
+
+  return compiler_setup_makeprg(tbl)
+end
+
 local function compiler_tbl_makeprg_setup(tbl)
 	if tbl == nil then
 		return false
 	end
+
+	compiler_latest_build_data = tbl
 
 	if tbl.opts ~= nil then
 		if compiler_optional_setup(tbl) == false then
