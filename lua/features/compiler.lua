@@ -119,13 +119,29 @@ local function compiler_read_json()
 	for _, grp in pairs(compiler_data) do
 		for grp_name, grp_info in pairs(grp) do
 			for _, i in pairs(grp_info) do
-				if i["git"] ~= nil and i["git"]["remote"] ~= nil and i["git"]["url"] ~= nil then
-					if check_git_remote_url_exists(i["git"]["remote"], i["git"]["url"]) == false then
-						goto skip_current_compiler_setup
-					end
-				end
-				compiler_insert_info_permanent(i.name, i.cmd, i.desc, i.ext, i.type, grp_name, i.efm, i.opts)
-				::skip_current_compiler_setup::
+
+        if i["directory"] ~= nil then
+          local directory = i["directory"]
+          local compare_directory = (type(directory) == "table") and directory or {directory}
+
+          for _, d in pairs(compare_directory) do
+            if vim.fn.isdirectory(d) > 0 then
+              goto setup_current_compiler
+            end
+          end
+        end
+
+        if (i["git"] ~= nil) and (i["git"]["remote"] ~= nil) and (i["git"]["url"] ~= nil) and
+          (check_git_remote_url_exists(i["git"]["remote"], i["git"]["url"]) == true) then
+          goto setup_current_compiler
+        end
+
+        goto next_compiler
+
+        ::setup_current_compiler::
+        compiler_insert_info_permanent(i.name, i.cmd, i.desc, i.ext, i.type, grp_name, i.efm, i.opts)
+
+        ::next_compiler::
 			end
 		end
 	end
