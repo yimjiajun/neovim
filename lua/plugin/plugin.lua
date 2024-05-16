@@ -235,7 +235,7 @@ local function setup()
         config = function ()
           local credentials = os.getenv('HOME') .. "/.cache/calendar.vim/credentials.vim"
 
-          if vim.fn.filereadable(credentials) then
+          if vim.fn.filereadable(credentials) > 0 then
             vim.g.calendar_google_calendar = 1
             vim.g.calendar_google_task = 1
             vim.g.calendar_frame ="unicode_round"
