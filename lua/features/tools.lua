@@ -126,7 +126,7 @@ local function setup_calendar()
 		cmd = 'date'
 	end
 
-  if vim.fn.exists(":Calendar") then
+  if vim.fn.exists(":Calendar") > 0 then
 		keymap('n', prefix_key .. 't', [[<cmd> Calendar -day <CR>]],
 			{ silent = true, desc = 'Vim google Calendar list today'})
 
