@@ -2,7 +2,7 @@ local function Setting_view()
 	vim.opt.background = "dark"
 
 	if vim.fn.trim(vim.fn.execute('colorscheme')) == 'default' then
-		if vim.version().major < 1 and vim.version().minor < 10 then
+		if vim.version().major < 1 and vim.version().minor < 11 then
 			vim.cmd('colorscheme habamax')
 		end
 	end

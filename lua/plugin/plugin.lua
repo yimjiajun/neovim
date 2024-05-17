@@ -164,6 +164,7 @@ local function setup()
 					local keymap = vim.api.nvim_set_keymap
 
 					keymap('n', '<leader>tt', [[<cmd> TagbarToggle fc <CR>]], { silent = true, desc = 'tag lists'})
+          vim.g.tagbar_sort = 0 -- sort by order of appearance
 				end
 			},
 			{ 'goolord/alpha-nvim',
@@ -223,13 +224,6 @@ local function setup()
 				config = function()
 					require('plugin.venn').Setup()
 				end,
-			},
-			{ 'kepano/flexoki-neovim',
-				name = 'flexoki',
-				config = function ()
-					vim.cmd("colorscheme flexoki-dark")
-					vim.cmd("highlight Pmenu blend=0")
-				end
 			},
       { 'itchyny/calendar.vim',
         config = function ()

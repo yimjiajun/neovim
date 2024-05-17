@@ -140,7 +140,7 @@ local default_header = {
 	val = msg_display,
 	opts = {
 		position = "center",
-		hl = "@constant",
+		hl = "@character",
 		-- wrap = "overflow";
 	},
 }
