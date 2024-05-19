@@ -26,12 +26,10 @@ local function setup_vim_markdown()
 	}
 end
 
-local function init()
+local function setup()
 	setup_vim_markdown()
 end
 
 return {
-	Align = tabular_align,
-	Setup = setup,
-	Init = init,
+	Setup = setup
 }
