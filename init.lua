@@ -1,12 +1,4 @@
-vim.g.custom = {
-	colorscheme = {
-		theme = 'gruvbox',
-		transparency = false,
-		highlight = {
-			FloatBorder = {},
-		}
-	},
-	lsp = {
+local lsp = {
 		"bashls",
 		"clangd", "cmake",
 		"lua_ls",
@@ -14,11 +6,35 @@ vim.g.custom = {
 		"pyright",
 		"rust_analyzer",
 		"ruff_lsp"
-	},
 }
-
 local config_path = vim.fn.stdpath("config")
 local config_dir = {"config", "features", "usr"}
+
+if vim.loop.os_uname().machine ~= 'aarch64' then
+  goto start_setup
+end
+
+for _, l in ipairs({"lua_ls", "clangd"}) do
+  for i, v in ipairs(lsp) do
+    if l == v then
+      table.remove(lsp, i)
+      break
+    end
+  end
+end
+
+::start_setup::
+
+vim.g.custom = {
+	colorscheme = {
+		theme = 'habamax',
+		transparency = false,
+		highlight = {
+			FloatBorder = {},
+		}
+	},
+  lsp = lsp
+}
 
 for _, dir in ipairs(config_dir) do
 	local lua_config_path = config_path .. "/lua/" .. dir
