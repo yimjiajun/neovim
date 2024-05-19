@@ -176,18 +176,6 @@ local function setup()
 					require('plugin.surround').Setup()
 				end
 			},
-			{ "plasticboy/vim-markdown",
-				dependencies = {
-					"godlygeek/tabular",
-					'dhruvasagar/vim-table-mode' },
-				ft = { "markdown" },
-				init = function ()
-					require('plugin.vim-markdown').Init()
-				end,
-				config = function()
-					require('plugin.vim-markdown').Setup()
-				end,
-			},
 			{ "iamcco/markdown-preview.nvim",
 				ft = { "markdown" },
 				build = "cd app && npm install",
