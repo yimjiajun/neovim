@@ -42,17 +42,20 @@ The supported compiler setup file structure is as follows:
 
     >
         [
-           "Group Name": {
-              "name": "Compiler Name",
-              "cmd": "Compiler Command",
-              "desc": "Compiler Description (Optional)",
-              "ext": "Compiler File Extension, this comoiler only visible when match the file extension (Optional)",
-              "efm": "Compiler Error Format, this is used to parse the error message from compiler output (Optional)",
-              "build_type": "Compiler Build Type, this is used to define the build type of compiler (Optional)("make", "term", "term_full", "builtin")",
-              "git": { "remote": "Remote repository object name (ex. origin, remote)", "url": "Link included as regex" (ex. ["neovim", "nvim", "github.com/neovim/neovim.git"] },
+           <Group Name>: {
+              "name": <string>,
+              "cmd": <string>,
+              "desc": <string>,
+              "ext": <string>,
+              "efm": <string>,
+              "build_type": <"make", "term", "term_full", "builtin">
+              "git": {
+                  "remote": [<string>, <string>, ...],
+                  "url": [<string>, <string>, ...]
+              },
               "opts": {
-                 "dofile": "Compiler Callback File, link to callback function existing .lua file (Optional, if callback not provided)",
-                 "callback": "Compiler Callback Function, this is used to pre-setup or callback function before run the compiler command, writting in "dofile" (Optional)"
+                 "dofile": <file>.lua
+                 "callback": <function>
               }
         ]
     >
@@ -61,7 +64,7 @@ The supported compiler setup file structure is as follows:
 | Structure Name | Description                                                                        |
 + -------------- + ---------------------------------------------------------------------------------- +
 | Group Name     |                                                                                    |
-| name           | compiler name                                                                      |
+| * name         | compiler name                                                                      |
 | cmd            | command to run                                                                     |
 | desc           | description the purpose                                                            |
 | ext            | compiler file extension, visible when match the file extension on build selection  |
