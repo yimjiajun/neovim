@@ -22,10 +22,7 @@ local function ssh_connect(user, host, port, password)
 	if vim.fn.exists('win32') == 1 or (vim.fn.isdirectory('/run/WSL') == 1 and vim.g.wsl_ssh_run_win == 1) then
 		cmd = terminal .. " " .. " powershell.exe -C " .. cmd
 	else
-		if vim.fn.executable('sshpass') == 1 and
-			vim.g.ssh_run_sshpass == 1 and
-			password ~= "" and password ~= nil then
-
+		if vim.fn.executable('sshpass') == 1 and vim.g.ssh_run_sshpass == 1 and password ~= nil and password ~= "" then
 			cmd = "sshpass -p '" .. password .. "' " .. cmd
 		end
 
@@ -63,9 +60,7 @@ local function ssh_get_list(save_file)
 	if save_file == true then
 		local file = vim.fn.tempname() .. ".txt"
 
-		if vim.fn.tolower(vim.fn.trim(
-			vim.fn.input("view password? (y/n): ", 'y'))) == 'y'
-		then
+		if vim.fn.tolower(vim.fn.trim(vim.fn.input("view password? (y/n): ", 'y'))) == 'y' then
 			show_pass = true
 		end
 
@@ -255,13 +250,65 @@ local function ssh_read_json()
 	end
 end
 
+-- @brief: ssh_send_file
+-- @description: send file to remote server
+-- @usage: lua require('features.ssh').ssh_send_file()
+-- @param: file: file path to send
+-- @param: hostname: remote server hostname
+-- @param: destination: destination path
+local function ssh_send_file(file, hostname, destination)
+  local sel_ssh
+
+  if hostname == nil then
+    goto ssh_send_file_get_from_selection
+  end
+
+  for _, info in ipairs(vim.g.ssh_data) do
+    if info.host == hostname then
+      sel_ssh = info
+      goto ssh_send_file_selected
+    end
+  end
+
+  ::ssh_send_file_get_from_selection::
+  sel_ssh = ssh_get_list(false)
+  ::ssh_send_file_selected::
+
+  if sel_ssh == nil then
+    vim.api.nvim_echo({{"SSH information not found ...", "WarningMsg"}}, true, {})
+    return
+  end
+
+  if file == nil or file == "" then
+    file = vim.fn.expand(vim.fn.input("File to send: "))
+  end
+
+  if file == "" or vim.fn.filereadable(file) == 0 then
+    vim.api.nvim_echo({{"** Invalid file .. " .. file, "ErrorMsg"}}, true, {})
+    return
+  end
+
+  if destination == nil or destination == "" then
+    destination = vim.fn.expand(vim.fn.input("Remote destination (optional): "))
+  end
+
+  local cmd = "scp " .. file .. " scp://" .. sel_ssh.name .. "@" .. sel_ssh.host .. ":" .. destination
+
+  if (sel_ssh.pass ~= nil and sel_ssh.pass ~= "") and
+    (vim.fn.executable('sshpass') == 1 and vim.g.ssh_run_sshpass == 1) then
+    cmd = "sshpass -p '" .. sel_ssh.pass .. "' " .. cmd
+  end
+
+  vim.cmd(vim.inspect(cmd))
+end
+
 local function setup()
 	vim.g.ssh_data = {
-		{ host = "raspberrypi.local",
+		{ host = "jun.local",
 			name = "jun",
 			pass = "jun",
 			port = "22",
-			description = "Raspberry Pi 4B",
+			description = "Raspberry Pi 5B",
 			group = "computer",
 		}
 	}
@@ -272,6 +319,7 @@ local function setup()
 	vim.cmd("command! -nargs=0 SshReq lua require('features.ssh').SshConnectReq()")
 	vim.cmd("command! -nargs=0 Ssh lua require('features.ssh').SshRun()")
 	vim.cmd("command! -nargs=0 SshList lua require('features.ssh').SshList(true)")
+	vim.cmd("command! -nargs=* SshSendFile lua require('features.ssh').SshSendFile(<f-args>)")
 end
 
 return {
@@ -283,4 +331,5 @@ return {
 	SshList = ssh_get_list,
 	SshTogglePwrsh = toggle_powershell_ssh,
 	SshToggleSshpass = toggle_sshpass,
+  SshSendFile = ssh_send_file,
 }
