@@ -157,6 +157,30 @@ local function json_read(path)
 	return vim.json.decode(json_format)
 end
 
+-- @name: save_command_message_to_file
+-- @description: save command message to file
+-- @param cmd: string
+-- @return: nil
+-- @usage: save_command_message_to_file(":messages")
+-- @usage: save_command_message_to_file("!git log")
+local function save_command_message_to_file(cmd)
+  if cmd == nil or #cmd == 0 then
+    cmd = ":messages"
+  end
+
+  local file = vim.fn.tempname()
+  local commands = {
+    "redir! > " .. file,
+    cmd,
+    "redir END",
+    "view " .. file
+  }
+
+  for _, c in ipairs(commands) do
+    vim.cmd(c)
+  end
+end
+
 local function setup()
 	local skip_functions = { '^Setup$', '^.*Json$' }
 
@@ -171,6 +195,8 @@ local function setup()
 		vim.cmd("command! -nargs=0 -bang " .. "File" .. name .. " lua print(" .. callback .. ")" )
 		::continue::
 	end
+
+  vim.cmd("command! -nargs=1 -bang FileSaveCmdMsgInput lua require('features.files').SaveCmdMsg(<f-args>)")
 end
 
 return {
@@ -184,5 +210,6 @@ return {
 	Search = search_file,
 	SetJson = json_write,
 	GetJson= json_read,
+  SaveCmdMsg = save_command_message_to_file,
 	Setup = setup,
 }
