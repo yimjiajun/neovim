@@ -137,6 +137,7 @@ local function async_command(cmd, timeout_sec, sub_cmd)
     args = args,
     stdio = {nil, stdout, stderr},
   }, vim.schedule_wrap(on_exit))
+  print("Execute => [ " .. cmd .. " ]")
   -- Read from the pipes
   local function on_read(err, data)
     assert(not err, err)

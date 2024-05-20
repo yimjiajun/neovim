@@ -302,8 +302,28 @@ local function ssh_send_file(file, hostname, destination)
     cmd = "sshpass -p '" .. sel_ssh.pass .. "' " .. cmd
   end
 
-  require('features.common').AsyncCommand(cmd, 3600)
-  return true
+  vim.api.nvim_echo({{"\n"}}, false, {})
+  vim.api.nvim_echo({{"====================", "MoreMsg"}}, true, {})
+  vim.api.nvim_echo({{"  SCP", "MoreMsg"}}, true, {})
+  vim.api.nvim_echo({{"====================", "MoreMsg"}}, true, {})
+  vim.api.nvim_echo({{"* Hostname:    " .. sel_ssh.host, "MoreMsg"}}, true, {})
+  vim.api.nvim_echo({{"* Username:    " .. sel_ssh.name, "MoreMsg"}}, true, {})
+  vim.api.nvim_echo({{"* File:        " .. file, "MoreMsg"}}, true, {})
+  vim.api.nvim_echo({{"* Destination: " .. destination, "MoreMsg"}}, true, {})
+  vim.api.nvim_echo({{"--------------------", "MoreMsg"}}, true, {})
+
+  local ret = (os.execute(cmd) == 0)
+  local status_msg = "Failed"
+  local msg_type = "ErrorMsg"
+
+  if ret == true then
+    status_msg = "Success"
+    msg_type = "MoreMsg"
+  end
+
+  vim.api.nvim_echo({{"Scp [ " .. status_msg .. " ]", msg_type}}, true, {})
+
+  return ret
 end
 
 local function setup()
