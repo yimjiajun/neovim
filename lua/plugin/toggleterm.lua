@@ -1,28 +1,28 @@
+local function setup_keymap()
+  vim.api.nvim_set_keymap('n', "<leader>tf", ":ToggleTerm direction=float <CR>", { silent = true, noremap = true })
+  vim.api.nvim_set_keymap('n', "<leader>ts", ":ToggleTerm direction=horizontal<CR>", { silent = true, noremap = true })
+  vim.api.nvim_set_keymap('n', "<leader>tv", ":ToggleTerm direction=vertical<CR>", { silent = true, noremap = true })
+end
+
+local function setup_autocmd()
+  -- vim.cmd("autocmd TermOpen * setlocal nonumber norelativenumber")
+  vim.api.nvim_create_augroup( "toggleterm", { clear = true })
+  vim.api.nvim_create_autocmd( "FileType", {
+    desc = "Hide Toggle Term",
+    group = "toggleterm",
+    pattern = "toggleterm",
+    callback = function()
+      local current_buf = vim.api.nvim_get_current_buf()
+      local keymap = vim.api.nvim_buf_set_keymap
+      local opts = { noremap = true, silent = true }
+
+      keymap(current_buf, 't', 'jkl', '<c-\\><c-n>', opts)
+      keymap(current_buf, 't', 'lkj', '<c-\\><c-n><cmd>ToggleTerm<CR>', opts)
+    end,
+  })
+end
+
 local function setup()
-	local function setup_keymap()
-		vim.api.nvim_set_keymap('n', "<leader>tf", ":ToggleTerm direction=float <CR>", { silent = true, noremap = true })
-		vim.api.nvim_set_keymap('n', "<leader>ts", ":ToggleTerm direction=horizontal<CR>", { silent = true, noremap = true })
-		vim.api.nvim_set_keymap('n', "<leader>tv", ":ToggleTerm direction=vertical<CR>", { silent = true, noremap = true })
-	end
-
-	local function setup_autocmd()
-		-- vim.cmd("autocmd TermOpen * setlocal nonumber norelativenumber")
-		vim.api.nvim_create_augroup( "toggleterm", { clear = true })
-		vim.api.nvim_create_autocmd( "FileType", {
-			desc = "Hide Toggle Term",
-			group = "toggleterm",
-			pattern = "toggleterm",
-			callback = function()
-				local current_buf = vim.api.nvim_get_current_buf()
-				local keymap = vim.api.nvim_buf_set_keymap
-				local opts = { noremap = true, silent = true }
-
-				keymap(current_buf, 't', 'jkl', '<c-\\><c-n>', opts)
-				keymap(current_buf, 't', 'lkj', '<c-\\><c-n><cmd>ToggleTerm<CR>', opts)
-			end,
-		})
-	end
-
 	require("toggleterm").setup{
 		-- size can be a number or function which is passed the current terminal
 		size = function(term)-- 20 | function(term)
@@ -47,13 +47,13 @@ local function setup()
 			-- highlights which map to a highlight group name and a table of it's values
 			-- NOTE: this is only a subset of values, any group placed here will be set for the terminal window split
 			Normal = {
-				link = "NormalFloat",
+				link = "Normal",
 			},
 			NormalFloat = {
-				link = 'NormalFloat'
+				link = 'Normal'
 			},
 			FloatBorder = {
-				link = "NormalFloat",
+				link = "Normal",
 			},
 		},
 		shade_terminals = true,
