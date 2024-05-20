@@ -241,24 +241,6 @@ local function get_compiler_build_data()
 	return compiler_build_data
 end
 
-local function compiler_setup_makeprg(tbl)
-	if tbl == nil then
-		return false
-	end
-
-	compiler_latest_build_data = tbl
-
-  if tbl.cmd ~= nil then
-    vim.api.nvim_set_option_value('makeprg', tbl.cmd, {})
-  end
-
-	if tbl.efm ~= nil then
-		vim.api.nvim_set_option_value('errorformat', tbl.efm, {})
-	end
-
-	return true
-end
-
 local function compiler_optional_setup(tbl)
   if tbl == nil or tbl.opts == nil or tbl.opts.callback == nil or tbl.opts.dofile == nil then
     return nil
@@ -288,25 +270,6 @@ local function compiler_optional_setup(tbl)
   return nil
 end
 
-local function compiler_latest_makeprg_setup()
-  if compiler_latest_build_data == nil then
-    return nil
-  end
-
-  local tbl = compiler_latest_build_data
-
-  if (tbl.ext ~= nil) and (tbl.ext ~= 'any') and (tbl.ext ~= vim.bo.filetype) then
-    return false
-  end
-
-  if (tbl.opt ~= nil) and (compiler_optional_setup(tbl) == false) then
-    vim.api.nvim_echo({{"compiler callback error", "ErrorMsg"}}, true, {})
-    return false
-  end
-
-  return compiler_setup_makeprg(tbl)
-end
-
 local function compiler_tbl_makeprg_setup(tbl)
 	if tbl == nil then
 		return false
@@ -320,6 +283,10 @@ local function compiler_tbl_makeprg_setup(tbl)
 			return false
 		end
 	end
+
+  if tbl.build_type == nil then
+    return true
+  end
 
 	if tbl.build_type == "term" then
 		vim.cmd("5split | terminal " .. tbl.cmd)
@@ -342,7 +309,34 @@ local function compiler_tbl_makeprg_setup(tbl)
 		return false
 	end
 
-	return compiler_setup_makeprg(tbl)
+  if tbl.cmd ~= nil then
+    vim.api.nvim_set_option_value('makeprg', tbl.cmd, {})
+  end
+
+  if tbl.efm ~= nil then
+    vim.api.nvim_set_option_value('errorformat', tbl.efm, {})
+  end
+
+  return true
+end
+
+local function compiler_latest_makeprg_setup()
+  if compiler_latest_build_data == nil then
+    return nil
+  end
+
+  local tbl = compiler_latest_build_data
+
+  if (tbl.ext ~= nil) and (tbl.ext ~= 'any') and (tbl.ext ~= vim.bo.filetype) then
+    return false
+  end
+
+  if (tbl.opt ~= nil) and (compiler_optional_setup(tbl) == false) then
+    vim.api.nvim_echo({{"compiler callback error", "ErrorMsg"}}, true, {})
+    return false
+  end
+
+  return compiler_tbl_makeprg_setup(tbl)
 end
 
 local function compiler_build_setup_selection()
