@@ -299,7 +299,7 @@ local function ssh_send_file(file, hostname, destination)
     cmd = "sshpass -p '" .. sel_ssh.pass .. "' " .. cmd
   end
 
-  vim.cmd(vim.inspect(cmd))
+  require('features.common').AsyncCommand(cmd, 3600)
 end
 
 local function setup()

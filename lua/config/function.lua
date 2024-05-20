@@ -41,21 +41,12 @@ local function set_statusline(mode)
 end
 
 local function create_ctags()
-
 	if vim.fn.executable("ctags") == 0 then
 		vim.api.nvim_echo({{"Ctags not found !", "ErrorMsg"}}, false, {})
 		return
 	end
 
-	vim.api.nvim_echo({{"Ctags creating ...", "MoreMsg"}}, false, {})
-
-	local success = os.execute("ctags -R . && sort -u -o tags tags")
-
-	if success then
-		vim.api.nvim_echo({{"Ctags created !", "MoreMsg"}}, false, {})
-	else
-		vim.api.nvim_echo({{"Failed to create ctags !", "ErrorMsg"}}, false, {})
-	end
+  require('features.common').AsyncCommand('ctags -R .', 120, 'sort -u -o tags tags')
 end
 
 local function build(mode)
