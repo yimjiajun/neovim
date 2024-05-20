@@ -12,7 +12,7 @@ local compiler_data_dir = vim.fn.stdpath('data') .. delim .. 'compilers'
 --@field cmd string command to run
 --@field desc string description of build
 --@field ext string file extension
---@field build_type string build type: "make", "term", "term_full", "plugin"
+--@field type string build type: "make", "term", "term_full", "plugin"
 --@field group string group name
 vim.g.compiler_data = {}
 local compiler_build_data = {}
@@ -32,7 +32,7 @@ local function compiler_insert_info(name, cmd, desc, ext, type, grp, efm)
 		cmd = cmd,
 		desc = desc,
 		ext = ext,
-		build_type = type,
+		type = type,
 		group = grp,
 		efm = efm,
 	}
@@ -48,7 +48,7 @@ local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp, e
 		cmd = cmd,
 		desc = desc,
 		ext = ext,
-		build_type = type,
+		type = type,
 		group = grp,
 		efm = efm,
 		opts = opts,
@@ -285,16 +285,16 @@ local function compiler_tbl_makeprg_setup(tbl)
 		end
 	end
 
-  if tbl.build_type == nil then
+  if tbl.type == nil then
     return false
   end
 
-	if tbl.build_type == "term" then
+	if tbl.type == "term" then
 		vim.cmd("5split | terminal " .. tbl.cmd)
 		return false
 	end
 
-	if tbl.build_type == "term_full" then
+	if tbl.type == "term_full" then
 		if vim.fn.exists(":ToggleTerm") and vim.fn.exists(":TermCmd")
 		then
 			vim.cmd("TermCmd " .. tbl.cmd)
@@ -305,7 +305,7 @@ local function compiler_tbl_makeprg_setup(tbl)
 		return false
 	end
 
-	if tbl.build_type == "builtin" then
+	if tbl.type == "builtin" then
 		vim.cmd(tbl.cmd)
 		return false
 	end

@@ -48,7 +48,7 @@ The supported compiler setup file structure is as follows:
               "desc": <string>,
               "ext": <string>,
               "efm": <string>,
-              "build_type": <"make", "term", "term_full", "builtin">
+              "type": <"make", "term", "term_full", "builtin">
               "git": {
                   "remote": [<string>, <string>, ...],
                   "url": [<string>, <string>, ...]
@@ -69,7 +69,7 @@ The supported compiler setup file structure is as follows:
 | desc           | description the purpose                                                            |
 | ext            | compiler file extension, visible when match the file extension on build selection  |
 | efm            | compiler error format, used to parse the error message from compiler output        |
-| build_type     |                                                                                    |
+| type           |                                                                                    |
 | git            |                                                                                    |
 | opts           |                                                                                    |
 | dotfile        |                                                                                    |
