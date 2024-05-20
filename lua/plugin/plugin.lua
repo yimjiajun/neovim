@@ -160,7 +160,7 @@ local function setup()
 			},
 			{ 'goolord/alpha-nvim',
 				config = function()
-					require('alpha').setup(require('plugin.alphas').config)
+					require('plugin.alphas').Setup()
 				end
 			},
 			{ "folke/which-key.nvim",
