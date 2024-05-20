@@ -151,7 +151,7 @@ local function setup()
 		},
 		t = { name = 'Toggle',
 			f = 'terminal',
-			F = 'terminal shell',
+			F = 'scp send',
 			s = 'terminal split',
 			v = 'terminal vsplit',
 			c = 'ctags generator',

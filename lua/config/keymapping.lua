@@ -131,7 +131,6 @@ local function setting_key_terminal()
 	keymap('n', '<leader>ts', [[<cmd> lua require("config.function").Terminal("split") <CR>]], opts)
 	keymap('n', '<leader>tv', [[<cmd> lua require("config.function").Terminal("vertical") <CR>]], opts)
 	keymap('n', '<leader>tf', [[<cmd> lua require("config.function").Terminal("default") <CR>]], opts)
-	keymap('n', '<leader>tF', [[<cmd> lua require("config.function").Terminal("selection") <CR>]], opts)
 end
 
 local function setting_key_session()

@@ -204,6 +204,9 @@ local function ssh_setting_keymapping()
 				}, { mode = "n", prefix = "<leader>m" })
 		end
 	end
+
+	vim.api.nvim_set_keymap('n', '<leader>tF', [[<cmd> lua require('features.ssh').SshSendFile() <CR> ]],
+		{ silent = true, desc = "send file via scp from ssh selection" })
 end
 
 local function ssh_setting()
@@ -217,7 +220,7 @@ local function ssh_setting()
 	end
 
 	if wk ~= nil then
-		wk.register({ S = "SSH connect" }, { mode = "n", prefix = "<leader>t" })
+		wk.register({ S = "SSH connect", F = "SCP send file" }, { mode = "n", prefix = "<leader>t" })
 		wk.register({ S = "SSH list", }, { mode = "n", prefix = "<leader>v" })
 	end
 end
