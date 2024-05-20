@@ -270,6 +270,7 @@ local function compiler_optional_setup(tbl)
   return nil
 end
 
+-- @return true: support to run with makeprg, false: makeprg is not setup
 local function compiler_tbl_makeprg_setup(tbl)
 	if tbl == nil then
 		return false
@@ -285,7 +286,7 @@ local function compiler_tbl_makeprg_setup(tbl)
 	end
 
   if tbl.build_type == nil then
-    return true
+    return false
   end
 
 	if tbl.build_type == "term" then
@@ -309,9 +310,11 @@ local function compiler_tbl_makeprg_setup(tbl)
 		return false
 	end
 
-  if tbl.cmd ~= nil then
-    vim.api.nvim_set_option_value('makeprg', tbl.cmd, {})
+  if tbl.cmd == nil then
+    return false
   end
+
+  vim.api.nvim_set_option_value('makeprg', tbl.cmd, {})
 
   if tbl.efm ~= nil then
     vim.api.nvim_set_option_value('errorformat', tbl.efm, {})
