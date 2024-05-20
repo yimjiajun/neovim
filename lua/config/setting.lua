@@ -73,12 +73,20 @@ local function Setting_netrw()
 	vim.g.netrw_winsize = 25
 end
 
+local function Setting_colorscheme()
+	if vim.fn.trim(vim.fn.execute('colorscheme')) == 'habamax' then
+    vim.cmd('highlight DiffAdd guifg=#ffffff')
+    vim.cmd('highlight DiffText guifg=#ffffff')
+	end
+end
+
 local function setup()
 	vim.opt.compatible = false
 	Setting_view()
 	Setting_editor()
 	Setting_buffer()
 	Setting_netrw()
+  Setting_colorscheme()
 
   if vim.fn.isdirectory(vim.fn.stdpath('config') .. '/doc') then
     vim.cmd('helptags ALL')

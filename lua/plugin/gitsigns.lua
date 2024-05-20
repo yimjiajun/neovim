@@ -1,6 +1,6 @@
 local function setup_highlight()
-	local colors = {
-		GitSignsChange = { link = 'Normal' },
+	local colors = { GitSignsChange = { link = 'Normal' },
+    GitSignsAdd = { link = '@comment.warning' },
 	}
 
 	for n, c in pairs(colors) do
