@@ -279,7 +279,7 @@ local function ssh_send_file(file, hostname, destination)
 
   if sel_ssh == nil then
     vim.api.nvim_echo({{"SSH information not found ...", "WarningMsg"}}, true, {})
-    return
+    return false
   end
 
   if file == nil or file == "" then
@@ -288,14 +288,14 @@ local function ssh_send_file(file, hostname, destination)
 
   if file == "" or vim.fn.filereadable(file) == 0 then
     vim.api.nvim_echo({{"** Invalid file .. " .. file, "ErrorMsg"}}, true, {})
-    return
+    return false
   end
 
   if destination == nil or destination == "" then
     destination = vim.fn.expand(vim.fn.input("Remote destination (optional): "))
   end
 
-  local cmd = "scp " .. file .. " scp://" .. sel_ssh.name .. "@" .. sel_ssh.host .. ":" .. destination
+  local cmd = "scp " .. file .. " " .. sel_ssh.name .. "@" .. sel_ssh.host .. ":" .. destination
 
   if (sel_ssh.pass ~= nil and sel_ssh.pass ~= "") and
     (vim.fn.executable('sshpass') == 1 and vim.g.ssh_run_sshpass == 1) then
@@ -303,6 +303,7 @@ local function ssh_send_file(file, hostname, destination)
   end
 
   require('features.common').AsyncCommand(cmd, 3600)
+  return true
 end
 
 local function setup()
