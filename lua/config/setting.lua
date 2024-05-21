@@ -77,6 +77,8 @@ local function Setting_colorscheme()
 	if vim.fn.trim(vim.fn.execute('colorscheme')) == 'habamax' then
     vim.cmd('highlight DiffAdd guifg=#ffffff')
     vim.cmd('highlight DiffText guifg=#ffffff')
+    vim.cmd('highlight StatusLine guibg=#303030 guifg=#afaf87')
+    vim.cmd('highlight StatusLineNC guibg=#303030 guifg=#5f5f5f')
 	end
 end
 
