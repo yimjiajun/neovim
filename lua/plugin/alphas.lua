@@ -153,7 +153,7 @@ local function setup ()
     },
   }
 
-  local footer_value = os.date("| %A | %d %b %Y | %H:%M:%S |") .. "\n"
+  local footer_value = os.date("%d %b %Y \t\t %A \t\t %H:%M:%S") .. "\n"
 
   if vim.fn.executable('khal') == 1 then
     footer_value = footer_value .. "\n \n" ..
