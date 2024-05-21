@@ -171,6 +171,7 @@ local function async_command(cmd, timeout_sec, sub_cmd)
 end
 
 local function setup()
+	vim.cmd("command! -nargs=+ AsyncCmd lua require('features.common').AsyncCommand(<f-args>)")
 	return nil
 end
 
