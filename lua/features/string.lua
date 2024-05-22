@@ -100,6 +100,9 @@ local function search_word_by_buffer()
 	vim.cmd("silent! +copen 5")
 end
 
+-- @brief Toggle comment (deprecated after 0.10.0, neovim has built-in support)
+-- @description Toggle comment in current line or selected lines
+-- @usage ToggleComment()
 local function toggle_comment()
 	local tbl = {}
 	local comments_tbl = {
