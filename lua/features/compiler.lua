@@ -357,7 +357,6 @@ local function compiler_build_setup_selection()
 
 	local target_tbl = {}
 	local msg = {}
-	local idx = 0
 
 	for _, info in ipairs(tbl) do
 		if (info.ext ~= nil) and (info.ext ~= 'any') and (info.ext ~= vim.bo.filetype) then
@@ -368,14 +367,7 @@ local function compiler_build_setup_selection()
 			goto continue
 		end
 
-		idx = idx + 1
-
-		msg[idx] = string.format(
-			"%3d | %-20s | %5s\t", idx, info.name, info.desc
-		)
-
 		table.insert(target_tbl, info)
-
 		::continue::
 	end
 
@@ -383,9 +375,17 @@ local function compiler_build_setup_selection()
 		return false
 	end
 
+  table.sort(target_tbl, function(a, b)
+    return a.name > b.name
+  end)
+
 	display_title(string.format(
 		"%3s | %-20s | %-s", "idx",  "name", "description")
 	)
+
+  for i, t in ipairs(target_tbl) do
+    msg[i] = string.format("%3d | %-20s | %s", i, t.name, t.desc)
+  end
 
 	local sel_idx = vim.fn.inputlist(msg)
 

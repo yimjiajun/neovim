@@ -50,18 +50,12 @@ local function group_selection(tbl)
 
 	local sel = vim.fn.inputlist(lists)
 
-	if sel == 0
-	then
+	if sel == 0 or sel > #group_list then
 		return nil
 	end
 
-	local sel_grp = group_list[sel]
-
-	vim.api.nvim_echo({
-		{"\t[ " .. sel_grp .. " ]\n", "WarningMsg"}
-	}, false, {})
-
-	return sel_grp
+	vim.api.nvim_echo({{"\t[ " .. group_list[sel] .. " ]\n", "WarningMsg"}}, false, {})
+	return group_list[sel]
 end
 
 local function table_selection(tbl, display_lists, name)
