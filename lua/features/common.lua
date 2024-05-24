@@ -1,5 +1,5 @@
 local function display_title(title)
-	vim.api.nvim_echo({{string.format("%-s", title), "Title"}}, true, {})
+	vim.api.nvim_echo({{string.format("%-s", title), "Title"}}, false, {})
 end
 
 local function group_selection(tbl)

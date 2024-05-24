@@ -388,9 +388,13 @@ local function compiler_build_setup_selection()
 	)
 
 	local sel_idx = vim.fn.inputlist(msg)
-	local sel_tbl = target_tbl[sel_idx]
 
-	return compiler_tbl_makeprg_setup(sel_tbl)
+  if sel_idx == 0 or sel_idx > #target_tbl then
+    return false
+  end
+
+  vim.api.nvim_echo({{"\n"}}, false, {})
+  return compiler_tbl_makeprg_setup(target_tbl[sel_idx])
 end
 
 local function setup()
