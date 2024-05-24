@@ -302,15 +302,25 @@ local function ssh_send_file(file, hostname, destination)
     cmd = "sshpass -p '" .. sel_ssh.pass .. "' " .. cmd
   end
 
+  local separator_number = 1
+
+  for _, v in pairs({file, sel_ssh.host, sel_ssh.name, destination}) do
+    if vim.fn.len(v) > separator_number then
+      separator_number = vim.fn.len(v)
+    end
+  end
+
+  local separator = string.rep("=", separator_number + vim.fn.len("* Hostname:    "))
+
   vim.api.nvim_echo({{"\n"}}, false, {})
-  vim.api.nvim_echo({{"====================", "MoreMsg"}}, true, {})
+  vim.api.nvim_echo({{separator, "MsgSeparator"}}, true, {})
   vim.api.nvim_echo({{"  SCP", "MoreMsg"}}, true, {})
-  vim.api.nvim_echo({{"====================", "MoreMsg"}}, true, {})
-  vim.api.nvim_echo({{"* Hostname:    " .. sel_ssh.host, "MoreMsg"}}, true, {})
-  vim.api.nvim_echo({{"* Username:    " .. sel_ssh.name, "MoreMsg"}}, true, {})
-  vim.api.nvim_echo({{"* File:        " .. file, "MoreMsg"}}, true, {})
-  vim.api.nvim_echo({{"* Destination: " .. destination, "MoreMsg"}}, true, {})
-  vim.api.nvim_echo({{"--------------------", "MoreMsg"}}, true, {})
+  vim.api.nvim_echo({{separator, "MsgSeparator"}}, true, {})
+  vim.api.nvim_echo({{"* Hostname:    " .. sel_ssh.host, "MsgArea"}}, true, {})
+  vim.api.nvim_echo({{"* Username:    " .. sel_ssh.name, "MsgArea"}}, true, {})
+  vim.api.nvim_echo({{"* File:        " .. file, "MsgArea"}}, true, {})
+  vim.api.nvim_echo({{"* Destination: " .. destination, "MsgArea"}}, true, {})
+  vim.api.nvim_echo({{separator, "MsgSeparator"}}, true, {})
 
   local ret = (os.execute(cmd) == 0)
   local status_msg = "Failed"
@@ -318,10 +328,10 @@ local function ssh_send_file(file, hostname, destination)
 
   if ret == true then
     status_msg = "Success"
-    msg_type = "MoreMsg"
+    msg_type = "ModeMsg"
   end
 
-  vim.api.nvim_echo({{"Scp [ " .. status_msg .. " ]", msg_type}}, true, {})
+  vim.api.nvim_echo({{"  SCP [ " .. status_msg .. " ]", msg_type}}, true, {})
 
   return ret
 end
