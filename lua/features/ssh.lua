@@ -322,6 +322,11 @@ local function ssh_send_file(file, hostname, destination)
   vim.api.nvim_echo({{"* Destination: " .. destination, "MsgArea"}}, true, {})
   vim.api.nvim_echo({{separator, "MsgSeparator"}}, true, {})
 
+  if vim.fn.filereadable(file) == 0 then
+    vim.api.nvim_echo({{"** File not found .. " .. file, "ErrorMsg"}}, true, {})
+    return false
+  end
+
   local ret = (os.execute(cmd) == 0)
   local status_msg = "Failed"
   local msg_type = "ErrorMsg"
@@ -332,6 +337,12 @@ local function ssh_send_file(file, hostname, destination)
   end
 
   vim.api.nvim_echo({{"  SCP [ " .. status_msg .. " ]", msg_type}}, true, {})
+
+  if ret ~= true and string.match(cmd, "^sshpass") == nil then
+    vim.api.nvim_echo({{"SCP - opening terminal to Enter password..."}}, false, {})
+    cmd = string.gsub(cmd, "sshpass -p '.*' ", "")
+    vim.cmd("split | term " .. cmd)
+  end
 
   return ret
 end
