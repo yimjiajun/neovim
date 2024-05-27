@@ -314,6 +314,10 @@ local function compiler_tbl_makeprg_setup(tbl)
     return false
   end
 
+  if tbl.cmd == "" then
+    return true
+  end
+
   vim.api.nvim_set_option_value('makeprg', tbl.cmd, {})
 
   if tbl.efm ~= nil then
