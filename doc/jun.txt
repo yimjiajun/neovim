@@ -21,6 +21,230 @@ SEE ALSO
     :lua vim.cmd("helptags ALL")
 
 REFERNECE
-    |JunCompiler| - customize compiler pre-setup
 
- vim:tw=78:ts=8:noet:ft=help:norl:
+==============================================================================
+
+CONTENTS                                                          *JunContents*
+
+1. KEYMAPPING ................................................. |JunKeymapping|
+
+2. FILE ............................................................. |JunFile|
+    2.1 save command output to temporal file ... |save_command_message_to_file|
+        FileSaveCmdMsg                       ................. |FileSaveCmdMsg|
+        FileSaveCmdMsgInput                  ............ |FileSaveCmdMsgInput|
+
+3. SSH ............................................................... |JunSSH|
+    3.1 Structure ........................................... |JunSSHStructure|
+    3.2 SSH Connection .......................................... |ssh_connect|
+        SshRun         ............................................... |SshRun|
+    3.3 Secure Copy ............................................. |secure_copy|
+        SshCopy     ................................................. |SshCopy|
+        SshSendFile ............................................. |SshSendFile|
+    3.4 Secret File Transfer ........................... |secret_file_transfer|
+        SshSftp              ........................................ |SshSftp|
+    3.5 Connect Remote Desktop .......................... |connect_ssh_desktop|
+        SshDesktop            .................................... |SshDesktop|
+
+4. COMPILER ..................................................... |JunCompiler|
+   4.1 Structure .......................................... |JunCompilerStruct|
+
+==============================================================================
+
+1. KEYMAPPING                                                  *JunKeymapping*
+
+==============================================================================
+
+2. FILE                                                               *JunFile*
+
+$HOME/.config/nvim/lua/features/file.lua                             *file.lua*
+
+------------------------------------------------------------------------------
+
+2.1 SAVE COMMAND OUTPUT TO TEMPORAL FILE          *save_command_message_to_file*
+
+Providing for save vim output message and input command output to a temporal
+file and view in a new buffer.
+
+                                                                *FileSaveCmdMsg*
+:FileSaveCmdMsg        Save vim output message |':messages'| to a temporal file
+                       and view in a new buffer.
+
+                                                           *FileSaveCmdMsgInput*
+:FileSaveCmdMsgInput {command}
+                       Save input command output to a temporal file and view
+                       in a new buffer.
+<
+==============================================================================
+
+3. SSH                                                                  *JunSSH*
+
+$HOME/.config/nvim/lua/features/ssh.lua                                *ssh.lua*
+$HOME/.local/share/nvim/ssh/                                          *ssh_path*
+$HOME/.local/share/nvim/ssh/desktop/                          *ssh_desktop_path*
+
+------------------------------------------------------------------------------
+
+3.1 STRUCTURE                                                  *JunSSHStructure*
+
+                                                                       *SshList*
+:SshList              list all the SSH configuration in the |ssh_path|.
+
+3.2 SSH CONNECTION                                                 *ssh_connect*
+
+SSH connect to the remote server by the specified configuration or selection.
+This simulates the SSH connection by the terminal command.
+
+                                                                       *SshRun*
+:SshRun                ssh connect to the remote server by the selection. the
+                       selection information is stored in |ssh_path|.
+
+3.3 SECURE COPY                                                   *secure_copy*
+
+Secure copy file to the remote server by the selection. This simulates the
+SCP connection by the terminal command.
+
+                                                          *SshCopy* *SshSendFile*
+:SshCopy              secure copy file to the remote server by the
+:SshSendFile          selection.
+
+3.4 SECRET FILE TRANSFER                                  *secret_file_transfer*
+
+:SshSftp              interactive secure transfer file to the remote server by
+                      the selection.
+
+                      Propmt: `sftp>`
+                      Usage:
+                      - `help` for more information.
+                      - `put <file>` to transfer file to the remote server.
+                      - `get` to transfer file from the remote server.
+                      - `ls` to list the file in the remote server.
+                      - `lls` to list the file in the local server.
+                      - `exit` to exit the interactive mode.
+
+3.5 CONNECT REMOTE DESKTOP                                *connect_ssh_desktop*
+
+Connect to the remote desktop by selection.
+- Linux it will using `remmina` to connect to the remote desktop.
+- Windows it will using `mstsc` to connect to the remote desktop.
+
+                                                                   *SshDesktop
+:SshDesktop           connect to the remote desktop by the selection. the
+                      selection information is stored in |ssh_desktop_path|.
+
+                      prefer to use the following provided file with extension
+                      from |ssh_desktop_path|:
+                      - `remmina`: `.remmina`
+                      - `mstsc`: `.rdp`
+                      - `vnc`: `.vnc` (not implemented)
+
+==============================================================================
+
+4. COMPILER                                                        *JunCompiler*
+
+$HOME/.config/nvim/lua/features/compiler.lua                      *compiler.lua*
+$HOME/.local/share/nvim/compiler/                                *compiler_path*
+
+------------------------------------------------------------------------------
+
+4.1 STRUCTURE                                             *JunCompilerStructure*
+
+The compiler setup is implemented in compiler feature will used the stored
+|compiler_path| to load the compiler setup file.
+
+The supported compiler setup files `.lua` and `.json`:
+
+    `*.lua`
+        purpose of this file for callback functions, then calback function
+        will run before the `"cmd"` specified in `.json`
+
+    `.json`
+        it used to store the compiler setup for |compiler.lua| by structure:
+
+    >
+        [
+           <Group>: {
+              "name": <string>,
+              "cmd": <string>,
+              "desc": <string>,
+              "ext": <string>,
+              "efm": <string>,
+              "type": <"make", "term", "term_full", "builtin">
+              "git": {
+                  "remote": [<string>, <string>, ...],
+                  "url": [<string>, <string>, ...]
+              },
+              "opts": {
+                 "dofile": <file>.lua
+                 "callback": <function>
+              }
+        ]
+>
+
+|'Group'|                                              *JunCompilerStructGroup*
+        name the group, providing for group selection in the compiler list.
+
+
+|'name'|                                                *JunCompilerStructName*
+        name the compiler, used to display in the compiler list.
+
+|'cmd'|                                                  *JunCompilerStructCmd*
+        run command depending on the `"type"` (|JunCompilerStructType|).
+
+|'desc'|                                                *JunCompilerStructDesc*
+        description the command purpose.
+
+|'ext'|                                                  *JunCompilerStructExt*
+        file extension, visible when match the file extension
+        on build selection.
+
+        Example:
+        - `"ext": "c"` will match the file extension ".c"
+
+|'efm'|                                                  *JunCompilerStructEfm*
+        error format, used to parse the error message from compiler output.
+
+|'type'|                                                *JunCompilerStructType*
+        tool to run the build, available options are:
+        - "make": build by |makeprg| and output to |quickfix|
+        - "term": run command in terminal by split window
+        - "term_full: run command in terminal by full window
+        - "builtin": use builtin/vim plugin command
+
+|'git'|                                                  *JunCompilerStructGit*
+        check the git repository status to visible in the compiler list.
+        - "remote": git remote name (ex. origin)
+        - "url": git remote url (ex. git@github.com:yimjiajun/neovim.git)
+        Example:
+
+>
+            "git": {
+                "remote": ["origin", "remote"],
+                "url": ["git@github.com:yimjiajun/neovim.git"]
+            }
+<
+
+|'opts'|                                                *JunCompilerStructOpts*
+        options to run before the `"cmd"` (|JunCompilerStructCmd|).
+        - "dofile": lua file to run before the specified `"cmd"`
+        - "callback": lua function to run before the specified `"cmd"`
+
+        Example:
+        - example.json
+
+>
+            "opts": {
+                "dofile": "example.lua",
+                "callback": "example_function"
+            }
+<
+        - example.lua
+
+>
+            function _G.example_function()
+                print("example function")
+            end
+<
+
+==============================================================================
+
+vim:tw=78:ts=8:noet:ft=help:norl:expandtab
