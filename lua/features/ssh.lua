@@ -220,48 +220,43 @@ local function toggle_sshpass()
 		"WarningMsg"}}, false, {})
 end
 
--- @brief: ssh_setting
+-- @brief: ssh_keymap_setting
 -- @description: setting keymapping for ssh
 -- @usage: lua require('features.ssh').ssh_setting()
-local function ssh_setting()
-  local wk =nil
+local function ssh_keymap_setting()
+  local wk = nil
+  local prefix = "<leader>tS"
+  local key = function(key) return prefix .. key end
+  local keymap_opts = function(desc) return { noremap = true, silent = true, desc = (desc ~= nil) and desc or "" } end
+  local keymap_setup = {
+    { key = "s", func = [[<cmd> lua require('features.ssh').SshRun() <CR> ]], desc = "ssh connect",
+      support = true},
+    { key = "f", func = [[<cmd> lua require('features.ssh').SshSendFile() <CR> ]], desc = "send file (scp)",
+      support = true },
+    { key = "v", func = [[<cmd> lua require('features.ssh').SshList(true) <CR> ]], desc = "ssh list",
+      support = true },
+    { key = "P", func = [[<cmd> lua require('features.ssh').SshTogglePwrsh() <CR> ]], desc = "toggle powershell/WSL",
+      support = (vim.fn.isdirectory('/run/WSL') == 1) },
+    { key = "p", func = [[<cmd> lua require('features.ssh').SshToggleSshpass() <CR> ]], desc = "toggle sshpass",
+      support = (vim.fn.executable('sshpass') == 1) },
+  }
 
   if pcall(require, "which-key") then
     wk = require("which-key")
   end
 
-  vim.api.nvim_set_keymap('n', '<leader>tS', [[<cmd> lua require('features.ssh').SshRun() <CR> ]],
-    { silent = true })
-
-  if vim.fn.isdirectory('/run/WSL') == 1 then
-    vim.api.nvim_set_keymap('n', '<leader>mS', [[<cmd> lua require('features.ssh').SshTogglePwrsh() <CR> ]],
-      { silent = true })
-  end
-
-  if vim.fn.executable('sshpass') == 1 then
-    vim.api.nvim_set_keymap('n', '<leader>ms',
-      [[<cmd> lua require('features.ssh').SshToggleSshpass() <CR> ]],
-      { silent = true })
-  end
-
-  vim.api.nvim_set_keymap('n', '<leader>tF', [[<cmd> lua require('features.ssh').SshSendFile() <CR> ]],
-    { silent = true, desc = "send file via scp from ssh selection" })
-
-  vim.api.nvim_set_keymap('n', '<leader>vS',
-    [[<cmd> lua require('features.ssh').SshList(true) <CR> ]], { silent = true })
-
-  if wk ~= nil then
-    wk.register({ S = "SSH connect", F = "SCP send file" }, { mode = "n", prefix = "<leader>t" })
-    wk.register({ S = "SSH list", }, { mode = "n", prefix = "<leader>v" })
-
-    if vim.fn.executable('sshpass') == 1 then
-      wk.register({ s = "toggle sshpass" }, { mode = "n", prefix = "<leader>m" })
+  for _, v in ipairs(keymap_setup) do
+    if v.support ~= true then
+      goto continue
     end
 
-    if vim.fn.isdirectory('/run/WSL') == 1 then
-      wk.register({ S = "toggle ssh on wsl/win" }, { mode = "n", prefix = "<leader>m" })
+    vim.api.nvim_set_keymap("n", key(v.key), v.func, keymap_opts(v.desc))
+
+    if wk ~= nil then
+      wk.register({ [v.key] = v.desc }, { mode = "n", prefix = prefix })
     end
-	end
+    ::continue::
+  end
 end
 
 -- @brief: ssh_read_json
@@ -412,7 +407,7 @@ local function setup()
 			group = "computer",
 		}
 	}
-	ssh_setting()
+	ssh_keymap_setting()
 	ssh_read_json()
 
 	vim.cmd("command! -nargs=0 SshReq lua require('features.ssh').SshConnectReq()")
