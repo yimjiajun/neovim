@@ -7,16 +7,20 @@ local ssh_data_dir = vim.fn.stdpath('data') .. delim .. 'ssh'
 local display_title = require("features.common").DisplayTitle
 local ssh_list_get_group = require("features.common").GroupSelection
 
-local function ssh_connect(user, host, port, password)
-	if port == '' then
-		port = 22
-	end
-
+-- @brief: ssh_connect
+-- @description: connect to remote server via ssh
+-- @usage: lua require('features.ssh').ssh_connect(<username>, <hostname>, <port>, <password>)
+-- @param: username: username
+-- @param: hostname: hostname/ip
+-- @param: port: port number
+-- @param: password: password
+-- @return: nil
+local function ssh_connect(username, hostname, port, password)
 	local cmd = "ssh"
 	local terminal = 'term'
-
-	cmd = cmd .. " " .. user .. "@" .. host .. " -p " .. port
-
+  port = (port == nil or port == '') and "22" or port
+	cmd = cmd .. " " .. username .. "@" .. hostname .. " -p " .. port
+  -- set password to clipboard
 	vim.fn.setreg('+', tostring(password))
 
 	if vim.fn.exists('win32') == 1 or (vim.fn.isdirectory('/run/WSL') == 1 and vim.g.wsl_ssh_run_win == 1) then
@@ -34,20 +38,30 @@ local function ssh_connect(user, host, port, password)
 	return cmd
 end
 
+-- @brief: ssh_connect_request
+-- @description: request ssh information to connect
+-- @usage: lua require('features.ssh').ssh_connect_request()
+-- @return: nil
 local function ssh_connect_request()
-	local host_ip = vim.fn.input("Host/ip: ")
+	local host_ip = vim.fn.input("hostname/ip: ")
 	local usr = vim.fn.input("Username: ")
 	local port = vim.fn.input("Port: ")
-	local pass = vim.fn.inputsecret("Password: ")
+	local password = vim.fn.inputsecret("Password: ")
 
-	if host_ip == "" or usr == "" or pass == "" then
+	if host_ip == "" or usr == "" or password == "" then
 		vim.api.nvim_echo({{"** Invalid input", "ErrorMsg"}}, true, {})
 		return
 	end
 
-	return ssh_connect(usr, host_ip, port, pass)
+	return ssh_connect(usr, host_ip, port, password)
 end
 
+-- @brief: ssh_get_list
+-- @description: get ssh information list
+-- @usage: lua require('features.ssh').ssh_get_list(<save_file>)
+-- @param: save_file: save ssh information to file to view
+-- @usage: lua require('features.ssh').ssh_get_list(true)
+-- @return: table of ssh information
 local function ssh_get_list(save_file)
 	local show_pass = false
 	local ssh_sel_list = {}
@@ -71,20 +85,45 @@ local function ssh_get_list(save_file)
 
 	local idx = 1
 	local msg = {}
+  local msg_max_length = {
+    alias = vim.fn.strlen("alias"),
+    hostname = vim.fn.strlen("hostname/ip"),
+    username = vim.fn.strlen("username"),
+    port = vim.fn.strlen("port"),
+    description = vim.fn.strlen("description")
+  }
+
+  for _, info in ipairs(vim.g.ssh_data) do
+    if info.group ~= group then
+      goto skip_get_max_length
+    end
+
+    msg_max_length = {
+      alias = math.max(msg_max_length.alias, vim.fn.strlen(info.alias)),
+      hostname = math.max(msg_max_length.hostname, vim.fn.strlen(info.hostname)),
+      username = math.max(msg_max_length.username, vim.fn.strlen(info.username)),
+      port = math.max(msg_max_length.port, vim.fn.strlen(info.port)),
+      description = math.max(msg_max_length.description, vim.fn.strlen(info.description)),
+    }
+    ::skip_get_max_length::
+  end
+
+  local msg_format = string.format("%%3s | %%-%ds | %%-%ds | %%-%ds | %%-%ds | %%-s",
+    msg_max_length.alias, msg_max_length.hostname, msg_max_length.username, msg_max_length.port)
+  local msg_total_length = msg_max_length.alias + msg_max_length.hostname + msg_max_length.username +
+    msg_max_length.port + msg_max_length.description + 20
+  local separator = string.rep("=", msg_total_length)
 
 	for _, info in ipairs(vim.g.ssh_data) do
-		if info.group ~= group
-		then
+		if info.group ~= group then
 			goto continue
 		end
 
-		msg[idx] = string.format("%3d | %-20s | %-20s | %-5s | %-s",
-			idx, info.host, info.name, info.port, info.description)
+		msg[idx] = string.format(msg_format,
+			idx, info.alias, info.hostname, info.username, info.port, info.description)
 
-		if save_file == true and show_pass == true
-		then
-			msg[idx] = msg[idx] ..
-			"\t" .. "[" .. info.pass .. "]"
+		if save_file == true and show_pass == true then
+			msg[idx] = msg[idx] .. "\t" .. "[" .. info.password .. "]"
 		end
 
 		table.insert(ssh_sel_list, info)
@@ -96,11 +135,9 @@ local function ssh_get_list(save_file)
 		return nil
 	end
 
-	display_title(string.format(
-		"%3s | %-20s | %-20s | %-5s | %-s",
-		"idx",  "hostname/ip", "username", "port", "description"
-		)
-	)
+	display_title(separator)
+  display_title(string.format(msg_format, "idx", "alias", "hostname/ip", "username", "port", "description"))
+  display_title(separator)
 
 	local sel = vim.fn.inputlist(msg)
 
@@ -111,14 +148,16 @@ local function ssh_get_list(save_file)
 		return nil
 	end
 
-	if sel == 0 or sel > #ssh_sel_list
-	then
+	if sel == 0 or sel > #ssh_sel_list then
 		return nil
 	end
 
 	return ssh_sel_list[sel]
 end
 
+-- @brief: ssh_run
+-- @description: run ssh connection
+-- @usage: lua require('features.ssh').ssh_run()
 local function ssh_run()
 	local sel_ssh = ssh_get_list(false)
 
@@ -126,24 +165,40 @@ local function ssh_run()
 		return
 	end
 
-	ssh_connect(sel_ssh.name, sel_ssh.host, sel_ssh.port, sel_ssh.pass)
+	ssh_connect(sel_ssh.username, sel_ssh.hostname, sel_ssh.port, sel_ssh.password)
 end
 
-local function ssh_insert_info(username, hostname, port, password, description, group)
+-- @brief: ssh_insert_info
+-- @description: insert ssh information to global variable g:ssh_data
+-- @usage: lua require('features.ssh').ssh_insert_info(<opts>)
+-- @param: opts: table of ssh information
+-- @field: alias: alias name
+-- @field: hostname: remote server hostname
+-- @field: username: remote server username
+-- @field: password: remote server password
+-- @field: port: remote server port
+-- @field: description: description of remote server
+-- @field: group: group name of remote server
+-- @return: nil
+local function ssh_insert_info(opts)
 	local data = vim.g.ssh_data
 	local info = {
-		name = username,
-		host = hostname,
-		port = port,
-		pass = password,
-		description = description,
-		group = group,
+    alias = opts.alias,
+		username = opts.username,
+		hostname = opts.hostname,
+		port = opts.port,
+		password = opts.password,
+		description = opts.description,
+		group = opts.group,
 	}
 
 	table.insert(data, info)
 	vim.g.ssh_data = data
 end
 
+-- @brief: toggle_powershell_ssh
+-- @description: toggle between powershell and wsl ssh
+-- @usage: lua require('features.ssh').toggle_powershell_ssh()
 local function toggle_powershell_ssh()
 	if vim.fn.has('unix') == 1 and vim.fn.isdirectory('/run/WSL') == 0 then
 		return
@@ -151,8 +206,7 @@ local function toggle_powershell_ssh()
 
 	vim.g.wsl_ssh_run_win = (vim.g.wsl_ssh_run_win == 1 and 0 or 1)
 	local msg = (vim.g.wsl_ssh_run_win == 1) and "powershell" or "wsl"
-	vim.api.nvim_echo({{"[ SSH ]" .. " -> " .. msg,
-		"WarningMsg"}}, false, {})
+	vim.api.nvim_echo({{"[ SSH ]" .. " -> " .. msg, "WarningMsg"}}, false, {})
 end
 
 local function toggle_sshpass()
@@ -166,65 +220,53 @@ local function toggle_sshpass()
 		"WarningMsg"}}, false, {})
 end
 
-local function ssh_setting_keymapping()
-	local wk = nil
-
-	vim.api.nvim_set_keymap('n', '<leader>tS',
-		[[<cmd> lua require('features.ssh').SshRun() <CR> ]],
-		{ silent = true })
-
-	if vim.fn.has('unix') == 0 then
-		return
-	end
-
-	if pcall(require, "which-key") then
-		 wk = require("which-key")
-	end
-
-	if vim.fn.isdirectory('/run/WSL') == 1 then
-		vim.api.nvim_set_keymap('n', '<leader>mS',
-			[[<cmd> lua require('features.ssh').SshTogglePwrsh() <CR> ]],
-			{ silent = true })
-
-		if wk ~= nil then
-			wk.register({
-				S = "toggle ssh on wsl/win",
-				}, { mode = "n", prefix = "<leader>m" })
-		end
-	end
-
-	if vim.fn.executable('sshpass') == 1 then
-		vim.api.nvim_set_keymap('n', '<leader>ms',
-			[[<cmd> lua require('features.ssh').SshToggleSshpass() <CR> ]],
-			{ silent = true })
-
-		if wk ~= nil then
-			wk.register({
-				s = "toggle sshpass",
-				}, { mode = "n", prefix = "<leader>m" })
-		end
-	end
-
-	vim.api.nvim_set_keymap('n', '<leader>tF', [[<cmd> lua require('features.ssh').SshSendFile() <CR> ]],
-		{ silent = true, desc = "send file via scp from ssh selection" })
-end
-
+-- @brief: ssh_setting
+-- @description: setting keymapping for ssh
+-- @usage: lua require('features.ssh').ssh_setting()
 local function ssh_setting()
-	local wk =nil
+  local wk =nil
 
-	vim.api.nvim_set_keymap('n', '<leader>vS',
-		[[<cmd> lua require('features.ssh').SshList(true) <CR> ]], { silent = true })
+  if pcall(require, "which-key") then
+    wk = require("which-key")
+  end
 
-	if pcall(require, "which-key") then
-		wk = require("which-key")
-	end
+  vim.api.nvim_set_keymap('n', '<leader>tS', [[<cmd> lua require('features.ssh').SshRun() <CR> ]],
+    { silent = true })
 
-	if wk ~= nil then
-		wk.register({ S = "SSH connect", F = "SCP send file" }, { mode = "n", prefix = "<leader>t" })
-		wk.register({ S = "SSH list", }, { mode = "n", prefix = "<leader>v" })
+  if vim.fn.isdirectory('/run/WSL') == 1 then
+    vim.api.nvim_set_keymap('n', '<leader>mS', [[<cmd> lua require('features.ssh').SshTogglePwrsh() <CR> ]],
+      { silent = true })
+  end
+
+  if vim.fn.executable('sshpass') == 1 then
+    vim.api.nvim_set_keymap('n', '<leader>ms',
+      [[<cmd> lua require('features.ssh').SshToggleSshpass() <CR> ]],
+      { silent = true })
+  end
+
+  vim.api.nvim_set_keymap('n', '<leader>tF', [[<cmd> lua require('features.ssh').SshSendFile() <CR> ]],
+    { silent = true, desc = "send file via scp from ssh selection" })
+
+  vim.api.nvim_set_keymap('n', '<leader>vS',
+    [[<cmd> lua require('features.ssh').SshList(true) <CR> ]], { silent = true })
+
+  if wk ~= nil then
+    wk.register({ S = "SSH connect", F = "SCP send file" }, { mode = "n", prefix = "<leader>t" })
+    wk.register({ S = "SSH list", }, { mode = "n", prefix = "<leader>v" })
+
+    if vim.fn.executable('sshpass') == 1 then
+      wk.register({ s = "toggle sshpass" }, { mode = "n", prefix = "<leader>m" })
+    end
+
+    if vim.fn.isdirectory('/run/WSL') == 1 then
+      wk.register({ S = "toggle ssh on wsl/win" }, { mode = "n", prefix = "<leader>m" })
+    end
 	end
 end
 
+-- @brief: ssh_read_json
+-- @description: read ssh data from json files from path ~/.local/share/nvim/ssh
+-- @usage: lua require('features.ssh').ssh_read_json()
 local function ssh_read_json()
 	if vim.fn.isdirectory(ssh_data_dir) == 0 then
 		return
@@ -247,7 +289,16 @@ local function ssh_read_json()
 	for _, grp in pairs(ssh_data) do
 		for grp_name, grp_info in pairs(grp) do
 			for _, i in pairs(grp_info) do
-				ssh_insert_info(i.username, i.hostname, i.port, i.pass, i.description, grp_name)
+        local tbl = {
+          alias = (i.alias ~= nil) and i.alias or "",
+          hostname = (i.hostname ~= nil) and i.hostname or "",
+          username = (i.username ~= nil) and i.username or "",
+          password = (i.password ~= nil) and i.password or "",
+          port = (i.port ~= nil) and i.port or "",
+          description = (i.description ~= nil) and i.description or "",
+          group = grp_name
+        }
+				ssh_insert_info(tbl)
 			end
 		end
 	end
@@ -267,7 +318,7 @@ local function ssh_send_file(file, hostname, destination)
   end
 
   for _, info in ipairs(vim.g.ssh_data) do
-    if info.host == hostname then
+    if info.hostname == hostname then
       sel_ssh = info
       goto ssh_send_file_selected
     end
@@ -295,16 +346,16 @@ local function ssh_send_file(file, hostname, destination)
     destination = vim.fn.expand(vim.fn.input("Remote destination (optional): "))
   end
 
-  local cmd = "scp " .. file .. " " .. sel_ssh.name .. "@" .. sel_ssh.host .. ":" .. destination
+  local cmd = "scp " .. file .. " " .. sel_ssh.username .. "@" .. sel_ssh.hostname .. ":" .. destination
 
-  if (sel_ssh.pass ~= nil and sel_ssh.pass ~= "") and
+  if (sel_ssh.password ~= nil and sel_ssh.password ~= "") and
     (vim.fn.executable('sshpass') == 1 and vim.g.ssh_run_sshpass == 1) then
-    cmd = "sshpass -p '" .. sel_ssh.pass .. "' " .. cmd
+    cmd = "sshpass -p '" .. sel_ssh.password .. "' " .. cmd
   end
 
   local separator_number = 1
 
-  for _, v in pairs({file, sel_ssh.host, sel_ssh.name, destination}) do
+  for _, v in pairs({file, sel_ssh.hostname, sel_ssh.username, destination}) do
     if vim.fn.len(v) > separator_number then
       separator_number = vim.fn.len(v)
     end
@@ -316,8 +367,8 @@ local function ssh_send_file(file, hostname, destination)
   vim.api.nvim_echo({{separator, "MsgSeparator"}}, true, {})
   vim.api.nvim_echo({{"  SCP", "MoreMsg"}}, true, {})
   vim.api.nvim_echo({{separator, "MsgSeparator"}}, true, {})
-  vim.api.nvim_echo({{"* Hostname:    " .. sel_ssh.host, "MsgArea"}}, true, {})
-  vim.api.nvim_echo({{"* Username:    " .. sel_ssh.name, "MsgArea"}}, true, {})
+  vim.api.nvim_echo({{"* Hostname:    " .. sel_ssh.hostname, "MsgArea"}}, true, {})
+  vim.api.nvim_echo({{"* Username:    " .. sel_ssh.username, "MsgArea"}}, true, {})
   vim.api.nvim_echo({{"* File:        " .. file, "MsgArea"}}, true, {})
   vim.api.nvim_echo({{"* Destination: " .. destination, "MsgArea"}}, true, {})
   vim.api.nvim_echo({{separator, "MsgSeparator"}}, true, {})
@@ -347,18 +398,21 @@ local function ssh_send_file(file, hostname, destination)
   return ret
 end
 
+-- @brief: setup
+-- @description: setup ssh feature, this should be called in init.vim / init.lua
+-- @usage: lua require('features.ssh').Setup()
 local function setup()
 	vim.g.ssh_data = {
-		{ host = "jun.local",
-			name = "jun",
-			pass = "jun",
+		{ alias = "RPI",
+      hostname = "jun.local",
+			username = "jun",
+			password = "jun",
 			port = "22",
 			description = "Raspberry Pi 5B",
 			group = "computer",
 		}
 	}
 	ssh_setting()
-	ssh_setting_keymapping()
 	ssh_read_json()
 
 	vim.cmd("command! -nargs=0 SshReq lua require('features.ssh').SshConnectReq()")

@@ -2,6 +2,11 @@ local function display_title(title)
 	vim.api.nvim_echo({{string.format("%-s", title), "Title"}}, false, {})
 end
 
+-- @name: group_selection
+-- @description: select group from list
+-- @param tbl: table of group list
+-- @return: selected group
+-- @usage: group_selection({{group = "Group1"}, {group = "Group2"}})
 local function group_selection(tbl)
 	local group_list = {}
 	local group_total = 0
