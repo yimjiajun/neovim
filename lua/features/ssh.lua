@@ -436,6 +436,7 @@ end
 -- @param: opts: table of ssh information
 -- @return: boolean (true: success, false: failed)
 local function connect_ssh_desktop(opts)
+  display_title("Remote Desktop")
   opts = (opts ~= nil) and opts or ssh_get_list(false)
 
   if opts == nil then
@@ -458,6 +459,9 @@ local function connect_ssh_desktop(opts)
 
     desktop_cmd_opt = " -c "
   end
+
+  vim.fn.setreg('+', tostring(opts.password))
+  vim.api.nvim_echo({{"\n[USERNAME] " .. opts.username, "MoreMsg"}}, true, {})
 
   if vim.fn.filereadable(desktop_file) > 0 then
     if vim.fn.isdirectory('/run/WSL') == 0 then
