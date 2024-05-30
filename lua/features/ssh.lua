@@ -224,7 +224,7 @@ end
 -- @description: setting keymapping for ssh
 -- @usage: lua require('features.ssh').ssh_setting()
 local function ssh_keymap_setting()
-  local wk = nil
+  local wk = (pcall(require, "which-key") == true) and require("which-key") or nil
   local prefix = "<leader>tS"
   local key = function(key) return prefix .. key end
   local keymap_opts = function(desc) return { noremap = true, silent = true, desc = (desc ~= nil) and desc or "" } end
@@ -240,10 +240,6 @@ local function ssh_keymap_setting()
     { key = "p", func = [[<cmd> lua require('features.ssh').SshToggleSshpass() <CR> ]], desc = "toggle sshpass",
       support = (vim.fn.executable('sshpass') == 1) },
   }
-
-  if pcall(require, "which-key") then
-    wk = require("which-key")
-  end
 
   for _, v in ipairs(keymap_setup) do
     if v.support ~= true then

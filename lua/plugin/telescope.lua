@@ -3,47 +3,58 @@ local function setup()
 	local extensions
 
 	local function setup_keymap()
-		local k = vim.api.nvim_set_keymap
-		local opts = { noremap = true, silent = true }
+    local wk = (pcall(require, "which-key") and require("which-key")) or nil
+    local key = function(prefix, key)
+      return '<leader>' .. ((prefix ~= nil) and prefix or "") .. ((key ~= nil) and key or "")
+    end
+    local opts = function(desc)
+      return { noremap = true, silent = true, desc = (desc ~= nil) and desc or "" }
+    end
+    local keymap_setup = {
+      {  prefix = nil, key = 'w', func = [[<cmd> lua require('plugin.telescope').Buffer().buffer_with_del() <CR>]],
+        desc = 'buffer with delete', support = true },
+      {  prefix = 'gg', key = 's', func = [[<cmd> lua require('telescope.builtin').git_status() <CR>]],
+        desc = 'git status', support = true },
+      {  prefix = nil, key = 'q', func = [[<cmd> lua require('telescope.builtin').marks() <CR>]],
+        desc = 'marks', support = true },
+      {  prefix = nil, key = 'h', func = [[<cmd> lua require('telescope.builtin').jumplist() <CR>]],
+        desc = 'jumplist', support = true },
+      {  key = 'r', func = [[<cmd> lua require('telescope.builtin').registers() <CR>]],
+        desc = 'registers', support = true },
+      {  prefix = 'z', key = '=', func = [[<cmd> lua require('telescope.builtin').spell_suggest() <CR>]],
+        desc = 'spell suggest', support = true },
+      {  prefix = 'gg', key = 'L', func = [[<cmd> lua require('telescope.builtin').git_commits() <CR>]],
+        desc = 'git commits', support = true },
+      {  prefix = 't', key = 't', func = [[<cmd> lua require('telescope.builtin').current_buffer_tags() <CR>]],
+        desc = 'buffer tags list', support = true },
+      {  prefix = 't', key = 'T', func = [[<cmd> lua require('telescope.builtin').tagstack() <CR>]],
+        desc = 'tag stack selection', support = (vim.fn.filereadable("tags") == 1 and vim.fn.exists(':Tagbar') == 0) },
+      {  prefix = 'f', key = 'b', func = [[<cmd> lua require('telescope.builtin').current_buffer_fuzzy_find() <CR>]],
+        desc = 'search current buffer', support = true },
+      {  prefix = 'f', key = 't', func = [[<cmd> lua require('telescope.builtin').tags() <CR>]],
+        desc = 'search from tags', support = true },
+      {  prefix = 'f', key = 'f', func = [[<cmd> lua require('telescope.builtin').find_files(]] ..
+        [[{ hidden=false, no_ignore=false, no_ignore_parent=false }) <CR>]],
+        desc = 'search files', support = true },
+      {  prefix = 'f', key = 'F', func =
+        [[<cmd> lua require('telescope.builtin').find_files(]] ..
+        [[{ hidden=true, no_ignore=true, no_ignore_parent=true }) <CR>]],
+        desc = 'search all files', support = true },
+    }
 
-		k('n', '<leader>w', [[<cmd> lua require('plugin.telescope').Buffer().buffer_with_del() <CR>]], opts)
-		k('n', '<Leader>ggs', [[<cmd> lua require('telescope.builtin').git_status() <CR>]], opts)
-		k('n', '<leader>q', [[<cmd> lua require('telescope.builtin').marks() <CR>]], opts)
-		k('n', '<leader>h', [[<cmd> lua require('telescope.builtin').jumplist() <CR>]], opts)
-		k('n', '<leader>r', [[<cmd> lua require('telescope.builtin').registers() <CR>]], opts)
-		k('n', "z=", [[<cmd> lua require('telescope.builtin').spell_suggest() <CR>]],
-			{ silent = true, desc = 'Spell Suggest' })
-		k('n', '<Leader>ggL', [[<cmd> lua require('telescope.builtin').git_commits() <CR>]], opts)
+    for _, v in ipairs(keymap_setup) do
+      if v.support ~= true then
+        goto continue
+      end
 
-		if vim.fn.filereadable("tags") == 1 and vim.fn.exists(':Tagbar') == 0 then
-			k('n', "<leader>tt", [[<cmd> lua require('telescope.builtin').current_buffer_tags() <CR>]],
-				{ silent = true, desc = 'buffer tags list' })
-		end
+      vim.api.nvim_set_keymap('n', key(v.prefix, v.key), v.func, opts(v.desc))
 
-		k('n', "<leader>tS", [[<cmd> lua require('telescope.builtin').tagstack() <CR>]],
-			{ silent = true, desc = 'tag stack selection' })
-		k('n', "<leader>fb", [[<cmd> lua require('telescope.builtin').current_buffer_fuzzy_find() <CR>]],
-			{ silent = true, desc = 'search current buffer' })
-		k('n', "<leader>ft", [[<cmd> lua require('telescope.builtin').tags() <CR>]],
-			{ silent = true, desc = 'search from tags' })
-		k('n', "<leader>ff",
-			[[<cmd> lua require('telescope.builtin').find_files({hidden=false, no_ignore=false, no_ignore_parent=false}) <CR>]],
-			{ silent = true, desc = 'search files' })
-		k('n', "<leader>fF",
-			[[<cmd> lua require('telescope.builtin').find_files({hidden=true, no_ignore=true, no_ignore_parent=true}) <CR>]],
-			{ silent = true, desc = 'search all files' })
-
-		if pcall(require, "which-key") then
-			local wk = require("which-key")
-			wk.register({
-				t = { t = "tags list",
-					S = "tags stack" },
-				f = {
-					b = "buffer search",
-					F = "all files",
-					t = "tags", },
-				}, { prefix = "<leader>" })
-		end
+      if wk ~= nil then
+        wk = require("which-key")
+        wk.register({ [v.key] = v.desc }, { prefix = key(v.prefix) })
+      end
+      ::continue::
+    end
 	end
 
 	local function get_live_grep_args()

@@ -115,7 +115,6 @@ local function setup()
 				i = 'interactive',
 			},
 		},
-		m = { name = 'Mode' },
 		f = { name = 'Find',
 			f = 'file',
 			w = 'word',
@@ -157,6 +156,7 @@ local function setup()
 			v = 'terminal vsplit',
 			c = 'ctags generator',
 			e = 'file format',
+      S = '+ Secure Shell Protocol',
 			w = { name = 'working directory',
 				w = 'chg & save current path',
 				s = 'save current path',
@@ -164,7 +164,7 @@ local function setup()
 				c = 'clear saved path',
 			},
 		},
-	}, { mode = "n", prefix = "<leader>", })
+	}, { mode = "n", prefix = "<leader>" })
 
 	wk.register({
 		g = { name = 'Global Plug' },
