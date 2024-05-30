@@ -2,8 +2,11 @@ vim.g.wsl_ssh_run_win = 0
 vim.g.ssh_run_sshpass = 1
 vim.g.ssh_data = {}
 
+local async_cmd = require("features.common").AsyncCommand
 local delim = vim.fn.has('win32') == 1 and '\\' or '/'
 local ssh_data_dir = vim.fn.stdpath('data') .. delim .. 'ssh'
+-- for desktop ssh connection (win32: .rdp, unix: .desktop)
+local ssh_desktop_data_dir = ssh_data_dir .. delim .. 'desktop'
 local display_title = require("features.common").DisplayTitle
 local ssh_list_get_group = require("features.common").GroupSelection
 
@@ -243,6 +246,8 @@ local function ssh_keymap_setting()
       support = true },
     { key = "F", func = [[<cmd> lua require('features.ssh').SshSftp() <CR> ]], desc = "secret file transfer",
       support = (vim.fn.executable('sftp') == 1) },
+    { key = "d", func = [[<cmd> lua require('features.ssh').SshDesktop() <CR> ]], desc = "remote desktop",
+      support = true },
   }
 
   for _, v in ipairs(keymap_setup) do
@@ -424,6 +429,67 @@ local function secret_file_transfer(opts)
   return true
 end
 
+-- @brief: connect_ssh_desktop
+-- @description: connect to remote desktop via remmina / mstsc
+-- the remote desktop files should stored in ~/.local/share/nvim/ssh/desktop
+-- @usage: lua require('features.ssh').connect_ssh_desktop()
+-- @param: opts: table of ssh information
+-- @return: boolean (true: success, false: failed)
+local function connect_ssh_desktop(opts)
+  opts = (opts ~= nil) and opts or ssh_get_list(false)
+
+  if opts == nil then
+    return false
+  end
+
+  local desktop_extension = (vim.fn.exists('win32') == 1 or vim.fn.isdirectory('/run/WSL') == 1)
+    and ".rdp" or ".remmina"
+  local desktop_file = ssh_desktop_data_dir .. delim .. opts.hostname .. desktop_extension
+  local desktop_execute = (vim.fn.exists('win32') == 1 or vim.fn.isdirectory('/run/WSL') == 1)
+    and "mstsc" or "remmina"
+  local desktop_cmd = desktop_execute
+  local desktop_cmd_opt = " "
+
+  if desktop_execute == "remmina" then
+    if vim.fn.executable('remmina') == 0 then
+      vim.api.nvim_echo({{"** Remmina not found ..", "ErrorMsg"}}, false, {})
+      return false
+    end
+
+    desktop_cmd_opt = " -c "
+  end
+
+  if vim.fn.filereadable(desktop_file) > 0 then
+    if vim.fn.isdirectory('/run/WSL') == 0 then
+      goto start_desktop_by_file
+    end
+
+    if vim.fn.isdirectory('/mnt/c/neovim') == 0 then
+      vim.fn.mkdir('/mnt/c/neovim')
+    end
+
+    vim.fn.system("cp " .. desktop_file .. " /mnt/c/neovim/")
+    desktop_file = "C:\\neovim\\" .. vim.fn.fnamemodify(desktop_file, ":t")
+    desktop_cmd = "powershell.exe -C " .. desktop_cmd
+
+    ::start_desktop_by_file::
+    async_cmd(desktop_cmd .. desktop_cmd_opt .. desktop_file, 0)
+    return true
+  end
+
+  if desktop_execute == "mstsc" then
+    async_cmd("powershell.exe -C mstsc " .. "/v:" .. opts.hostname, 0)
+    return true
+  elseif vim.fn.executable('remmina') == 1 then
+    async_cmd((vim.fn.executable('sshpass') == 1) and "sshpass -p '" .. opts.password .. "' " or "" ..
+      "remmina -c " .. "rdp://" .. opts.username .. "@" .. opts.hostname, 0)
+    return true
+  end
+
+  vim.api.nvim_echo({{"** Not Available Remote Desktop found ..", "ErrorMsg"}}, false, {})
+  return false
+end
+
 -- @brief: setup
 -- @description: setup ssh feature, this should be called in init.vim / init.lua
 -- @usage: lua require('features.ssh').Setup()
@@ -446,6 +512,7 @@ local function setup()
 	vim.cmd("command! -nargs=0 SshList lua require('features.ssh').SshList(true)")
 	vim.cmd("command! -nargs=0 SshCopy lua require('features.ssh').SshCopy()")
 	vim.cmd("command! -nargs=0 SshSftp lua require('features.ssh').SshSftp()")
+  vim.cmd("command! -nargs=0 SshDesktop lua require('features.ssh').SshDesktop()")
 end
 
 return {
@@ -460,4 +527,5 @@ return {
   SshCopy = secure_copy,
   SshSendFile = secure_copy,
   SshSftp = secret_file_transfer,
+  SshDesktop = connect_ssh_desktop,
 }
