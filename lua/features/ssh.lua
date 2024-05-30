@@ -61,7 +61,7 @@ end
 -- @usage: lua require('features.ssh').ssh_get_list(<save_file>)
 -- @param: save_file: save ssh information to file to view
 -- @usage: lua require('features.ssh').ssh_get_list(true)
--- @return: table of ssh information
+-- @return: table of ssh information or nil
 local function ssh_get_list(save_file)
 	local show_pass = false
 	local ssh_sel_list = {}
@@ -231,14 +231,18 @@ local function ssh_keymap_setting()
   local keymap_setup = {
     { key = "s", func = [[<cmd> lua require('features.ssh').SshRun() <CR> ]], desc = "ssh connect",
       support = true},
-    { key = "f", func = [[<cmd> lua require('features.ssh').SshSendFile() <CR> ]], desc = "send file (scp)",
-      support = true },
+    { key = "f", func = [[<cmd> lua require('features.ssh').SshCopy() <CR> ]], desc = "secure copy",
+      support = (vim.fn.executable('scp') == 1) },
     { key = "v", func = [[<cmd> lua require('features.ssh').SshList(true) <CR> ]], desc = "ssh list",
       support = true },
     { key = "P", func = [[<cmd> lua require('features.ssh').SshTogglePwrsh() <CR> ]], desc = "toggle powershell/WSL",
       support = (vim.fn.isdirectory('/run/WSL') == 1) },
     { key = "p", func = [[<cmd> lua require('features.ssh').SshToggleSshpass() <CR> ]], desc = "toggle sshpass",
       support = (vim.fn.executable('sshpass') == 1) },
+    { key = "r", func = [[<cmd> lua require('features.ssh').SshReq() <CR> ]], desc = "ssh connect request",
+      support = true },
+    { key = "F", func = [[<cmd> lua require('features.ssh').SshSftp() <CR> ]], desc = "secret file transfer",
+      support = (vim.fn.executable('sftp') == 1) },
   }
 
   for _, v in ipairs(keymap_setup) do
@@ -295,29 +299,29 @@ local function ssh_read_json()
 	end
 end
 
--- @brief: ssh_send_file
+-- @brief: secure_copy
 -- @description: send file to remote server
--- @usage: lua require('features.ssh').ssh_send_file()
+-- @usage: lua require('features.ssh').secure_copy()
 -- @param: file: file path to send
 -- @param: hostname: remote server hostname
 -- @param: destination: destination path
-local function ssh_send_file(file, hostname, destination)
+local function secure_copy(file, hostname, destination)
+  display_title("Secure Copy")
   local sel_ssh
 
   if hostname == nil then
-    goto ssh_send_file_get_from_selection
+    goto secure_copy_get_from_selection
   end
-
   for _, info in ipairs(vim.g.ssh_data) do
     if info.hostname == hostname then
       sel_ssh = info
-      goto ssh_send_file_selected
+      goto secure_copy_selected
     end
   end
 
-  ::ssh_send_file_get_from_selection::
+  ::secure_copy_get_from_selection::
   sel_ssh = ssh_get_list(false)
-  ::ssh_send_file_selected::
+  ::secure_copy_selected::
 
   if sel_ssh == nil then
     vim.api.nvim_echo({{"SSH information not found ...", "WarningMsg"}}, true, {})
@@ -389,6 +393,37 @@ local function ssh_send_file(file, hostname, destination)
   return ret
 end
 
+-- @brief: secret_file_transfer
+-- @description: secret file transfer via sftp
+-- @param: opts: table of ssh information
+-- @usage: lua require('features.ssh').secret_file_transfer({
+--  username = "username",
+--  hostname = "hostname",
+--  password = "password",
+--  port = "port"
+--  })
+-- )
+-- @return: boolean (true: success, false: failed)
+local function secret_file_transfer(opts)
+  display_title("Secrete File Transfer")
+  opts = (opts ~= nil) and opts or ssh_get_list(false)
+
+  if opts == nil then
+    return false
+  end
+
+  local cmd = "sftp " .. " -P " .. opts.port .. " " .. opts.username .. "@" .. opts.hostname
+  local password_available = (opts.password ~= nil and opts.password ~= "")
+  local sshpass_support = (vim.fn.executable('sshpass') == 1 and vim.g.ssh_run_sshpass == 1)
+
+  if password_available and sshpass_support then
+    cmd = "sshpass -p '" .. opts.password .. "' " .. cmd
+  end
+
+  vim.cmd("split | term " .. cmd)
+  return true
+end
+
 -- @brief: setup
 -- @description: setup ssh feature, this should be called in init.vim / init.lua
 -- @usage: lua require('features.ssh').Setup()
@@ -409,7 +444,8 @@ local function setup()
 	vim.cmd("command! -nargs=0 SshReq lua require('features.ssh').SshConnectReq()")
 	vim.cmd("command! -nargs=0 Ssh lua require('features.ssh').SshRun()")
 	vim.cmd("command! -nargs=0 SshList lua require('features.ssh').SshList(true)")
-	vim.cmd("command! -nargs=* SshSendFile lua require('features.ssh').SshSendFile(<f-args>)")
+	vim.cmd("command! -nargs=0 SshCopy lua require('features.ssh').SshCopy()")
+	vim.cmd("command! -nargs=0 SshSftp lua require('features.ssh').SshSftp()")
 end
 
 return {
@@ -421,5 +457,7 @@ return {
 	SshList = ssh_get_list,
 	SshTogglePwrsh = toggle_powershell_ssh,
 	SshToggleSshpass = toggle_sshpass,
-  SshSendFile = ssh_send_file,
+  SshCopy = secure_copy,
+  SshSendFile = secure_copy,
+  SshSftp = secret_file_transfer,
 }
