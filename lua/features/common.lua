@@ -118,8 +118,14 @@ local function async_command(cmd, timeout_sec, sub_cmd)
     end
 
     print(status_msg .. " => [ " .. cmd .. " ]")
-    stdout:close()
-    stderr:close()
+
+    if stdout and not stdout:is_closing() then
+      stdout:close()
+    end
+
+    if stderr and not stderr:is_closing() then
+      stderr:close()
+    end
 
     if handle and not handle:is_closing() then
       handle:close()
