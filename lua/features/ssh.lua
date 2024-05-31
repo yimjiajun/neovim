@@ -158,6 +158,28 @@ local function ssh_get_list(save_file)
 	return ssh_sel_list[sel]
 end
 
+-- @brief: get_ssh_info_by_name
+-- @description: get ssh information by name
+-- @usage: lua require('features.ssh').get_ssh_info_by_name(<name>)
+-- @param: name: name to search (alias -> hostname -> username)
+-- @return: table of ssh information or nil
+local function get_ssh_info_by_name(name)
+  if name == nil or name == "" then
+    goto search_name_not_found
+  end
+
+  for _, info in ipairs(vim.g.ssh_data) do
+    for _, n in pairs({info.alias, info.hostname, info.username}) do
+      if n == name then
+        return info
+      end
+    end
+  end
+
+  ::search_name_not_found::
+  return nil
+end
+
 -- @brief: ssh_run
 -- @description: run ssh connection
 -- @usage: lua require('features.ssh').ssh_run()
@@ -306,27 +328,22 @@ end
 
 -- @brief: secure_copy
 -- @description: send file to remote server
--- @usage: lua require('features.ssh').secure_copy()
+-- @usage: lua require('features.ssh').SshCopy()
+-- @param: opts: table of ssh information
 -- @param: file: file path to send
--- @param: hostname: remote server hostname
 -- @param: destination: destination path
-local function secure_copy(file, hostname, destination)
+-- @return: boolean (true: success, false: failed)
+local function secure_copy(opts, file, destination)
   display_title("Secure Copy")
-  local sel_ssh
+  local sel_ssh = nil
 
-  if hostname == nil then
-    goto secure_copy_get_from_selection
-  end
-  for _, info in ipairs(vim.g.ssh_data) do
-    if info.hostname == hostname then
-      sel_ssh = info
-      goto secure_copy_selected
-    end
+  if opts.hostname == nil or opts.username == nil then
+    sel_ssh = get_ssh_info_by_name(
+      (opts.alias ~= nil) and opts.alias or
+      (opts.hostname ~= nil) and opts.hostname or opts.username)
   end
 
-  ::secure_copy_get_from_selection::
-  sel_ssh = ssh_get_list(false)
-  ::secure_copy_selected::
+  sel_ssh = (sel_ssh == nil) and opts or ssh_get_list(false)
 
   if sel_ssh == nil then
     vim.api.nvim_echo({{"SSH information not found ...", "WarningMsg"}}, true, {})
@@ -432,7 +449,7 @@ end
 -- @brief: connect_ssh_desktop
 -- @description: connect to remote desktop via remmina / mstsc
 -- the remote desktop files should stored in ~/.local/share/nvim/ssh/desktop
--- @usage: lua require('features.ssh').connect_ssh_desktop()
+-- @usage: lua require('features.ssh').SshDesktop()
 -- @param: opts: table of ssh information
 -- @return: boolean (true: success, false: failed)
 local function connect_ssh_desktop(opts)
@@ -441,6 +458,16 @@ local function connect_ssh_desktop(opts)
 
   if opts == nil then
     return false
+  end
+
+  if opts.username == nil or opts.hostname == nil then
+    opts = get_ssh_info_by_name((opts.alias ~= nil) and opts.alias or
+      (opts.hostname ~= nil) and opts.hostname or opts.username)
+
+    if opts == nil then
+      vim.api.nvim_echo({{"** Invalid SSH information ..", "ErrorMsg"}}, false, {})
+      return false
+    end
   end
 
   local desktop_extension = (vim.fn.exists('win32') == 1 or vim.fn.isdirectory('/run/WSL') == 1)
@@ -514,6 +541,7 @@ local function setup()
 	vim.cmd("command! -nargs=0 SshReq lua require('features.ssh').SshConnectReq()")
 	vim.cmd("command! -nargs=0 Ssh lua require('features.ssh').SshRun()")
 	vim.cmd("command! -nargs=0 SshList lua require('features.ssh').SshList(true)")
+	vim.cmd("command! -nargs=1 SshGetInfo lua print(vim.inspect(require('features.ssh').SshGetInfo(<q-args>)))")
 	vim.cmd("command! -nargs=0 SshCopy lua require('features.ssh').SshCopy()")
 	vim.cmd("command! -nargs=0 SshSftp lua require('features.ssh').SshSftp()")
   vim.cmd("command! -nargs=0 SshDesktop lua require('features.ssh').SshDesktop()")
@@ -526,6 +554,7 @@ return {
 	SshRun = ssh_run,
 	SshInsertInfo = ssh_insert_info,
 	SshList = ssh_get_list,
+  SshGetInfo = get_ssh_info_by_name,
 	SshTogglePwrsh = toggle_powershell_ssh,
 	SshToggleSshpass = toggle_sshpass,
   SshCopy = secure_copy,
