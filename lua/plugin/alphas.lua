@@ -110,7 +110,7 @@ local function get_display()
     }
   }
 
-  if hour > 9 and hour < 17 then
+  if hour > 8 and hour < 17 then
     display = "work"
   elseif hour > 17 and hour < 22 then
     display = "home"
@@ -148,7 +148,7 @@ local function setup ()
     val = get_display(),
     opts = {
       position = "center",
-      hl = "@character",
+      hl = "Type",
       -- wrap = "overflow";
     },
   }
@@ -165,7 +165,7 @@ local function setup ()
     val = footer_value,
     opts = {
       position = "center",
-      hl = "Number",
+      hl = "Define",
     },
   }
 
