@@ -264,7 +264,7 @@ local function setup()
 		},
 		install = {
 			missing = true,
-			colorscheme = { "default" },
+			colorscheme = { "habamax" },
 		},
 	})
 
