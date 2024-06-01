@@ -222,7 +222,59 @@ local function setup()
 				config = function()
 					require('render-markdown').setup({})
 				end,
-			}
+			},
+      { "ellisonleao/gruvbox.nvim", priority = 1000 , config = function()
+        require("gruvbox").setup({
+          terminal_colors = true, -- add neovim terminal colors
+          undercurl = true,
+          underline = true,
+          bold = true,
+          italic = {
+            strings = true,
+            emphasis = true,
+            comments = true,
+            operators = false,
+            folds = true,
+          },
+          strikethrough = true,
+          invert_selection = false,
+          invert_signs = false,
+          invert_tabline = true,
+          invert_intend_guides = false,
+          inverse = true, -- invert background for search, diffs, statuslines and errors
+          contrast = "hard", -- can be "hard", "soft" or empty string
+          palette_overrides = {},
+          overrides = {},
+          dim_inactive = false,
+          transparent_mode = false,
+        })
+        vim.cmd('colorscheme gruvbox') -- pre-setup color palatte
+        -- retrieve gruvbox platte information
+        local override = {
+          bg = vim.fn.synIDattr(vim.fn.hlID("Normal"), "bg#"),
+          fg = vim.fn.synIDattr(vim.fn.hlID("GruvboxAqua"), "fg#"),
+          statusline = vim.fn.synIDattr(vim.fn.hlID("Gruvboxbg1"), "fg#"),
+        }
+
+        local gruvbox = require("gruvbox") -- retrieve pre-setup
+        gruvbox.setup({ -- setup depending on pre-setup information
+          overrides = {
+            SignColumn = { link = "Normal" },
+            GruvboxYellowSign = { bg = override.bg },
+            GruvboxAquaSign = { bg = override.bg },
+            GruvboxBlueSign = { bg = override.bg },
+            GruvboxGreenSign = { bg = override.bg },
+            GruvboxOrangeSign = { bg = override.bg },
+            GruvboxPurpleSign = { bg = override.bg },
+            GruvboxRedSign = { bg = override.bg },
+            StatusLine = {
+              bg = (gruvbox.config.inverse == true) and override.fg or override.statusline,
+              fg = (gruvbox.config.inverse == true) and override.statusline or override.fg },
+            IncSearch = { bold = true },
+          }
+        })
+        vim.cmd('colorscheme gruvbox') -- apply new setup
+      end },
 		},
 		defaults = {
 			-- By default, Your custom plugins will load during startup.
