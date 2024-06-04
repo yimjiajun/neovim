@@ -470,27 +470,23 @@ local function connect_ssh_desktop(opts)
     end
   end
 
-  local desktop_extension = (vim.fn.exists('win32') == 1 or vim.fn.isdirectory('/run/WSL') == 1)
-    and ".rdp" or ".remmina"
-  local desktop_file = ssh_desktop_data_dir .. delim .. opts.hostname .. desktop_extension
-  local desktop_execute = (vim.fn.exists('win32') == 1 or vim.fn.isdirectory('/run/WSL') == 1)
+  local desktop_remote_setup = {
+    remmina = { cmd = "remmina", ext = ".remmina", opt = "-c" },
+    mstsc = { cmd = "powershell.exe -C mstsc", ext = ".rdp", opt = "" }
+  }
+  local tool = (vim.fn.exists('win32') == 1 or vim.fn.isdirectory('/run/WSL') == 1)
     and "mstsc" or "remmina"
-  local desktop_cmd = desktop_execute
-  local desktop_cmd_opt = " "
+  local desktop_remote_file = ssh_desktop_data_dir .. delim .. opts.hostname .. desktop_remote_setup[tool].ext
 
-  if desktop_execute == "remmina" then
-    if vim.fn.executable('remmina') == 0 then
-      vim.api.nvim_echo({{"** Remmina not found ..", "ErrorMsg"}}, false, {})
+  if tool ~= "mstsc" and vim.fn.executable(desktop_remote_setup[tool].cmd) == 0 then
+      vim.api.nvim_echo({{desktop_remote_setup[tool].cmd .. " not found ..", "ErrorMsg"}}, false, {})
       return false
-    end
-
-    desktop_cmd_opt = " -c "
   end
 
   vim.fn.setreg('+', tostring(opts.password))
   vim.api.nvim_echo({{"\n[USERNAME] " .. opts.username, "MoreMsg"}}, true, {})
 
-  if vim.fn.filereadable(desktop_file) > 0 then
+  if vim.fn.filereadable(desktop_remote_file) > 0 then
     if vim.fn.isdirectory('/run/WSL') == 0 then
       goto start_desktop_by_file
     end
@@ -499,26 +495,31 @@ local function connect_ssh_desktop(opts)
       vim.fn.mkdir('/mnt/c/neovim')
     end
 
-    vim.fn.system("cp " .. desktop_file .. " /mnt/c/neovim/")
-    desktop_file = "C:\\neovim\\" .. vim.fn.fnamemodify(desktop_file, ":t")
-    desktop_cmd = "powershell.exe -C " .. desktop_cmd
+    vim.fn.system("cp" .. " " .. desktop_remote_file .. " " .. "/mnt/c/neovim/")
+    desktop_remote_file = "C:\\neovim\\" .. vim.fn.fnamemodify(desktop_remote_file, ":t")
 
     ::start_desktop_by_file::
-    async_cmd(desktop_cmd .. desktop_cmd_opt .. desktop_file, 0)
+    async_cmd(desktop_remote_setup[tool].cmd .. " "
+      .. desktop_remote_setup[tool].opt .. " "
+      .. desktop_remote_file,
+      0)
     return true
   end
 
-  if desktop_execute == "mstsc" then
-    async_cmd("powershell.exe -C mstsc " .. "/v:" .. opts.hostname, 0)
-    return true
-  elseif vim.fn.executable('remmina') == 1 then
-    async_cmd((vim.fn.executable('sshpass') == 1) and "sshpass -p '" .. opts.password .. "' " or "" ..
-      "remmina -c " .. "rdp://" .. opts.username .. "@" .. opts.hostname, 0)
-    return true
+  local cmd
+
+  if tool == "mstsc" then
+    async_cmd(desktop_remote_setup[tool].cmd .. " " .. "/v:" .. opts.hostname, 0)
+  else
+    if vim.fn.executable('sshpass') == 1 and opts.password ~= nil and opts.password ~= "" then
+      cmd = "sshpass -p '" .. opts.password .. "' " .. desktop_remote_setup[tool].cmd
+    end
+
+    cmd = cmd .." " .. desktop_remote_setup[tool].opt .. " " .. "rdp://" .. opts.username .. "@" .. opts.hostname
+    async_cmd(cmd, 0)
   end
 
-  vim.api.nvim_echo({{"** Not Available Remote Desktop found ..", "ErrorMsg"}}, false, {})
-  return false
+  return true
 end
 
 -- @brief: setup
