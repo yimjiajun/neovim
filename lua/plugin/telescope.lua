@@ -282,13 +282,14 @@ local function ssh_get_list_in_telescope()
 		for i, info in ipairs(vim.g.ssh_data) do
 
 			table.insert(results, {
-				string.format("%-20s", info.host),
-				string.format("%+25s", info.name),
-				string.format("%-3s", info.port),
-				string.format("%-s", info.description),
-				string.format("%-15s", info.group),
-				string.format("%-15s", info.pass),
-				string.format("%2s", i)
+				string.format("%-20s", info.alias), -- entry[1]
+				string.format("%-20s", info.hostname), -- entry[2]
+				string.format("%+25s", info.username), -- entry[3]
+				string.format("%-3s", info.port), -- entry[4]
+				string.format("%-s", info.description), -- entry[5]
+				string.format("%-15s", info.group), -- entry[6]
+				string.format("%-15s", info.password), -- entry[7]
+				string.format("%2s", i) -- entry[8]
 			})
 		end
 
@@ -299,11 +300,9 @@ local function ssh_get_list_in_telescope()
 				entry_maker = function(entry)
 					return {
 						value = entry,
-						display = '| ' .. entry[7] ..' | ' ..
-							entry[5] .. ' || ' ..
-							entry[2] .. ' | ' .. entry[1] .. ' | ' ..
-							entry[3] .. ' | ' .. entry[4],
-						ordinal = entry[7] .. ' ' .. entry[5] .. ' ' .. entry[2] .. ' ' .. entry[1] .. ' ' .. entry[3] .. ' ' .. entry[4],
+						display = '| ' .. entry[8] ..' | ' .. entry[6] .. ' || ' .. -- index | group
+							entry[1] .. '|' .. entry[3] .. ' | ' .. entry[2] .. ' | ' .. entry[4] .. ' | ' .. entry[5],
+						ordinal = entry[8] .. ' ' .. entry[1] .. ' ' .. entry[2] .. ' ' .. entry[3] .. ' ' .. entry[6] .. ' ' .. entry[5],
 					}
 				end
 			},
@@ -312,10 +311,10 @@ local function ssh_get_list_in_telescope()
 				actions.select_default:replace(function()
 					actions.close(prompt_bufnr)
 					local selection = action_state.get_selected_entry()
-					local host = vim.fn.trim(selection.value[1])
-					local name = vim.fn.trim(selection.value[2])
-					local port = vim.fn.trim(selection.value[3])
-					local pass = vim.fn.trim(selection.value[6])
+					local host = vim.fn.trim(selection.value[2])
+					local name = vim.fn.trim(selection.value[3])
+					local port = vim.fn.trim(selection.value[4])
+					local pass = vim.fn.trim(selection.value[7])
 					require('features.ssh').SshConnect(name, host, port, pass)
 					-- print(vim.inspect(selection))
 					-- vim.api.nvim_put({ selection[1] }, "", false, true)
@@ -323,7 +322,7 @@ local function ssh_get_list_in_telescope()
 				local call_help = function()
 					require('features.common').DisplayTitle(" Help")
 					local selection = action_state.get_selected_entry()
-					print(">> ", selection.value[4])
+					print(">> ", selection.value[5])
 				end
 				map('i', '<C-h>', call_help)
 				return true
