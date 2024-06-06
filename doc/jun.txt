@@ -27,24 +27,33 @@ REFERNECE
 CONTENTS                                                          *JunContents*
 
 1. KEYMAPPING ................................................. |JunKeymapping|
-
 2. FILE ............................................................. |JunFile|
-    2.1 save command output to temporal file ... |save_command_message_to_file|
-        FileSaveCmdMsg                       ................. |FileSaveCmdMsg|
-        FileSaveCmdMsgInput                  ............ |FileSaveCmdMsgInput|
-
+    2.1 Retrieve File Infromation ................. |retrieve_file_information|
+        - FileGetName ........................................... |FileGetName|
+        - FileGetPath ........................................... |FileGetPath|
+        - FileGetFullPath ................................... |FileGetFullPath|
+        - FileGetDir ............................................. |FileGetDir|
+        - FileSearch ............................................. |FileSearch|
+    2.2 Save Command Output To Temporal File ... |save_command_message_to_file|
+        - FileSaveCmdMsg ..................................... |FileSaveCmdMsg|
+        - FileSaveCmdMsgInput ........................... |FileSaveCmdMsgInput|
 3. SSH ............................................................... |JunSSH|
     3.1 Structure ........................................... |JunSSHStructure|
+        - SshList ................................................... |SshList|
+        - SshGetInfo ............................................. |SshGetInfo|
     3.2 SSH Connection .......................................... |ssh_connect|
-        SshRun         ............................................... |SshRun|
+        - SshRequest ................................................. |SshReq|
+        - SshRun ..................................................... |SshRun|
     3.3 Secure Copy ............................................. |secure_copy|
-        SshCopy     ................................................. |SshCopy|
-        SshSendFile ............................................. |SshSendFile|
+        - SshCopy ................................................... |SshCopy|
+        - SshSendFile ........................................... |SshSendFile|
     3.4 Secret File Transfer ........................... |secret_file_transfer|
-        SshSftp              ........................................ |SshSftp|
+        - SshSftp ................................................... |SshSftp|
     3.5 Connect Remote Desktop .......................... |connect_ssh_desktop|
-        SshDesktop            .................................... |SshDesktop|
-
+        - SshDesktop ............................................. |SshDesktop|
+    3.6 Toggle SSH Mode ..................................... |toggle_ssh_mode|
+        - SshToggleSshpass ................................. |SshToggleSshpass|
+        - SshTogglePwrsh ..................................... |SshTogglePwrsh|
 4. COMPILER ..................................................... |JunCompiler|
    4.1 Structure .......................................... |JunCompilerStruct|
 
@@ -60,16 +69,36 @@ $HOME/.config/nvim/lua/features/file.lua                             *file.lua*
 
 ------------------------------------------------------------------------------
 
-2.1 SAVE COMMAND OUTPUT TO TEMPORAL FILE          *save_command_message_to_file*
+2.1 RETRIEVE FILE INFORMATION                        *retrieve_file_information*
+
+Get the file information
+
+                                                                   *FileGetName*
+:FileGetName           get the current buffer file name.
+
+                                                                   *FileGetPath*
+:FileGetPath           get the current buffer file path from working directory
+
+                                                               *FileGetFullPath*
+:FileGetFullPath       get the current buffer file full path.
+
+                                                                    *FileGetDir*
+:FileGetDir            get the current buffer file directory path.
+
+                                                                    *FileSearch*
+:FileSearch {pattern}  search the file by the regex pattern in the current
+                       directory.
+
+2.2 SAVE COMMAND OUTPUT TO TEMPORAL FILE          *save_command_message_to_file*
 
 Providing for save vim output message and input command output to a temporal
 file and view in a new buffer.
 
-                                                                *FileSaveCmdMsg*
+                                                               *FileSaveCmdMsg*
 :FileSaveCmdMsg        Save vim output message |':messages'| to a temporal file
                        and view in a new buffer.
 
-                                                           *FileSaveCmdMsgInput*
+                                                          *FileSaveCmdMsgInput*
 :FileSaveCmdMsgInput {command}
                        Save input command output to a temporal file and view
                        in a new buffer.
@@ -89,10 +118,39 @@ $HOME/.local/share/nvim/ssh/desktop/                          *ssh_desktop_path*
                                                                        *SshList*
 :SshList              list all the SSH configuration in the |ssh_path|.
 
+                      the SSH configuration file is stored in the |ssh_path|,
+                      it is a `.json` file with the following structure:
+
+                      Example: |ssh_path|/example.json
+>
+                      [
+                          "GROUP": [
+                              {
+                                  "alias": <string>,
+                                  "hostname": <string>,
+                                  "username": <string>,
+                                  "port": <number>,
+                                  "password": <string>,
+                                  "description": <string>
+                              }
+                          ]
+                      ]
+<
+
+                                                                    *SshGetInfo*
+:SshGetInfo {alias/hostname/username}
+                      get the SSH information from `.json` provided file from
+                      |ssh_path|. Refer to |SshList|.
+
 3.2 SSH CONNECTION                                                 *ssh_connect*
 
 SSH connect to the remote server by the specified configuration or selection.
 This simulates the SSH connection by the terminal command.
+
+                                                                       *SshReq*
+:SshReq               prompt to request the SSH information by the user.
+                      users must provide the following information:
+                      hostname/ip, username, port, password
 
                                                                        *SshRun*
 :SshRun                ssh connect to the remote server by the selection. the
@@ -109,6 +167,9 @@ SCP connection by the terminal command.
 
 3.4 SECRET FILE TRANSFER                                  *secret_file_transfer*
 
+Interactive secure transfer file to the remote server by the selection.
+
+                                                                       *SshSftp*
 :SshSftp              interactive secure transfer file to the remote server by
                       the selection.
 
@@ -131,11 +192,34 @@ Connect to the remote desktop by selection.
 :SshDesktop           connect to the remote desktop by the selection. the
                       selection information is stored in |ssh_desktop_path|.
 
-                      prefer to use the following provided file with extension
-                      from |ssh_desktop_path|:
+                      prefer to use the following `hostname` of provided file
+                      with extension from |ssh_desktop_path|:
                       - `remmina`: `.remmina`
                       - `mstsc`: `.rdp`
                       - `vnc`: `.vnc` (not implemented)
+
+                      Example: `$HOME/.local/share/nvim/ssh/desktop/`
+
+                      - |_ssh_desktop_path_|/192.1.1.1.remmina
+                      - |_ssh_desktop_path_|/172.1.1.1.rdp
+
+                      if the file extension is not provided, it will prompt to
+                      selection of the remote desktop by SSH information,
+                      which is the json file defined in |ssh_path|,
+                      refers to |SshList|.
+
+3.6 TOGGLE SSH MODE                                         *toggle_ssh_mode*
+
+Toggle the SSH mode between `sshpass` and `powershell` for the SSH connection.
+
+                                                          *SshToggleSshpass*
+
+:SshToggleSshpass     toggle the SSH connection by `sshpass` mode.
+
+                                                          *SshTogglePwrsh*
+
+:SshTogglePwrsh       ** Only available for `WSL` on Window **
+                      force the SSH connection by `powershell` mode in `WSL`.
 
 ==============================================================================
 
@@ -176,6 +260,11 @@ The supported compiler setup files `.lua` and `.json`:
               "opts": {
                  "dofile": <file>.lua
                  "callback": <function>
+                 "args": {
+                     <arg1>: <value>,
+                     <arg2>: <value>,
+                     ...
+                 }
               }
         ]
 >
@@ -234,14 +323,20 @@ The supported compiler setup files `.lua` and `.json`:
 >
             "opts": {
                 "dofile": "example.lua",
-                "callback": "example_function"
+                "callback": "example_function",
+                "args": {
+                    "arg1": true,
+                    "arg2": "example"
+                }
             }
 <
         - example.lua
 
 >
-            function _G.example_function()
-                print("example function")
+            function _G.example_function(args)
+                print("example_function")
+                print(args.arg1)
+                print(args.arg2)
             end
 <
 
