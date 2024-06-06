@@ -8,12 +8,14 @@ local todo_lists = {
 local delim = vim.fn.has('win32') == 1 and '\\' or '/'
 local todo_lists_path = vim.fn.stdpath('data') .. delim .. 'todo'
 local todo_list_json = todo_lists_path .. delim .. 'todo_list.json'
+-- todo list item prefix and icon display on quickfix window
 local todo_prefix = {
 	['n'] = '[ ]',
 	['d'] = '[V]',
 	['p'] = '[-]',
 	['x'] = '[x]',
 }
+-- toggle todo status sequence: n -> d -> p -> x -> n
 local todo_prefix_sequence = {
 	['n'] = 'd',
 	['d'] = 'p',
@@ -21,7 +23,7 @@ local todo_prefix_sequence = {
 	['x'] = 'n',
 }
 local todo_lists_autocmd_id = {}
-
+-- @brief Remove todo list autocmd id
 local function remove_todo_lists_autocmd_id(bufnr)
 	if todo_lists_autocmd_id[bufnr] ~= nil then
 		vim.api.nvim_del_autocmd(todo_lists_autocmd_id[bufnr])
@@ -33,6 +35,8 @@ local function remove_todo_lists_autocmd_id(bufnr)
 	return false
 end
 
+-- @brief Add keymapping to todo list in quickfix window
+-- @return nil
 local function add_todo_keymapping()
 	if vim.bo.filetype ~= 'qf' then
 		return
@@ -42,18 +46,21 @@ local function add_todo_keymapping()
 		return
 	end
 
-	vim.api.nvim_buf_set_keymap(0, 'n', '<Tab>',
-		'<cmd>:lua require("features.todo").Toggle()<CR>', {silent = true })
-	vim.api.nvim_buf_set_keymap(0, 'n', 'w',
-		'<cmd>lua require("features.todo").Add()<CR>', { silent = true })
-	vim.api.nvim_buf_set_keymap(0, 'n', 'r',
-		'<cmd>lua require("features.todo").Update()<CR>', { silent = true })
-	vim.api.nvim_buf_set_keymap(0, 'n', '<CR>',
-		'<cmd>lua require("features.todo").Read()<CR>', { silent = true })
-	vim.api.nvim_buf_set_keymap(0, 'n', 'dd',
-		'<cmd>lua require("features.todo").Remove()<CR>', { silent = true })
+  local key_setup = {
+    { key = '<Tab>', cmd = ':lua require("features.todo").Toggle()<CR>' },
+    { key = 'w', cmd = ':lua require("features.todo").Add()<CR>' },
+    { key = 'r', cmd = ':lua require("features.todo").Update()<CR>' },
+    { key = '<CR>', cmd = ':lua require("features.todo").Read()<CR>' },
+    { key = 'dd', cmd = ':lua require("features.todo").Remove()<CR>' },
+  }
+
+  for _, v in ipairs(key_setup) do
+    vim.api.nvim_buf_set_keymap(0, 'n', v.key, v.cmd, { silent = true })
+  end
 end
 
+-- @brief Add todo list
+-- @return nil
 local function add_todo_list()
 	local name = 'todo_' .. os.date('%y%m%d_%H%M%S')
 	local filename = todo_lists_path .. delim .. name
@@ -96,11 +103,10 @@ local function add_todo_list()
 	end
 
 	todo_lists = items
-
-
 	 require('features.files').SetJson(todo_lists, todo_list_json)
 end
 
+-- @brief Read todo list
 local function read_todo_list()
 	if vim.bo.filetype ~= 'qf' then
 		return
@@ -152,6 +158,8 @@ local function read_todo_list()
 	}
 end
 
+-- @brief Get todo list
+-- @return todo list
 local function get_todo_list()
 	local lists, items = {}, {}
 	local file, text
@@ -219,6 +227,8 @@ local function get_todo_list()
 	return lists
 end
 
+-- @brief Toggle todo list item
+-- @return nil
 local function toggle_todo_list()
 	if vim.bo.filetype ~= 'qf' then
 		return
@@ -353,6 +363,15 @@ local function update_todo_list()
 end
 
 
+-- @brief Setup todo list
+-- @details:
+--     1. Create todo list directory if not exists
+--     2. Create todo list json file if not exists
+--     3. Load todo list json file
+--     4. Sort Done items from todo list after processing todo list
+--     4. Set todo list as global variable
+--     5. Update todo list json file
+-- @return nil
 local function setup()
 	if vim.fn.filereadable(vim.fn.expand(todo_list_json)) == 0 then
 		vim.fn.mkdir(todo_lists_path, 'p')
@@ -365,11 +384,7 @@ local function setup()
 	local items = {}
 
 	for _, v in ipairs(todo_lists) do
-		if v.type == 'd' then
-			table.insert(done_items, v)
-		else
-			table.insert(items, v)
-		end
+    table.insert((v.type == 'd' and done_items or items), v)
 	end
 
 	for _, v in ipairs(done_items) do
