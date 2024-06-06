@@ -499,24 +499,24 @@ local function connect_ssh_desktop(opts)
     desktop_remote_file = "C:\\neovim\\" .. vim.fn.fnamemodify(desktop_remote_file, ":t")
 
     ::start_desktop_by_file::
-    async_cmd(desktop_remote_setup[tool].cmd .. " "
+    async_cmd({ commands = {desktop_remote_setup[tool].cmd .. " "
       .. desktop_remote_setup[tool].opt .. " "
-      .. desktop_remote_file,
-      0)
+      .. desktop_remote_file},
+      timeout = 0})
     return true
   end
 
   local cmd
 
   if tool == "mstsc" then
-    async_cmd(desktop_remote_setup[tool].cmd .. " " .. "/v:" .. opts.hostname, 0)
+    async_cmd({ commands = {desktop_remote_setup[tool].cmd .. " " .. "/v:" .. opts.hostname}, timeout = 0})
   else
     if vim.fn.executable('sshpass') == 1 and opts.password ~= nil and opts.password ~= "" then
       cmd = "sshpass -p '" .. opts.password .. "' " .. desktop_remote_setup[tool].cmd
     end
 
     cmd = cmd .." " .. desktop_remote_setup[tool].opt .. " " .. "rdp://" .. opts.username .. "@" .. opts.hostname
-    async_cmd(cmd, 0)
+    async_cmd({commands = {cmd}, timeout = 0})
   end
 
   return true
