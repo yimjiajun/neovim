@@ -1,0 +1,14 @@
+[
+    {
+        "name": "ssh",
+        "url": "git@github.com:yimjiajun/nvim_data_ssh.git"
+    },
+    {
+        "name": "compiler",
+        "url": "git@github.com:yimjiajun/nvim_data_compiler.git"
+    },
+    {
+        "name": "todo",
+        "url": "git@github.com:yimjiajun/nvim_data_todo.git"
+    }
+]

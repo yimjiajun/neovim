@@ -223,7 +223,31 @@ local function commit()
 end
 
 local function setup()
-	return
+  local repo = require('features.files').GetJson(vim.fn.stdpath('config') .. '/repo.json')
+
+  if repo == nil or #repo == 0 then
+    goto setup_end
+  end
+
+  for _, v in ipairs(repo) do
+    local path = vim.fn.stdpath('data') .. '/' .. v.name
+
+    if v.url == nil or v.url == '' then
+      goto continue
+    end
+
+    if vim.fn.isdirectory(path) == 0 then
+      require('features.common').AsyncCommand({ commands = {
+        'git clone ' .. v.url .. ' ' ..  path,
+        'mkdir -p ' .. path,
+      }, timeout = 120, allow_fail = true})
+    end
+
+    ::continue::
+  end
+
+  ::setup_end::
+  return
 end
 
 return {
