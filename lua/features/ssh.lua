@@ -526,16 +526,6 @@ end
 -- @description: setup ssh feature, this should be called in init.vim / init.lua
 -- @usage: lua require('features.ssh').Setup()
 local function setup()
-	vim.g.ssh_data = {
-		{ alias = "RPI",
-      hostname = "jun.local",
-			username = "jun",
-			password = "jun",
-			port = "22",
-			description = "Raspberry Pi 5B",
-			group = "computer",
-		}
-	}
 	ssh_keymap_setting()
 	ssh_read_json()
 
