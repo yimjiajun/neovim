@@ -137,7 +137,7 @@ end
 local function json_read(path)
 	if path == nil then
 		vim.api.nvim_echo({{"file path is empty ...", "ErrorMsg"}}, false, {})
-		return false
+		return {}
 	end
 
 	local file = io.open(path, "r")
