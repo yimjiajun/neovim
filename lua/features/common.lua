@@ -89,51 +89,45 @@ end
 -- @return: nil
 -- @usage: async_command("git log --oneline --graph --all")
 -- @usage: async_command("ctags -R .", 120, "sort -u -o tags tags")
-local function async_command(opts)
-  if opts == nil or #opts == {} then
-    vim.api.nvim_err_writeln("No input is provided on AsyncCommand")
-    return
-  end
+local function async_command(args)
+  local opts = (args.opts == nil) and {} or args.opts
+  local commands = (args.commands == nil) and nil or args.commands
 
-  if opts.commands == nil then
+  if commands == nil then
     vim.api.nvim_err_writeln("Not command is providing on AsyncCommand")
     return
   end
 
-  local commands = (type(opts.commands) == "table") and opts.commands or
-                  ((type(opts) == "string") and opts or {opts.cmd})
+  commands = (type(commands) == "table") and commands or
+            ((type(commands) == "string") and {commands} or { string.format("%s", commands) })
   local timeout = (opts.timeout == nil) and 30000 or (opts.timeout * 1000)-- default 30 seconds
-  local allow_fail = (opts.allow_fail == nil) and false or opts.allow_fail
   local handle = nil
-  -- Function to strip surrounding quotes from a string
-  local function strip_quotes(s)
+
+  local function strip_quotes(s) -- Function to strip surrounding quotes from a string
     return
       ((s:sub(1, 1) == '"' and s:sub(-1) == '"') or (s:sub(1, 1) == "'" and s:sub(-1) == "'")) and s:sub(2, -2) or s
   end
-  -- Split the command string into parts
-  local parts = vim.split(strip_quotes(commands[1]), "%s+")
-  -- Extract the command (first element)
-  local cmd = table.remove(parts, 1)
-  -- The remaining parts are the arguments
-  local args = parts
+  local parts = vim.split(strip_quotes(commands[1]), "%s+") -- Split the command string into parts
+  local cmd = table.remove(parts, 1) -- Extract the command (first element)
+  local cmd_args = parts -- The remaining parts are the arguments
 
-  if vim.fn.executable(cmd) == 0 then
-    vim.api.nvim_err_writeln(string.format("Async Command not found: %s", cmd))
-    return
+  local function output_message(msg)
+    if opts.silent == nil or opts.silent == false then
+      print(msg)
+    end
   end
 
+  if vim.fn.executable(cmd) == 0 then
+    output_message(string.format("%-10s [ %s ]", "Command Not Found", cmd))
+    return
+  end
   -- Create pipes for stdout and stderr
   local stdout = vim.loop.new_pipe(false)
   local stderr = vim.loop.new_pipe(false)
   -- Define the on_exit callback
   local function on_exit(code, _)
-    local status_msg = "Failed"
-
-    if code == 0 then
-      status_msg = "Succeeded"
-    end
-
-    print(string.format("%-10s [ %s ] (Exit Code: %d)", status_msg, commands[1], code))
+    output_message(string.format("%-10s [ %s ] (Exit Code: %d)",
+      (code == 0) and "Success" or "Failed", commands[1], code))
 
     if stdout and not stdout:is_closing() then
       stdout:close()
@@ -151,38 +145,43 @@ local function async_command(opts)
       table.remove(commands, 1)
     end
 
-    if (code == 0 or allow_fail == true) and #commands > 0  then
-      async_command({commands = commands, timeout = timeout, allow_fail = allow_fail})
+    if (#commands > 0) and (code == 0 or ((opts.allow_fail == nil) and false or opts.allow_fail)) then
+      async_command({commands = commands, opts = opts})
     end
   end
   -- Spawn the process
   handle = vim.loop.spawn(cmd, {
-    args = args,
-    stdio = {nil, stdout, stderr},
+    args = cmd_args,
+    stdio = {nil, stdout, stderr}
   }, vim.schedule_wrap(on_exit))
-  print(string.format("%-10s [ %s ]", "Execute", commands[1]))
+
+  output_message(string.format("%-10s [ %s ]", "Execute", commands[1]))
   -- Read from the pipes
   local function on_read(err, data)
     assert(not err, err)
+
     if data then
-      print(data)
+      output_message(data)
     end
   end
+
   stdout:read_start(on_read)
   stderr:read_start(on_read)
   vim.defer_fn(function()
     if stdout and not stdout:is_closing() then
       stdout:close()
     end
+
     if stderr and not stderr:is_closing() then
       stderr:close()
     end
+
     if handle and not handle:is_closing() then
       handle:kill('sigterm')
       handle:close()
       -- cmd being nil when exited from running
       if #commands > 0 then
-        print(string.format("%-10s [ %s ]", "TimeOut", commands[1]))
+        output_message(string.format("%-10s [ %s ]", "TimeOut", commands[1]))
       end
     end
   end, timeout)

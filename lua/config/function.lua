@@ -46,7 +46,9 @@ local function create_ctags()
 		return
 	end
 
-  require('features.common').AsyncCommand({commands = { 'ctags -R .', 'sort -u -o tags tags'}, timeout = 120})
+  require('features.common').AsyncCommand( {
+    commands = { 'ctags -R .', 'sort -u -o tags tags'}, opts = {timeout = 120}
+  })
 end
 
 local function build(mode)
