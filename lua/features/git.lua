@@ -222,6 +222,12 @@ local function commit()
 	}
 end
 
+-- Setup git repo
+-- @description Setup git repo of vim data depending on "name" parameter
+--                  Search the vim.fn.stdpath('config')/repo.json file and find the name of the repo
+--                  - If the repo does not exists, clone the repo from the url
+--                  - If the repo exists, pull the repo from the url
+--                  - If the url or reopo is empty, skip the repo
 local function setup()
   local repo = require('features.files').GetJson(vim.fn.stdpath('config') .. '/repo.json')
 
@@ -236,18 +242,59 @@ local function setup()
       goto continue
     end
 
-    if vim.fn.isdirectory(path) == 0 then
-      require('features.common').AsyncCommand({ commands = {
-        'git clone ' .. v.url .. ' ' ..  path,
-        'mkdir -p ' .. path,
-      }, timeout = 120, allow_fail = true})
-    end
+    local cmd = (vim.fn.isdirectory(path .. '/.git') > 0)
+        and { 'git -C ' .. path .. ' pull' }
+        or { 'git clone ' .. v.url .. ' ' .. path, 'mkdir -p ' .. path }
+
+    require('features.common').AsyncCommand({ commands = cmd,
+      opts = { timeout = 30, allow_fail = true, silent = true } })
 
     ::continue::
   end
 
   ::setup_end::
-  return
+end
+
+-- Update vim data repo
+-- @description Update vim data repo depending on "name" parameter
+--              Search the vim.fn.stdpath('config')/repo.json file and find the name of the repo
+--              Commit message with working directory and push to remote
+-- @param name string
+-- @return boolean (true if success, false if failed)
+local function update_vim_data_repo(name)
+  local repo = require('features.files').GetJson(vim.fn.stdpath('config') .. '/repo.json')
+
+  if repo == nil or #repo == 0 then
+    return false
+  end
+
+  for _, v in ipairs(repo) do
+    if v.name ~= name then
+      goto vim_data_repo_skip
+    end
+
+    local path = vim.fn.stdpath('data') .. '/' .. v.name
+
+    if v.url == nil or v.url == '' then
+      vim.api.nvim_err_writeln('URL is empty from updating vim data repo: ' .. v.name)
+      return false
+    end
+
+    if vim.fn.isdirectory(path) == 0 then
+      vim.api.nvim_err_writeln('Path does not exists from updating vim data repo: ' .. path)
+      return false
+    end
+
+    require('features.common').AsyncCommand({ commands = {
+      'git -C ' .. path .. ' add ' .. path,
+      'git -C ' .. path ..  ' commit --message="Update"',
+      'git -C ' .. path .. ' push'
+    }, timeout = 30 })
+
+    ::vim_data_repo_skip::
+  end
+
+  return true
 end
 
 return {
@@ -259,5 +306,6 @@ return {
 	Status = status,
 	Add = add,
 	Commit = commit,
+  UpdateVimDataRepo = update_vim_data_repo,
 	Setup = setup,
 }

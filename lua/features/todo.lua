@@ -1,3 +1,4 @@
+local todo_repo_name = "todo"
 local todo_list_title = 'Todo List'
 local todo_lists = {
 	create_file_location = nil,
@@ -60,6 +61,9 @@ local function add_todo_keymapping()
 end
 
 -- @brief Add todo list
+-- @description Create a new todo list as file and records as json member in todo_list.json
+--              open the file in a new split window
+--              Sort todo list by filename in descending order and completed items at the end
 -- @return nil
 local function add_todo_list()
 	local name = 'todo_' .. os.date('%y%m%d_%H%M%S')
@@ -67,14 +71,11 @@ local function add_todo_list()
 	local file = io.open(filename, 'w')
 
 	if file == nil then
-		vim.api.nvim_echo({
-			{'Error: Could not create file: ' .. filename,
-			'ErrorMsg'}}, true, {})
+		vim.api.nvim_echo({{'Error: Could not create file: ' .. filename, 'ErrorMsg'}}, true, {})
 		return
 	end
 
 	io.close(file)
-
 	vim.cmd('5split ' .. filename)
 
 	table.insert(todo_lists, {
@@ -83,27 +84,27 @@ local function add_todo_list()
 		type = 'n',
 	})
 
-	table.sort(todo_lists, function(a, b)
-		return a.filename > b.filename
-	end)
+  table.sort(todo_lists,
+    function(a, b)
+      return a.filename > b.filename
+    end
+  )
 
-	local done_items = {}
-	local items = {}
+	local done_items, items = {}, {}
 
 	for _, v in ipairs(todo_lists) do
-		if v.type == 'd' then
-			table.insert(done_items, v)
-		else
-			table.insert(items, v)
-		end
+    table.insert((v.type == 'd' and done_items or items), v)
 	end
 
 	for _, v in ipairs(done_items) do
 		table.insert(items, v)
 	end
 
-	todo_lists = items
-	 require('features.files').SetJson(todo_lists, todo_list_json)
+  todo_lists = items
+
+  if require('features.files').SetJson(todo_lists, todo_list_json) == true then
+    require('features.git').UpdateVimDataRepo(todo_repo_name)
+  end
 end
 
 -- @brief Read todo list
@@ -267,7 +268,11 @@ local function toggle_todo_list()
 	end
 
 	todo_lists = items
-	require('features.files').SetJson(todo_lists, todo_list_json)
+
+	if require('features.files').SetJson(todo_lists, todo_list_json) == true then
+    require('features.git').UpdateVimDataRepo(todo_repo_name)
+  end
+
 	get_todo_list()
 	vim.fn.cursor(qf_index, qf_col)
 end
@@ -304,14 +309,16 @@ local function remove_todo_list()
 		todo_lists = items
 	end
 
-	require('features.files').SetJson(todo_lists, todo_list_json)
+	if require('features.files').SetJson(todo_lists, todo_list_json) == true then
+    require('features.git').UpdateVimDataRepo(todo_repo_name)
+  end
+
 	get_todo_list()
 	vim.fn.cursor(qf_index, qf_col)
 end
 
 local function update_todo_list()
-	local qf_index = vim.fn.line('.')
-	local qf_col = vim.fn.col('.')
+	local qf_index, qf_col = vim.fn.line('.'), vim.fn.col('.')
 
 	get_todo_list()
 
