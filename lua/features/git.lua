@@ -261,8 +261,11 @@ end
 --              Commit message with working directory and push to remote
 -- @param name string
 -- @return boolean (true if success, false if failed)
-local function update_vim_data_repo(name)
+local function update_vim_data_repo(name, opts)
+  opts = (opts == nil or type(opts) ~= 'table') and {} or opts
+
   local repo = require('features.files').GetJson(vim.fn.stdpath('config') .. '/repo.json')
+  local commit_msg = (opts.commit_msg == nil or opts.commit_msg == '') and 'Update by Neovim' or opts.commit_msg
 
   if repo == nil or #repo == 0 then
     return false
@@ -285,9 +288,12 @@ local function update_vim_data_repo(name)
       return false
     end
 
+    local commit_msg_file = vim.fn.stdpath('cache') .. '/commit_msg.txt'
+    vim.fn.writefile({ commit_msg }, commit_msg_file)
+
     require('features.common').AsyncCommand({ commands = {
       'git -C ' .. path .. ' add ' .. path,
-      'git -C ' .. path ..  ' commit --message="Update"',
+      'git -C ' .. path ..  ' commit --file=' .. commit_msg_file,
       'git -C ' .. path .. ' push'
     }, timeout = 30 })
 
