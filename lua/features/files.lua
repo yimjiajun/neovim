@@ -123,8 +123,7 @@ local function json_write(tbl, path)
 	local file = io.open(path, "w")
 
 	if file == nil then
-		vim.api.nvim_echo({{"file open failed ...",
-			"ErrorMsg"}}, false, {})
+		vim.api.nvim_echo({{"file open failed ...", "ErrorMsg"}}, false, {})
 		return false
 	end
 

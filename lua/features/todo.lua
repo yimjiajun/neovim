@@ -10,6 +10,7 @@ local delim = vim.fn.has('win32') == 1 and '\\' or '/'
 local todo_lists_path = vim.fn.stdpath('data') .. delim .. 'todo'
 local todo_list_json = todo_lists_path .. delim .. 'todo_list.json'
 -- todo list item prefix and icon display on quickfix window
+-- n: new, d: done, p: pending, x: cancel
 local todo_prefix = {
 	['n'] = '[ ]',
 	['d'] = '[V]',
@@ -67,25 +68,24 @@ end
 -- @return nil
 local function add_todo_list()
 	local name = 'todo_' .. os.date('%y%m%d_%H%M%S')
-	local filename = todo_lists_path .. delim .. name
-	local file = io.open(filename, 'w')
+	local file_path = todo_lists_path .. delim .. name
+	local file = io.open(file_path, 'w')
 
 	if file == nil then
-		vim.api.nvim_echo({{'Error: Could not create file: ' .. filename, 'ErrorMsg'}}, true, {})
+		vim.api.nvim_echo({{'Error: Could not create file: ' .. file_path, 'ErrorMsg'}}, true, {})
 		return
 	end
 
 	io.close(file)
-	vim.cmd('5split ' .. filename)
+	vim.cmd('5split ' .. file_path)
 
 	table.insert(todo_lists, {
 		create_file_location = vim.fn.expand('%:p'),
-		filename = filename,
-		type = 'n',
+		filename = vim.fn.fnamemodify(file_path, ':t'),
+		type = 'n',  -- n: new
 	})
 
-  table.sort(todo_lists,
-    function(a, b)
+  table.sort(todo_lists, function(a, b)
       return a.filename > b.filename
     end
   )
@@ -132,11 +132,13 @@ local function read_todo_list()
 		return
 	end
 
-	if vim.fn.filereadable(todo_list.filename) == 0 then
+  local file_path = todo_lists_path .. delim .. todo_list.filename
+
+	if vim.fn.filereadable(file_path) == 0 then
 		return
 	end
 
-	vim.cmd('view ' .. todo_list.filename)
+	vim.cmd('view ' .. file_path)
 
 	local autocmd_id = vim.api.nvim_create_autocmd({"BufDelete"}, {
 		callback = function()
@@ -163,10 +165,11 @@ end
 -- @return todo list
 local function get_todo_list()
 	local lists, items = {}, {}
-	local file, text
+	local file, text, file_path
 
 	for _, v in ipairs(todo_lists) do
-		file = io.open(v.filename, 'r')
+    file_path = todo_lists_path .. delim .. v.filename
+		file = io.open(file_path, 'r')
 
 		if file == nil then
 			goto continue
@@ -176,7 +179,7 @@ local function get_todo_list()
 		io.close(file)
 
 		if text == nil or text == '' then
-			os.remove(v.filename)
+			os.remove(file_path)
 			goto continue
 		end
 
@@ -342,11 +345,13 @@ local function update_todo_list()
 		return
 	end
 
-	if vim.fn.filereadable(todo_list.filename) == 0 then
+  local file_path = todo_lists_path .. delim .. todo_list.filename
+
+	if vim.fn.filereadable(file_path) == 0 then
 		return
 	end
 
-	vim.cmd('edit ' .. todo_list.filename)
+	vim.cmd('edit ' .. file_path)
 
 	local autocmd_id = vim.api.nvim_create_autocmd({"BufDelete"}, {
 		callback = function()
