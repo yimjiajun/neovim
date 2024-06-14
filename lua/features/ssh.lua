@@ -335,6 +335,12 @@ end
 -- @return: boolean (true: success, false: failed)
 local function secure_copy(opts, file, destination)
   display_title("Secure Copy")
+  opts = (opts ~= nil) and opts or ssh_get_list(false)
+
+  if opts == nil then
+    return false
+  end
+
   local sel_ssh = nil
 
   if opts.hostname == nil or opts.username == nil then
