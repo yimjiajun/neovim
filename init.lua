@@ -36,6 +36,11 @@ vim.g.custom = {
   lsp = lsp
 }
 
+if pcall(require, 'features.git') then
+  -- Download Vim Data Repo depending on repo.json in neovim configuration path
+  require('features.git').DownloadVimDataRepo()
+end
+
 for _, dir in ipairs(config_dir) do
 	local lua_config_path = config_path .. "/lua/" .. dir
 	local lua_files = vim.fn.glob(lua_config_path .. "/*.lua", false, true)

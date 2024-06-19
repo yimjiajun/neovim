@@ -222,17 +222,17 @@ local function commit()
 	}
 end
 
--- Setup git repo
+-- Download git repo
 -- @description Setup git repo of vim data depending on "name" parameter
 --                  Search the vim.fn.stdpath('config')/repo.json file and find the name of the repo
 --                  - If the repo does not exists, clone the repo from the url
 --                  - If the repo exists, pull the repo from the url
 --                  - If the url or reopo is empty, skip the repo
-local function setup()
+local function download_vim_data_repo()
   local repo = require('features.files').GetJson(vim.fn.stdpath('config') .. '/repo.json')
 
   if repo == nil or #repo == 0 then
-    goto setup_end
+    goto download_vim_data_repo_end
   end
 
   for _, v in ipairs(repo) do
@@ -252,7 +252,11 @@ local function setup()
     ::continue::
   end
 
-  ::setup_end::
+  ::download_vim_data_repo_end::
+end
+
+-- @brief setup 'Git' module before use it's APIs
+local function setup()
 end
 
 -- Update vim data repo
@@ -313,5 +317,6 @@ return {
 	Add = add,
 	Commit = commit,
   UpdateVimDataRepo = update_vim_data_repo,
+  DownloadVimDataRepo = download_vim_data_repo,
 	Setup = setup,
 }
