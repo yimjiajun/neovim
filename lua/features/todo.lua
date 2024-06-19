@@ -386,8 +386,7 @@ end
 -- @return nil
 local function setup()
 	if vim.fn.filereadable(vim.fn.expand(todo_list_json)) == 0 then
-		vim.fn.mkdir(todo_lists_path, 'p')
-		vim.fn.writefile({}, todo_list_json)
+    return
 	end
 
 	 todo_lists = require('features.files').GetJson(todo_list_json) or {}
