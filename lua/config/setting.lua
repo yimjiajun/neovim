@@ -2,8 +2,10 @@ local function Setting_view()
 	vim.opt.background = "dark"
 
 	if vim.fn.trim(vim.fn.execute('colorscheme')) == 'default' then
-		if vim.version().major < 1 and vim.version().minor < 11 then
+		if vim.version().major < 1 and vim.version().minor < 10 then
 			vim.cmd('colorscheme habamax')
+		else
+			vim.cmd('colorscheme retrobox')
 		end
 	end
 
@@ -74,12 +76,16 @@ local function Setting_netrw()
 end
 
 local function Setting_colorscheme()
-	if vim.fn.trim(vim.fn.execute('colorscheme')) == 'habamax' then
+  local c = vim.fn.trim(vim.fn.execute('colorscheme'))
+
+  if c == 'habamax' then
     vim.cmd('highlight DiffAdd guifg=#ffffff')
     vim.cmd('highlight DiffText guifg=#ffffff')
+  end
+
+  if c == 'habamax' or c == 'retrobox' then
     vim.cmd('highlight StatusLine guibg=#303030 guifg=#afaf87')
-    vim.cmd('highlight StatusLineNC guibg=#303030 guifg=#5f5f5f')
-	end
+  end
 end
 
 local function setup()
