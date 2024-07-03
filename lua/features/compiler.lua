@@ -346,6 +346,9 @@ local function compiler_latest_makeprg_setup()
   return compiler_tbl_makeprg_setup(tbl)
 end
 
+-- @brief: compiler_build_setup_selection
+-- @description: get compiler information list
+-- @return: table of compiler information or nil
 local function compiler_build_setup_selection()
 	local tbl = get_compiler_build_data()
 
@@ -383,13 +386,29 @@ local function compiler_build_setup_selection()
     return a.name > b.name
   end)
 
-	display_title(string.format(
-		"%3s | %-20s | %-s", "idx",  "name", "description")
-	)
+  local msg_max_length = {
+    name = vim.fn.strlen("name"),
+    description = vim.fn.strlen("description")
+  }
+
+  for _, t in ipairs(target_tbl) do
+    msg_max_length = {
+      name = math.max(msg_max_length.name, vim.fn.strlen(t.name)),
+      description = math.max(msg_max_length.description, vim.fn.strlen(t.desc)),
+    }
+  end
+
+  local msg_format = string.format("%%3s | %%-%ds | %%-s", msg_max_length.name)
+  local msg_total_length = msg_max_length.name + msg_max_length.description + 10 -- pad index 3 digits, '|', space
+  local separator = string.rep("=", msg_total_length)
 
   for i, t in ipairs(target_tbl) do
-    msg[i] = string.format("%3d | %-20s | %s", i, t.name, t.desc)
+    msg[i] = string.format(msg_format, i, t.name, t.desc)
   end
+
+  display_title(separator)
+  display_title(string.format(msg_format, "idx", "name", "description"))
+  display_title(separator)
 
 	local sel_idx = vim.fn.inputlist(msg)
 
