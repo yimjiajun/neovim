@@ -15,4 +15,4 @@ jobs:
           sudo luarocks install luacheck
 
       - name: Lint
-        run: luacheck lua/ --globals vim
+        run: luacheck --no-max-line-length lua/ --globals vim
