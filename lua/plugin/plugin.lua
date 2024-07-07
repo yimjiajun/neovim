@@ -44,7 +44,6 @@ local function setup()
 					require('plugin.goto_preview').Setup()
 				end,
 			},
-			{ 'p00f/clangd_extensions.nvim' },
 			{ 'nvimtools/none-ls.nvim',
 				config = function()
 					require('plugin.none_ls').Setup()
