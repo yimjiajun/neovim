@@ -147,15 +147,6 @@ local function setup()
                 build = "cd app && npm install",
                 config = function() require('plugin.markdown-preview').Setup() end
             }, {
-                "jackMort/ChatGPT.nvim",
-                dependencies = {
-                    "nvim-telescope/telescope.nvim", "MunifTanjim/nui.nvim",
-                    "nvim-lua/plenary.nvim"
-                },
-                event = "VeryLazy",
-                config = function() require('plugin.chatgpt').Setup() end
-            },
-            {
                 'chrisbra/csv.vim',
                 config = function() require('plugin.csv').Setup() end
             },
