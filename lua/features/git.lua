@@ -37,7 +37,7 @@ local function branch()
 
     local function default() run_git_cmd("branch") end
 
-    return {Get = lists, Remote = remote_lists, Default = default}
+    return { Get = lists, Remote = remote_lists, Default = default }
 end
 
 local function remote()
@@ -57,7 +57,7 @@ local function remote()
 
     local function default() run_git_cmd("remote -v") end
 
-    return {Get = get_remote, GetUrl = get_url, Default = default}
+    return { Get = get_remote, GetUrl = get_url, Default = default }
 end
 
 local function diff()
@@ -134,7 +134,7 @@ local function status()
         end
     end
 
-    return {Short = short, ChkWhitespace = check_whitespace, Default = default}
+    return { Short = short, ChkWhitespace = check_whitespace, Default = default }
 end
 
 local function add()
@@ -144,7 +144,7 @@ local function add()
 
     local function default() run_git_cmd("add -i") end
 
-    return {Patch = patch, All = all, Default = default}
+    return { Patch = patch, All = all, Default = default }
 end
 
 local function commit()
@@ -152,7 +152,7 @@ local function commit()
 
     local function default() run_git_cmd("commit") end
 
-    return {Amend = amend, Default = default}
+    return { Amend = amend, Default = default }
 end
 
 -- Download git repo
@@ -173,11 +173,11 @@ local function download_vim_data_repo()
 
         local cmd = (vim.fn.isdirectory(path .. '/.git') > 0) and {
             'git -C ' .. path .. ' pull'
-        } or {'git clone ' .. v.url .. ' ' .. path, 'mkdir -p ' .. path}
+        } or { 'git clone ' .. v.url .. ' ' .. path, 'mkdir -p ' .. path }
 
         require('features.common').AsyncCommand({
             commands = cmd,
-            opts = {timeout = 30, allow_fail = true, silent = true}
+            opts = { timeout = 30, allow_fail = true, silent = true }
         })
 
         ::continue::
@@ -219,7 +219,7 @@ local function update_vim_data_repo(name, opts)
         end
 
         local commit_msg_file = vim.fn.stdpath('cache') .. '/commit_msg.txt'
-        vim.fn.writefile({commit_msg}, commit_msg_file)
+        vim.fn.writefile({ commit_msg }, commit_msg_file)
 
         require('features.common').AsyncCommand({
             commands = {

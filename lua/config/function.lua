@@ -33,13 +33,13 @@ end
 
 local function create_ctags()
     if vim.fn.executable("ctags") == 0 then
-        vim.api.nvim_echo({{"Ctags not found !", "ErrorMsg"}}, false, {})
+        vim.api.nvim_echo({ { "Ctags not found !", "ErrorMsg" } }, false, {})
         return
     end
 
     require('features.common').AsyncCommand({
-        commands = {'ctags -R .', 'sort -u -o tags tags'},
-        opts = {timeout = 120}
+        commands = { 'ctags -R .', 'sort -u -o tags tags' },
+        opts = { timeout = 120 }
     })
 end
 
@@ -54,7 +54,7 @@ local function build(mode)
     end
 
     if status == nil then
-        vim.api.nvim_echo({{"\nBuild not found\n", "ErrorMsg"}}, false, {})
+        vim.api.nvim_echo({ { "\nBuild not found\n", "ErrorMsg" } }, false, {})
         return
     end
 
@@ -68,7 +68,7 @@ local function build(mode)
 end
 
 local function setup_file_format()
-    vim.api.nvim_echo({{"Setup File Format: " .. vim.bo.filetype, "Normal"}}, false, {})
+    vim.api.nvim_echo({ { "Setup File Format: " .. vim.bo.filetype, "Normal" } }, false, {})
 
     if vim.bo.filetype == "c" or vim.bo.filetype == "cpp" then
         vim.cmd('setlocal cindent')
@@ -139,12 +139,13 @@ end
 local function list_functions()
     local regex = ""
     local info = {
-        {ft = "c", regex = [[^\w.*(.*)]]}, {ft = "cpp", regex = [[^\w.*(.*)]]},
-        {ft = "lua", regex = [[^\w.*(.*)]]},
-        {ft = "sh", regex = [[^\w.*()\|^function\ ]]},
-        {ft = "python", regex = [[\<def .*(.*):]]},
-        {ft = "markdown", regex = [[^#\+]]},
-        {ft = "yaml", regex = [[^\w.*:\|-.*:]]}
+        { ft = "c", regex = [[^\w.*(.*)]] },
+        { ft = "cpp", regex = [[^\w.*(.*)]] },
+        { ft = "lua", regex = [[^\w.*(.*)]] },
+        { ft = "sh", regex = [[^\w.*()\|^function\ ]] },
+        { ft = "python", regex = [[\<def .*(.*):]] },
+        { ft = "markdown", regex = [[^#\+]] },
+        { ft = "yaml", regex = [[^\w.*:\|-.*:]] }
     }
 
     for _, v in ipairs(info) do
@@ -159,7 +160,7 @@ local function list_functions()
         vim.cmd("vimgrep /" .. regex .. "/j " .. vim.fn.expand("%"))
         vim.cmd("silent! copen")
     else
-        vim.api.nvim_echo({{"not supporting in " .. vim.bo.filetype}}, false, {})
+        vim.api.nvim_echo({ { "not supporting in " .. vim.bo.filetype } }, false, {})
     end
 end
 

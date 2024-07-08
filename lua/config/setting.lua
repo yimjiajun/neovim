@@ -102,4 +102,4 @@ local function setup()
     if vim.fn.isdirectory(vim.fn.stdpath('config') .. '/doc') then vim.cmd('helptags ALL') end
 end
 
-return {Setup = setup}
+return { Setup = setup }

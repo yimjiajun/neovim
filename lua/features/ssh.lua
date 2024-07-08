@@ -52,7 +52,7 @@ local function ssh_connect_request()
     local password = vim.fn.inputsecret("Password: ")
 
     if host_ip == "" or usr == "" or password == "" then
-        vim.api.nvim_echo({{"** Invalid input", "ErrorMsg"}}, true, {})
+        vim.api.nvim_echo({ { "** Invalid input", "ErrorMsg" } }, true, {})
         return
     end
 
@@ -77,7 +77,7 @@ local function ssh_get_list(save_file)
 
         if vim.fn.tolower(vim.fn.trim(vim.fn.input("view password? (y/n): ", 'y'))) == 'y' then show_pass = true end
 
-        vim.api.nvim_echo({{"\nredirecting ssh information to file", "none"}}, false, {})
+        vim.api.nvim_echo({ { "\nredirecting ssh information to file", "none" } }, false, {})
         vim.fn.setreg('"', file)
         vim.cmd([[redir! > ]] .. vim.fn.getreg('"'))
     end
@@ -154,7 +154,7 @@ local function get_ssh_info_by_name(name)
     if name == nil or name == "" then goto search_name_not_found end
 
     for _, info in ipairs(vim.g.ssh_data) do
-        for _, n in pairs({info.alias, info.hostname, info.username}) do if n == name then return info end end
+        for _, n in pairs({ info.alias, info.hostname, info.username }) do if n == name then return info end end
     end
 
     ::search_name_not_found::
@@ -208,7 +208,7 @@ local function toggle_powershell_ssh()
 
     vim.g.wsl_ssh_run_win = (vim.g.wsl_ssh_run_win == 1 and 0 or 1)
     local msg = (vim.g.wsl_ssh_run_win == 1) and "powershell" or "wsl"
-    vim.api.nvim_echo({{"[ SSH ]" .. " -> " .. msg, "WarningMsg"}}, false, {})
+    vim.api.nvim_echo({ { "[ SSH ]" .. " -> " .. msg, "WarningMsg" } }, false, {})
 end
 
 local function toggle_sshpass()
@@ -217,7 +217,7 @@ local function toggle_sshpass()
     vim.g.ssh_run_sshpass = (vim.g.ssh_run_sshpass == 1 and 0 or 1)
     local msg = (vim.g.ssh_run_sshpass == 1) and "on" or "off"
     vim.api.nvim_echo({
-        {"[ SSHpass ]" .. " credential -> " .. msg, "WarningMsg"}
+        { "[ SSHpass ]" .. " credential -> " .. msg, "WarningMsg" }
     }, false, {})
 end
 
@@ -282,7 +282,7 @@ local function ssh_keymap_setting()
 
         vim.api.nvim_set_keymap("n", key(v.key), v.func, keymap_opts(v.desc))
 
-        if wk ~= nil then wk.register({[v.key] = v.desc}, {
+        if wk ~= nil then wk.register({ [v.key] = v.desc }, {
             mode = "n",
             prefix = prefix
         }) end
@@ -349,14 +349,14 @@ local function secure_copy(opts, file, destination)
     sel_ssh = (sel_ssh == nil) and opts or ssh_get_list(false)
 
     if sel_ssh == nil then
-        vim.api.nvim_echo({{"SSH information not found ...", "WarningMsg"}}, true, {})
+        vim.api.nvim_echo({ { "SSH information not found ...", "WarningMsg" } }, true, {})
         return false
     end
 
     if file == nil or file == "" then file = vim.fn.expand(vim.fn.input("File to send: ")) end
 
     if file == "" or vim.fn.filereadable(file) == 0 then
-        vim.api.nvim_echo({{"** Invalid file .. " .. file, "ErrorMsg"}}, true, {})
+        vim.api.nvim_echo({ { "** Invalid file .. " .. file, "ErrorMsg" } }, true, {})
         return false
     end
 
@@ -373,24 +373,24 @@ local function secure_copy(opts, file, destination)
 
     local separator_number = 1
 
-    for _, v in pairs({file, sel_ssh.hostname, sel_ssh.username, destination}) do
+    for _, v in pairs({ file, sel_ssh.hostname, sel_ssh.username, destination }) do
         if vim.fn.len(v) > separator_number then separator_number = vim.fn.len(v) end
     end
 
     local separator = string.rep("=", separator_number + vim.fn.len("* Hostname:    "))
 
-    vim.api.nvim_echo({{"\n"}}, false, {})
-    vim.api.nvim_echo({{separator, "MsgSeparator"}}, true, {})
-    vim.api.nvim_echo({{"  SCP", "MoreMsg"}}, true, {})
-    vim.api.nvim_echo({{separator, "MsgSeparator"}}, true, {})
-    vim.api.nvim_echo({{"* Hostname:    " .. sel_ssh.hostname, "MsgArea"}}, true, {})
-    vim.api.nvim_echo({{"* Username:    " .. sel_ssh.username, "MsgArea"}}, true, {})
-    vim.api.nvim_echo({{"* File:        " .. file, "MsgArea"}}, true, {})
-    vim.api.nvim_echo({{"* Destination: " .. destination, "MsgArea"}}, true, {})
-    vim.api.nvim_echo({{separator, "MsgSeparator"}}, true, {})
+    vim.api.nvim_echo({ { "\n" } }, false, {})
+    vim.api.nvim_echo({ { separator, "MsgSeparator" } }, true, {})
+    vim.api.nvim_echo({ { "  SCP", "MoreMsg" } }, true, {})
+    vim.api.nvim_echo({ { separator, "MsgSeparator" } }, true, {})
+    vim.api.nvim_echo({ { "* Hostname:    " .. sel_ssh.hostname, "MsgArea" } }, true, {})
+    vim.api.nvim_echo({ { "* Username:    " .. sel_ssh.username, "MsgArea" } }, true, {})
+    vim.api.nvim_echo({ { "* File:        " .. file, "MsgArea" } }, true, {})
+    vim.api.nvim_echo({ { "* Destination: " .. destination, "MsgArea" } }, true, {})
+    vim.api.nvim_echo({ { separator, "MsgSeparator" } }, true, {})
 
     if vim.fn.filereadable(file) == 0 then
-        vim.api.nvim_echo({{"** File not found .. " .. file, "ErrorMsg"}}, true, {})
+        vim.api.nvim_echo({ { "** File not found .. " .. file, "ErrorMsg" } }, true, {})
         return false
     end
 
@@ -403,10 +403,10 @@ local function secure_copy(opts, file, destination)
         msg_type = "ModeMsg"
     end
 
-    vim.api.nvim_echo({{"  SCP [ " .. status_msg .. " ]", msg_type}}, true, {})
+    vim.api.nvim_echo({ { "  SCP [ " .. status_msg .. " ]", msg_type } }, true, {})
 
     if ret ~= true and string.match(cmd, "^sshpass") == nil then
-        vim.api.nvim_echo({{"SCP - opening terminal to Enter password..."}}, false, {})
+        vim.api.nvim_echo({ { "SCP - opening terminal to Enter password..." } }, false, {})
         cmd = string.gsub(cmd, "sshpass -p '.*' ", "")
         vim.cmd("split | term " .. cmd)
     end
@@ -458,27 +458,27 @@ local function connect_ssh_desktop(opts)
                                         opts.username)
 
         if opts == nil then
-            vim.api.nvim_echo({{"** Invalid SSH information ..", "ErrorMsg"}}, false, {})
+            vim.api.nvim_echo({ { "** Invalid SSH information ..", "ErrorMsg" } }, false, {})
             return false
         end
     end
 
     local desktop_remote_setup = {
-        remmina = {cmd = "remmina", ext = ".remmina", opt = "-c"},
-        mstsc = {cmd = "powershell.exe -C mstsc", ext = ".rdp", opt = ""}
+        remmina = { cmd = "remmina", ext = ".remmina", opt = "-c" },
+        mstsc = { cmd = "powershell.exe -C mstsc", ext = ".rdp", opt = "" }
     }
     local tool = (vim.fn.exists('win32') == 1 or vim.fn.isdirectory('/run/WSL') == 1) and "mstsc" or "remmina"
     local desktop_remote_file = ssh_desktop_data_dir .. delim .. opts.hostname .. desktop_remote_setup[tool].ext
 
     if tool ~= "mstsc" and vim.fn.executable(desktop_remote_setup[tool].cmd) == 0 then
         vim.api.nvim_echo({
-            {desktop_remote_setup[tool].cmd .. " not found ..", "ErrorMsg"}
+            { desktop_remote_setup[tool].cmd .. " not found ..", "ErrorMsg" }
         }, false, {})
         return false
     end
 
     vim.fn.setreg('+', tostring(opts.password))
-    vim.api.nvim_echo({{"\n[USERNAME] " .. opts.username, "MoreMsg"}}, true, {})
+    vim.api.nvim_echo({ { "\n[USERNAME] " .. opts.username, "MoreMsg" } }, true, {})
 
     if vim.fn.filereadable(desktop_remote_file) > 0 then
         if vim.fn.isdirectory('/run/WSL') == 0 then goto start_desktop_by_file end
@@ -493,7 +493,7 @@ local function connect_ssh_desktop(opts)
             commands = {
                 desktop_remote_setup[tool].cmd .. " " .. desktop_remote_setup[tool].opt .. " " .. desktop_remote_file
             },
-            opts = {timeout = 0}
+            opts = { timeout = 0 }
         })
         return true
     end
@@ -505,7 +505,7 @@ local function connect_ssh_desktop(opts)
             commands = {
                 desktop_remote_setup[tool].cmd .. " " .. "/v:" .. opts.hostname
             },
-            opts = {timeout = 0}
+            opts = { timeout = 0 }
         })
     else
         if vim.fn.executable('sshpass') == 1 and opts.password ~= nil and opts.password ~= "" then
@@ -513,7 +513,7 @@ local function connect_ssh_desktop(opts)
         end
 
         cmd = cmd .. " " .. desktop_remote_setup[tool].opt .. " " .. "rdp://" .. opts.username .. "@" .. opts.hostname
-        async_cmd({commands = {cmd}, opts = {timeout = 0}})
+        async_cmd({ commands = { cmd }, opts = { timeout = 0 } })
     end
 
     return true

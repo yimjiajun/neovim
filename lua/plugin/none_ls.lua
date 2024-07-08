@@ -14,4 +14,4 @@ local function setup()
     })
 end
 
-return {Setup = setup}
+return { Setup = setup }

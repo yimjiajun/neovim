@@ -13,7 +13,7 @@ local function python_setup()
         init_options = {
             settings = {
                 -- Any extra CLI arguments for `ruff` go here.
-                args = {'format --check', 'check'}
+                args = { 'format --check', 'check' }
             }
         }
     }
@@ -26,7 +26,7 @@ local function python_setup()
             python = {
                 analysis = {
                     -- Ignore all files for analysis to exclusively use Ruff for linting
-                    ignore = {'*'}
+                    ignore = { '*' }
                 }
             }
         }
@@ -46,8 +46,8 @@ local function setup()
 
     lspconfig.clangd.setup {
         capabilities = capabilities,
-        cmd = {"clangd"},
-        filetypes = {"c", "cpp", "objc", "objcpp", "cuda", "proto"},
+        cmd = { "clangd" },
+        filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
         root_dir = lspconfig.util.root_pattern('.clangd', '.clang-tidy', '.clang-format', 'compile_commands.json',
                                                'compile_flags.txt', 'configure.ac', '.git'),
         single_file = true,
@@ -66,7 +66,7 @@ local function setup()
     -- nvim-cmp setup
     local cmp = require 'cmp'
     cmp.setup {
-        snippet = {expand = function(args) luasnip.lsp_expand(args.body) end},
+        snippet = { expand = function(args) luasnip.lsp_expand(args.body) end },
         mapping = cmp.mapping.preset.insert({
             ['<C-d>'] = cmp.mapping.scroll_docs(-4),
             ['<C-f>'] = cmp.mapping.scroll_docs(4),
@@ -83,7 +83,7 @@ local function setup()
                 else
                     fallback()
                 end
-            end, {'i', 's'}),
+            end, { 'i', 's' }),
             ['<C-p>'] = cmp.mapping(function(fallback)
                 if cmp.visible() then
                     cmp.select_prev_item()
@@ -92,12 +92,14 @@ local function setup()
                 else
                     fallback()
                 end
-            end, {'i', 's'})
+            end, { 'i', 's' })
         }),
-        sources = cmp.config.sources({{name = 'nvim_lsp'}, {name = 'luasnip'}})
+        sources = cmp.config.sources({
+            { name = 'nvim_lsp' }, { name = 'luasnip' }
+        })
     }
 
     python_setup()
 end
 
-return {Setup = setup}
+return { Setup = setup }

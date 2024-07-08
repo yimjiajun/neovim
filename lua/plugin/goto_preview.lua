@@ -12,14 +12,14 @@ local function setup()
                     r = 'references',
                     t = 'type definition'
                 }
-            }, {mode = "n", prefix = "g"})
+            }, { mode = "n", prefix = "g" })
         end
     end
 
     require('goto-preview').setup {
         width = 120, -- Width of the floating window
         height = 15, -- Height of the floating window
-        border = {"↖", "─", "┐", "│", "┘", "─", "└", "│"}, -- Border characters of the floating window
+        border = { "↖", "─", "┐", "│", "┘", "─", "└", "│" }, -- Border characters of the floating window
         default_mappings = true, -- Bind default mappings
         debug = false, -- Print debug information
         opacity = nil, -- 0-100 opacity level of the floating window where 100 is fully transparent.
@@ -30,9 +30,9 @@ local function setup()
             telescope = require("telescope.themes").get_dropdown({
                 hide_preview = false,
                 borderchars = {
-                    prompt = {" ", " ", " ", " ", " ", " ", " ", " "},
-                    results = {" ", " ", " ", " ", " ", " ", " ", " "},
-                    preview = {" ", " ", " ", " ", " ", " ", " ", " "}
+                    prompt = { " ", " ", " ", " ", " ", " ", " ", " " },
+                    results = { " ", " ", " ", " ", " ", " ", " ", " " },
+                    preview = { " ", " ", " ", " ", " ", " ", " ", " " }
                 }
             })
         },
@@ -43,10 +43,10 @@ local function setup()
         bufhidden = "wipe", -- the bufhidden option to set on the floating window. See :h bufhidden
         stack_floating_preview_windows = true, -- Whether to nest floating windows
         -- Whether to set the preview window title as the filename
-        preview_window_title = {enable = true, position = "left"}
+        preview_window_title = { enable = true, position = "left" }
     }
 
     setup_keymap()
 end
 
-return {Setup = setup}
+return { Setup = setup }

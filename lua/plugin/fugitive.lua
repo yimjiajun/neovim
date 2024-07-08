@@ -2,7 +2,7 @@ vim.g.vim_git = "Git"
 
 local function setup()
     local function setup_autocmd()
-        vim.api.nvim_create_augroup("git", {clear = true})
+        vim.api.nvim_create_augroup("git", { clear = true })
         vim.api.nvim_create_autocmd("FileType", {
             desc = "Format git commit message",
             group = "git",
@@ -31,4 +31,4 @@ local function setup()
     setup_autocmd()
 end
 
-return {Setup = setup}
+return { Setup = setup }

@@ -3,11 +3,11 @@ local lsp = {
     "rust_analyzer", "ruff_lsp"
 }
 local config_path = vim.fn.stdpath("config")
-local config_dir = {"config", "features", "usr"}
+local config_dir = { "config", "features", "usr" }
 
 if vim.loop.os_uname().machine ~= 'aarch64' then goto start_setup end
 
-for _, l in ipairs({"lua_ls", "clangd"}) do
+for _, l in ipairs({ "lua_ls", "clangd" }) do
     for i, v in ipairs(lsp) do
         if l == v then
             table.remove(lsp, i)
@@ -22,7 +22,7 @@ vim.g.custom = {
     colorscheme = {
         theme = 'habamax',
         transparency = false,
-        highlight = {FloatBorder = {}}
+        highlight = { FloatBorder = {} }
     },
     lsp = lsp
 }

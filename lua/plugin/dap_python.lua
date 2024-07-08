@@ -13,14 +13,14 @@ local function setup()
                 type = 'server',
                 port = assert(port, '`connect.port` is required for a python `attach` configuration'),
                 host = host,
-                options = {source_filetype = 'python'}
+                options = { source_filetype = 'python' }
             })
         else
             cb({
                 type = 'executable',
                 command = user_root .. '/.local/share/.virtualenvs/debugpy/bin/python',
-                args = {'-m', 'debugpy.adapter'},
-                options = {source_filetype = 'python'}
+                args = { '-m', 'debugpy.adapter' },
+                options = { source_filetype = 'python' }
             })
         end
     end
@@ -28,4 +28,4 @@ local function setup()
     for _, v in pairs(tbl) do table.insert(dap.configurations.python, v) end
 end
 
-return {Setup = setup}
+return { Setup = setup }

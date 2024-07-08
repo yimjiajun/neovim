@@ -72,12 +72,12 @@ local function search_file()
     local msg = string.format("\tfound %d files", #files)
 
     if #files == 0 or files == nil then
-        vim.api.nvim_echo({{"\tfiles not found", ""}}, false, {})
+        vim.api.nvim_echo({ { "\tfiles not found", "" } }, false, {})
         return
     end
 
     local items = {}
-    local std_item = {filename = nil, text = nil, type = 'f', bufnr = nil}
+    local std_item = { filename = nil, text = nil, type = 'f', bufnr = nil }
 
     for _, file in ipairs(files) do
         local item = vim.deepcopy(std_item)
@@ -86,19 +86,19 @@ local function search_file()
         table.insert(items, item)
     end
 
-    vim.fn.setqflist({}, ' ', {title = "Find Files", items = items})
-    vim.api.nvim_echo({{msg, "MoreMsg"}}, false, {})
+    vim.fn.setqflist({}, ' ', { title = "Find Files", items = items })
+    vim.api.nvim_echo({ { msg, "MoreMsg" } }, false, {})
     vim.cmd("silent! copen")
 end
 
 local function json_write(tbl, path)
     if tbl == nil then
-        vim.api.nvim_echo({{"empty table ...", "ErrorMsg"}}, false, {})
+        vim.api.nvim_echo({ { "empty table ...", "ErrorMsg" } }, false, {})
         return false
     end
 
     if path == nil or #path == 0 then
-        vim.api.nvim_echo({{"file path is empty ...", "ErrorMsg"}}, false, {})
+        vim.api.nvim_echo({ { "file path is empty ...", "ErrorMsg" } }, false, {})
         return false
     end
 
@@ -106,7 +106,7 @@ local function json_write(tbl, path)
     local file = io.open(path, "w")
 
     if file == nil then
-        vim.api.nvim_echo({{"file open failed ...", "ErrorMsg"}}, false, {})
+        vim.api.nvim_echo({ { "file open failed ...", "ErrorMsg" } }, false, {})
         return false
     end
 
@@ -118,14 +118,14 @@ end
 
 local function json_read(path)
     if path == nil then
-        vim.api.nvim_echo({{"file path is empty ...", "ErrorMsg"}}, false, {})
+        vim.api.nvim_echo({ { "file path is empty ...", "ErrorMsg" } }, false, {})
         return {}
     end
 
     local file = io.open(path, "r")
 
     if file == nil then
-        vim.api.nvim_echo({{"file open failed ...", "ErrorMsg"}}, false, {})
+        vim.api.nvim_echo({ { "file open failed ...", "ErrorMsg" } }, false, {})
         return nil
     end
 
@@ -147,13 +147,13 @@ local function save_command_message_to_file(cmd)
     if cmd == nil or #cmd == 0 then cmd = ":messages" end
 
     local file = vim.fn.tempname()
-    local commands = {"redir! > " .. file, cmd, "redir END", "view " .. file}
+    local commands = { "redir! > " .. file, cmd, "redir END", "view " .. file }
 
     for _, c in ipairs(commands) do vim.cmd(c) end
 end
 
 local function setup()
-    local skip_functions = {'^Setup$', '^.*Json$'}
+    local skip_functions = { '^Setup$', '^.*Json$' }
 
     for name in pairs(require('features.files')) do
         for _, skip in ipairs(skip_functions) do if name:match(skip) ~= nil then goto continue end end

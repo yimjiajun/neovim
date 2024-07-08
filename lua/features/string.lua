@@ -41,7 +41,7 @@ local function search_word(extension, mode)
     end
 
     vim.cmd("silent! " .. cmd .. " | silent! +copen 5")
-    vim.fn.setqflist({}, 'r', {title = "search word: " .. vim.fn.getreg('/')})
+    vim.fn.setqflist({}, 'r', { title = "search word: " .. vim.fn.getreg('/') })
 end
 
 local function search_word_by_file(file, mode)
@@ -86,7 +86,7 @@ end
 local function search_word_by_buffer()
     vim.fn.setreg('/', vim.fn.expand("<cword>"))
     vim.cmd([[silent! vimgrep /]] .. vim.fn.getreg('/') .. [[/gj %]])
-    vim.fn.setqflist({}, 'r', {title = "search buffer: " .. vim.fn.getreg('/')})
+    vim.fn.setqflist({}, 'r', { title = "search buffer: " .. vim.fn.getreg('/') })
     vim.cmd("silent! +copen 5")
 end
 
@@ -96,8 +96,8 @@ end
 local function toggle_comment()
     local tbl = {}
     local comments_tbl = {
-        {type = 'c', prefix = '//'}, {type = 'lua', prefix = '--'},
-        {type = 'python', prefix = "\\#"}, {type = 'sh', prefix = "\\#"}
+        { type = 'c', prefix = '//' }, { type = 'lua', prefix = '--' },
+        { type = 'python', prefix = "\\#" }, { type = 'sh', prefix = "\\#" }
     }
 
     local function toggle(prefix, lnum, opts)
@@ -158,7 +158,7 @@ local function toggle_comment()
         local trigger_comment = vim.fn.search(tbl.prefix, 'cn', lend) == 0
 
         while lbegin <= lend do
-            toggle(tbl.prefix, lbegin, {trigger = trigger_comment})
+            toggle(tbl.prefix, lbegin, { trigger = trigger_comment })
             lbegin = lbegin + 1
         end
     elseif vim.fn.mode() == 'n' then

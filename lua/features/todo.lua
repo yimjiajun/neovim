@@ -1,13 +1,13 @@
 local todo_repo_name = "todo"
 local todo_list_title = 'Todo List'
-local todo_lists = {create_file_location = nil, filename = nil, type = nil}
+local todo_lists = { create_file_location = nil, filename = nil, type = nil }
 
 local delim = vim.fn.has('win32') == 1 and '\\' or '/'
 local todo_lists_path = vim.fn.stdpath('data') .. delim .. 'todo'
 local todo_list_json = todo_lists_path .. delim .. 'todo_list.json'
 -- todo list item prefix and icon display on quickfix window
 -- n: new, d: done, p: pending, x: cancel
-local todo_prefix = {['n'] = '[ ]', ['d'] = '[V]', ['p'] = '[-]', ['x'] = '[x]'}
+local todo_prefix = { ['n'] = '[ ]', ['d'] = '[V]', ['p'] = '[-]', ['x'] = '[x]' }
 -- toggle todo status sequence: n -> d -> p -> x -> n
 local todo_prefix_sequence = {
     ['n'] = 'd',
@@ -33,14 +33,14 @@ end
 local function add_todo_keymapping()
     if vim.bo.filetype ~= 'qf' then return end
 
-    if vim.fn.getqflist({title = 0}).title ~= todo_list_title then return end
+    if vim.fn.getqflist({ title = 0 }).title ~= todo_list_title then return end
 
     local key_setup = {
-        {key = '<Tab>', cmd = ':lua require("features.todo").Toggle()<CR>'},
-        {key = 'w', cmd = ':lua require("features.todo").Add()<CR>'},
-        {key = 'r', cmd = ':lua require("features.todo").Update()<CR>'},
-        {key = '<CR>', cmd = ':lua require("features.todo").Read()<CR>'},
-        {key = 'dd', cmd = ':lua require("features.todo").Remove()<CR>'}
+        { key = '<Tab>', cmd = ':lua require("features.todo").Toggle()<CR>' },
+        { key = 'w', cmd = ':lua require("features.todo").Add()<CR>' },
+        { key = 'r', cmd = ':lua require("features.todo").Update()<CR>' },
+        { key = '<CR>', cmd = ':lua require("features.todo").Read()<CR>' },
+        { key = 'dd', cmd = ':lua require("features.todo").Remove()<CR>' }
     }
 
     for _, v in ipairs(key_setup) do vim.api.nvim_buf_set_keymap(0, 'n', v.key, v.cmd, {
@@ -60,7 +60,7 @@ local function add_todo_list()
 
     if file == nil then
         vim.api.nvim_echo({
-            {'Error: Could not create file: ' .. file_path, 'ErrorMsg'}
+            { 'Error: Could not create file: ' .. file_path, 'ErrorMsg' }
         }, true, {})
         return
     end
@@ -93,7 +93,7 @@ end
 local function read_todo_list()
     if vim.bo.filetype ~= 'qf' then return end
 
-    local qf_title = vim.fn.getqflist({title = 0}).title
+    local qf_title = vim.fn.getqflist({ title = 0 }).title
 
     if qf_title ~= todo_list_title then return end
 
@@ -112,7 +112,7 @@ local function read_todo_list()
 
     vim.cmd('view ' .. file_path)
 
-    local autocmd_id = vim.api.nvim_create_autocmd({"BufDelete"}, {
+    local autocmd_id = vim.api.nvim_create_autocmd({ "BufDelete" }, {
         callback = function()
             local bufnr = vim.fn.bufnr("%")
 
@@ -155,20 +155,20 @@ local function get_todo_list()
 
         text = todo_prefix[v.type] .. ' ' .. text
         table.insert(lists, v)
-        table.insert(items, {filename = nil, text = text, type = v.type})
+        table.insert(items, { filename = nil, text = text, type = v.type })
 
         ::continue::
     end
 
     todo_lists = lists
 
-    local qf_title = vim.fn.getqflist({title = 0}).title
+    local qf_title = vim.fn.getqflist({ title = 0 }).title
     local action = ' '
 
     if qf_title == todo_list_title then action = 'r' end
 
     if #items > 0 then
-        vim.fn.setqflist({}, action, {title = todo_list_title, items = items})
+        vim.fn.setqflist({}, action, { title = todo_list_title, items = items })
 
         if vim.bo.filetype ~= 'qf' then
             vim.cmd('silent! copen')
@@ -179,7 +179,7 @@ local function get_todo_list()
         add_todo_keymapping()
     elseif vim.bo.filetype == 'qf' and qf_title == todo_list_title then
         vim.cmd('silent! cclose')
-        vim.fn.setqflist({}, 'r', {title = todo_list_title, items = {}})
+        vim.fn.setqflist({}, 'r', { title = todo_list_title, items = {} })
     end
 
     return lists
@@ -190,7 +190,7 @@ end
 local function toggle_todo_list()
     if vim.bo.filetype ~= 'qf' then return end
 
-    local qf_title = vim.fn.getqflist({title = 0}).title
+    local qf_title = vim.fn.getqflist({ title = 0 }).title
 
     if qf_title ~= todo_list_title then return end
 
@@ -227,7 +227,7 @@ end
 local function remove_todo_list()
     if vim.bo.filetype ~= 'qf' then return end
 
-    local qf_title = vim.fn.getqflist({title = 0}).title
+    local qf_title = vim.fn.getqflist({ title = 0 }).title
 
     if qf_title ~= todo_list_title then return end
 
@@ -261,7 +261,7 @@ local function update_todo_list()
 
     if vim.bo.filetype ~= 'qf' then return end
 
-    local qf_title = vim.fn.getqflist({title = 0}).title
+    local qf_title = vim.fn.getqflist({ title = 0 }).title
 
     if qf_title ~= todo_list_title then return end
 
@@ -277,7 +277,7 @@ local function update_todo_list()
 
     vim.cmd('edit ' .. file_path)
 
-    local autocmd_id = vim.api.nvim_create_autocmd({"BufDelete"}, {
+    local autocmd_id = vim.api.nvim_create_autocmd({ "BufDelete" }, {
         callback = function()
             local bufnr = vim.fn.bufnr("%")
 

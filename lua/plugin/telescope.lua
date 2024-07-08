@@ -104,7 +104,7 @@ local function setup()
 
             if wk ~= nil then
                 wk = require("which-key")
-                wk.register({[v.key] = v.desc}, {prefix = key(v.prefix)})
+                wk.register({ [v.key] = v.desc }, { prefix = key(v.prefix) })
             end
             ::continue::
         end
@@ -192,7 +192,7 @@ local function setup()
         return ret
     end
 
-    extensions = {live_grep_args = get_live_grep_args()}
+    extensions = { live_grep_args = get_live_grep_args() }
 
     telescope.setup {
         defaults = {
@@ -206,8 +206,8 @@ local function setup()
                 mirror = false
             },
             wrap_results = true,
-            path_display = {shorten = {len = 1, exclude = {1, -2, -1}}},
-            mappings = {i = {["<C-h>"] = "which_key"}},
+            path_display = { shorten = { len = 1, exclude = { 1, -2, -1 } } },
+            mappings = { i = { ["<C-h>"] = "which_key" } },
             borderchars = {
                 prompt = {
                     "─", "│", "─", "│", "╭", "╮", "╯", "╰"
@@ -235,19 +235,19 @@ local function setup_extension_live_grep_args()
 
     keymap('n', "<leader>fW",
            [[<cmd> lua require("telescope-live-grep-args.shortcuts").grep_word_under_cursor({prompt_title='fixed word'})<CR>]],
-           {silent = true, desc = 'search word under cursor'})
+           { silent = true, desc = 'search word under cursor' })
 
     keymap('n', "<leader>fw", [[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args(]] ..
                [[{prompt_title='word', default_text=vim.fn.expand('<cword>')})<CR>]],
-           {silent = true, desc = 'search word under cursor'})
+           { silent = true, desc = 'search word under cursor' })
 
     keymap('n', "<leader>fa",
            [[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args({prompt_title='ALL'})<CR>]],
-           {silent = true, desc = 'search all from user input'})
+           { silent = true, desc = 'search all from user input' })
 
     keymap('n', "<leader>fA", [[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args(]] ..
                [[{prompt_title='all', default_text='"' .. vim.fn.expand('<cword>')  .. '"' ..  " --glob '!{.*,  tags}'"})<CR>]],
-           {silent = true, desc = 'search all from cursor'})
+           { silent = true, desc = 'search all from cursor' })
 
     keymap('n', "<leader>fc", [[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args(]] ..
                [[{prompt_title='c, cpp', default_text='"' .. vim.fn.expand('<cword>')  .. '"' ..]] ..
@@ -294,7 +294,7 @@ local function setup_extension_live_grep_args()
     keymap('n', "<leader>fm", [[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args(]] ..
                [[{prompt_title='CMakeLists, MakeFile, makefile', default_text='"' .. vim.fn.expand('<cword>')  .. '"' ..]] ..
                [[" --glob '!{.*,  tags}' --glob '{CMakeLists,MakeFile,makefile}'"})<CR>]],
-           {silent = true, desc = 'make'})
+           { silent = true, desc = 'make' })
 
     keymap('n', "<leader>fM", [[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args(]] ..
                [[{prompt_title='md, rst', default_text='"' .. vim.fn.expand('<cword>')  .. '"' ..]] ..
@@ -315,7 +315,7 @@ local function telescope_buffer()
             local delete_buf = function()
                 local selection = action_state.get_selected_entry()
                 actions.close(prompt_bufnr)
-                vim.api.nvim_buf_delete(selection.bufnr, {force = true})
+                vim.api.nvim_buf_delete(selection.bufnr, { force = true })
                 vim.cmd([[lua require('plugin.telescope').Buffer().buffer_with_del()]])
             end
             map('i', '<del>', delete_buf)
@@ -328,11 +328,11 @@ end
 
 local function setup_extension_bookmarks()
     vim.api.nvim_set_keymap('n', "<leader>vl", [[<cmd> Telescope bookmarks <cr>]],
-                            {silent = true, desc = 'open browser bookmarks'})
+                            { silent = true, desc = 'open browser bookmarks' })
 
     if pcall(require, "which-key") then
         local wk = require("which-key")
-        wk.register({l = "browser bookmarks"}, {prefix = "<leader>v"})
+        wk.register({ l = "browser bookmarks" }, { prefix = "<leader>v" })
     end
 
     require('telescope').load_extension('bookmarks')
@@ -344,7 +344,7 @@ local function ssh_get_list_in_telescope()
     local conf = require("telescope.config").values
     local action_state = require('telescope.actions.state')
     local actions = require('telescope.actions')
-    local telescope_opts = {sorting_strategy = 'ascending'}
+    local telescope_opts = { sorting_strategy = 'ascending' }
 
     local select_connection = function(opts)
         opts = opts or {}

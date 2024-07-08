@@ -14,7 +14,7 @@ local function setup()
         auto_install = true,
 
         -- List of parsers to ignore installing (for "all")
-        ignore_install = {"javascript"},
+        ignore_install = { "javascript" },
 
         highlight = {
             -- `false` will disable the whole extension
@@ -25,8 +25,8 @@ local function setup()
                 if ok and stats and stats.size > max_filesize then return true end
             end
         },
-        indent = {enable = true}
+        indent = { enable = true }
     }
 end
 
-return {Setup = setup}
+return { Setup = setup }

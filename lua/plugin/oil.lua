@@ -7,7 +7,7 @@ local function setup()
             end
 
             require("oil").open(vim.fn.getcwd())
-        end, {silent = true})
+        end, { silent = true })
 
         vim.keymap.set('n', '<leader>E', function()
             if vim.bo.filetype == "oil" then
@@ -16,7 +16,7 @@ local function setup()
             end
 
             require("oil").open()
-        end, {silent = true})
+        end, { silent = true })
     end
 
     require("oil").setup({
@@ -29,7 +29,7 @@ local function setup()
             -- "mtime",
         },
         -- Buffer-local options to use for oil buffers
-        buf_options = {buflisted = false, bufhidden = "hide"},
+        buf_options = { buflisted = false, bufhidden = "hide" },
         -- Window-local options to use for oil buffers
         win_options = {
             wrap = false,
@@ -91,7 +91,7 @@ local function setup()
             max_width = 100,
             max_height = 0,
             border = "shadow",
-            win_options = {winblend = 0}
+            win_options = { winblend = 0 }
         },
         -- Configuration for the actions floating preview window
         preview = {
@@ -100,7 +100,7 @@ local function setup()
             -- max_width = {100, 0.8} means "the lesser of 100 columns or 80% of total"
             max_width = 0.9,
             -- min_width = {40, 0.4} means "the greater of 40 columns or 40% of total"
-            min_width = {40, 0.4},
+            min_width = { 40, 0.4 },
             -- optionally define an integer/float for the exact width of the preview window
             width = nil,
             -- Height dimensions can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
@@ -108,27 +108,27 @@ local function setup()
             -- max_height = {80, 0.9} means "the lesser of 80 columns or 90% of total"
             max_height = 0.9,
             -- min_height = {5, 0.1} means "the greater of 5 columns or 10% of total"
-            min_height = {5, 0.1},
+            min_height = { 5, 0.1 },
             -- optionally define an integer/float for the exact height of the preview window
             height = nil,
             border = "rounded",
-            win_options = {winblend = 0}
+            win_options = { winblend = 0 }
         },
         -- Configuration for the floating progress window
         progress = {
             max_width = 0.9,
-            min_width = {40, 0.4},
+            min_width = { 40, 0.4 },
             width = nil,
-            max_height = {10, 0.9},
-            min_height = {5, 0.1},
+            max_height = { 10, 0.9 },
+            min_height = { 5, 0.1 },
             height = nil,
             border = "rounded",
             minimized_border = "none",
-            win_options = {winblend = 0}
+            win_options = { winblend = 0 }
         }
     })
 
     setup_keymapping()
 end
 
-return {Setup = setup}
+return { Setup = setup }

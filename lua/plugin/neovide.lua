@@ -18,4 +18,4 @@ local function setup()
     vim.opt.titlestring = "JunVim" .. "@" .. vim.fn.getcwd()
 end
 
-return {Setup = setup}
+return { Setup = setup }

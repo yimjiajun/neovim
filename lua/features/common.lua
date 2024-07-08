@@ -1,5 +1,5 @@
 local function display_title(title) vim.api.nvim_echo({
-    {string.format("%-s", title), "Title"}
+    { string.format("%-s", title), "Title" }
 }, false, {}) end
 
 -- @name: group_selection
@@ -45,7 +45,7 @@ local function group_selection(tbl)
 
     if sel == 0 or sel > #group_list then return nil end
 
-    vim.api.nvim_echo({{"\t[ " .. group_list[sel] .. " ]\n", "WarningMsg"}}, false, {})
+    vim.api.nvim_echo({ { "\t[ " .. group_list[sel] .. " ]\n", "WarningMsg" } }, false, {})
     return group_list[sel]
 end
 
@@ -58,7 +58,7 @@ local function table_selection(tbl, display_lists, name)
 
     local sel_tbl = tbl[s]
 
-    vim.api.nvim_echo({{"\t[ " .. sel_tbl .. " ]\n", "WarningMsg"}}, false, {})
+    vim.api.nvim_echo({ { "\t[ " .. sel_tbl .. " ]\n", "WarningMsg" } }, false, {})
 
     return sel_tbl
 end
@@ -80,10 +80,9 @@ local function async_command(args)
         return
     end
 
-    commands = (type(commands) == "table") and commands or
-                   ((type(commands) == "string") and {commands} or {
-            string.format("%s", commands)
-        })
+    commands = (type(commands) == "table") and commands or ((type(commands) == "string") and {
+        commands
+    } or { string.format("%s", commands) })
     local timeout = (opts.timeout == nil) and 30000 or (opts.timeout * 1000) -- default 30 seconds
     local handle = nil
 
@@ -119,13 +118,13 @@ local function async_command(args)
         if #commands >= 1 then table.remove(commands, 1) end
 
         if (#commands > 0) and (code == 0 or ((opts.allow_fail == nil) and false or opts.allow_fail)) then
-            async_command({commands = commands, opts = opts})
+            async_command({ commands = commands, opts = opts })
         end
     end
     -- Spawn the process
     handle = vim.loop.spawn(cmd, {
         args = cmd_args,
-        stdio = {nil, stdout, stderr}
+        stdio = { nil, stdout, stderr }
     }, vim.schedule_wrap(on_exit))
 
     output_message(string.format("%-10s [ %s ]", "Execute", commands[1]))

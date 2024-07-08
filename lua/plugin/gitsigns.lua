@@ -1,7 +1,7 @@
 local function setup_highlight()
     local colors = {
-        GitSignsChange = {link = 'Normal'},
-        GitSignsAdd = {link = '@comment.warning'}
+        GitSignsChange = { link = 'Normal' },
+        GitSignsAdd = { link = '@comment.warning' }
     }
 
     for n, c in pairs(colors) do vim.api.nvim_set_hl(0, tostring(n), c) end
@@ -45,7 +45,7 @@ local function setup()
         numhl = true, -- Toggle with `:Gitsigns toggle_numhl`
         linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
         word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
-        watch_gitdir = {interval = 1000, follow_files = true},
+        watch_gitdir = { interval = 1000, follow_files = true },
         attach_to_untracked = true,
         current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
         current_line_blame_opts = {
@@ -67,7 +67,7 @@ local function setup()
             row = 0,
             col = 1
         },
-        yadm = {enable = false},
+        yadm = { enable = false },
 
         on_attach = function(bufnr)
             local gs = package.loaded.gitsigns
@@ -83,24 +83,24 @@ local function setup()
                 if vim.wo.diff then return ']c' end
                 vim.schedule(function() gs.next_hunk() end)
                 return '<Ignore>'
-            end, {expr = true})
+            end, { expr = true })
 
             map('n', '[c', function()
                 if vim.wo.diff then return '[c' end
                 vim.schedule(function() gs.prev_hunk() end)
                 return '<Ignore>'
-            end, {expr = true})
+            end, { expr = true })
 
             -- Actions
             map('n', '<leader>gGn', gs.next_hunk)
             map('n', '<leader>gGp', gs.prev_hunk)
-            map({'n', 'v'}, '<leader>gGss', ':Gitsigns stage_hunk<CR>')
-            map({'n', 'v'}, '<leader>gGsr', ':Gitsigns reset_hunk<CR>')
+            map({ 'n', 'v' }, '<leader>gGss', ':Gitsigns stage_hunk<CR>')
+            map({ 'n', 'v' }, '<leader>gGsr', ':Gitsigns reset_hunk<CR>')
             map('n', '<leader>gGsS', gs.stage_buffer)
             map('n', '<leader>gGsu', gs.undo_stage_hunk)
             map('n', '<leader>gGsR', gs.reset_buffer)
             map('n', '<leader>gGsp', gs.preview_hunk)
-            map('n', '<leader>gGba', function() gs.blame_line {full = true} end)
+            map('n', '<leader>gGba', function() gs.blame_line { full = true } end)
             map('n', '<leader>gGbb', gs.toggle_current_line_blame)
             map('n', '<leader>gGdd', gs.diffthis)
             map('n', '<leader>gGdp', function() gs.diffthis('~') end)
@@ -111,7 +111,7 @@ local function setup()
             map('n', '<leader>gGtn', gs.toggle_numhl)
 
             -- Text object
-            map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+            map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
         end
     }
 
@@ -136,7 +136,7 @@ local function setup()
                     a = 'line',
                     b = 'toggle current line blame'
                 },
-                d = {name = "Diff", d = 'diffthis', p = 'diffthis ~'},
+                d = { name = "Diff", d = 'diffthis', p = 'diffthis ~' },
                 t = {
                     name = "Toggle",
                     d = 'toggle deleted',
@@ -146,17 +146,17 @@ local function setup()
                     n = 'toggle numhl'
                 }
             }
-        }, {prefix = "<leader>g"})
+        }, { prefix = "<leader>g" })
 
         wk.register({
             G = {
                 name = "GitSign",
-                s = {name = "Stage", s = 'hunk', r = 'reset'}
+                s = { name = "Stage", s = 'hunk', r = 'reset' }
             }
-        }, {mode = 'v', prefix = "<leader>g"})
+        }, { mode = 'v', prefix = "<leader>g" })
     end
 
     setup_highlight()
 end
 
-return {Setup = setup}
+return { Setup = setup }

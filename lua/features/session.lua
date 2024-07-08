@@ -4,7 +4,7 @@ local session_name = vim.fn.substitute(vim.fn.expand(vim.fn.getcwd()), d, '_', '
 local src = path .. d .. session_name
 local json_file = path .. d .. "sessions.json"
 local uv = vim.loop
-local work_dirs = {uv.cwd()}
+local work_dirs = { uv.cwd() }
 
 local function get_session_tbl()
     if vim.fn.isdirectory(path) == 0 then vim.fn.mkdir(path, "p") end
@@ -44,7 +44,7 @@ local function load_session()
     if (vim.fn.isdirectory(path) == 1) and (vim.fn.filereadable(src) == 1) then
         vim.cmd("source " .. src)
     else
-        vim.api.nvim_echo({{"Session not found !", "ErrorMsg"}}, false, {})
+        vim.api.nvim_echo({ { "Session not found !", "ErrorMsg" } }, false, {})
     end
 end
 
@@ -55,7 +55,7 @@ local function select_session()
     for i, v in ipairs(json_lua_tbl) do lists[i] = string.format("%2d. [%s]:\t%s\t{%s}", i, v.name, v.path, v.date) end
 
     if #lists == 0 then
-        vim.api.nvim_echo({{"Session not found !", "ErrorMsg"}}, false, {})
+        vim.api.nvim_echo({ { "Session not found !", "ErrorMsg" } }, false, {})
         return
     end
 
@@ -68,8 +68,8 @@ end
 local function change_and_save_working_directory()
     local current_file_dir = vim.fn.expand('%:p:h')
 
-    vim.api.nvim_echo({{'change working directory to: ', "None"}}, true, {})
-    vim.api.nvim_echo({{current_file_dir, "WarningMsg"}}, true, {})
+    vim.api.nvim_echo({ { 'change working directory to: ', "None" } }, true, {})
+    vim.api.nvim_echo({ { current_file_dir, "WarningMsg" } }, true, {})
     save_session()
     vim.cmd('cd ' .. current_file_dir)
     table.insert(work_dirs, current_file_dir)
@@ -78,8 +78,8 @@ end
 local function save_current_working_directory()
     local current_file_dir = uv.cwd()
 
-    vim.api.nvim_echo({{'save working directory: ', "None"}}, true, {})
-    vim.api.nvim_echo({{current_file_dir, "WarningMsg"}}, true, {})
+    vim.api.nvim_echo({ { 'save working directory: ', "None" } }, true, {})
+    vim.api.nvim_echo({ { current_file_dir, "WarningMsg" } }, true, {})
     save_session()
     table.insert(work_dirs, current_file_dir)
 end
@@ -97,10 +97,10 @@ local function select_working_directory()
     vim.cmd('cd ' .. chg_work_dir)
 end
 
-local function clear_working_directory_history() work_dirs = {uv.cwd()} end
+local function clear_working_directory_history() work_dirs = { uv.cwd() } end
 
 local function setup()
-    work_dirs = {uv.cwd()}
+    work_dirs = { uv.cwd() }
 
     if vim.fn.isdirectory(path) == 0 then vim.fn.mkdir(path, "p") end
 end

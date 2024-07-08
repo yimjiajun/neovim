@@ -128,7 +128,7 @@ local function setup()
         command = nil,
         width = 69,
         height = 8,
-        opts = {redraw = true, window_config = {}}
+        opts = { redraw = true, window_config = {} }
     }
     local default_header = {
         type = "text",
@@ -150,7 +150,7 @@ local function setup()
     local footer = {
         type = "text",
         val = footer_value,
-        opts = {position = "center", hl = "Define"}
+        opts = { position = "center", hl = "Define" }
     }
 
     local leader = "SPC"
@@ -176,7 +176,7 @@ local function setup()
                 silent = true,
                 nowait = true
             })
-            opts.keymap = {"n", sc_, keybind, keybind_opts}
+            opts.keymap = { "n", sc_, keybind, keybind_opts }
         end
 
         local function on_press()
@@ -184,10 +184,10 @@ local function setup()
             vim.api.nvim_feedkeys(key, "tx", false)
         end
 
-        return {type = "button", val = txt, on_press = on_press, opts = opts}
+        return { type = "button", val = txt, on_press = on_press, opts = opts }
     end
 
-    local buttons = {type = "group", val = {}, opts = {spacing = 1}}
+    local buttons = { type = "group", val = {}, opts = { spacing = 1 } }
 
     local section = {
         terminal = default_terminal,
@@ -198,10 +198,10 @@ local function setup()
 
     local config = {
         layout = {
-            {type = "padding", val = 2}, section.header,
-            {type = "padding", val = 2}, section.buttons, section.footer
+            { type = "padding", val = 2 }, section.header,
+            { type = "padding", val = 2 }, section.buttons, section.footer
         },
-        opts = {margin = 5}
+        opts = { margin = 5 }
     }
 
     vim.cmd [[
@@ -224,4 +224,4 @@ local function setup()
     vim.cmd("command! -nargs=0 AlphaUpdate lua require('plugin.alphas').AlphaUpdate()")
 end
 
-return {AlphaUpdate = update_dashboard, Setup = setup}
+return { AlphaUpdate = update_dashboard, Setup = setup }

@@ -61,8 +61,8 @@ end
 local function check_git_remote_url_exists(remote, url)
     if remote == nil or url == nil then return false end
 
-    local compare_remote = (type(remote) == "table") and remote or {remote}
-    local compare_url = (type(url) == "table") and url or {url}
+    local compare_remote = (type(remote) == "table") and remote or { remote }
+    local compare_url = (type(url) == "table") and url or { url }
 
     for _, u in pairs(compare_url) do
         for _, r in pairs(compare_remote) do
@@ -237,7 +237,7 @@ local function compiler_tbl_makeprg_setup(tbl)
 
     if tbl.opts ~= nil then
         if compiler_optional_setup(tbl) == false then
-            vim.api.nvim_echo({{"compiler callback error", "ErrorMsg"}}, true, {})
+            vim.api.nvim_echo({ { "compiler callback error", "ErrorMsg" } }, true, {})
             return false
         end
     end
@@ -283,7 +283,7 @@ local function compiler_latest_makeprg_setup()
     if (tbl.ext ~= nil) and (tbl.ext ~= 'any') and (tbl.ext ~= vim.bo.filetype) then return false end
 
     if (tbl.opt ~= nil) and (compiler_optional_setup(tbl) == false) then
-        vim.api.nvim_echo({{"compiler callback error", "ErrorMsg"}}, true, {})
+        vim.api.nvim_echo({ { "compiler callback error", "ErrorMsg" } }, true, {})
         return false
     end
 
@@ -344,14 +344,14 @@ local function compiler_build_setup_selection()
 
     if sel_idx == 0 or sel_idx > #target_tbl then return false end
 
-    vim.api.nvim_echo({{"\n"}}, false, {})
+    vim.api.nvim_echo({ { "\n" } }, false, {})
     return compiler_tbl_makeprg_setup(target_tbl[sel_idx])
 end
 
 local function setup()
     local compiler_dir = vim.fn.stdpath('data') .. delim
 
-    for _, dir in ipairs({'compiler', 'compilers'}) do
+    for _, dir in ipairs({ 'compiler', 'compilers' }) do
         if vim.fn.isdirectory(compiler_dir .. dir) == 1 then
             compiler_data_dir = compiler_dir .. dir
             break

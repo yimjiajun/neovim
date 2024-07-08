@@ -44,7 +44,7 @@ local function setup()
             }, {
                 'nvim-treesitter/nvim-treesitter',
                 build = function()
-                    require('nvim-treesitter.install').update({with_sync = true})
+                    require('nvim-treesitter.install').update({ with_sync = true })
                     require("plugin.treesitter")
                     vim.cmd([[TSUpdateSync]])
                 end,
@@ -70,7 +70,7 @@ local function setup()
                 end
             }, {
                 "mfussenegger/nvim-dap-python",
-                dependencies = {"mfussenegger/nvim-dap"},
+                dependencies = { "mfussenegger/nvim-dap" },
                 build = function()
                     os.execute([[
 						mkdir ~/.local/share/.virtualenvs 1>/dev/null 2>&1
@@ -79,7 +79,7 @@ local function setup()
 						debugpy/bin/python -m pip install debugpy
 					]])
                 end,
-                ft = {"python"},
+                ft = { "python" },
                 config = function()
                     require('dap-python').setup('~/.local/share/.virtualenvs/debugpy/bin/python')
                     require('plugin.dap').Keymap().Python()
@@ -94,11 +94,11 @@ local function setup()
             }, {
                 'nvim-telescope/telescope.nvim',
                 tag = '0.1.4',
-                dependencies = {'nvim-lua/plenary.nvim'},
+                dependencies = { 'nvim-lua/plenary.nvim' },
                 config = function() require('plugin.telescope').Setup() end
             }, {
                 "nvim-telescope/telescope-live-grep-args.nvim",
-                dependencies = {'nvim-telescope/telescope.nvim'},
+                dependencies = { 'nvim-telescope/telescope.nvim' },
                 config = function() require('plugin.telescope').SetupLiveGrepArgs() end
             }, {
                 'dhruvmanila/telescope-bookmarks.nvim',
@@ -115,7 +115,7 @@ local function setup()
                 config = function() require('plugin.toggleterm').Setup() end
             }, {
                 'stevearc/oil.nvim',
-                dependencies = {"nvim-tree/nvim-web-devicons"},
+                dependencies = { "nvim-tree/nvim-web-devicons" },
                 opts = {},
                 config = function() require('plugin.oil').Setup() end
             }, {
@@ -143,14 +143,14 @@ local function setup()
                 config = function() require('plugin.surround').Setup() end
             }, {
                 "iamcco/markdown-preview.nvim",
-                ft = {"markdown"},
+                ft = { "markdown" },
                 build = "cd app && npm install",
                 config = function() require('plugin.markdown-preview').Setup() end
             }, {
                 "CopilotC-Nvim/CopilotChat.nvim",
                 branch = "canary",
                 dependencies = {
-                    {'github/copilot.vim'}, {"nvim-lua/plenary.nvim"} -- for curl, log wrapper
+                    { 'github/copilot.vim' }, { "nvim-lua/plenary.nvim" } -- for curl, log wrapper
                 },
                 opts = {
                     debug = true -- Enable debugging
@@ -181,7 +181,7 @@ local function setup()
             }, {
                 'MeanderingProgrammer/markdown.nvim',
                 name = 'render-markdown', -- Only needed if you have another plugin named markdown.nvim
-                dependencies = {'nvim-treesitter/nvim-treesitter'},
+                dependencies = { 'nvim-treesitter/nvim-treesitter' },
                 config = function() require('render-markdown').setup({}) end
             }
         },
@@ -207,7 +207,7 @@ local function setup()
             notify = true -- get a notification when changes are found
         },
         performance = {
-            cache = {enabled = true},
+            cache = { enabled = true },
             reset_packpath = true, -- reset the package path to improve startup time
             rtp = {
                 -- disable some rtp plugins
@@ -219,10 +219,10 @@ local function setup()
                 }
             }
         },
-        install = {missing = true, colorscheme = {"habamax"}}
+        install = { missing = true, colorscheme = { "habamax" } }
     })
 
     if vim.g.neovide ~= nil and pcall(require, 'plugin.neovide') then require('plugin.neovide').Setup() end
 end
 
-return {Setup = setup}
+return { Setup = setup }

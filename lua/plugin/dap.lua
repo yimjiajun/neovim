@@ -1,8 +1,8 @@
-local dap_info = {python = {}}
+local dap_info = { python = {} }
 
 local function setup_keymap()
     local keymap = vim.api.nvim_set_keymap
-    local opts = {noremap = true, silent = true}
+    local opts = { noremap = true, silent = true }
 
     local function dap_python_keymap()
         keymap('n', '<leader>dpm', '<cmd>lua require"dap-python".test_method()<CR>', opts)
@@ -13,10 +13,10 @@ local function setup_keymap()
             local wk = require('which-key')
 
             wk.register({
-                p = {name = 'Python', m = 'test method', c = 'test class'}
-            }, {mode = 'n', prefix = '<leader>d'})
+                p = { name = 'Python', m = 'test method', c = 'test class' }
+            }, { mode = 'n', prefix = '<leader>d' })
 
-            wk.register({p = {name = 'Python', s = 'debug selection'}}, {
+            wk.register({ p = { name = 'Python', s = 'debug selection' } }, {
                 mode = 'v',
                 prefix = '<leader>d'
             })
@@ -67,17 +67,17 @@ local function setup_keymap()
                 g = 'goto'
             }
 
-            wk.register(k, {mode = 'n', prefix = '<leader>d'})
-            wk.register({d = 'Debugger'}, {mode = 'v', prefix = '<leader>'})
+            wk.register(k, { mode = 'n', prefix = '<leader>d' })
+            wk.register({ d = 'Debugger' }, { mode = 'v', prefix = '<leader>' })
         end
     end
 
-    return {Python = dap_python_keymap, Init = init}
+    return { Python = dap_python_keymap, Init = init }
 end
 
 local function dap_get_info(client)
     local tbl = {}
-    local dap_tbl = {{client = 'python', info = dap_info.python}}
+    local dap_tbl = { { client = 'python', info = dap_info.python } }
 
     for _, v in pairs(dap_tbl) do if v.client == client then table.insert(tbl, v.info) end end
 
@@ -85,7 +85,7 @@ local function dap_get_info(client)
 end
 
 local function dap_insert_info(tbl, client)
-    local dap_tbl = {{client = 'python', info = dap_info.python}}
+    local dap_tbl = { { client = 'python', info = dap_info.python } }
 
     if (client == nil) or (tbl == nil) then return end
 

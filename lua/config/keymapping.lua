@@ -1,6 +1,6 @@
 local keymap = vim.api.nvim_set_keymap
-local opts = {noremap = true, silent = true}
-local opts_output = {noremap = true, silent = false}
+local opts = { noremap = true, silent = true }
+local opts_output = { noremap = true, silent = false }
 
 local function setting_key_move()
     keymap('i', '<C-b>', '<Left>', opts)
@@ -28,8 +28,8 @@ local function setting_key_buffer()
     keymap('n', '<leader><BS>', [[<cmd>%bd|e#|bd#|'<CR>|<CR>|`"]], opts)
     keymap('n', '<C-c>', ':bd<CR>', opts)
     keymap('n', '<esc><BS>', ':cclose<CR>', opts)
-    keymap('n', 'cxz', '<cmd>bp<CR>', {noremap = true})
-    keymap('n', 'zxc', '<cmd>bn<CR>', {noremap = true})
+    keymap('n', 'cxz', '<cmd>bp<CR>', { noremap = true })
+    keymap('n', 'zxc', '<cmd>bn<CR>', { noremap = true })
     keymap('n', '<leader>c', ':lua require("config.function").ToggleQuickFix() <CR>', opts)
     keymap('n', '<M-j>', '<cmd> cn <CR>z.', opts)
     keymap('n', '<M-k>', '<cmd> cp <CR>z.', opts)
@@ -181,24 +181,24 @@ local function setting_key_working_directory()
     if pcall(require, 'features.session') == false then return end
 
     keymap('n', '<leader>tww', [[<cmd> lua require('features.session').SaveWD() <CR>]],
-           {silent = true, desc = 'save current working directory'})
+           { silent = true, desc = 'save current working directory' })
     keymap('n', '<leader>tws', [[<cmd> lua require('features.session').ChgSaveWD() <CR>]], {
         silent = true,
         desc = 'change to path as working directory and save previos working directory'
     })
     keymap('n', '<leader>twS', [[<cmd> lua require('features.session').SelWD() <CR>]],
-           {silent = true, desc = 'selection of saved working directory'})
+           { silent = true, desc = 'selection of saved working directory' })
     keymap('n', '<leader>twC', [[<cmd> lua require('features.session').ClrWD() <CR>]],
-           {silent = true, desc = 'clear all the saved working directory'})
+           { silent = true, desc = 'clear all the saved working directory' })
 end
 
 local function setting_key_system()
     if pcall(require, 'features.system') == false then return end
 
     keymap('n', '<leader>vci', [[<cmd> lua require('features.system').GetCalendar() <CR>]],
-           {silent = true, desc = 'show calendar'})
+           { silent = true, desc = 'show calendar' })
     keymap('n', '<leader>vsb', [[<cmd> lua require('features.system').GetBatInfo() <CR>]],
-           {silent = true, desc = 'show battery info'})
+           { silent = true, desc = 'show battery info' })
 end
 
 local function setup()
@@ -219,4 +219,4 @@ local function setup()
     setting_key_system()
 end
 
-return {Setup = setup}
+return { Setup = setup }

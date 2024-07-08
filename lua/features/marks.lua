@@ -1,5 +1,5 @@
 local function all_marks(act)
-    local skip_mark = {'E', 'I', 'N', 'W'}
+    local skip_mark = { 'E', 'I', 'N', 'W' }
     local items = {}
     local item
     local mark
@@ -72,13 +72,13 @@ local function all_marks(act)
     end
 
     if #items > 0 then
-        vim.fn.setqflist({}, ' ', {title = "universal marks", items = items})
+        vim.fn.setqflist({}, ' ', { title = "universal marks", items = items })
         vim.cmd("silent! copen")
     end
 end
 
 local function buffer_marks(act)
-    local skip_mark = {'e', 'i', 'n', 'w'}
+    local skip_mark = { 'e', 'i', 'n', 'w' }
     local items = {}
     local item
     local mark
@@ -181,11 +181,11 @@ local function buffer_marks(act)
     if #items > 0 then
         if string.match(act, 'sort') then table.sort(items, function(a, b) return a.lnum < b.lnum end) end
 
-        vim.fn.setqflist({}, ' ', {title = "buffer marks", items = items})
+        vim.fn.setqflist({}, ' ', { title = "buffer marks", items = items })
         vim.cmd("silent! copen")
     end
 end
 
 local function setup() return nil end
 
-return {Setup = setup, All = all_marks, Buffer = buffer_marks}
+return { Setup = setup, All = all_marks, Buffer = buffer_marks }

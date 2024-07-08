@@ -1,12 +1,12 @@
-vim.g.mkdp_filetypes = {"markdown"}
+vim.g.mkdp_filetypes = { "markdown" }
 vim.g.browser = nil
 
 local function setup_browser()
     local info = {
-        {os = "mac", browser = "safari"},
-        {os = "win32", browser = "MicrosoftEdge.exe"},
-        {os = "unix", browser = "firefox"},
-        {os = "unix", browser = "google-chrome"}
+        { os = "mac", browser = "safari" },
+        { os = "win32", browser = "MicrosoftEdge.exe" },
+        { os = "unix", browser = "firefox" },
+        { os = "unix", browser = "google-chrome" }
     }
 
     for _, v in pairs(info) do
@@ -53,4 +53,4 @@ local function setup()
     setup_builtin_compiler()
 end
 
-return {Setup = setup}
+return { Setup = setup }

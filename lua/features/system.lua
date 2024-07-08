@@ -1,6 +1,6 @@
 local function pwrsh_cmd(cmd)
     if vim.fn.executable('powershell.exe') == 0 then
-        vim.api.nvim_echo({{"powershell not supporting ...", "WarningMsg"}}, true, {})
+        vim.api.nvim_echo({ { "powershell not supporting ...", "WarningMsg" } }, true, {})
         return
     end
 
@@ -39,7 +39,7 @@ local function get_install_package_cmd()
 
     if install_cmd == nil then
         vim.api.nvim_echo({
-            {'System install command not found! ...', 'WarningMsg'}
+            { 'System install command not found! ...', 'WarningMsg' }
         }, true, {})
         local usr_install_cmd = vim.fn.input("Please enter system install command: ")
         vim.api.nvim_echo({
@@ -114,7 +114,7 @@ local function get_battery_info()
         print(bat_top_display)
         for percent = 100, 1, -10 do
             if bat_capacity >= percent then
-                vim.api.nvim_echo({{bat_charging_display, bat_cap_hi_color}}, false, {})
+                vim.api.nvim_echo({ { bat_charging_display, bat_cap_hi_color } }, false, {})
             else
                 print(bat_empty_display)
             end
@@ -131,7 +131,7 @@ local function run_system_command(cmd)
     handle = io.popen(tostring(cmd))
 
     if handle == nil then
-        vim.api.nvim_echo({{"run system command failed ...", "ErrorMsg"}}, false, {})
+        vim.api.nvim_echo({ { "run system command failed ...", "ErrorMsg" } }, false, {})
         return ''
     end
 

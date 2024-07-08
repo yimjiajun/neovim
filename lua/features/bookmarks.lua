@@ -3,7 +3,7 @@ local bookmarks_dir = vim.fn.stdpath('data') .. delim .. 'bookmarks'
 local bookmarks_json_file = bookmarks_dir .. delim .. 'bookmarks.json'
 local BookMarks = {}
 local bookmarks_qf_title = "bookmarks"
-local reserve_marks = {'e', 'i', 'n', 'm', 'w'}
+local reserve_marks = { 'e', 'i', 'n', 'm', 'w' }
 
 local function update_items_from_mark(items)
     for _, v in ipairs(items) do
@@ -72,14 +72,12 @@ local function sort_items_by_mark(items)
 end
 
 local function load_qf_bookmark_keymap()
-    vim.api.nvim_buf_set_keymap(0, 'n', 'dd', [[<cmd> lua require('features.bookmarks').Remove() <CR>]], {
-        silent = true
-    })
+    vim.api.nvim_buf_set_keymap(0, 'n', 'dd', [[<cmd> lua require('features.bookmarks').Remove() <CR>]],
+                                { silent = true })
     vim.api.nvim_buf_set_keymap(0, 'n', '<Tab>', [[<cmd> lua require('features.bookmarks').Review() <CR>]],
-                                {silent = true})
-    vim.api.nvim_buf_set_keymap(0, 'n', 'c', [[<cmd> lua require('features.bookmarks').Rename() <CR>]], {
-        silent = true
-    })
+                                { silent = true })
+    vim.api.nvim_buf_set_keymap(0, 'n', 'c', [[<cmd> lua require('features.bookmarks').Rename() <CR>]],
+                                { silent = true })
 end
 
 local function get_same_path_bookmarks(filepath)
@@ -129,7 +127,7 @@ local function save_bookmark()
 
     for _, v in ipairs(BookMarks) do
         if v.filename == item.filename then
-            local mark = {0, 0}
+            local mark = { 0, 0 }
 
             if v.type ~= nil then mark = vim.api.nvim_buf_get_mark(0, v.type) end
 
@@ -154,13 +152,13 @@ local function save_bookmark()
 end
 
 local function load_local_bookmarks(row, col)
-    local qf_title = vim.fn.getqflist({title = 0}).title
+    local qf_title = vim.fn.getqflist({ title = 0 }).title
 
     BookMarks = require('features.files').GetJson(bookmarks_json_file) or {}
 
     if #BookMarks == 0 then
         if qf_title == bookmarks_qf_title then
-            vim.fn.setqflist({}, 'r', {title = bookmarks_qf_title, items = {}})
+            vim.fn.setqflist({}, 'r', { title = bookmarks_qf_title, items = {} })
 
             if vim.bo.filetype == 'qf' then vim.cmd("silent! copen") end
         end
@@ -231,12 +229,12 @@ end
 local function load_bookmarks(row, col)
     BookMarks = require('features.files').GetJson(bookmarks_json_file) or {}
 
-    local qf_title = vim.fn.getqflist({title = 0}).title
+    local qf_title = vim.fn.getqflist({ title = 0 }).title
     local filename = vim.fn.expand('%:p')
 
     if #BookMarks == 0 then
         if qf_title == bookmarks_qf_title then
-            vim.fn.setqflist({}, 'r', {title = bookmarks_qf_title, items = {}})
+            vim.fn.setqflist({}, 'r', { title = bookmarks_qf_title, items = {} })
 
             if vim.bo.filetype == 'qf' then vim.cmd("silent! copen") end
         end
@@ -310,12 +308,12 @@ local function rename_bookmark()
     local items
 
     if vim.bo.filetype == 'qf' then
-        local qf_title = vim.fn.getqflist({title = 0}).title
+        local qf_title = vim.fn.getqflist({ title = 0 }).title
         local qf_index = lnum
 
         if qf_title ~= bookmarks_qf_title then return end
 
-        items = vim.fn.getqflist({title = bookmarks_qf_title, items = 0}).items
+        items = vim.fn.getqflist({ title = bookmarks_qf_title, items = 0 }).items
         filename = vim.api.nvim_buf_get_name(items[qf_index].bufnr)
         lnum = items[qf_index].lnum
     else
@@ -386,7 +384,7 @@ local function remove_bookmark_in_buffer()
 
     local prefix_string = string.format("[ X %s] ", bookmarks_qf_title)
     local display_string = string.format("%s%s", prefix_string, remove_bookmark_content)
-    vim.api.nvim_echo({{display_string}}, false, {})
+    vim.api.nvim_echo({ { display_string } }, false, {})
 
     BookMarks = items
     require('features.files').SetJson(BookMarks, bookmarks_json_file)
@@ -397,16 +395,16 @@ local function remove_bookmark()
         remove_bookmark_in_buffer()
         return
     else
-        local qf_title = vim.fn.getqflist({title = 0}).title
+        local qf_title = vim.fn.getqflist({ title = 0 }).title
 
         if qf_title ~= bookmarks_qf_title then return end
     end
 
     local items = {}
-    local qf_items = vim.fn.getqflist({title = bookmarks_qf_title, items = 0}).items
+    local qf_items = vim.fn.getqflist({ title = bookmarks_qf_title, items = 0 }).items
 
     if #qf_items == 0 then
-        vim.fn.setqflist({}, 'r', {title = bookmarks_qf_title, items = {}})
+        vim.fn.setqflist({}, 'r', { title = bookmarks_qf_title, items = {} })
         return
     end
 
@@ -468,8 +466,8 @@ local function next_bookmark()
     if #items == 0 then return end
 
     local current_line, last_line = vim.fn.line('.'), vim.fn.line('$')
-    local next = {row = last_line, col = 0, msg = ''}
-    local wrap = {row = current_line, col = 0, msg = ''}
+    local next = { row = last_line, col = 0, msg = '' }
+    local wrap = { row = current_line, col = 0, msg = '' }
     local current_line_msg = ''
 
     for _, v in ipairs(items) do
@@ -505,7 +503,7 @@ local function next_bookmark()
 
     vim.fn.cursor(next.row, next.col)
     next.msg = string.format("[%s] %s", bookmarks_qf_title, next.msg)
-    vim.api.nvim_echo({{next.msg}}, false, {})
+    vim.api.nvim_echo({ { next.msg } }, false, {})
 end
 
 local function prev_bookmark()
@@ -515,8 +513,8 @@ local function prev_bookmark()
     if #items == 0 then return end
 
     local current_line, first_line = vim.fn.line('.'), 1
-    local prev = {row = first_line, col = 0, msg = ''}
-    local wrap = {row = current_line, col = 0, msg = ''}
+    local prev = { row = first_line, col = 0, msg = '' }
+    local wrap = { row = current_line, col = 0, msg = '' }
     local current_line_msg = ''
 
     for _, v in ipairs(items) do
@@ -550,7 +548,7 @@ local function prev_bookmark()
 
     vim.fn.cursor(prev.row, prev.col)
     prev.msg = string.format("[%s] %s", bookmarks_qf_title, prev.msg)
-    vim.api.nvim_echo({{prev.msg}}, false, {})
+    vim.api.nvim_echo({ { prev.msg } }, false, {})
 end
 
 local function review_bookmark_content()
@@ -562,7 +560,7 @@ local function review_bookmark_content()
     local lnum
 
     if vim.bo.filetype == 'qf' then
-        if vim.fn.getqflist({title = 0}).title ~= bookmarks_qf_title then return end
+        if vim.fn.getqflist({ title = 0 }).title ~= bookmarks_qf_title then return end
 
         local qf_items = vim.fn.getqflist({
             title = bookmarks_qf_title,
@@ -579,7 +577,7 @@ local function review_bookmark_content()
 
     for _, v in ipairs(BookMarks) do
         if filename == v.filename and lnum == v.lnum then
-            vim.api.nvim_echo({{v.content}}, false, {})
+            vim.api.nvim_echo({ { v.content } }, false, {})
             break
         end
     end

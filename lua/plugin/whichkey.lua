@@ -22,7 +22,7 @@ local function setup()
         },
         -- add operators that will trigger motion and text object completion
         -- to enable all native operators, set the preset / operators plugin above
-        operators = {gc = "Comments"},
+        operators = { gc = "Comments" },
         key_labels = {
             -- override the label used to display some keys. It doesn't effect WK in any other way.
             -- For example:
@@ -42,13 +42,13 @@ local function setup()
         window = {
             border = "single", -- none, single, double, shadow
             position = "bottom", -- bottom, top
-            margin = {1, 15, 1, 15}, -- extra window margin [top, right, bottom, left]
-            padding = {2, 2, 2, 2} -- extra window padding [top, right, bottom, left]
+            margin = { 1, 15, 1, 15 }, -- extra window margin [top, right, bottom, left]
+            padding = { 2, 2, 2, 2 } -- extra window padding [top, right, bottom, left]
             -- winblend = 20
         },
         layout = {
-            height = {min = 4, max = 20}, -- min and max height of the columns
-            width = {min = 10, max = 40}, -- min and max width of the columns
+            height = { min = 4, max = 20 }, -- min and max height of the columns
+            width = { min = 10, max = 40 }, -- min and max width of the columns
             spacing = 10, -- spacing between columns
             align = "center" -- align columns left, center or right
         },
@@ -63,10 +63,10 @@ local function setup()
             -- list of mode / prefixes that should never be hooked by WhichKey
             -- this is mostly relevant for key maps that start with a native binding
             -- most people should not need to change this
-            i = {"j", "k"},
-            v = {"j", "k"},
+            i = { "j", "k" },
+            v = { "j", "k" },
             -- customize
-            l = {"k", "j"}
+            l = { "k", "j" }
         }
     })
 
@@ -114,8 +114,8 @@ local function setup()
         },
         v = {
             name = 'View',
-            s = {name = 'System', b = 'battery'},
-            c = {name = 'Calendar', i = 'interactive'}
+            s = { name = 'System', b = 'battery' },
+            c = { name = 'Calendar', i = 'interactive' }
         },
         f = {
             name = 'Find',
@@ -171,11 +171,14 @@ local function setup()
                 c = 'clear saved path'
             }
         }
-    }, {mode = "n", prefix = "<leader>"})
+    }, { mode = "n", prefix = "<leader>" })
 
-    wk.register({g = {name = 'Global Plug'}}, {mode = 'v', prefix = "<leader>"})
+    wk.register({ g = { name = 'Global Plug' } }, {
+        mode = 'v',
+        prefix = "<leader>"
+    })
 
     vim.cmd("highlight default link WhichKeyFloat Normal")
 end
 
-return {Setup = setup}
+return { Setup = setup }

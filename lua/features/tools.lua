@@ -5,7 +5,7 @@ local function setup_ui_git()
     local git_cmd
     local key = 'g'
     local desc = "git UI"
-    local opts = {silent = true, desc = desc}
+    local opts = { silent = true, desc = desc }
 
     if vim.fn.executable('lazygit') > 0 then git_cmd = 'lazygit' end
 
@@ -20,9 +20,9 @@ local function setup_ui_git()
 
         if pcall(require, 'which-key') then
             local wk = require("which-key")
-            local wk_mode = {mode = 'n', prefix = system_prefix_key}
+            local wk_mode = { mode = 'n', prefix = system_prefix_key }
 
-            wk.register({[key] = desc}, wk_mode)
+            wk.register({ [key] = desc }, wk_mode)
         end
 
         key = system_prefix_key .. key
@@ -34,7 +34,7 @@ local function setup_top()
     local top_cmd = 'top'
     local key = 't'
     local desc = "system resource"
-    local opts = {silent = true, desc = desc}
+    local opts = { silent = true, desc = desc }
 
     if vim.fn.executable('htop') == 1 then top_cmd = 'htop' end
 
@@ -48,8 +48,8 @@ local function setup_top()
 
     if pcall(require, 'which-key') then
         local wk = require("which-key")
-        local wk_mode = {mode = 'n', prefix = system_prefix_key}
-        wk.register({[key] = desc}, wk_mode)
+        local wk_mode = { mode = 'n', prefix = system_prefix_key }
+        wk.register({ [key] = desc }, wk_mode)
     end
 
     key = system_prefix_key .. key
@@ -60,7 +60,7 @@ local function setup_disk_usage()
     local du_cmd = 'clear;' .. 'du -h --max-depth=1 %:h' .. '; read -n 1'
     local key = 'd'
     local desc = "disk usage"
-    local opts = {silent = true, desc = desc}
+    local opts = { silent = true, desc = desc }
 
     if vim.fn.executable('ncdu') > 0 then du_cmd = 'ncdu %:h' end
 
@@ -74,9 +74,9 @@ local function setup_disk_usage()
 
     if pcall(require, 'which-key') then
         local wk = require("which-key")
-        local wk_mode = {mode = 'n', prefix = system_prefix_key}
+        local wk_mode = { mode = 'n', prefix = system_prefix_key }
 
-        wk.register({[key] = desc}, wk_mode)
+        wk.register({ [key] = desc }, wk_mode)
     end
 
     key = system_prefix_key .. key
@@ -87,20 +87,20 @@ local function setup_calendar()
     local prefix_key = '<leader>vc'
     local key = 'c'
     local desc = "date/calendar"
-    local opts = {silent = true, desc = desc}
+    local opts = { silent = true, desc = desc }
     local cmd
 
     if vim.fn.executable('khal') > 0 then
         keymap('n', prefix_key .. 't', [[<cmd> sp | term khal list today; exit <CR>]],
-               {silent = true, desc = 'khal list today'})
+               { silent = true, desc = 'khal list today' })
         keymap('n', prefix_key .. 'i', [[<cmd> term khal interactive; exit <CR>]],
-               {silent = true, desc = 'khal interactive'})
+               { silent = true, desc = 'khal interactive' })
 
         cmd = [[khal calendar --format '● {start-time} | {title}']]
 
         if pcall(require, 'which-key') then
             local wk = require("which-key")
-            local wk_mode = {mode = 'n', prefix = prefix_key}
+            local wk_mode = { mode = 'n', prefix = prefix_key }
 
             wk.register({
                 [key] = desc,
@@ -116,13 +116,13 @@ local function setup_calendar()
 
     if vim.fn.exists(":Calendar") > 0 then
         keymap('n', prefix_key .. 't', [[<cmd> Calendar -day <CR>]],
-               {silent = true, desc = 'Vim google Calendar list today'})
+               { silent = true, desc = 'Vim google Calendar list today' })
 
         if pcall(require, 'which-key') then
             local wk = require("which-key")
-            local wk_mode = {mode = 'n', prefix = prefix_key}
+            local wk_mode = { mode = 'n', prefix = prefix_key }
 
-            wk.register({[key] = desc, t = "list today (vim)"}, wk_mode)
+            wk.register({ [key] = desc, t = "list today (vim)" }, wk_mode)
         end
     end
 
@@ -130,9 +130,9 @@ local function setup_calendar()
 
     if pcall(require, 'which-key') then
         local wk = require("which-key")
-        local wk_mode = {mode = 'n', prefix = prefix_key}
+        local wk_mode = { mode = 'n', prefix = prefix_key }
 
-        wk.register({[key] = desc}, wk_mode)
+        wk.register({ [key] = desc }, wk_mode)
     end
 
     key = prefix_key .. key
@@ -147,4 +147,4 @@ local function setup()
     for _, tool in ipairs(tools_setup) do tool() end
 end
 
-return {Setup = setup}
+return { Setup = setup }

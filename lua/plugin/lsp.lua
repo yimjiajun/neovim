@@ -1,6 +1,6 @@
 local function setup()
     local function setup_keymap()
-        vim.keymap.set("v", "<leader>lf", vim.lsp.buf.format, {remap = false})
+        vim.keymap.set("v", "<leader>lf", vim.lsp.buf.format, { remap = false })
 
         if pcall(require, 'which-key') then
             local wk = require("which-key")
@@ -11,7 +11,7 @@ local function setup()
                 i = 'lsp implementation',
                 r = 'lsp references',
                 t = "type definition"
-            }, {mode = "n", prefix = "g"})
+            }, { mode = "n", prefix = "g" })
 
             wk.register({
                 l = {
@@ -28,11 +28,11 @@ local function setup()
                     Q = "diagnostic lists",
                     q = "diagnostic float"
                 }
-            }, {mode = "n", prefix = "<leader>"})
+            }, { mode = "n", prefix = "<leader>" })
 
             wk.register({
-                l = {name = "Lsp", c = "code action", f = "formatting"}
-            }, {mode = "v", prefix = "<leader>"})
+                l = { name = "Lsp", c = "code action", f = "formatting" }
+            }, { mode = "v", prefix = "<leader>" })
         end
     end
     -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -50,7 +50,7 @@ local function setup()
 
             -- Buffer local mappings.
             -- See `:help vim.lsp.*` for documentation on any of the below functions
-            local opts = {buffer = ev.buf}
+            local opts = { buffer = ev.buf }
             vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
             vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
             vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
@@ -63,7 +63,7 @@ local function setup()
             end, opts)
             vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts)
             vim.keymap.set('n', '<space>lr', vim.lsp.buf.rename, opts)
-            vim.keymap.set({'n', 'v'}, '<space>lc', vim.lsp.buf.code_action, opts)
+            vim.keymap.set({ 'n', 'v' }, '<space>lc', vim.lsp.buf.code_action, opts)
             vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
             vim.keymap.set('n', '<space>lf', function() vim.lsp.buf.format {
                 async = true
@@ -81,4 +81,4 @@ local function setup()
     setup_keymap()
 end
 
-return {Setup = setup}
+return { Setup = setup }

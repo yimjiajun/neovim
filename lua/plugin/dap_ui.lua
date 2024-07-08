@@ -11,4 +11,4 @@ local function setup()
     dap.listeners.before.event_exited["dapui_config"] = function() dapui.close() end
 end
 
-return {Setup = setup}
+return { Setup = setup }

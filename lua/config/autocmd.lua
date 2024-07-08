@@ -1,5 +1,5 @@
 local function session()
-    vim.api.nvim_create_augroup("session", {clear = true})
+    vim.api.nvim_create_augroup("session", { clear = true })
 
     vim.api.nvim_create_autocmd("VimLeavePre", {
         desc = "Save Session Before Leave Neovim",
@@ -10,7 +10,7 @@ local function session()
 end
 
 local function statusline()
-    vim.api.nvim_create_augroup("statusline", {clear = true})
+    vim.api.nvim_create_augroup("statusline", { clear = true })
 
     vim.api.nvim_create_autocmd("BufRead", {
         desc = "Refresh statusline",
@@ -21,7 +21,7 @@ local function statusline()
 end
 
 local function format()
-    vim.api.nvim_create_augroup("format", {clear = true})
+    vim.api.nvim_create_augroup("format", { clear = true })
 
     vim.api.nvim_create_autocmd("InsertLeave", {
         desc = "Killing whitespace trailing",
@@ -51,7 +51,7 @@ local function format()
 end
 
 local function cursor()
-    vim.api.nvim_create_augroup("cursor", {clear = true})
+    vim.api.nvim_create_augroup("cursor", { clear = true })
 
     vim.api.nvim_create_autocmd("WinEnter", {
         desc = "Enable cursor line",
@@ -92,7 +92,7 @@ local function cursor()
         desc = "Flash the part being yank",
         group = "cursor",
         pattern = "*",
-        callback = function() vim.highlight.on_yank({higroup = 'Visual'}) end
+        callback = function() vim.highlight.on_yank({ higroup = 'Visual' }) end
     })
 
     vim.api.nvim_create_autocmd("FileType", {
@@ -109,7 +109,7 @@ local function cursor()
 end
 
 local function programming()
-    vim.api.nvim_create_augroup("programming", {clear = true})
+    vim.api.nvim_create_augroup("programming", { clear = true })
     vim.api.nvim_create_autocmd("FileType", {
         desc = "C",
         group = "programming",
@@ -186,7 +186,7 @@ local function programming()
 end
 
 local function terminal()
-    vim.api.nvim_create_augroup("terminal", {clear = true})
+    vim.api.nvim_create_augroup("terminal", { clear = true })
 
     vim.api.nvim_create_autocmd("TermOpen", {
         desc = "Terminal",
@@ -243,7 +243,7 @@ local function file()
 end
 
 local function package()
-    vim.api.nvim_create_augroup("package", {clear = true})
+    vim.api.nvim_create_augroup("package", { clear = true })
     vim.api.nvim_create_autocmd("VimEnter", {
         desc = "setup git wrapper, if vim-fugitive package exists",
         group = "package",
@@ -260,7 +260,7 @@ end
 local function highlight()
     local grp_name = "highlight"
 
-    vim.api.nvim_create_augroup(grp_name, {clear = true})
+    vim.api.nvim_create_augroup(grp_name, { clear = true })
     vim.api.nvim_create_autocmd("VimEnter", {
         desc = "setup highlight colors",
         group = grp_name,

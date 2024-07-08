@@ -15,7 +15,7 @@ end
 
 local function setup_autocmd()
     -- vim.cmd("autocmd TermOpen * setlocal nonumber norelativenumber")
-    vim.api.nvim_create_augroup("toggleterm", {clear = true})
+    vim.api.nvim_create_augroup("toggleterm", { clear = true })
     vim.api.nvim_create_autocmd("FileType", {
         desc = "Hide Toggle Term",
         group = "toggleterm",
@@ -23,7 +23,7 @@ local function setup_autocmd()
         callback = function()
             local current_buf = vim.api.nvim_get_current_buf()
             local keymap = vim.api.nvim_buf_set_keymap
-            local opts = {noremap = true, silent = true}
+            local opts = { noremap = true, silent = true }
 
             keymap(current_buf, 't', 'jkl', '<c-\\><c-n>', opts)
             keymap(current_buf, 't', 'lkj', '<c-\\><c-n><cmd>ToggleTerm<CR>', opts)
@@ -55,9 +55,9 @@ local function setup()
         highlights = {
             -- highlights which map to a highlight group name and a table of it's values
             -- NOTE: this is only a subset of values, any group placed here will be set for the terminal window split
-            Normal = {link = "Normal"},
-            NormalFloat = {link = 'Normal'},
-            FloatBorder = {link = "Normal"}
+            Normal = { link = "Normal" },
+            NormalFloat = { link = 'Normal' },
+            FloatBorder = { link = "Normal" }
         },
         shade_terminals = true,
         -- the degree by which to darken to terminal colour, default: 1 for dark backgrounds, 3 for light
@@ -100,4 +100,4 @@ local function setup()
     setup_autocmd()
 end
 
-return {Setup = setup}
+return { Setup = setup }

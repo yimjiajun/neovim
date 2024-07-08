@@ -10,7 +10,7 @@ local function dispatch_build(mode)
 
     if status == nil then
         local msg = "\nBuild not found\n"
-        vim.api.nvim_echo({{msg, "ErrorMsg"}}, true, {})
+        vim.api.nvim_echo({ { msg, "ErrorMsg" } }, true, {})
         return
     end
 
@@ -22,7 +22,7 @@ end
 local function setup()
     local function setup_keymap()
         local keymap = vim.api.nvim_set_keymap
-        local opts = {noremap = true, silent = true}
+        local opts = { noremap = true, silent = true }
 
         keymap('n', '<leader>b', [[<cmd> lua require('plugin.dispatch').Build() <CR>]], opts)
         keymap('n', '<leader>B', [[<cmd> lua require('plugin.dispatch').Build("latest") <CR>]], opts)
@@ -31,4 +31,4 @@ local function setup()
     setup_keymap()
 end
 
-return {Build = dispatch_build, Setup = setup}
+return { Build = dispatch_build, Setup = setup }
