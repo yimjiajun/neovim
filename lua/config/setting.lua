@@ -85,7 +85,10 @@ local function Setting_colorscheme()
         vim.cmd('highlight DiffText guifg=#ffffff')
     end
 
-    if c == 'habamax' or c == 'retrobox' then vim.cmd('highlight StatusLine guibg=#303030 guifg=#afaf87') end
+    if c == 'habamax' or c == 'retrobox' then
+        vim.cmd('highlight StatusLine guibg=#303030 guifg=#afaf87')
+        vim.cmd('highlight link NormalFloat Normal')
+    end
 end
 
 local function setup()
