@@ -1,4 +1,26 @@
 #!/bin/bash
+# Syntax check and format Lua files
+# Usage: ./syntax.sh
+# Dependencies: luaformatter, luacheck, shfmt
+if [ "$#" -ne 0 ]; then
+  if [ "$1" == "--help" ] || [ "$1" == "-h" ]; then
+    cat <<-EOF
+    Syntax check and format Lua files
+
+    Usage:
+        ./syntax.sh
+        find . -name '*.lua' | xargs ./syntax.sh
+        find . -name '*.lua' -exec ./syntax.sh {} +
+
+    Dependencies: luaformatter, luacheck, shfmt
+EOF
+    exit 0
+  fi
+
+  files="$@"
+else
+  files=$(git diff --diff-filter=ACM --name-only HEAD~1)
+fi
 
 lua_tool_cmd=("lua-format" "luacheck")
 lua_tool_install_cmd=(
@@ -35,12 +57,10 @@ if ! command -v lua-format &>/dev/null; then
   exit 1
 fi
 
-files=$(git diff --diff-filter=ACM --name-only HEAD~1)
-
 for f in $files; do
   if [[ $f == *.lua ]]; then
     if ! lua-format --column-limit=120 --column-table-limit=80 \
-      --break-after-table-lb --break-before-table-rb --align-table-field \
+      --spaces-inside-table-braces --spaces-around-equals-in-field --break-after-table-lb --break-before-table-rb --align-table-field \
       --in-place $f; then
       echo -e "\033[0;31mError: lua-format $f failed\033[0m"
       exit 1
