@@ -155,8 +155,9 @@ local function setup()
                 opts = {
                     debug = true -- Enable debugging
                     -- See Configuration section for rest
-                }
+                },
                 -- See Commands section for default commands if you want to lazy load on them
+                config = function() require('plugin.copilotchat').Setup() end
             },
             {
                 'chrisbra/csv.vim',
