@@ -147,6 +147,18 @@ local function setup()
                 build = "cd app && npm install",
                 config = function() require('plugin.markdown-preview').Setup() end
             }, {
+                "CopilotC-Nvim/CopilotChat.nvim",
+                branch = "canary",
+                dependencies = {
+                    {'github/copilot.vim'}, {"nvim-lua/plenary.nvim"} -- for curl, log wrapper
+                },
+                opts = {
+                    debug = true -- Enable debugging
+                    -- See Configuration section for rest
+                }
+                -- See Commands section for default commands if you want to lazy load on them
+            },
+            {
                 'chrisbra/csv.vim',
                 config = function() require('plugin.csv').Setup() end
             },
