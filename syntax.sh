@@ -35,7 +35,9 @@ if ! command -v lua-format &>/dev/null; then
   exit 1
 fi
 
-for f in $(git diff --diff-filter=ACM --name-only HEAD~1); do
+files=$(git diff --diff-filter=ACM --name-only HEAD~1)
+
+for f in $files; do
   if [[ $f == *.lua ]]; then
     if ! lua-format --column-limit=120 --column-table-limit=80 \
       --break-after-table-lb --break-before-table-rb --align-table-field \
@@ -66,9 +68,13 @@ if ! command -v luacheck &>/dev/null; then
   exit 1
 fi
 
-if ! luacheck --no-max-line-length lua/ --globals vim; then
-  echo -e "\033[0;31mError: luacheck failed\033[0m"
-  exit 1
-fi
+for f in $files; do
+  if [[ $f == *.lua ]]; then
+    if ! luacheck --no-max-line-length $f --globals vim; then
+      echo -e "\033[0;31mError: luacheck $f failed\033[0m"
+      exit 1
+    fi
+  fi
+done
 
 exit 0
