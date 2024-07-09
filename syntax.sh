@@ -19,7 +19,7 @@ EOF
 
   files="$@"
 else
-  files=$(git diff --diff-filter=ACM --name-only HEAD~1)
+  files=$(git diff --diff-filter=ACM --name-only)
 fi
 
 lua_tool_cmd=("lua-format" "luacheck")
