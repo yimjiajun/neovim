@@ -394,6 +394,15 @@ local function secure_copy(opts, file, destination)
         return false
     end
 
+    vim.fn.system('ping -c 1 -q ' .. sel_ssh.hostname)
+
+    if vim.v.shell_error > 0 then
+        vim.api.nvim_echo({
+            { sel_ssh.hostname .. " Destination is not reachable !", "ErrorMsg" }
+        }, false, {})
+        return false
+    end
+
     local ret = (os.execute(cmd) == 0)
     local status_msg = "Failed"
     local msg_type = "ErrorMsg"
