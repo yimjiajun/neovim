@@ -1,86 +1,112 @@
-local function search_word(extension, mode)
-    local word, cmd
+-- @brief Search pattern asynchronously
+-- @param key Search key
+-- @param opts Search options
+local function search_pattern_async(key, opts)
+    opts = (opts == nil) and {} or opts
+    local extension = (opts.extension == nil) and '*' or opts.extension
+    local options = string.format('%s %s %s',
+                                  (opts.smart_case == nil or opts.smart_case == false) and '' or '--smart-case',
+                                  (opts.case_sensitive == nil or opts.case_sensitive == false) and '' or
+                                      '--case-sensitive', (opts.ignore_case_sensitive == nil or
+                                      opts.ignore_case_sensitive == false) and '' or '--ignore-case-sensitive')
+    local stdout = vim.loop.new_pipe(false) -- Create a new pipe for stdout
+    local stderr = vim.loop.new_pipe(false) -- Create a new pipe for stderr
+    local handle -- Store the process handle
+    local timeout = 10000 -- Define timeout in milliseconds
+    local temp_file = vim.fn.tempname() -- Read the output to a temporary file and open it in quickfix window
 
-    if extension == nil then extension = vim.fn.input("Enter filetype to search: ", vim.fn.expand("%:e")) end
-
-    if extension == "" then extension = "*" end
-
-    if mode ~= 'cursor' then
-        word = vim.fn.input("Enter word to search: ")
-    else
-        word = vim.fn.expand("<cword>")
+    if key == nil then
+        vim.ui.input({ prompt = 'Enter pattern for search: ' }, function(input)
+            key = input
+        end)
     end
 
-    if word == "" then return end
+    key = (key == nil or key == '') and vim.fn.expand("<cword>") or key
+    -- Set the search key, extension and options in the register
+    vim.fn.setreg('/', tostring(key))
+    vim.fn.setreg('e', tostring(extension))
+    vim.fn.setreg('o', tostring(options))
 
-    vim.fn.setreg('/', tostring(word))
+    if vim.fn.executable('rg') == 0 then
+        local cmd = string.format("silent! vimgrep /%s/gj ./**/%s", vim.fn.getreg('/'), vim.fn.getreg('e'))
+        vim.cmd(string.format("silent! %s | silent! +copen 5", cmd))
+        vim.fn.setqflist({}, 'r', {
+            title = string.format("Vim Search >> %s", vim.fn.getreg('/'))
+        })
 
-    if vim.fn.executable("rg") == 1 then
-        if extension == "*" then
-            extension = [[--glob "*"]]
+        return
+    end
+
+    local cmd = 'rg'
+    local cmd_args = vim.split(string.format('--vimgrep --no-ignore %s --regexp %s --glob %s', options, key, extension),
+                               "%s+")
+
+    -- @brief Callback function to handle the exit of the process
+    -- @param _ Exit code (0 for success, non-zero for failure)
+    -- @param _ Signal number (0 for success, non-zero for failure)
+    local function on_exit(_, _)
+        if vim.fn.filereadable(temp_file) == 0 then
+            vim.api.nvim_err_writeln(string.format("'%s' pattern NOT found", key))
         else
-            extension = string.format([[--glob "*.%s"]], extension)
+            vim.cmd(string.format('cgetfile %s', temp_file))
+            vim.cmd('silent! cwindow')
         end
 
-        local opts = " --no-ignore "
-
-        if mode == 'complete' then
-            opts = opts .. " --case-sensitive "
-        else
-            opts = opts .. " --smart-case "
+        if stdout and not stdout:is_closing() then
+            stdout:close()
         end
 
-        vim.fn.setreg('e', extension)
-        vim.fn.setreg('o', opts)
-        cmd = [[cgetexpr system('rg --vimgrep ' .. getreg('o') .. " --regexp " .. getreg('/') .. " " .. getreg('e'))]]
-    else
-        if extension ~= "*" then extension = [[*.]] .. extension end
-
-        vim.fn.setreg('e', tostring(extension))
-        cmd = [[silent! vimgrep /]] .. vim.fn.getreg('/') .. [[/gj ./**/]] .. vim.fn.getreg('e')
-    end
-
-    vim.cmd("silent! " .. cmd .. " | silent! +copen 5")
-    vim.fn.setqflist({}, 'r', { title = "search word: " .. vim.fn.getreg('/') })
-end
-
-local function search_word_by_file(file, mode)
-    local word, cmd
-
-    if file == nil or file == "" then search_word("*", "normal") end
-
-    if mode ~= 'cursor' then
-        word = vim.fn.input("Enter word to search: ")
-    else
-        word = vim.fn.expand("<cword>")
-    end
-
-    if word == "" then return end
-
-    vim.fn.setreg('/', tostring(word))
-
-    if vim.fn.executable("rg") == 1 then
-        file = string.format("{%s,./**/%s}", file, file)
-        local opts = " --no-ignore "
-
-        if mode == 'complete' then
-            opts = opts .. " --case-sensitive "
-        else
-            opts = opts .. " --smart-case "
+        if stderr and not stderr:is_closing() then
+            stderr:close()
         end
 
-        vim.fn.setreg('e', file)
-        vim.fn.setreg('o', opts)
-        cmd = [[cgetexpr system('rg --vimgrep ' .. getreg('o') .. " --regexp " .. getreg('/') .. " " .. getreg('e'))]]
-    else
-        vim.fn.setreg('e', tostring(file))
-        cmd = [[silent! vimgrep /]] .. vim.fn.getreg('/') .. [[/gj ./**/]] .. vim.fn.getreg('e')
+        if handle and not handle:is_closing() then
+            handle:close()
+        end
     end
 
-    vim.cmd("silent! " .. cmd .. " | silent! +copen 5")
-    vim.fn.setqflist({}, 'r', {
-        title = "search word in file: " .. vim.fn.getreg('/')
-    })
+    handle = vim.loop.spawn(cmd, {
+        args = cmd_args,
+        stdio = { nil, stdout, stderr }
+    }, vim.schedule_wrap(on_exit))
+
+    if not handle then
+        vim.api.nvim_err_writeln(string.format("Failed to start process to search: %s", key))
+        return
+    end
+
+    vim.api.nvim_echo({ { string.format("\tSearching >> '%s'", key), "MoreMsg" } }, false, {})
+
+    -- @brief Read the output from the process
+    -- @param err Error message
+    -- @param data Output data
+    local function on_read(err, data)
+        assert(not err, err)
+
+        if data then
+            local file = io.open(temp_file, 'a')
+            file:write(data)
+            file:close()
+        end
+    end
+
+    stdout:read_start(on_read)
+    stderr:read_start(on_read)
+
+    vim.defer_fn(function()
+        if stdout and not stdout:is_closing() then
+            stdout:close()
+        end
+
+        if stderr and not stderr:is_closing() then
+            stderr:close()
+        end
+
+        if handle and not handle:is_closing() then
+            handle:kill('sigterm')
+            handle:close()
+        end
+    end, timeout)
 end
 
 local function search_word_by_buffer()
@@ -134,7 +160,9 @@ local function toggle_comment()
             end
         end
 
-        if opts ~= nil and opts.trigger ~= nil then trigger = opts.trigger end
+        if opts ~= nil and opts.trigger ~= nil then
+            trigger = opts.trigger
+        end
 
         if trigger == true and string.match(ltext, '^$') == nil then
             vim.cmd(lnum .. 's#\\S#' .. vim.fn.trim(prefix) .. ' &#')
@@ -148,7 +176,9 @@ local function toggle_comment()
         end
     end
 
-    if vim.fn.len(tbl) == 0 then return end
+    if vim.fn.len(tbl) == 0 then
+        return
+    end
 
     local hold_search_reg = vim.fn.getreg('/')
 
@@ -168,11 +198,11 @@ local function toggle_comment()
     vim.fn.setreg('/', hold_search_reg)
 end
 
-local function setup() end
+local function setup()
+end
 
 return {
-    Search = search_word,
-    SearchByFile = search_word_by_file,
+    Search = search_pattern_async,
     SearchByBuffer = search_word_by_buffer,
     ToggleComment = toggle_comment,
     Setup = setup

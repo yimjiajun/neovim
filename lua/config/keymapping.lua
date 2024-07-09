@@ -40,7 +40,9 @@ local function setting_key_buffer()
     keymap('n', '<leader>te', [[<cmd> lua require("config.function").SetFileFormat() <CR>]], opts)
 end
 
-local function setting_key_view() keymap('n', '<BS>', ':set hlsearch!<CR>', opts) end
+local function setting_key_view()
+    keymap('n', '<BS>', ':set hlsearch!<CR>', opts)
+end
 
 local function setting_key_edit()
     keymap('i', 'zxc', '<ESC>', opts)
@@ -89,21 +91,26 @@ end
 local function setting_key_search()
     keymap('n', '<Leader>ff', [[:find ./**/*]], opts_output)
     keymap('n', '<Leader>fF', [[<cmd> lua require("features.files").Search() <CR>]], opts)
-    keymap('n', '<Leader>fA', [[<cmd> lua require("features.string").Search(nil, "normal") <CR>]], opts)
-    keymap('n', '<Leader>fa', [[<cmd> lua require("features.string").Search(nil, "complete") <CR>]], opts)
-    keymap('n', '<Leader>fw', [[<cmd> lua require("features.string").Search(vim.fn.expand("%:e"), "cursor") <CR>]], opts)
-    keymap('n', '<Leader>fW', [[<cmd> lua require("features.string").Search("", "cursor") <CR>]], opts)
-    keymap('n', '<Leader>fc', [[<cmd> lua require("features.string").Search("c", "normal") <CR>]], opts)
-    keymap('n', '<Leader>fC', [[<cmd> lua require("features.string").Search("{c,h,cpp}", "normal") <CR>]], opts)
-    keymap('n', '<Leader>fh', [[<cmd> lua require("features.string").Search("h", "normal") <CR>]], opts)
-    keymap('n', '<Leader>fd', [[<cmd> lua require("features.string").Search("{dts,dtsi}", "normal") <CR>]], opts)
-    keymap('n', '<Leader>fK', [[<cmd> lua require("features.string").SearchByFile("Kconfig", "normal") <CR>]], opts)
-    keymap('n', '<Leader>fk', [[<cmd> lua require("features.string").Search("conf", "normal") <CR>]], opts)
-    keymap('n', '<Leader>fm', [[<cmd> lua require("features.string").SearchByFile("CMakeLists.txt", "normal") <CR>]],
+    keymap('n', '<Leader>fA', [[<cmd> lua require("features.string").Search(nil) <CR>]], opts)
+    keymap('n', '<Leader>fa', [[<cmd> lua require("features.string").Search(nil, {case_sensitive = true}) <CR>]], opts)
+    keymap('n', '<Leader>fw',
+           [[<cmd> lua require("features.string").Search('', {extension = string.format("*.%s",vim.fn.expand("%:e"))}) <CR>]],
            opts)
-    keymap('n', '<Leader>fM', [[<cmd> lua require("features.string").Search("{md,rst,txt}", "normal") <CR>]], opts)
-    keymap('n', '<Leader>fv', [[<cmd> lua require("features.string").Search(nil, "normal") <CR>]], opts)
-    keymap('n', '<Leader>fV', [[<cmd> lua require("features.string").Search(nil, "complete") <CR>]], opts)
+    keymap('n', '<Leader>fW', [[<cmd> lua require("features.string").Search('') <CR>]], opts)
+    keymap('n', '<Leader>fc', [[<cmd> lua require("features.string").Search(nil, {extension = "*.c"}) <CR>]], opts)
+    keymap('n', '<Leader>fC',
+           [[<cmd> lua require("features.string").Search(nil, {extension = "{*.c,*.h,*.cpp}"}) <CR>]], opts)
+    keymap('n', '<Leader>fh', [[<cmd> lua require("features.string").Search(nil, {extension = "*.h"}) <CR>]], opts)
+    keymap('n', '<Leader>fd', [[<cmd> lua require("features.string").Search(nil, {extension = "{*.dts,*.dtsi}"}) <CR>]],
+           opts)
+    keymap('n', '<Leader>fK', [[<cmd> lua require("features.string").Search(nil, {extension = "Kconfig"}) <CR>]], opts)
+    keymap('n', '<Leader>fk', [[<cmd> lua require("features.string").Search(nil, {extension = "*.conf"}) <CR>]], opts)
+    keymap('n', '<Leader>fm', [[<cmd> lua require("features.string").Search(nil, {extension = "CMakeLists.txt"}) <CR>]],
+           opts)
+    keymap('n', '<Leader>fM',
+           [[<cmd> lua require("features.string").Search(nil, {extension = "{*.md,*.rst,*.txt}"}) <CR>]], opts)
+    keymap('n', '<Leader>fv', [[<cmd> lua require("features.string").Search(nil) <CR>]], opts)
+    keymap('n', '<Leader>fV', [[<cmd> lua require("features.string").Search(nil, {case_sensitive = true}) <CR>]], opts)
     keymap('n', '<Leader>fb', [[<cmd> lua require("features.string").SearchByBuffer() <CR>]], opts)
     if vim.version().major < 1 or vim.version().minor < 10 then
         keymap('n', 'gcc', [[<cmd> lua require("features.string").ToggleComment() <CR>]], opts)
@@ -135,7 +142,9 @@ local function setting_key_terminal()
 end
 
 local function setting_key_session()
-    if pcall(require, 'features.session') == false then return end
+    if pcall(require, 'features.session') == false then
+        return
+    end
 
     keymap('n', '<leader>os', [[<cmd> lua require("features.session").Get() <CR>]], opts)
     keymap('n', '<leader>oS', [[<cmd> lua require("features.session").Select() <CR>]], opts)
@@ -178,7 +187,9 @@ local function setting_abbreviations()
 end
 
 local function setting_key_working_directory()
-    if pcall(require, 'features.session') == false then return end
+    if pcall(require, 'features.session') == false then
+        return
+    end
 
     keymap('n', '<leader>tww', [[<cmd> lua require('features.session').SaveWD() <CR>]],
            { silent = true, desc = 'save current working directory' })
@@ -193,7 +204,9 @@ local function setting_key_working_directory()
 end
 
 local function setting_key_system()
-    if pcall(require, 'features.system') == false then return end
+    if pcall(require, 'features.system') == false then
+        return
+    end
 
     keymap('n', '<leader>vci', [[<cmd> lua require('features.system').GetCalendar() <CR>]],
            { silent = true, desc = 'show calendar' })
