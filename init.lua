@@ -5,7 +5,9 @@ local lsp = {
 local config_path = vim.fn.stdpath("config")
 local config_dir = { "config", "features", "usr" }
 
-if vim.loop.os_uname().machine ~= 'aarch64' then goto start_setup end
+if vim.loop.os_uname().machine ~= 'aarch64' then
+    goto start_setup
+end
 
 for _, l in ipairs({ "lua_ls", "clangd" }) do
     for i, v in ipairs(lsp) do
@@ -47,5 +49,7 @@ for _, dir in ipairs(config_dir) do
         end
     end
 
-    if dir == "config" and pcall(require, 'plugin.plugin') then require('plugin.plugin').Setup() end
+    if dir == "config" and pcall(require, 'plugin.plugin') then
+        require('plugin.plugin').Setup()
+    end
 end

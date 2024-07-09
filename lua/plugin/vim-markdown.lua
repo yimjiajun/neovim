@@ -14,6 +14,8 @@ local function setup_vim_markdown()
     }
 end
 
-local function setup() setup_vim_markdown() end
+local function setup()
+    setup_vim_markdown()
+end
 
 return { Setup = setup }

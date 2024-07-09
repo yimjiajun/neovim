@@ -19,9 +19,13 @@ local function all_marks(act)
         local mark_empty = ((row or col or bufnr) == 0) and (filepath == '')
 
         if act == 'save' then
-            if (mark_empty == false) and (string.char(mark_to_insert) ~= 'Z') then goto continue end
+            if (mark_empty == false) and (string.char(mark_to_insert) ~= 'Z') then
+                goto continue
+            end
 
-            if vim.tbl_contains(skip_mark, string.char(mark_to_insert)) then goto continue end
+            if vim.tbl_contains(skip_mark, string.char(mark_to_insert)) then
+                goto continue
+            end
 
             row = vim.fn.line('.')
             vim.cmd(row .. 'mark ' .. string.char(mark_to_insert))
@@ -37,7 +41,9 @@ local function all_marks(act)
                     delete_mark = string.char(mark_to_insert - 1)
                 end
 
-                if vim.tbl_contains(skip_mark, delete_mark) then goto continue end
+                if vim.tbl_contains(skip_mark, delete_mark) then
+                    goto continue
+                end
 
                 vim.cmd('delmarks ' .. delete_mark)
 
@@ -45,12 +51,16 @@ local function all_marks(act)
             end
         elseif act == 'clear' then
             if mark_empty == false then
-                if vim.tbl_contains(skip_mark, string.char(mark_to_insert)) then goto continue end
+                if vim.tbl_contains(skip_mark, string.char(mark_to_insert)) then
+                    goto continue
+                end
 
                 vim.cmd('delmarks ' .. string.char(mark_to_insert))
             end
         else
-            if mark_empty == true then goto continue end
+            if mark_empty == true then
+                goto continue
+            end
 
             if vim.fn.match(vim.fn.fnamemodify(filepath, ':p'), vim.fn.getcwd()) == -1 and act ~= 'universal' then
                 goto continue
@@ -114,7 +124,9 @@ local function buffer_marks(act)
                 goto continue
             end
 
-            if vim.tbl_contains(skip_mark, string.char(mark_to_insert)) then goto continue end
+            if vim.tbl_contains(skip_mark, string.char(mark_to_insert)) then
+                goto continue
+            end
 
             row = vim.fn.line('.')
             col = vim.fn.col('.')
@@ -131,7 +143,9 @@ local function buffer_marks(act)
                     bufnr = bufnr
                 })
 
-                table.sort(items, function(a, b) return a.lnum < b.lnum end)
+                table.sort(items, function(a, b)
+                    return a.lnum < b.lnum
+                end)
 
                 local idx = 1
                 for j = string.byte('a'), mark_to_insert, 1 do
@@ -159,9 +173,13 @@ local function buffer_marks(act)
                 return
             end
         elseif act == 'clear' then
-            if mark_empty == false then vim.api.nvim_buf_del_mark(bufnr, string.char(mark_to_insert)) end
+            if mark_empty == false then
+                vim.api.nvim_buf_del_mark(bufnr, string.char(mark_to_insert))
+            end
         else
-            if mark_empty == true then goto continue end
+            if mark_empty == true then
+                goto continue
+            end
 
             item = {
                 filename = vim.fn.expand('%:p'),
@@ -179,13 +197,19 @@ local function buffer_marks(act)
     end
 
     if #items > 0 then
-        if string.match(act, 'sort') then table.sort(items, function(a, b) return a.lnum < b.lnum end) end
+        if string.match(act, 'sort') then
+            table.sort(items, function(a, b)
+                return a.lnum < b.lnum
+            end)
+        end
 
         vim.fn.setqflist({}, ' ', { title = "buffer marks", items = items })
         vim.cmd("silent! copen")
     end
 end
 
-local function setup() return nil end
+local function setup()
+    return nil
+end
 
 return { Setup = setup, All = all_marks, Buffer = buffer_marks }

@@ -31,9 +31,13 @@ end
 -- @brief Add keymapping to todo list in quickfix window
 -- @return nil
 local function add_todo_keymapping()
-    if vim.bo.filetype ~= 'qf' then return end
+    if vim.bo.filetype ~= 'qf' then
+        return
+    end
 
-    if vim.fn.getqflist({ title = 0 }).title ~= todo_list_title then return end
+    if vim.fn.getqflist({ title = 0 }).title ~= todo_list_title then
+        return
+    end
 
     local key_setup = {
         { key = '<Tab>', cmd = ':lua require("features.todo").Toggle()<CR>' },
@@ -43,9 +47,9 @@ local function add_todo_keymapping()
         { key = 'dd', cmd = ':lua require("features.todo").Remove()<CR>' }
     }
 
-    for _, v in ipairs(key_setup) do vim.api.nvim_buf_set_keymap(0, 'n', v.key, v.cmd, {
-        silent = true
-    }) end
+    for _, v in ipairs(key_setup) do
+        vim.api.nvim_buf_set_keymap(0, 'n', v.key, v.cmd, { silent = true })
+    end
 end
 
 -- @brief Add todo list
@@ -74,13 +78,19 @@ local function add_todo_list()
         type = 'n' -- n: new
     })
 
-    table.sort(todo_lists, function(a, b) return a.filename > b.filename end)
+    table.sort(todo_lists, function(a, b)
+        return a.filename > b.filename
+    end)
 
     local done_items, items = {}, {}
 
-    for _, v in ipairs(todo_lists) do table.insert((v.type == 'd' and done_items or items), v) end
+    for _, v in ipairs(todo_lists) do
+        table.insert((v.type == 'd' and done_items or items), v)
+    end
 
-    for _, v in ipairs(done_items) do table.insert(items, v) end
+    for _, v in ipairs(done_items) do
+        table.insert(items, v)
+    end
 
     todo_lists = items
 
@@ -91,24 +101,34 @@ end
 
 -- @brief Read todo list
 local function read_todo_list()
-    if vim.bo.filetype ~= 'qf' then return end
+    if vim.bo.filetype ~= 'qf' then
+        return
+    end
 
     local qf_title = vim.fn.getqflist({ title = 0 }).title
 
-    if qf_title ~= todo_list_title then return end
+    if qf_title ~= todo_list_title then
+        return
+    end
 
     local qf_index = vim.fn.line('.')
     local qf_col = vim.fn.col('.')
 
-    if qf_index > #todo_lists or qf_index == 0 then return end
+    if qf_index > #todo_lists or qf_index == 0 then
+        return
+    end
 
     local todo_list = todo_lists[qf_index]
 
-    if todo_list == nil then return end
+    if todo_list == nil then
+        return
+    end
 
     local file_path = todo_lists_path .. delim .. todo_list.filename
 
-    if vim.fn.filereadable(file_path) == 0 then return end
+    if vim.fn.filereadable(file_path) == 0 then
+        return
+    end
 
     vim.cmd('view ' .. file_path)
 
@@ -116,7 +136,9 @@ local function read_todo_list()
         callback = function()
             local bufnr = vim.fn.bufnr("%")
 
-            if require('features.todo').RemoveAutoCmdId(bufnr) == false then return end
+            if require('features.todo').RemoveAutoCmdId(bufnr) == false then
+                return
+            end
 
             require('features.todo').Get()
             vim.fn.cursor(qf_index, qf_col)
@@ -141,7 +163,9 @@ local function get_todo_list()
         file_path = todo_lists_path .. delim .. v.filename
         file = io.open(file_path, 'r')
 
-        if file == nil then goto continue end
+        if file == nil then
+            goto continue
+        end
 
         text = file:read("*l")
         io.close(file)
@@ -151,7 +175,9 @@ local function get_todo_list()
             goto continue
         end
 
-        if todo_prefix[v.type] == nil then v.type = 'n' end
+        if todo_prefix[v.type] == nil then
+            v.type = 'n'
+        end
 
         text = todo_prefix[v.type] .. ' ' .. text
         table.insert(lists, v)
@@ -165,7 +191,9 @@ local function get_todo_list()
     local qf_title = vim.fn.getqflist({ title = 0 }).title
     local action = ' '
 
-    if qf_title == todo_list_title then action = 'r' end
+    if qf_title == todo_list_title then
+        action = 'r'
+    end
 
     if #items > 0 then
         vim.fn.setqflist({}, action, { title = todo_list_title, items = items })
@@ -188,20 +216,28 @@ end
 -- @brief Toggle todo list item
 -- @return nil
 local function toggle_todo_list()
-    if vim.bo.filetype ~= 'qf' then return end
+    if vim.bo.filetype ~= 'qf' then
+        return
+    end
 
     local qf_title = vim.fn.getqflist({ title = 0 }).title
 
-    if qf_title ~= todo_list_title then return end
+    if qf_title ~= todo_list_title then
+        return
+    end
 
     local qf_index = vim.fn.line('.')
     local qf_col = vim.fn.col('.')
 
-    if qf_index > #todo_lists or qf_index == 0 then return end
+    if qf_index > #todo_lists or qf_index == 0 then
+        return
+    end
 
     local todo_list = todo_lists[qf_index]
 
-    if todo_list == nil then return end
+    if todo_list == nil then
+        return
+    end
 
     local toggle = todo_prefix_sequence[todo_list.type]
     todo_list.type = toggle
@@ -209,7 +245,9 @@ local function toggle_todo_list()
     local items = {}
 
     for i, v in ipairs(todo_lists) do
-        if i == qf_index then v.type = todo_list.type end
+        if i == qf_index then
+            v.type = todo_list.type
+        end
 
         table.insert(items, v)
     end
@@ -225,23 +263,33 @@ local function toggle_todo_list()
 end
 
 local function remove_todo_list()
-    if vim.bo.filetype ~= 'qf' then return end
+    if vim.bo.filetype ~= 'qf' then
+        return
+    end
 
     local qf_title = vim.fn.getqflist({ title = 0 }).title
 
-    if qf_title ~= todo_list_title then return end
+    if qf_title ~= todo_list_title then
+        return
+    end
 
     local qf_index = vim.fn.line('.')
     local qf_col = vim.fn.col('.')
 
-    if qf_index == 0 and #todo_lists > 0 then return end
+    if qf_index == 0 and #todo_lists > 0 then
+        return
+    end
 
     if qf_index >= #todo_lists then
         table.remove(todo_lists)
     else
         local items = {}
 
-        for i, v in ipairs(todo_lists) do if i ~= qf_index then table.insert(items, v) end end
+        for i, v in ipairs(todo_lists) do
+            if i ~= qf_index then
+                table.insert(items, v)
+            end
+        end
 
         todo_lists = items
     end
@@ -259,21 +307,31 @@ local function update_todo_list()
 
     get_todo_list()
 
-    if vim.bo.filetype ~= 'qf' then return end
+    if vim.bo.filetype ~= 'qf' then
+        return
+    end
 
     local qf_title = vim.fn.getqflist({ title = 0 }).title
 
-    if qf_title ~= todo_list_title then return end
+    if qf_title ~= todo_list_title then
+        return
+    end
 
-    if qf_index > #todo_lists or qf_index == 0 then return end
+    if qf_index > #todo_lists or qf_index == 0 then
+        return
+    end
 
     local todo_list = todo_lists[qf_index]
 
-    if todo_list == nil then return end
+    if todo_list == nil then
+        return
+    end
 
     local file_path = todo_lists_path .. delim .. todo_list.filename
 
-    if vim.fn.filereadable(file_path) == 0 then return end
+    if vim.fn.filereadable(file_path) == 0 then
+        return
+    end
 
     vim.cmd('edit ' .. file_path)
 
@@ -281,7 +339,9 @@ local function update_todo_list()
         callback = function()
             local bufnr = vim.fn.bufnr("%")
 
-            if require('features.todo').RemoveAutoCmdId(bufnr) == false then return end
+            if require('features.todo').RemoveAutoCmdId(bufnr) == false then
+                return
+            end
 
             require('features.todo').Get()
             vim.fn.cursor(qf_index, qf_col)
@@ -306,16 +366,22 @@ end
 --     5. Update todo list json file
 -- @return nil
 local function setup()
-    if vim.fn.filereadable(vim.fn.expand(todo_list_json)) == 0 then return end
+    if vim.fn.filereadable(vim.fn.expand(todo_list_json)) == 0 then
+        return
+    end
 
     todo_lists = require('features.files').GetJson(todo_list_json) or {}
 
     local done_items = {}
     local items = {}
 
-    for _, v in ipairs(todo_lists) do table.insert((v.type == 'd' and done_items or items), v) end
+    for _, v in ipairs(todo_lists) do
+        table.insert((v.type == 'd' and done_items or items), v)
+    end
 
-    for _, v in ipairs(done_items) do table.insert(items, v) end
+    for _, v in ipairs(done_items) do
+        table.insert(items, v)
+    end
 
     todo_lists = items
 

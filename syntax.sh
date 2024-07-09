@@ -60,6 +60,7 @@ fi
 for f in $files; do
   if [[ $f == *.lua ]]; then
     if ! lua-format --column-limit=120 --column-table-limit=80 \
+      --no-keep-simple-control-block-one-line --no-keep-simple-function-one-line \
       --spaces-inside-table-braces --spaces-around-equals-in-field --break-after-table-lb --break-before-table-rb --align-table-field \
       --in-place $f; then
       echo -e "\033[0;31mError: lua-format $f failed\033[0m"

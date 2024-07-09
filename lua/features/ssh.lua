@@ -70,12 +70,16 @@ local function ssh_get_list(save_file)
     local ssh_sel_list = {}
     local group = ssh_list_get_group(vim.g.ssh_data)
 
-    if group == nil then return nil end
+    if group == nil then
+        return nil
+    end
 
     if save_file == true then
         local file = vim.fn.tempname() .. ".txt"
 
-        if vim.fn.tolower(vim.fn.trim(vim.fn.input("view password? (y/n): ", 'y'))) == 'y' then show_pass = true end
+        if vim.fn.tolower(vim.fn.trim(vim.fn.input("view password? (y/n): ", 'y'))) == 'y' then
+            show_pass = true
+        end
 
         vim.api.nvim_echo({ { "\nredirecting ssh information to file", "none" } }, false, {})
         vim.fn.setreg('"', file)
@@ -93,7 +97,9 @@ local function ssh_get_list(save_file)
     }
 
     for _, info in ipairs(vim.g.ssh_data) do
-        if info.group ~= group then goto skip_get_max_length end
+        if info.group ~= group then
+            goto skip_get_max_length
+        end
 
         msg_max_length = {
             alias = math.max(msg_max_length.alias, vim.fn.strlen(info.alias)),
@@ -112,7 +118,9 @@ local function ssh_get_list(save_file)
     local separator = string.rep("=", msg_total_length)
 
     for _, info in ipairs(vim.g.ssh_data) do
-        if info.group ~= group then goto continue end
+        if info.group ~= group then
+            goto continue
+        end
 
         msg[idx] = string.format(msg_format, idx, info.alias, info.hostname, info.username, info.port, info.description)
 
@@ -125,7 +133,9 @@ local function ssh_get_list(save_file)
         ::continue::
     end
 
-    if #ssh_sel_list == 0 then return nil end
+    if #ssh_sel_list == 0 then
+        return nil
+    end
 
     display_title(separator)
     display_title(string.format(msg_format, "idx", "alias", "hostname/ip", "username", "port", "description"))
@@ -140,7 +150,9 @@ local function ssh_get_list(save_file)
         return nil
     end
 
-    if sel == 0 or sel > #ssh_sel_list then return nil end
+    if sel == 0 or sel > #ssh_sel_list then
+        return nil
+    end
 
     return ssh_sel_list[sel]
 end
@@ -151,10 +163,16 @@ end
 -- @param: name: name to search (alias -> hostname -> username)
 -- @return: table of ssh information or nil
 local function get_ssh_info_by_name(name)
-    if name == nil or name == "" then goto search_name_not_found end
+    if name == nil or name == "" then
+        goto search_name_not_found
+    end
 
     for _, info in ipairs(vim.g.ssh_data) do
-        for _, n in pairs({ info.alias, info.hostname, info.username }) do if n == name then return info end end
+        for _, n in pairs({ info.alias, info.hostname, info.username }) do
+            if n == name then
+                return info
+            end
+        end
     end
 
     ::search_name_not_found::
@@ -167,7 +185,9 @@ end
 local function ssh_run()
     local sel_ssh = ssh_get_list(false)
 
-    if sel_ssh == nil then return end
+    if sel_ssh == nil then
+        return
+    end
 
     ssh_connect(sel_ssh.username, sel_ssh.hostname, sel_ssh.port, sel_ssh.password)
 end
@@ -204,7 +224,9 @@ end
 -- @description: toggle between powershell and wsl ssh
 -- @usage: lua require('features.ssh').toggle_powershell_ssh()
 local function toggle_powershell_ssh()
-    if vim.fn.has('unix') == 1 and vim.fn.isdirectory('/run/WSL') == 0 then return end
+    if vim.fn.has('unix') == 1 and vim.fn.isdirectory('/run/WSL') == 0 then
+        return
+    end
 
     vim.g.wsl_ssh_run_win = (vim.g.wsl_ssh_run_win == 1 and 0 or 1)
     local msg = (vim.g.wsl_ssh_run_win == 1) and "powershell" or "wsl"
@@ -212,7 +234,9 @@ local function toggle_powershell_ssh()
 end
 
 local function toggle_sshpass()
-    if vim.fn.executable('sshpass') == 0 or vim.g.wsl_ssh_run_win == 1 then return end
+    if vim.fn.executable('sshpass') == 0 or vim.g.wsl_ssh_run_win == 1 then
+        return
+    end
 
     vim.g.ssh_run_sshpass = (vim.g.ssh_run_sshpass == 1 and 0 or 1)
     local msg = (vim.g.ssh_run_sshpass == 1) and "on" or "off"
@@ -227,12 +251,16 @@ end
 local function ssh_keymap_setting()
     local wk = (pcall(require, "which-key") == true) and require("which-key") or nil
     local prefix = "<leader>tS"
-    local key = function(key) return prefix .. key end
-    local keymap_opts = function(desc) return {
-        noremap = true,
-        silent = true,
-        desc = (desc ~= nil) and desc or ""
-    } end
+    local key = function(key)
+        return prefix .. key
+    end
+    local keymap_opts = function(desc)
+        return {
+            noremap = true,
+            silent = true,
+            desc = (desc ~= nil) and desc or ""
+        }
+    end
     local keymap_setup = {
         {
             key = "s",
@@ -278,14 +306,15 @@ local function ssh_keymap_setting()
     }
 
     for _, v in ipairs(keymap_setup) do
-        if v.support ~= true then goto continue end
+        if v.support ~= true then
+            goto continue
+        end
 
         vim.api.nvim_set_keymap("n", key(v.key), v.func, keymap_opts(v.desc))
 
-        if wk ~= nil then wk.register({ [v.key] = v.desc }, {
-            mode = "n",
-            prefix = prefix
-        }) end
+        if wk ~= nil then
+            wk.register({ [v.key] = v.desc }, { mode = "n", prefix = prefix })
+        end
         ::continue::
     end
 end
@@ -294,7 +323,9 @@ end
 -- @description: read ssh data from json files from path ~/.local/share/nvim/ssh
 -- @usage: lua require('features.ssh').ssh_read_json()
 local function ssh_read_json()
-    if vim.fn.isdirectory(ssh_data_dir) == 0 then return end
+    if vim.fn.isdirectory(ssh_data_dir) == 0 then
+        return
+    end
 
     local ssh_data_files = require('features.files').RecurSearch(ssh_data_dir, "*.json")
     local ssh_data = {}
@@ -302,7 +333,9 @@ local function ssh_read_json()
     for _, f in ipairs(ssh_data_files) do
         local info = require('features.files').GetJson(f)
 
-        if info == nil then goto continue end
+        if info == nil then
+            goto continue
+        end
 
         table.insert(ssh_data, info)
         ::continue::
@@ -337,7 +370,9 @@ local function secure_copy(opts, file, destination)
     display_title("Secure Copy")
     opts = (opts ~= nil) and opts or ssh_get_list(false)
 
-    if opts == nil then return false end
+    if opts == nil then
+        return false
+    end
 
     local sel_ssh = nil
 
@@ -353,7 +388,9 @@ local function secure_copy(opts, file, destination)
         return false
     end
 
-    if file == nil or file == "" then file = vim.fn.expand(vim.fn.input("File to send: ")) end
+    if file == nil or file == "" then
+        file = vim.fn.expand(vim.fn.input("File to send: "))
+    end
 
     if file == "" or vim.fn.filereadable(file) == 0 then
         vim.api.nvim_echo({ { "** Invalid file .. " .. file, "ErrorMsg" } }, true, {})
@@ -374,7 +411,9 @@ local function secure_copy(opts, file, destination)
     local separator_number = 1
 
     for _, v in pairs({ file, sel_ssh.hostname, sel_ssh.username, destination }) do
-        if vim.fn.len(v) > separator_number then separator_number = vim.fn.len(v) end
+        if vim.fn.len(v) > separator_number then
+            separator_number = vim.fn.len(v)
+        end
     end
 
     local separator = string.rep("=", separator_number + vim.fn.len("* Hostname:    "))
@@ -438,13 +477,17 @@ local function secret_file_transfer(opts)
     display_title("Secrete File Transfer")
     opts = (opts ~= nil) and opts or ssh_get_list(false)
 
-    if opts == nil then return false end
+    if opts == nil then
+        return false
+    end
 
     local cmd = "sftp " .. " -P " .. opts.port .. " " .. opts.username .. "@" .. opts.hostname
     local password_available = (opts.password ~= nil and opts.password ~= "")
     local sshpass_support = (vim.fn.executable('sshpass') == 1 and vim.g.ssh_run_sshpass == 1)
 
-    if password_available and sshpass_support then cmd = "sshpass -p '" .. opts.password .. "' " .. cmd end
+    if password_available and sshpass_support then
+        cmd = "sshpass -p '" .. opts.password .. "' " .. cmd
+    end
 
     vim.cmd("split | term " .. cmd)
     return true
@@ -460,7 +503,9 @@ local function connect_ssh_desktop(opts)
     display_title("Remote Desktop")
     opts = (opts ~= nil) and opts or ssh_get_list(false)
 
-    if opts == nil then return false end
+    if opts == nil then
+        return false
+    end
 
     if opts.username == nil or opts.hostname == nil then
         opts = get_ssh_info_by_name((opts.alias ~= nil) and opts.alias or (opts.hostname ~= nil) and opts.hostname or
@@ -490,9 +535,13 @@ local function connect_ssh_desktop(opts)
     vim.api.nvim_echo({ { "\n[USERNAME] " .. opts.username, "MoreMsg" } }, true, {})
 
     if vim.fn.filereadable(desktop_remote_file) > 0 then
-        if vim.fn.isdirectory('/run/WSL') == 0 then goto start_desktop_by_file end
+        if vim.fn.isdirectory('/run/WSL') == 0 then
+            goto start_desktop_by_file
+        end
 
-        if vim.fn.isdirectory('/mnt/c/neovim') == 0 then vim.fn.mkdir('/mnt/c/neovim') end
+        if vim.fn.isdirectory('/mnt/c/neovim') == 0 then
+            vim.fn.mkdir('/mnt/c/neovim')
+        end
 
         vim.fn.system("cp" .. " " .. desktop_remote_file .. " " .. "/mnt/c/neovim/")
         desktop_remote_file = "C:\\neovim\\" .. vim.fn.fnamemodify(desktop_remote_file, ":t")

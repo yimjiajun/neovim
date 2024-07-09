@@ -11,13 +11,21 @@ local function terminal(mode)
     end
 end
 
-local function get_buffers(_mode) vim.cmd("ls") end
+local function get_buffers(_mode)
+    vim.cmd("ls")
+end
 
-local function get_marks(_mode) vim.cmd("marks") end
+local function get_marks(_mode)
+    vim.cmd("marks")
+end
 
-local function get_jumplist(_mode) vim.cmd("jump") end
+local function get_jumplist(_mode)
+    vim.cmd("jump")
+end
 
-local function get_register_list(_mode) vim.cmd("registers") end
+local function get_register_list(_mode)
+    vim.cmd("registers")
+end
 
 local function set_statusline(mode)
     if mode == "ascii" then
@@ -58,11 +66,15 @@ local function build(mode)
         return
     end
 
-    if status == false then return end
+    if status == false then
+        return
+    end
 
     local cmd = "make"
 
-    if vim.fn.exists(":Make") > 0 then cmd = "Make" end
+    if vim.fn.exists(":Make") > 0 then
+        cmd = "Make"
+    end
 
     vim.cmd(cmd)
 end
@@ -122,7 +134,9 @@ local function check_quickfix_win_exists()
     for _, win in ipairs(windows) do
         local buf = vim.api.nvim_win_get_buf(win)
         local buftype = vim.api.nvim_buf_get_option(buf, 'buftype')
-        if buftype == 'quickfix' then return true end
+        if buftype == 'quickfix' then
+            return true
+        end
     end
 
     return false

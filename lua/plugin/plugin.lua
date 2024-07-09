@@ -15,7 +15,9 @@ local function setup()
         spec = {
             {
                 'neovim/nvim-lspconfig',
-                config = function() require('plugin.lsp').Setup() end
+                config = function()
+                    require('plugin.lsp').Setup()
+                end
             }, {
                 'williamboman/mason.nvim',
                 dependencies = {
@@ -34,13 +36,19 @@ local function setup()
                     'hrsh7th/cmp-nvim-lsp', 'saadparwaiz1/cmp_luasnip',
                     'L3MON4D3/LuaSnip'
                 },
-                config = function() require('plugin.cmp').Setup() end
+                config = function()
+                    require('plugin.cmp').Setup()
+                end
             }, {
                 'rmagatti/goto-preview',
-                config = function() require('plugin.goto_preview').Setup() end
+                config = function()
+                    require('plugin.goto_preview').Setup()
+                end
             }, {
                 'nvimtools/none-ls.nvim',
-                config = function() require('plugin.none_ls').Setup() end
+                config = function()
+                    require('plugin.none_ls').Setup()
+                end
             }, {
                 'nvim-treesitter/nvim-treesitter',
                 build = function()
@@ -48,17 +56,25 @@ local function setup()
                     require("plugin.treesitter")
                     vim.cmd([[TSUpdateSync]])
                 end,
-                config = function() require("plugin.treesitter").Setup() end
+                config = function()
+                    require("plugin.treesitter").Setup()
+                end
             }, {
                 "folke/neodev.nvim",
                 opts = {},
-                config = function() require('neodev').setup() end
+                config = function()
+                    require('neodev').setup()
+                end
             }, {
                 'tpope/vim-dispatch',
-                config = function() require('plugin.dispatch').Setup() end
+                config = function()
+                    require('plugin.dispatch').Setup()
+                end
             }, {
                 "mfussenegger/nvim-dap",
-                config = function() require('plugin.dap').Setup() end
+                config = function()
+                    require('plugin.dap').Setup()
+                end
             }, {
                 "rcarriga/nvim-dap-ui",
                 dependencies = {
@@ -87,37 +103,53 @@ local function setup()
                 end
             }, {
                 'tpope/vim-fugitive',
-                config = function() require('plugin.fugitive').Setup() end
+                config = function()
+                    require('plugin.fugitive').Setup()
+                end
             }, {
                 'lewis6991/gitsigns.nvim',
-                config = function() require('plugin.gitsigns').Setup() end
+                config = function()
+                    require('plugin.gitsigns').Setup()
+                end
             }, {
                 'nvim-telescope/telescope.nvim',
                 tag = '0.1.4',
                 dependencies = { 'nvim-lua/plenary.nvim' },
-                config = function() require('plugin.telescope').Setup() end
+                config = function()
+                    require('plugin.telescope').Setup()
+                end
             }, {
                 "nvim-telescope/telescope-live-grep-args.nvim",
                 dependencies = { 'nvim-telescope/telescope.nvim' },
-                config = function() require('plugin.telescope').SetupLiveGrepArgs() end
+                config = function()
+                    require('plugin.telescope').SetupLiveGrepArgs()
+                end
             }, {
                 'dhruvmanila/telescope-bookmarks.nvim',
                 dependencies = {
                     'nvim-telescope/telescope.nvim', 'kkharji/sqlite.lua'
                 },
                 build = "pip3 install buku",
-                config = function() require('plugin.telescope').SetupBookmarks() end
+                config = function()
+                    require('plugin.telescope').SetupBookmarks()
+                end
             }, {
                 'github/copilot.vim',
-                build = function() print('Exit neovim and re-enter to run :Copilot! to register API key') end
+                build = function()
+                    print('Exit neovim and re-enter to run :Copilot! to register API key')
+                end
             }, {
                 "akinsho/toggleterm.nvim",
-                config = function() require('plugin.toggleterm').Setup() end
+                config = function()
+                    require('plugin.toggleterm').Setup()
+                end
             }, {
                 'stevearc/oil.nvim',
                 dependencies = { "nvim-tree/nvim-web-devicons" },
                 opts = {},
-                config = function() require('plugin.oil').Setup() end
+                config = function()
+                    require('plugin.oil').Setup()
+                end
             }, {
                 'preservim/tagbar',
                 config = function()
@@ -131,21 +163,29 @@ local function setup()
                 end
             }, {
                 'goolord/alpha-nvim',
-                config = function() require('plugin.alphas').Setup() end
+                config = function()
+                    require('plugin.alphas').Setup()
+                end
             }, {
                 "folke/which-key.nvim",
                 priority = 1000,
-                config = function() require('plugin.whichkey').Setup() end
+                config = function()
+                    require('plugin.whichkey').Setup()
+                end
             }, {
                 "kylechui/nvim-surround",
                 version = "*",
                 event = "VeryLazy",
-                config = function() require('plugin.surround').Setup() end
+                config = function()
+                    require('plugin.surround').Setup()
+                end
             }, {
                 "iamcco/markdown-preview.nvim",
                 ft = { "markdown" },
                 build = "cd app && npm install",
-                config = function() require('plugin.markdown-preview').Setup() end
+                config = function()
+                    require('plugin.markdown-preview').Setup()
+                end
             }, {
                 "CopilotC-Nvim/CopilotChat.nvim",
                 branch = "canary",
@@ -157,15 +197,19 @@ local function setup()
                     -- See Configuration section for rest
                 },
                 -- See Commands section for default commands if you want to lazy load on them
-                config = function() require('plugin.copilotchat').Setup() end
-            },
-            {
+                config = function()
+                    require('plugin.copilotchat').Setup()
+                end
+            }, {
                 'chrisbra/csv.vim',
-                config = function() require('plugin.csv').Setup() end
-            },
-            {
+                config = function()
+                    require('plugin.csv').Setup()
+                end
+            }, {
                 "jbyuki/venn.nvim",
-                config = function() require('plugin.venn').Setup() end
+                config = function()
+                    require('plugin.venn').Setup()
+                end
             }, {
                 'itchyny/calendar.vim',
                 config = function()
@@ -182,7 +226,9 @@ local function setup()
                 'MeanderingProgrammer/markdown.nvim',
                 name = 'render-markdown', -- Only needed if you have another plugin named markdown.nvim
                 dependencies = { 'nvim-treesitter/nvim-treesitter' },
-                config = function() require('render-markdown').setup({}) end
+                config = function()
+                    require('render-markdown').setup({})
+                end
             }
         },
         defaults = {
@@ -222,7 +268,9 @@ local function setup()
         install = { missing = true, colorscheme = { "habamax" } }
     })
 
-    if vim.g.neovide ~= nil and pcall(require, 'plugin.neovide') then require('plugin.neovide').Setup() end
+    if vim.g.neovide ~= nil and pcall(require, 'plugin.neovide') then
+        require('plugin.neovide').Setup()
+    end
 end
 
 return { Setup = setup }

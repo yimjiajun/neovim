@@ -31,9 +31,13 @@ local function get_files(path)
         while true do
             local name, type = uv.fs_scandir_next(handle)
 
-            if not name then break end
+            if not name then
+                break
+            end
 
-            if type == "file" then table.insert(files, name) end
+            if type == "file" then
+                table.insert(files, name)
+            end
         end
     end
 
@@ -43,9 +47,13 @@ end
 local function recursive_file_search(dir, file_pattern)
     local uv = vim.loop
 
-    if dir == nil or vim.fn.len(dir) == 0 then dir = uv.cwd() end
+    if dir == nil or vim.fn.len(dir) == 0 then
+        dir = uv.cwd()
+    end
 
-    if file_pattern == nil then file_pattern = "*" end
+    if file_pattern == nil then
+        file_pattern = "*"
+    end
 
     local cmd = "find " .. dir .. " -type f -name " .. '"' .. file_pattern .. '"' .. " -print"
     local result = vim.fn.system(vim.fn.expand(cmd))
@@ -55,7 +63,9 @@ local function recursive_file_search(dir, file_pattern)
 end
 
 local function check_extension_file_exist(extension)
-    if extension == nil then extension = vim.fn.expand("%:e") end
+    if extension == nil then
+        extension = vim.fn.expand("%:e")
+    end
 
     local cmd = "find . -type f -name " .. '"*.' .. extension .. '"' .. " -print -quit | wc -l"
     local result = tonumber(vim.fn.system(cmd))
@@ -66,7 +76,9 @@ end
 local function search_file()
     local regex_file = vim.fn.input("File to search (regex): ")
 
-    if regex_file == "" or regex_file == nil then return end
+    if regex_file == "" or regex_file == nil then
+        return
+    end
 
     local files = recursive_file_search(vim.loop.cwd(), regex_file)
     local msg = string.format("\tfound %d files", #files)
@@ -132,7 +144,9 @@ local function json_read(path)
     local json_format = file:read("*a")
     file:close()
 
-    if #json_format == 0 then return {} end
+    if #json_format == 0 then
+        return {}
+    end
 
     return vim.json.decode(json_format)
 end
@@ -144,19 +158,27 @@ end
 -- @usage: save_command_message_to_file(":messages")
 -- @usage: save_command_message_to_file("!git log")
 local function save_command_message_to_file(cmd)
-    if cmd == nil or #cmd == 0 then cmd = ":messages" end
+    if cmd == nil or #cmd == 0 then
+        cmd = ":messages"
+    end
 
     local file = vim.fn.tempname()
     local commands = { "redir! > " .. file, cmd, "redir END", "view " .. file }
 
-    for _, c in ipairs(commands) do vim.cmd(c) end
+    for _, c in ipairs(commands) do
+        vim.cmd(c)
+    end
 end
 
 local function setup()
     local skip_functions = { '^Setup$', '^.*Json$' }
 
     for name in pairs(require('features.files')) do
-        for _, skip in ipairs(skip_functions) do if name:match(skip) ~= nil then goto continue end end
+        for _, skip in ipairs(skip_functions) do
+            if name:match(skip) ~= nil then
+                goto continue
+            end
+        end
 
         local callback = "require('features.files')." .. name .. "()"
         vim.cmd("command! -nargs=0 -bang " .. "File" .. name .. " lua print(" .. callback .. ")")

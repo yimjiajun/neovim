@@ -7,9 +7,13 @@ local function setup_ui_git()
     local desc = "git UI"
     local opts = { silent = true, desc = desc }
 
-    if vim.fn.executable('lazygit') > 0 then git_cmd = 'lazygit' end
+    if vim.fn.executable('lazygit') > 0 then
+        git_cmd = 'lazygit'
+    end
 
-    if vim.fn.executable('gitui') > 0 then git_cmd = 'gitui' end
+    if vim.fn.executable('gitui') > 0 then
+        git_cmd = 'gitui'
+    end
 
     if git_cmd ~= nil then
         if vim.fn.exists(':ToggleTerm') > 0 then
@@ -36,9 +40,13 @@ local function setup_top()
     local desc = "system resource"
     local opts = { silent = true, desc = desc }
 
-    if vim.fn.executable('htop') == 1 then top_cmd = 'htop' end
+    if vim.fn.executable('htop') == 1 then
+        top_cmd = 'htop'
+    end
 
-    if vim.fn.executable('bpytop') == 1 then top_cmd = 'bpytop' end
+    if vim.fn.executable('bpytop') == 1 then
+        top_cmd = 'bpytop'
+    end
 
     if vim.fn.exists(':ToggleTerm') > 0 then
         top_cmd = [[<cmd> silent! TermExec cmd="]] .. top_cmd .. [[; exit" <CR>]]
@@ -62,9 +70,13 @@ local function setup_disk_usage()
     local desc = "disk usage"
     local opts = { silent = true, desc = desc }
 
-    if vim.fn.executable('ncdu') > 0 then du_cmd = 'ncdu %:h' end
+    if vim.fn.executable('ncdu') > 0 then
+        du_cmd = 'ncdu %:h'
+    end
 
-    if vim.fn.executable('dutree') > 0 then du_cmd = 'clear;' .. 'dutree -d1 %:h' .. '; read -n 1' end
+    if vim.fn.executable('dutree') > 0 then
+        du_cmd = 'clear;' .. 'dutree -d1 %:h' .. '; read -n 1'
+    end
 
     if vim.fn.exists(':ToggleTerm') > 0 then
         du_cmd = [[<cmd> silent! TermExec cmd="]] .. du_cmd .. [[; exit" <CR>]]
@@ -144,7 +156,9 @@ local function setup()
         setup_ui_git, setup_top, setup_disk_usage, setup_calendar
     }
 
-    for _, tool in ipairs(tools_setup) do tool() end
+    for _, tool in ipairs(tools_setup) do
+        tool()
+    end
 end
 
 return { Setup = setup }

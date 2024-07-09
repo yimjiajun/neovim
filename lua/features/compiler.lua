@@ -59,23 +59,35 @@ local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp, e
 end
 
 local function check_git_remote_url_exists(remote, url)
-    if remote == nil or url == nil then return false end
+    if remote == nil or url == nil then
+        return false
+    end
 
     local compare_remote = (type(remote) == "table") and remote or { remote }
     local compare_url = (type(url) == "table") and url or { url }
 
     for _, u in pairs(compare_url) do
         for _, r in pairs(compare_remote) do
-            if r == nil or vim.fn.len(r) == 0 then break end
+            if r == nil or vim.fn.len(r) == 0 then
+                break
+            end
 
             for _, local_remote in pairs(require('features.git').Remote().Get()) do
-                if local_remote ~= r then goto continue_remote_get end
+                if local_remote ~= r then
+                    goto continue_remote_get
+                end
 
                 local local_url = require('features.git').Remote().GetUrl(r)
 
-                if local_url == nil or vim.fn.len(local_url) == 0 then break end
+                if local_url == nil or vim.fn.len(local_url) == 0 then
+                    break
+                end
 
-                for w in string.gmatch(local_url, u) do if w == u then return true end end
+                for w in string.gmatch(local_url, u) do
+                    if w == u then
+                        return true
+                    end
+                end
 
                 ::continue_remote_get::
             end
@@ -86,7 +98,9 @@ local function check_git_remote_url_exists(remote, url)
 end
 
 local function compiler_read_json()
-    if vim.fn.isdirectory(compiler_data_dir) == 0 then return false end
+    if vim.fn.isdirectory(compiler_data_dir) == 0 then
+        return false
+    end
 
     local compiler_data_files = require('features.files').RecurSearch(compiler_data_dir, "*.json")
     local compiler_data = {}
@@ -94,7 +108,9 @@ local function compiler_read_json()
     for _, f in ipairs(compiler_data_files) do
         local info = require('features.files').GetJson(f)
 
-        if info == nil then goto continue end
+        if info == nil then
+            goto continue
+        end
 
         table.insert(compiler_data, info)
         ::continue::
@@ -111,7 +127,9 @@ local function compiler_read_json()
                     }
 
                     for _, d in pairs(compare_directory) do
-                        if vim.fn.isdirectory(d) > 0 then goto setup_current_compiler end
+                        if vim.fn.isdirectory(d) > 0 then
+                            goto setup_current_compiler
+                        end
                     end
                 end
 
@@ -161,7 +179,9 @@ local function setup_markdown()
 end
 
 local function setup_rust()
-    if vim.fn.executable('rustc') == 0 then return end
+    if vim.fn.executable('rustc') == 0 then
+        return
+    end
 
     compiler_insert_info("build rust", "rustc % --out-dir %:h ", "build current rust file", "rust", "make", "build")
     compiler_insert_info("run rust", "./" .. vim.fn.expand("%:r"), "run current executable rust file", "rust", "make",
@@ -175,7 +195,9 @@ end
 
 local function get_compiler_build_data()
     local function check_current_filetype(ext)
-        if vim.bo.filetype == tostring(ext) then return true end
+        if vim.bo.filetype == tostring(ext) then
+            return true
+        end
 
         return false
     end
@@ -200,28 +222,40 @@ local function get_compiler_build_data()
     end
 
     if vim.fn.empty(vim.g.compiler_data) == 0 then
-        for _, info in ipairs(vim.g.compiler_data) do table.insert(compiler_build_data, info) end
+        for _, info in ipairs(vim.g.compiler_data) do
+            table.insert(compiler_build_data, info)
+        end
     end
 
-    table.sort(compiler_build_data, function(a, b) return a.name > b.name end)
+    table.sort(compiler_build_data, function(a, b)
+        return a.name > b.name
+    end)
 
     return compiler_build_data
 end
 
 local function compiler_optional_setup(tbl)
-    if tbl == nil or tbl.opts == nil or tbl.opts.callback == nil or tbl.opts.dofile == nil then return nil end
+    if tbl == nil or tbl.opts == nil or tbl.opts.callback == nil or tbl.opts.dofile == nil then
+        return nil
+    end
 
     local callback_file = compiler_data_dir .. delim .. tbl.opts.dofile
 
-    if vim.fn.filereadable(callback_file) == 0 then return nil end
+    if vim.fn.filereadable(callback_file) == 0 then
+        return nil
+    end
 
     local callback = tbl.opts.callback
     dofile(callback_file)
 
-    if type(callback) == "string" then callback = _G[callback] end
+    if type(callback) == "string" then
+        callback = _G[callback]
+    end
 
     if type(callback) == "function" then
-        if tbl.opts.args ~= nil then return callback(tbl.opts.args) end
+        if tbl.opts.args ~= nil then
+            return callback(tbl.opts.args)
+        end
 
         return callback()
     end
@@ -231,7 +265,9 @@ end
 
 -- @return true: support to run with makeprg, false: makeprg is not setup
 local function compiler_tbl_makeprg_setup(tbl)
-    if tbl == nil then return false end
+    if tbl == nil then
+        return false
+    end
 
     compiler_latest_build_data = tbl
 
@@ -242,7 +278,9 @@ local function compiler_tbl_makeprg_setup(tbl)
         end
     end
 
-    if tbl.type == nil then return false end
+    if tbl.type == nil then
+        return false
+    end
 
     if tbl.type == "term" then
         vim.cmd("5split | terminal " .. tbl.cmd)
@@ -264,23 +302,33 @@ local function compiler_tbl_makeprg_setup(tbl)
         return false
     end
 
-    if tbl.cmd == nil then return false end
+    if tbl.cmd == nil then
+        return false
+    end
 
-    if tbl.cmd == "" then return true end
+    if tbl.cmd == "" then
+        return true
+    end
 
     vim.api.nvim_set_option_value('makeprg', tbl.cmd, {})
 
-    if tbl.efm ~= nil then vim.api.nvim_set_option_value('errorformat', tbl.efm, {}) end
+    if tbl.efm ~= nil then
+        vim.api.nvim_set_option_value('errorformat', tbl.efm, {})
+    end
 
     return true
 end
 
 local function compiler_latest_makeprg_setup()
-    if compiler_latest_build_data == nil then return nil end
+    if compiler_latest_build_data == nil then
+        return nil
+    end
 
     local tbl = compiler_latest_build_data
 
-    if (tbl.ext ~= nil) and (tbl.ext ~= 'any') and (tbl.ext ~= vim.bo.filetype) then return false end
+    if (tbl.ext ~= nil) and (tbl.ext ~= 'any') and (tbl.ext ~= vim.bo.filetype) then
+        return false
+    end
 
     if (tbl.opt ~= nil) and (compiler_optional_setup(tbl) == false) then
         vim.api.nvim_echo({ { "compiler callback error", "ErrorMsg" } }, true, {})
@@ -296,27 +344,39 @@ end
 local function compiler_build_setup_selection()
     local tbl = get_compiler_build_data()
 
-    if tbl == nil then return false end
+    if tbl == nil then
+        return false
+    end
 
     local grp = group_selection(tbl)
 
-    if grp == nil then return false end
+    if grp == nil then
+        return false
+    end
 
     local target_tbl = {}
     local msg = {}
 
     for _, info in ipairs(tbl) do
-        if (info.ext ~= nil) and (info.ext ~= 'any') and (info.ext ~= vim.bo.filetype) then goto continue end
+        if (info.ext ~= nil) and (info.ext ~= 'any') and (info.ext ~= vim.bo.filetype) then
+            goto continue
+        end
 
-        if (info.group ~= grp) then goto continue end
+        if (info.group ~= grp) then
+            goto continue
+        end
 
         table.insert(target_tbl, info)
         ::continue::
     end
 
-    if #target_tbl == 0 then return false end
+    if #target_tbl == 0 then
+        return false
+    end
 
-    table.sort(target_tbl, function(a, b) return a.name > b.name end)
+    table.sort(target_tbl, function(a, b)
+        return a.name > b.name
+    end)
 
     local msg_max_length = {
         name = vim.fn.strlen("name"),
@@ -334,7 +394,9 @@ local function compiler_build_setup_selection()
     local msg_total_length = msg_max_length.name + msg_max_length.description + 10 -- pad index 3 digits, '|', space
     local separator = string.rep("=", msg_total_length)
 
-    for i, t in ipairs(target_tbl) do msg[i] = string.format(msg_format, i, t.name, t.desc) end
+    for i, t in ipairs(target_tbl) do
+        msg[i] = string.format(msg_format, i, t.name, t.desc)
+    end
 
     display_title(separator)
     display_title(string.format(msg_format, "idx", "name", "description"))
@@ -342,7 +404,9 @@ local function compiler_build_setup_selection()
 
     local sel_idx = vim.fn.inputlist(msg)
 
-    if sel_idx == 0 or sel_idx > #target_tbl then return false end
+    if sel_idx == 0 or sel_idx > #target_tbl then
+        return false
+    end
 
     vim.api.nvim_echo({ { "\n" } }, false, {})
     return compiler_tbl_makeprg_setup(target_tbl[sel_idx])

@@ -2,7 +2,9 @@
 -- @description Update the dashboard with the current time, date, and khal
 -- every specified time interval
 local function update_dashboard()
-    if vim.bo.filetype ~= 'alpha' then return end
+    if vim.bo.filetype ~= 'alpha' then
+        return
+    end
 
     vim.defer_fn(function()
         require('plugin.alphas').Setup()
@@ -112,9 +114,13 @@ local function get_display()
         display = "sleep"
     end
 
-    if display == "work" and (year == 2023 and month <= 12 and month >= 5) then display = "work_on_mstf" end
+    if display == "work" and (year == 2023 and month <= 12 and month >= 5) then
+        display = "work_on_mstf"
+    end
 
-    if day > 5 and display == "work" then display = "free" end
+    if day > 5 and display == "work" then
+        display = "free"
+    end
 
     return ascii[display]
 end

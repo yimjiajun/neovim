@@ -25,7 +25,9 @@ local function setup()
         end
     end
 
-    for _, v in pairs(tbl) do table.insert(dap.configurations.python, v) end
+    for _, v in pairs(tbl) do
+        table.insert(dap.configurations.python, v)
+    end
 end
 
 return { Setup = setup }

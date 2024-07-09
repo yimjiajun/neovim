@@ -40,9 +40,9 @@ local function setup()
 
     -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
     local servers = vim.g.custom.lsp
-    for _, lsp in ipairs(servers) do lspconfig[lsp].setup {
-        capabilities = capabilities
-    } end
+    for _, lsp in ipairs(servers) do
+        lspconfig[lsp].setup { capabilities = capabilities }
+    end
 
     lspconfig.clangd.setup {
         capabilities = capabilities,
@@ -57,7 +57,8 @@ local function setup()
             completeUnimported = true,
             semanticHighlighting = true
         },
-        on_attach = function() end
+        on_attach = function()
+        end
     }
 
     -- luasnip setup
@@ -66,7 +67,11 @@ local function setup()
     -- nvim-cmp setup
     local cmp = require 'cmp'
     cmp.setup {
-        snippet = { expand = function(args) luasnip.lsp_expand(args.body) end },
+        snippet = {
+            expand = function(args)
+                luasnip.lsp_expand(args.body)
+            end
+        },
         mapping = cmp.mapping.preset.insert({
             ['<C-d>'] = cmp.mapping.scroll_docs(-4),
             ['<C-f>'] = cmp.mapping.scroll_docs(4),

@@ -7,9 +7,13 @@ local uv = vim.loop
 local work_dirs = { uv.cwd() }
 
 local function get_session_tbl()
-    if vim.fn.isdirectory(path) == 0 then vim.fn.mkdir(path, "p") end
+    if vim.fn.isdirectory(path) == 0 then
+        vim.fn.mkdir(path, "p")
+    end
 
-    if vim.fn.filereadable(json_file) == 0 then vim.fn.writefile({}, json_file) end
+    if vim.fn.filereadable(json_file) == 0 then
+        vim.fn.writefile({}, json_file)
+    end
 
     return require('features.files').GetJson(json_file) or {}
 end
@@ -52,7 +56,9 @@ local function select_session()
     local lists = {}
     local json_lua_tbl = get_session_tbl()
 
-    for i, v in ipairs(json_lua_tbl) do lists[i] = string.format("%2d. [%s]:\t%s\t{%s}", i, v.name, v.path, v.date) end
+    for i, v in ipairs(json_lua_tbl) do
+        lists[i] = string.format("%2d. [%s]:\t%s\t{%s}", i, v.name, v.path, v.date)
+    end
 
     if #lists == 0 then
         vim.api.nvim_echo({ { "Session not found !", "ErrorMsg" } }, false, {})
@@ -62,7 +68,9 @@ local function select_session()
     require('features.common').DisplayTitle("Select Session to Load")
     local s = vim.fn.inputlist(lists)
 
-    if s > 0 then vim.cmd("source " .. json_lua_tbl[s].src) end
+    if s > 0 then
+        vim.cmd("source " .. json_lua_tbl[s].src)
+    end
 end
 
 local function change_and_save_working_directory()
@@ -87,22 +95,30 @@ end
 local function select_working_directory()
     local lists = {}
 
-    for i, v in ipairs(work_dirs) do lists[i] = string.format("%s", v) end
+    for i, v in ipairs(work_dirs) do
+        lists[i] = string.format("%s", v)
+    end
 
     local chg_work_dir = require('features.common').TableSelection(work_dirs, lists, "Change Working Directory")
 
-    if chg_work_dir == nil then return end
+    if chg_work_dir == nil then
+        return
+    end
 
     save_session()
     vim.cmd('cd ' .. chg_work_dir)
 end
 
-local function clear_working_directory_history() work_dirs = { uv.cwd() } end
+local function clear_working_directory_history()
+    work_dirs = { uv.cwd() }
+end
 
 local function setup()
     work_dirs = { uv.cwd() }
 
-    if vim.fn.isdirectory(path) == 0 then vim.fn.mkdir(path, "p") end
+    if vim.fn.isdirectory(path) == 0 then
+        vim.fn.mkdir(path, "p")
+    end
 end
 
 return {

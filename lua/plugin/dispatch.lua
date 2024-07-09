@@ -14,7 +14,9 @@ local function dispatch_build(mode)
         return
     end
 
-    if status == false then return end
+    if status == false then
+        return
+    end
 
     vim.cmd("Make")
 end

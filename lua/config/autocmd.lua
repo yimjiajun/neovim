@@ -5,7 +5,9 @@ local function session()
         desc = "Save Session Before Leave Neovim",
         group = "session",
         pattern = "*.*",
-        callback = function() require("features.session").Save() end
+        callback = function()
+            require("features.session").Save()
+        end
     })
 end
 
@@ -16,7 +18,9 @@ local function statusline()
         desc = "Refresh statusline",
         group = "statusline",
         pattern = "*",
-        callback = function() require('config.function').SetStatusline() end
+        callback = function()
+            require('config.function').SetStatusline()
+        end
     })
 end
 
@@ -28,7 +32,9 @@ local function format()
         group = "format",
         pattern = "*",
         callback = function()
-            if vim.fn.expand('%:p') == '' or vim.bo.filetype == '' then return end
+            if vim.fn.expand('%:p') == '' or vim.bo.filetype == '' then
+                return
+            end
 
             vim.cmd([[s/\s\+$//e]])
             vim.fn.setpos('.', {
@@ -43,7 +49,9 @@ local function format()
         group = "format",
         pattern = "*",
         callback = function()
-            if vim.fn.expand('%:p') == '' or vim.bo.filetype == '' then return end
+            if vim.fn.expand('%:p') == '' or vim.bo.filetype == '' then
+                return
+            end
 
             vim.cmd([[%s/\r\+$//e]])
         end
@@ -57,42 +65,54 @@ local function cursor()
         desc = "Enable cursor line",
         group = "cursor",
         pattern = "*",
-        callback = function() vim.cmd('set cursorline') end
+        callback = function()
+            vim.cmd('set cursorline')
+        end
     })
 
     vim.api.nvim_create_autocmd("InsertLeave", {
         desc = "Enable cursor line",
         group = "cursor",
         pattern = "*",
-        callback = function() vim.cmd('set cursorline') end
+        callback = function()
+            vim.cmd('set cursorline')
+        end
     })
 
     vim.api.nvim_create_autocmd("WinEnter", {
         desc = "Enable cursor line",
         group = "cursor",
         pattern = "*",
-        callback = function() vim.cmd('set cursorline') end
+        callback = function()
+            vim.cmd('set cursorline')
+        end
     })
 
     vim.api.nvim_create_autocmd("InsertEnter", {
         desc = "Disable cursor line",
         group = "cursor",
         pattern = "*",
-        callback = function() vim.cmd('set nocursorline') end
+        callback = function()
+            vim.cmd('set nocursorline')
+        end
     })
 
     vim.api.nvim_create_autocmd("WinLeave", {
         desc = "Disable cursor line",
         group = "cursor",
         pattern = "*",
-        callback = function() vim.cmd('set nocursorline') end
+        callback = function()
+            vim.cmd('set nocursorline')
+        end
     })
 
     vim.api.nvim_create_autocmd('TextYankPost', {
         desc = "Flash the part being yank",
         group = "cursor",
         pattern = "*",
-        callback = function() vim.highlight.on_yank({ higroup = 'Visual' }) end
+        callback = function()
+            vim.highlight.on_yank({ higroup = 'Visual' })
+        end
     })
 
     vim.api.nvim_create_autocmd("FileType", {
@@ -267,9 +287,13 @@ local function highlight()
         callback = function()
             local h = vim.g.custom.colorscheme.highlight
 
-            if vim.fn.len(vim.g.custom.colorscheme.highlight) == 0 then return end
+            if vim.fn.len(vim.g.custom.colorscheme.highlight) == 0 then
+                return
+            end
 
-            for n, c in pairs(h) do vim.api.nvim_set_hl(0, tostring(n), c) end
+            for n, c in pairs(h) do
+                vim.api.nvim_set_hl(0, tostring(n), c)
+            end
         end
     })
 end
@@ -280,7 +304,9 @@ local function setup()
         package, highlight
     }
 
-    for _, exec in ipairs(setups) do exec() end
+    for _, exec in ipairs(setups) do
+        exec()
+    end
 end
 
 return {

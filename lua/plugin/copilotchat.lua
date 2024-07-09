@@ -105,7 +105,9 @@ local config = {
     callback = nil, -- Callback to use when ask response is received
 
     -- default selection (visual or line)
-    selection = function(source) return select.visual(source) or select.line(source) end,
+    selection = function(source)
+        return select.visual(source) or select.line(source)
+    end,
 
     -- default prompts
     prompts = {
@@ -173,7 +175,9 @@ local config = {
         },
         CommitStaged = {
             prompt = 'Write commit message for the change with commitizen convention. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Wrap the whole message in code block with language gitcommit.',
-            selection = function(source) return select.gitdiff(source, true) end
+            selection = function(source)
+                return select.gitdiff(source, true)
+            end
         }
     },
 
@@ -218,11 +222,9 @@ local function setup()
     require('CopilotChat').setup(config)
     -- Setup keybindings
     local keymap = vim.keymap.set
-    local keymap_options = function(desc) return {
-        noremap = true,
-        silent = true,
-        desc = desc
-    } end
+    local keymap_options = function(desc)
+        return { noremap = true, silent = true, desc = desc }
+    end
     local key = '<leader>gc'
     local copilotchat_telescope = function()
         local actions = require("CopilotChat.actions")

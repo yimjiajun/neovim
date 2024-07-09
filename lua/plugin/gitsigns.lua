@@ -4,7 +4,9 @@ local function setup_highlight()
         GitSignsAdd = { link = '@comment.warning' }
     }
 
-    for n, c in pairs(colors) do vim.api.nvim_set_hl(0, tostring(n), c) end
+    for n, c in pairs(colors) do
+        vim.api.nvim_set_hl(0, tostring(n), c)
+    end
 end
 
 local function setup()
@@ -80,14 +82,22 @@ local function setup()
 
             -- Navigation
             map('n', ']c', function()
-                if vim.wo.diff then return ']c' end
-                vim.schedule(function() gs.next_hunk() end)
+                if vim.wo.diff then
+                    return ']c'
+                end
+                vim.schedule(function()
+                    gs.next_hunk()
+                end)
                 return '<Ignore>'
             end, { expr = true })
 
             map('n', '[c', function()
-                if vim.wo.diff then return '[c' end
-                vim.schedule(function() gs.prev_hunk() end)
+                if vim.wo.diff then
+                    return '[c'
+                end
+                vim.schedule(function()
+                    gs.prev_hunk()
+                end)
                 return '<Ignore>'
             end, { expr = true })
 
@@ -100,10 +110,14 @@ local function setup()
             map('n', '<leader>gGsu', gs.undo_stage_hunk)
             map('n', '<leader>gGsR', gs.reset_buffer)
             map('n', '<leader>gGsp', gs.preview_hunk)
-            map('n', '<leader>gGba', function() gs.blame_line { full = true } end)
+            map('n', '<leader>gGba', function()
+                gs.blame_line { full = true }
+            end)
             map('n', '<leader>gGbb', gs.toggle_current_line_blame)
             map('n', '<leader>gGdd', gs.diffthis)
-            map('n', '<leader>gGdp', function() gs.diffthis('~') end)
+            map('n', '<leader>gGdp', function()
+                gs.diffthis('~')
+            end)
             map('n', '<leader>gGtd', gs.toggle_deleted)
             map('n', '<leader>gGtw', gs.toggle_word_diff)
             map('n', '<leader>gGts', gs.toggle_signs)

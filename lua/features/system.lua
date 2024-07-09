@@ -34,7 +34,9 @@ local function get_install_package_cmd()
             install_cmd = 'sudo port install'
         end
     elseif vim.fn.has('unix') == 1 then
-        if get_os_like_id() == 'debian' then install_cmd = 'sudo apt install -y ' end
+        if get_os_like_id() == 'debian' then
+            install_cmd = 'sudo apt install -y '
+        end
     end
 
     if install_cmd == nil then
@@ -50,14 +52,18 @@ local function get_install_package_cmd()
         }, true, {})
 
         local confirm = vim.fn.input("Confirm? (Y/n) ")
-        if confirm:match('^%s*[yY].*$') then install_cmd = usr_install_cmd end
+        if confirm:match('^%s*[yY].*$') then
+            install_cmd = usr_install_cmd
+        end
     end
 
     return install_cmd
 end
 
 local function get_battery_info()
-    if vim.fn.has('unix') == 0 then return end
+    if vim.fn.has('unix') == 0 then
+        return
+    end
 
     local dir = '/sys/class/power_supply/'
     local bat_pattern = 'BAT%d'
@@ -69,7 +75,9 @@ local function get_battery_info()
         end
     end
 
-    if #bat_dir == 0 then return end
+    if #bat_dir == 0 then
+        return
+    end
 
     for _, v in ipairs(bat_dir) do
         local bat_present = tonumber(vim.fn.trim(vim.fn.system('cat ' .. v .. '/present')))

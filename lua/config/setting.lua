@@ -35,7 +35,9 @@ local function Setting_view()
     }
     vim.opt.list = true
 
-    if vim.fn.has("termguicolors") == 1 then vim.opt.termguicolors = true end
+    if vim.fn.has("termguicolors") == 1 then
+        vim.opt.termguicolors = true
+    end
 
     require('config.function').SetStatusline()
 end
@@ -56,7 +58,9 @@ local function Setting_editor()
         local local_share_path = vim.fn.stdpath('data')
         local local_undodir = local_share_path .. '/undo'
 
-        if vim.fn.isdirectory(local_undodir) == 0 then vim.fn.mkdir(local_undodir, "p") end
+        if vim.fn.isdirectory(local_undodir) == 0 then
+            vim.fn.mkdir(local_undodir, "p")
+        end
 
         vim.opt.undodir = local_undodir
     end
@@ -99,7 +103,9 @@ local function setup()
     Setting_netrw()
     Setting_colorscheme()
 
-    if vim.fn.isdirectory(vim.fn.stdpath('config') .. '/doc') then vim.cmd('helptags ALL') end
+    if vim.fn.isdirectory(vim.fn.stdpath('config') .. '/doc') then
+        vim.cmd('helptags ALL')
+    end
 end
 
 return { Setup = setup }

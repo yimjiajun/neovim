@@ -98,7 +98,9 @@ local function setup()
         }
 
         for _, v in ipairs(keymap_setup) do
-            if v.support ~= true then goto continue end
+            if v.support ~= true then
+                goto continue
+            end
 
             vim.api.nvim_set_keymap('n', key(v.prefix, v.key), v.func, opts(v.desc))
 

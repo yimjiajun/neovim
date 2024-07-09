@@ -79,7 +79,11 @@ local function dap_get_info(client)
     local tbl = {}
     local dap_tbl = { { client = 'python', info = dap_info.python } }
 
-    for _, v in pairs(dap_tbl) do if v.client == client then table.insert(tbl, v.info) end end
+    for _, v in pairs(dap_tbl) do
+        if v.client == client then
+            table.insert(tbl, v.info)
+        end
+    end
 
     return tbl
 end
@@ -87,7 +91,9 @@ end
 local function dap_insert_info(tbl, client)
     local dap_tbl = { { client = 'python', info = dap_info.python } }
 
-    if (client == nil) or (tbl == nil) then return end
+    if (client == nil) or (tbl == nil) then
+        return
+    end
 
     for _, v in pairs(dap_tbl) do
         if v.client == client then
@@ -97,7 +103,9 @@ local function dap_insert_info(tbl, client)
     end
 end
 
-local function setup() setup_keymap().Init() end
+local function setup()
+    setup_keymap().Init()
+end
 
 return {
     Keymap = setup_keymap,

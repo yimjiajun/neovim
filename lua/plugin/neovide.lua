@@ -1,4 +1,6 @@
-if vim.g.neovide == nil then return {} end
+if vim.g.neovide == nil then
+    return {}
+end
 
 local function setup()
     vim.g.neovide_scale_factor = 1.0
@@ -12,7 +14,9 @@ local function setup()
     vim.g.neovide_cursor_animate_command_line = false
     vim.g.neovide_cursor_vfx_mode = "ripple"
 
-    if vim.g.neovide_cursor_vfx_mode ~= nil then vim.g.neovide_cursor_vfx_opacity = 100.0 end
+    if vim.g.neovide_cursor_vfx_mode ~= nil then
+        vim.g.neovide_cursor_vfx_opacity = 100.0
+    end
 
     vim.opt.title = true
     vim.opt.titlestring = "JunVim" .. "@" .. vim.fn.getcwd()

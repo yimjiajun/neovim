@@ -1,6 +1,6 @@
-local function display_title(title) vim.api.nvim_echo({
-    { string.format("%-s", title), "Title" }
-}, false, {}) end
+local function display_title(title)
+    vim.api.nvim_echo({ { string.format("%-s", title), "Title" } }, false, {})
+end
 
 -- @name: group_selection
 -- @description: select group from list
@@ -11,17 +11,25 @@ local function group_selection(tbl)
     local group_list = {}
     local group_total = 0
 
-    if tbl == nil then return nil end
+    if tbl == nil then
+        return nil
+    end
 
-    table.sort(tbl, function(a, b) return a.group < b.group end)
+    table.sort(tbl, function(a, b)
+        return a.group < b.group
+    end)
 
     for _, info in ipairs(tbl) do
         local cnt = 1
 
         repeat
-            if info.group == nil then break end
+            if info.group == nil then
+                break
+            end
 
-            if group_list[cnt] == info.group then break end
+            if group_list[cnt] == info.group then
+                break
+            end
 
             if group_list[cnt] == nil then
                 group_list[cnt] = info.group
@@ -35,15 +43,21 @@ local function group_selection(tbl)
 
     local lists = {}
 
-    if #group_list == 0 then return nil end
+    if #group_list == 0 then
+        return nil
+    end
 
     display_title("Group List")
 
-    for idx, grps in ipairs(group_list) do lists[idx] = string.format("%2d. %s", idx, grps) end
+    for idx, grps in ipairs(group_list) do
+        lists[idx] = string.format("%2d. %s", idx, grps)
+    end
 
     local sel = vim.fn.inputlist(lists)
 
-    if sel == 0 or sel > #group_list then return nil end
+    if sel == 0 or sel > #group_list then
+        return nil
+    end
 
     vim.api.nvim_echo({ { "\t[ " .. group_list[sel] .. " ]\n", "WarningMsg" } }, false, {})
     return group_list[sel]
@@ -54,7 +68,9 @@ local function table_selection(tbl, display_lists, name)
 
     local s = vim.fn.inputlist(display_lists)
 
-    if s == 0 then return end
+    if s == 0 then
+        return
+    end
 
     local sel_tbl = tbl[s]
 
@@ -95,7 +111,11 @@ local function async_command(args)
     local cmd = table.remove(parts, 1) -- Extract the command (first element)
     local cmd_args = parts -- The remaining parts are the arguments
 
-    local function output_message(msg) if opts.silent == nil or opts.silent == false then print(msg) end end
+    local function output_message(msg)
+        if opts.silent == nil or opts.silent == false then
+            print(msg)
+        end
+    end
 
     if vim.fn.executable(cmd) == 0 then
         output_message(string.format("%-10s [ %s ]", "Command Not Found", cmd))
@@ -109,13 +129,21 @@ local function async_command(args)
         output_message(string.format("%-10s [ %s ] (Exit Code: %d)", (code == 0) and "Success" or "Failed", commands[1],
                                      code))
 
-        if stdout and not stdout:is_closing() then stdout:close() end
+        if stdout and not stdout:is_closing() then
+            stdout:close()
+        end
 
-        if stderr and not stderr:is_closing() then stderr:close() end
+        if stderr and not stderr:is_closing() then
+            stderr:close()
+        end
 
-        if handle and not handle:is_closing() then handle:close() end
+        if handle and not handle:is_closing() then
+            handle:close()
+        end
 
-        if #commands >= 1 then table.remove(commands, 1) end
+        if #commands >= 1 then
+            table.remove(commands, 1)
+        end
 
         if (#commands > 0) and (code == 0 or ((opts.allow_fail == nil) and false or opts.allow_fail)) then
             async_command({ commands = commands, opts = opts })
@@ -132,21 +160,29 @@ local function async_command(args)
     local function on_read(err, data)
         assert(not err, err)
 
-        if data then output_message(data) end
+        if data then
+            output_message(data)
+        end
     end
 
     stdout:read_start(on_read)
     stderr:read_start(on_read)
     vim.defer_fn(function()
-        if stdout and not stdout:is_closing() then stdout:close() end
+        if stdout and not stdout:is_closing() then
+            stdout:close()
+        end
 
-        if stderr and not stderr:is_closing() then stderr:close() end
+        if stderr and not stderr:is_closing() then
+            stderr:close()
+        end
 
         if handle and not handle:is_closing() then
             handle:kill('sigterm')
             handle:close()
             -- cmd being nil when exited from running
-            if #commands > 0 then output_message(string.format("%-10s [ %s ]", "TimeOut", commands[1])) end
+            if #commands > 0 then
+                output_message(string.format("%-10s [ %s ]", "TimeOut", commands[1]))
+            end
         end
     end, timeout)
 end

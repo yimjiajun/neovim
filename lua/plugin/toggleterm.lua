@@ -94,7 +94,9 @@ local function setup()
 
     vim.cmd("command! -nargs=1 TermCmd lua require'toggleterm'.exec(<q-args>)")
 
-    if vim.g.vim_git == "!git" then vim.g.vim_git = "TermCmd git" end
+    if vim.g.vim_git == "!git" then
+        vim.g.vim_git = "TermCmd git"
+    end
 
     setup_keymap()
     setup_autocmd()
