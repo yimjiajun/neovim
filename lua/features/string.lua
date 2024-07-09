@@ -1,3 +1,11 @@
+-- @brief String utility functions
+-- @description String utility functions
+-- @usage local string = require(features.'string')
+-- @usage string.Search()
+-- @brief Search word
+-- @description Search word in current buffer or project
+-- @param extension string: file extension (default: current file extension)
+-- @param mode string: search mode (cursor, complete, normal)
 local function search_word(extension, mode)
     local word, cmd
 
@@ -44,6 +52,11 @@ local function search_word(extension, mode)
     vim.fn.setqflist({}, 'r', { title = "search word: " .. vim.fn.getreg('/') })
 end
 
+-- @brief Search word by file
+-- @description Search word in provided file, if file is nil search in project
+-- @param file string: file name
+-- @param mode string: search mode (cursor, complete, normal)
+-- @usage SearchByFile("*.lua", "cursor")
 local function search_word_by_file(file, mode)
     local word, cmd
 
@@ -83,6 +96,9 @@ local function search_word_by_file(file, mode)
     })
 end
 
+-- @brief Search word by buffer
+-- @description Search word in current buffer
+-- @usage SearchByBuffer()
 local function search_word_by_buffer()
     vim.fn.setreg('/', vim.fn.expand("<cword>"))
     vim.cmd([[silent! vimgrep /]] .. vim.fn.getreg('/') .. [[/gj %]])
