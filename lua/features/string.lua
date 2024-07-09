@@ -1,14 +1,72 @@
+local search_options = {
+    smart_case = false,
+    case_sensitive = false,
+    ignore_case = false
+}
+
+-- @brief Setup search options
+-- @description Update search options, if the options are not provided,
+--              the default options will be used and overwritten in search search_pattern_async
+-- @param opts Search options
+local function setup_search_options(opts)
+    local value = {}
+    local s = search_options
+    local selection = {
+        ["Smart Case"] = string.format('Smart Case: %s', s.smart_case),
+        ["Case Sensitive"] = string.format('Case Sensitive: %s', s.case_sensitive),
+        ["Ignore Case Sensitive"] = string.format('Ignore Case Sensitive: %s', s.ignore_case)
+    }
+
+    for _, v in pairs(selection) do
+        table.insert(value, v)
+    end
+
+    table.sort(value, function(a, b)
+        return a < b
+    end)
+
+    if opts == nil then
+        -- spawn table to
+        vim.ui.select(value, { prompt = 'Search Options' }, function(choice)
+            if choice == selection['Smart Case'] then
+                search_options.smart_case = not s.smart_case
+            elseif choice == selection['Case Sensitive'] then
+                search_options.case_sensitive = not s.case_sensitive
+            elseif choice == selection['Ignore Case Sensitive'] then
+                search_options.ignore_case = not s.ignore_case
+            end
+        end)
+    else
+        opts = (opts == nil) and {} or opts
+        search_options = {
+            smart_case = (opts.smart_case == nil) and s.smart_case or opts.smart_case,
+            case_sensitive = (opts.case_sensitive == nil) and s.case_sensitive or opts.case_sensitive,
+            ignore_case = (opts.ignore_case == nil) and s.ignore_case or opts.ignore_case
+        }
+    end
+
+    return search_options
+end
+
 -- @brief Search pattern asynchronously
 -- @param key Search key
 -- @param opts Search options
 local function search_pattern_async(key, opts)
     opts = (opts == nil) and {} or opts
-    local extension = (opts.extension == nil) and '*' or opts.extension
+    opts = {
+        smart_case = (opts.smart_case == nil) and search_options.smart_case or opts.smart_case,
+        case_sensitive = (opts.case_sensitive == nil) and search_options.case_sensitive or opts.case_sensitive,
+        ignore_case = (opts.ignore_case == nil) and search_options.ignore_case or opts.ignore_case,
+        extension = (opts.extension == nil) and '*' or opts.extension
+    }
+    local extension = (opts.extension == '') and
+                          vim.fn.input('Enter file extension: ', string.format("*.%s", vim.fn.expand('%:e'))) or
+                          opts.extension
     local options = string.format('%s %s %s',
                                   (opts.smart_case == nil or opts.smart_case == false) and '' or '--smart-case',
                                   (opts.case_sensitive == nil or opts.case_sensitive == false) and '' or
-                                      '--case-sensitive', (opts.ignore_case_sensitive == nil or
-                                      opts.ignore_case_sensitive == false) and '' or '--ignore-case-sensitive')
+                                      '--case-sensitive',
+                                  (opts.ignore_case == nil or opts.ignore_case == false) and '' or '--ignore-case')
     local stdout = vim.loop.new_pipe(false) -- Create a new pipe for stdout
     local stderr = vim.loop.new_pipe(false) -- Create a new pipe for stderr
     local handle -- Store the process handle
@@ -21,7 +79,11 @@ local function search_pattern_async(key, opts)
         end)
     end
 
-    key = (key == nil or key == '') and vim.fn.expand("<cword>") or key
+    if key == nil then
+        return
+    end
+
+    key = (key == '') and vim.fn.expand("<cword>") or key
     -- Set the search key, extension and options in the register
     vim.fn.setreg('/', tostring(key))
     vim.fn.setreg('e', tostring(extension))
@@ -109,6 +171,8 @@ local function search_pattern_async(key, opts)
     end, timeout)
 end
 
+-- @brief Search word by buffer
+-- @description Search word under cursor in the current buffer and display the result in quickfix window
 local function search_word_by_buffer()
     vim.fn.setreg('/', vim.fn.expand("<cword>"))
     vim.cmd([[silent! vimgrep /]] .. vim.fn.getreg('/') .. [[/gj %]])
@@ -198,11 +262,14 @@ local function toggle_comment()
     vim.fn.setreg('/', hold_search_reg)
 end
 
+-- @brief Setup
+-- @description Setup the features for string.lua
 local function setup()
 end
 
 return {
     Search = search_pattern_async,
+    SetupSearchOptions = setup_search_options,
     SearchByBuffer = search_word_by_buffer,
     ToggleComment = toggle_comment,
     Setup = setup

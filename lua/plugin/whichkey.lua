@@ -119,6 +119,7 @@ local function setup()
         },
         f = {
             name = 'Find',
+            s = 'setup search (legacy)',
             f = 'file',
             w = 'word',
             c = 'c',

@@ -89,6 +89,7 @@ local function setting_key_newtr()
 end
 
 local function setting_key_search()
+    keymap('n', '<Leader>fs', [[<cmd> lua require("features.string").SetupSearchOptions() <CR>]], opts)
     keymap('n', '<Leader>ff', [[:find ./**/*]], opts_output)
     keymap('n', '<Leader>fF', [[<cmd> lua require("features.files").Search() <CR>]], opts)
     keymap('n', '<Leader>fA', [[<cmd> lua require("features.string").Search(nil) <CR>]], opts)
@@ -109,8 +110,9 @@ local function setting_key_search()
            opts)
     keymap('n', '<Leader>fM',
            [[<cmd> lua require("features.string").Search(nil, {extension = "{*.md,*.rst,*.txt}"}) <CR>]], opts)
-    keymap('n', '<Leader>fv', [[<cmd> lua require("features.string").Search(nil) <CR>]], opts)
-    keymap('n', '<Leader>fV', [[<cmd> lua require("features.string").Search(nil, {case_sensitive = true}) <CR>]], opts)
+    keymap('n', '<Leader>fv', [[<cmd> lua require("features.string").Search(nil, {extension=''}) <CR>]], opts)
+    keymap('n', '<Leader>fV',
+           [[<cmd> lua require("features.string").Search(nil, {extension='',case_sensitive = true}) <CR>]], opts)
     keymap('n', '<Leader>fb', [[<cmd> lua require("features.string").SearchByBuffer() <CR>]], opts)
     if vim.version().major < 1 or vim.version().minor < 10 then
         keymap('n', 'gcc', [[<cmd> lua require("features.string").ToggleComment() <CR>]], opts)
