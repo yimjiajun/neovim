@@ -81,18 +81,22 @@ end
 
 -- @name: async_command
 -- @description: run command as async without blocking vim interface
--- @param cmd: command to run
--- @param timeout: timeout of running command in seconds
--- @param sub_cmd: command to run when primary command success
+-- @param commands: command to run
+--        - string: single command
+--        - table: multiple commands
+-- @param opts: options for running command
+--        - timeout: timeout for running command (default: 30 seconds)
+--        - silent: silent mode (default: false)
+--        - allow_fail: allow fail to run next command (default: false)
 -- @return: nil
--- @usage: async_command("git log --oneline --graph --all")
--- @usage: async_command("ctags -R .", 120, "sort -u -o tags tags")
+-- @usage: async_command({ commands = "git log --oneline --graph --all" })
+-- @usage: async_command({ commands = { "ctags -R .",  "sort -u -o tags tags" }, opts = { timeout = 120 })
 local function async_command(args)
     local opts = (args.opts == nil) and {} or args.opts
     local commands = (args.commands == nil) and nil or args.commands
 
     if commands == nil then
-        vim.api.nvim_err_writeln("Not command is providing on AsyncCommand")
+        vim.api.nvim_err_writeln("Not command is providing on AsyncCommand : { commands = <command> }")
         return
     end
 
