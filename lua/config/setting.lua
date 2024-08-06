@@ -43,6 +43,7 @@ local function Setting_view()
 end
 
 local function Setting_editor()
+    vim.opt.mouse = ""
     vim.opt.ignorecase = true
     vim.opt.smartcase = true
     vim.opt.showmatch = true
