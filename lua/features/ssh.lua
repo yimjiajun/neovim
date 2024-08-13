@@ -17,14 +17,20 @@ local ssh_list_get_group = require("features.common").GroupSelection
 -- @param: hostname: hostname/ip
 -- @param: port: port number
 -- @param: password: password
+-- @param: opts: table of ssh options
 -- @return: nil
-local function ssh_connect(username, hostname, port, password)
+local function ssh_connect(username, hostname, port, password, opts)
     local cmd = "ssh"
     local terminal = 'term'
     port = (port == nil or port == '') and "22" or port
     cmd = cmd .. " " .. username .. "@" .. hostname .. " -p " .. port
-    -- set password to clipboard
-    vim.fn.setreg('+', tostring(password))
+
+    if (password == nil or password == "") and (vim.fn.executable('pass') == 1 and opts.password_store ~= nil) then
+        vim.fn.system("pass show --clip " .. opts.password_store)
+    else
+        -- set password to clipboard
+        vim.fn.setreg('+', tostring(password))
+    end
 
     if vim.fn.exists('win32') == 1 or (vim.fn.isdirectory('/run/WSL') == 1 and vim.g.wsl_ssh_run_win == 1) then
         cmd = terminal .. " " .. " powershell.exe -C " .. cmd
@@ -56,7 +62,7 @@ local function ssh_connect_request()
         return
     end
 
-    return ssh_connect(usr, host_ip, port, password)
+    return ssh_connect(usr, host_ip, port, password, {})
 end
 
 -- @brief: ssh_get_list
@@ -189,13 +195,13 @@ local function ssh_run()
         return
     end
 
-    ssh_connect(sel_ssh.username, sel_ssh.hostname, sel_ssh.port, sel_ssh.password)
+    ssh_connect(sel_ssh.username, sel_ssh.hostname, sel_ssh.port, sel_ssh.password, sel_ssh.opts)
 end
 
 -- @brief: ssh_insert_info
 -- @description: insert ssh information to global variable g:ssh_data
 -- @usage: lua require('features.ssh').ssh_insert_info(<opts>)
--- @param: opts: table of ssh information
+-- @param: data: table of ssh information
 -- @field: alias: alias name
 -- @field: hostname: remote server hostname
 -- @field: username: remote server username
@@ -204,20 +210,21 @@ end
 -- @field: description: description of remote server
 -- @field: group: group name of remote server
 -- @return: nil
-local function ssh_insert_info(opts)
-    local data = vim.g.ssh_data
+local function ssh_insert_info(data)
+    local ssh_data = vim.g.ssh_data
     local info = {
-        alias = opts.alias,
-        username = opts.username,
-        hostname = opts.hostname,
-        port = opts.port,
-        password = opts.password,
-        description = opts.description,
-        group = opts.group
+        alias = data.alias,
+        username = data.username,
+        hostname = data.hostname,
+        port = data.port,
+        password = data.password,
+        description = data.description,
+        group = data.group,
+        opts = data.opts
     }
 
-    table.insert(data, info)
-    vim.g.ssh_data = data
+    table.insert(ssh_data, info)
+    vim.g.ssh_data = ssh_data
 end
 
 -- @brief: toggle_powershell_ssh
@@ -351,7 +358,8 @@ local function ssh_read_json()
                     password = (i.password ~= nil) and i.password or "",
                     port = (i.port ~= nil) and i.port or "",
                     description = (i.description ~= nil) and i.description or "",
-                    group = grp_name
+                    group = grp_name,
+                    opts = (i.opts ~= nil) and i.opts or {}
                 }
                 ssh_insert_info(tbl)
             end
@@ -403,8 +411,13 @@ local function secure_copy(opts, file, destination)
 
     local cmd = "scp " .. file .. " " .. sel_ssh.username .. "@" .. sel_ssh.hostname .. ":" .. destination
 
-    if (sel_ssh.password ~= nil and sel_ssh.password ~= "") and
-        (vim.fn.executable('sshpass') == 1 and vim.g.ssh_run_sshpass == 1) then
+    if (sel_ssh.password == nil or sel_ssh.password == "") and
+        (vim.fn.executable('pass') == 1 and sel_ssh.opts.password_store ~= nil) then
+        vim.fn.system("pass show --clip " .. sel_ssh.opts.password_store)
+    end
+
+    if (sel_ssh.password ~= nil and sel_ssh.password ~= "") and vim.fn.executable('sshpass') == 1 and
+        vim.g.ssh_run_sshpass == 1 then
         cmd = "sshpass -p '" .. sel_ssh.password .. "' " .. cmd
     end
 
@@ -464,7 +477,7 @@ end
 
 -- @brief: secret_file_transfer
 -- @description: secret file transfer via sftp
--- @param: opts: table of ssh information
+-- @param: data: table of ssh information
 -- @usage: lua require('features.ssh').secret_file_transfer({
 --  username = "username",
 --  hostname = "hostname",
@@ -473,20 +486,25 @@ end
 --  })
 -- )
 -- @return: boolean (true: success, false: failed)
-local function secret_file_transfer(opts)
+local function secret_file_transfer(data)
     display_title("Secrete File Transfer")
-    opts = (opts ~= nil) and opts or ssh_get_list(false)
+    data = (data ~= nil) and data or ssh_get_list(false)
+    local opts = (data.opts ~= nil) and data.opts or {}
 
-    if opts == nil then
+    if data == nil then
         return false
     end
 
-    local cmd = "sftp " .. " -P " .. opts.port .. " " .. opts.username .. "@" .. opts.hostname
-    local password_available = (opts.password ~= nil and opts.password ~= "")
+    local cmd = "sftp " .. " -P " .. data.port .. " " .. data.username .. "@" .. data.hostname
+    local password_available = (data.password ~= nil and data.password ~= "")
     local sshpass_support = (vim.fn.executable('sshpass') == 1 and vim.g.ssh_run_sshpass == 1)
 
+    if (password_available == false) and (vim.fn.executable('pass') == 1 and opts.password_store ~= nil) then
+        vim.fn.system("pass show --clip " .. opts.password_store)
+    end
+
     if password_available and sshpass_support then
-        cmd = "sshpass -p '" .. opts.password .. "' " .. cmd
+        cmd = "sshpass -p '" .. data.password .. "' " .. cmd
     end
 
     vim.cmd("split | term " .. cmd)
@@ -499,19 +517,19 @@ end
 -- @usage: lua require('features.ssh').SshDesktop()
 -- @param: opts: table of ssh information
 -- @return: boolean (true: success, false: failed)
-local function connect_ssh_desktop(opts)
+local function connect_ssh_desktop(data)
     display_title("Remote Desktop")
-    opts = (opts ~= nil) and opts or ssh_get_list(false)
+    data = (data ~= nil) and data or ssh_get_list(false)
 
-    if opts == nil then
+    if data == nil then
         return false
     end
 
-    if opts.username == nil or opts.hostname == nil then
-        opts = get_ssh_info_by_name((opts.alias ~= nil) and opts.alias or (opts.hostname ~= nil) and opts.hostname or
-                                        opts.username)
+    if data.username == nil or data.hostname == nil then
+        data = get_ssh_info_by_name((data.alias ~= nil) and data.alias or (data.hostname ~= nil) and data.hostname or
+                                        data.username)
 
-        if opts == nil then
+        if data == nil then
             vim.api.nvim_echo({ { "** Invalid SSH information ..", "ErrorMsg" } }, false, {})
             return false
         end
@@ -522,7 +540,7 @@ local function connect_ssh_desktop(opts)
         mstsc = { cmd = "powershell.exe -C mstsc", ext = ".rdp", opt = "" }
     }
     local tool = (vim.fn.exists('win32') == 1 or vim.fn.isdirectory('/run/WSL') == 1) and "mstsc" or "remmina"
-    local desktop_remote_file = ssh_desktop_data_dir .. delim .. opts.hostname .. desktop_remote_setup[tool].ext
+    local desktop_remote_file = ssh_desktop_data_dir .. delim .. data.hostname .. desktop_remote_setup[tool].ext
 
     if tool ~= "mstsc" and vim.fn.executable(desktop_remote_setup[tool].cmd) == 0 then
         vim.api.nvim_echo({
@@ -531,8 +549,13 @@ local function connect_ssh_desktop(opts)
         return false
     end
 
-    vim.fn.setreg('+', tostring(opts.password))
-    vim.api.nvim_echo({ { "\n[USERNAME] " .. opts.username, "MoreMsg" } }, true, {})
+    if (data.password == nil or data.password == "") and
+        (vim.fn.executable('pass') == 1 and data.opts.password_store ~= nil) then
+        vim.fn.system("pass show --clip " .. data.opts.password_store)
+    else
+        vim.fn.setreg('+', tostring(data.password))
+    end
+    vim.api.nvim_echo({ { "\n[USERNAME] " .. data.username, "MoreMsg" } }, true, {})
 
     if vim.fn.filereadable(desktop_remote_file) > 0 then
         if vim.fn.isdirectory('/run/WSL') == 0 then
@@ -561,16 +584,16 @@ local function connect_ssh_desktop(opts)
     if tool == "mstsc" then
         async_cmd({
             commands = {
-                desktop_remote_setup[tool].cmd .. " " .. "/v:" .. opts.hostname
+                desktop_remote_setup[tool].cmd .. " " .. "/v:" .. data.hostname
             },
             opts = { timeout = 0 }
         })
     else
-        if vim.fn.executable('sshpass') == 1 and opts.password ~= nil and opts.password ~= "" then
-            cmd = "sshpass -p '" .. opts.password .. "' " .. desktop_remote_setup[tool].cmd
+        if vim.fn.executable('sshpass') == 1 and data.password ~= nil and data.password ~= "" then
+            cmd = "sshpass -p '" .. data.password .. "' " .. desktop_remote_setup[tool].cmd
         end
 
-        cmd = cmd .. " " .. desktop_remote_setup[tool].opt .. " " .. "rdp://" .. opts.username .. "@" .. opts.hostname
+        cmd = cmd .. " " .. desktop_remote_setup[tool].opt .. " " .. "rdp://" .. data.username .. "@" .. data.hostname
         async_cmd({ commands = { cmd }, opts = { timeout = 0 } })
     end
 
