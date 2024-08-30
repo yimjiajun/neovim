@@ -280,7 +280,7 @@ local function update_vim_data_repo(name, opts)
 
         require('features.common').AsyncCommand({
             commands = {
-                'git -C ' .. path .. ' add ' .. path,
+                'git -C ' .. path .. ' add ' .. path .. '/*',
                 'git -C ' .. path .. ' commit --file=' .. commit_msg_file,
                 'git -C ' .. path .. ' push'
             },
