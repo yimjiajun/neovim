@@ -211,8 +211,8 @@ local function get_compiler_build_data()
     elseif check_current_filetype("python") then
         compiler_insert_info("run script", "python3 %" .. ";read;exit", "run current python file", "python", "make",
                              "build")
-        compiler_insert_info("select script and run", "python3 " .. vim.fn.expand("%") .. ";read;exit",
-                             "run specific python file", "python", "make", "build")
+        compiler_insert_info("select script and run", "python3 " .. vim.fn.expand("%"), "run specific python file",
+                             "python", "make", "build")
     elseif check_current_filetype("sh") then
         compiler_insert_info("run script", [[./%]], "run current buffer bash script", "sh", "make", "build")
     elseif check_current_filetype("perl") then
