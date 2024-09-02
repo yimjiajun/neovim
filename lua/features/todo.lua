@@ -94,6 +94,10 @@ local function add_todo_list()
 
     todo_lists = items
 
+    table.sort(todo_lists, function(a, b)
+        return a.filename > b.filename
+    end)
+
     if require('features.files').SetJson(todo_lists, todo_list_json) == true then
         require('features.git').UpdateVimDataRepo(todo_repo_name)
     end
@@ -254,6 +258,10 @@ local function toggle_todo_list()
 
     todo_lists = items
 
+    table.sort(todo_lists, function(a, b)
+        return a.filename > b.filename
+    end)
+
     if require('features.files').SetJson(todo_lists, todo_list_json) == true then
         require('features.git').UpdateVimDataRepo(todo_repo_name)
     end
@@ -293,6 +301,10 @@ local function remove_todo_list()
 
         todo_lists = items
     end
+
+    table.sort(todo_lists, function(a, b)
+        return a.filename > b.filename
+    end)
 
     if require('features.files').SetJson(todo_lists, todo_list_json) == true then
         require('features.git').UpdateVimDataRepo(todo_repo_name)
@@ -384,6 +396,10 @@ local function setup()
     end
 
     todo_lists = items
+
+    table.sort(todo_lists, function(a, b)
+        return a.filename > b.filename
+    end)
 
     require('features.files').SetJson(todo_lists, todo_list_json)
 end
