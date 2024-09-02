@@ -224,7 +224,7 @@ local function download_vim_data_repo()
         end
 
         local cmd = (vim.fn.isdirectory(path .. '/.git') > 0) and {
-            'git -C ' .. path .. ' pull'
+            'git -C ' .. path .. ' pull --rebase'
         } or { 'git clone ' .. v.url .. ' ' .. path, 'mkdir -p ' .. path }
 
         require('features.common').AsyncCommand({
