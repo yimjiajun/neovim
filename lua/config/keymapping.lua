@@ -79,13 +79,23 @@ local function setting_key_leader()
 end
 
 local function setting_key_newtr()
-    if vim.g.loaded_plugins == nil then
-        keymap('n', '<Leader>e', ':e ./', opts_output)
-        keymap('n', '<Leader>E', ':e %:h/', opts_output)
-    else
-        keymap('n', '<Leader>e', ':Lexplore<CR>', opts)
-        keymap('n', '<Leader>E', ':Explore<CR>', opts)
-    end
+    vim.keymap.set('n', '<Leader>E', function()
+        if vim.fn.exists(':Explore') > 0 then
+            vim.cmd('Explore')
+        else
+            keymap('n', '<Leader>E', ':e %:h/', opts_output)
+            vim.api.nvim_feedkeys(' E', 'm', false)
+        end
+    end, opts)
+
+    vim.keymap.set('n', '<Leader>e', function()
+        if vim.fn.exists(':Lexplore') > 0 then
+            vim.cmd('Lexplore')
+        else
+            keymap('n', '<Leader>e', ':e ./', opts_output)
+            vim.api.nvim_feedkeys(' e', 'm', false)
+        end
+    end, opts)
 end
 
 local function setting_key_search()
