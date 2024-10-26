@@ -65,7 +65,7 @@ local function setup_keymap()
                 { "<leader>do", desc = "open repl" },
                 { "<leader>dp", desc = "pause" },
                 { "<leader>dq", desc = "step out" },
-                { "<leader>ds", desc = "step over" },
+                { "<leader>ds", desc = "step over" }
             }
             wk.add(k, { mode = 'n' })
         end

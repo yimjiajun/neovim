@@ -24,7 +24,7 @@ local function setup_ui_git()
 
         if pcall(require, 'which-key') then
             local wk = require("which-key")
-            wk.add({ mode = { "n" }, { system_prefix_key .. key, desc = desc }})
+            wk.add({ mode = { "n" }, { system_prefix_key .. key, desc = desc } })
         end
 
         key = system_prefix_key .. key
@@ -54,7 +54,7 @@ local function setup_top()
 
     if pcall(require, 'which-key') then
         local wk = require("which-key")
-        wk.add({ mode = { "n" }, { system_prefix_key .. key, desc = desc }})
+        wk.add({ mode = { "n" }, { system_prefix_key .. key, desc = desc } })
     end
 
     key = system_prefix_key .. key
@@ -83,7 +83,7 @@ local function setup_disk_usage()
 
     if pcall(require, 'which-key') then
         local wk = require("which-key")
-        wk.add({ mode = { "n" }, { system_prefix_key .. key, desc = desc }})
+        wk.add({ mode = { "n" }, { system_prefix_key .. key, desc = desc } })
     end
 
     key = system_prefix_key .. key
@@ -107,7 +107,8 @@ local function setup_calendar()
 
         if pcall(require, 'which-key') then
             local wk = require("which-key")
-            wk.add({ mode = { "n" },
+            wk.add({
+                mode = { "n" },
                 { prefix_key .. key, desc = desc },
                 { prefix_key .. "t", desc = "khal list today" },
                 { prefix_key .. "i", desc = "khal interactive" }
@@ -125,7 +126,8 @@ local function setup_calendar()
 
         if pcall(require, 'which-key') then
             local wk = require("which-key")
-            wk.add({ mode = { "n" },
+            wk.add({
+                mode = { "n" },
                 { prefix_key .. key, desc = desc },
                 { prefix_key .. "t", desc = "list today (vim)" }
             })
@@ -136,7 +138,7 @@ local function setup_calendar()
 
     if pcall(require, 'which-key') then
         local wk = require("which-key")
-        wk.add({ mode = { "n" }, { prefix_key .. key, desc = desc }})
+        wk.add({ mode = { "n" }, { prefix_key .. key, desc = desc } })
     end
 
     key = prefix_key .. key

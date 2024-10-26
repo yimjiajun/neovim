@@ -331,12 +331,14 @@ end
 local function setup_extension_bookmarks()
     local key = "<leader>vl"
     local desc = "Browser bookmarks"
-    vim.api.nvim_set_keymap('n', key, [[<cmd> Telescope bookmarks <cr>]],
-                            { silent = true, desc = desc })
+    vim.api.nvim_set_keymap('n', key, [[<cmd> Telescope bookmarks <cr>]], {
+        silent = true,
+        desc = desc
+    })
 
     if pcall(require, "which-key") then
         local wk = require("which-key")
-        wk.add({key, desc = desc, mode = "n"})
+        wk.add({ key, desc = desc, mode = "n" })
     end
 
     require('telescope').load_extension('bookmarks')

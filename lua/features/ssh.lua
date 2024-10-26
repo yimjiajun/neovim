@@ -316,7 +316,7 @@ local function ssh_keymap_setting()
         vim.api.nvim_set_keymap("n", v.key, v.func, keymap_opts(v.desc))
 
         if wk ~= nil then
-            wk.add({ mode = { "n" }, { v.key, desc = v.desc }})
+            wk.add({ mode = { "n" }, { v.key, desc = v.desc } })
         end
         ::continue::
     end

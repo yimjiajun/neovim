@@ -10,7 +10,7 @@ local function setup()
                 { "gpd", desc = "definition" },
                 { "gpi", desc = "implementation" },
                 { "gpr", desc = "references" },
-                { "gpt", desc = "type definition" },
+                { "gpt", desc = "type definition" }
             })
         end
     end

@@ -20,13 +20,13 @@ local function setup()
                 { "<leader>lw", group = "Worksapce" },
                 { "<leader>lwa", desc = "add folder" },
                 { "<leader>lwl", desc = "list folder" },
-                { "<leader>lwr", desc = "remove folder" },
+                { "<leader>lwr", desc = "remove folder" }
             })
             wk.add({
                 mode = { "v" },
                 { "<leader>l", group = "Lsp" },
                 { "<leader>lc", desc = "code action" },
-                { "<leader>lf", desc = "formatting" },
+                { "<leader>lf", desc = "formatting" }
             })
         end
     end

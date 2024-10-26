@@ -237,22 +237,28 @@ local function setup()
     if pcall(require, 'which-key') then
         local wk = require('which-key')
         local keys = {
-          { "<leader>gc", group = "CopilotChat" },
-          { "<leader>gcC", ":CopilotChatToggle<CR>", desc = "Open" },
-          { "<leader>gcF", ":CopilotChatFixDiagnostic<CR>", desc = "Fix Diagnostic" },
-          { "<leader>gcR", ":CopilotChatReset<CR>", desc = "Reset" },
-          { "<leader>gcS", ":CopilotChatCommitStaged<CR>", desc = "Commit Staged" },
-          { "<leader>gcc", desc = "Telescope Open" },
-          { "<leader>gcd", ":CopilotChatDocs<CR>", desc = "Docs" },
-          { "<leader>gce", ":CopilotChatExplain<CR>", desc = "Explain" },
-          { "<leader>gcf", ":CopilotChatFix<CR>", desc = "Fix" },
-          { "<leader>gco", ":CopilotChatOptimize<CR>", desc = "Optimize" },
-          { "<leader>gcr", ":CopilotChatReview<CR>", desc = "Review" },
-          { "<leader>gcs", ":CopilotChatCommit<CR>", desc = "Commit" },
-          { "<leader>gct", ":CopilotChatTests<CR>", desc = "Tests" },
+            { "<leader>gc", group = "CopilotChat" },
+            { "<leader>gcC", ":CopilotChatToggle<CR>", desc = "Open" },
+            {
+                "<leader>gcF",
+                ":CopilotChatFixDiagnostic<CR>",
+                desc = "Fix Diagnostic"
+            }, { "<leader>gcR", ":CopilotChatReset<CR>", desc = "Reset" },
+            {
+                "<leader>gcS",
+                ":CopilotChatCommitStaged<CR>",
+                desc = "Commit Staged"
+            }, { "<leader>gcc", desc = "Telescope Open" },
+            { "<leader>gcd", ":CopilotChatDocs<CR>", desc = "Docs" },
+            { "<leader>gce", ":CopilotChatExplain<CR>", desc = "Explain" },
+            { "<leader>gcf", ":CopilotChatFix<CR>", desc = "Fix" },
+            { "<leader>gco", ":CopilotChatOptimize<CR>", desc = "Optimize" },
+            { "<leader>gcr", ":CopilotChatReview<CR>", desc = "Review" },
+            { "<leader>gcs", ":CopilotChatCommit<CR>", desc = "Commit" },
+            { "<leader>gct", ":CopilotChatTests<CR>", desc = "Tests" }
         }
-        wk.add({ mode = {'n'}, keys })
-        wk.add({ mode = {'v'}, keys })
+        wk.add({ mode = { 'n' }, keys })
+        wk.add({ mode = { 'v' }, keys })
     end
 end
 
