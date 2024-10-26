@@ -188,7 +188,7 @@ local function programming()
         callback = function()
             vim.cmd('setlocal softtabstop=2')
             vim.cmd('setlocal tabstop=2')
-            vim.cmd('setlocal shiftwidth=2')
+            vim.cmd('setlocal shiftwidth=4')
             vim.cmd('setlocal expandtab')
         end
     })
