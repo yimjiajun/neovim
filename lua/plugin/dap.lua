@@ -48,27 +48,26 @@ local function setup_keymap()
         if pcall(require, 'which-key') then
             local wk = require('which-key')
             local k = {
-                b = 'toggle breakpoint',
-                B = 'toggle conditional breakpoint',
-                d = 'continue',
-                s = 'step over',
-                i = 'step into',
-                q = 'step out',
-                Q = 'step back',
-                o = 'open repl',
-                T = 'terminate',
-                R = 'restart',
-                C = 'clear all breakpoints',
-                l = 'list breakpoints',
-                a = 'run',
-                A = 'run last',
-                D = 'disconnect',
-                p = 'pause',
-                g = 'goto'
+                { "<leader>d", group = "Debugger" },
+                { "<leader>dA", desc = "run last" },
+                { "<leader>dB", desc = "toggle conditional breakpoint" },
+                { "<leader>dC", desc = "clear all breakpoints" },
+                { "<leader>dD", desc = "disconnect" },
+                { "<leader>dQ", desc = "step back" },
+                { "<leader>dR", desc = "restart" },
+                { "<leader>dT", desc = "terminate" },
+                { "<leader>da", desc = "run" },
+                { "<leader>db", desc = "toggle breakpoint" },
+                { "<leader>dd", desc = "continue" },
+                { "<leader>dg", desc = "goto" },
+                { "<leader>di", desc = "step into" },
+                { "<leader>dl", desc = "list breakpoints" },
+                { "<leader>do", desc = "open repl" },
+                { "<leader>dp", desc = "pause" },
+                { "<leader>dq", desc = "step out" },
+                { "<leader>ds", desc = "step over" },
             }
-
-            wk.register(k, { mode = 'n', prefix = '<leader>d' })
-            wk.register({ d = 'Debugger' }, { mode = 'v', prefix = '<leader>' })
+            wk.add(k, { mode = 'n' })
         end
     end
 

@@ -3,16 +3,15 @@ local function setup()
         if pcall(require, "which-key") then
             local wk = require("which-key")
 
-            wk.register({
-                P = 'close lsp preview',
-                p = {
-                    name = "Lsp Preview",
-                    d = 'definition',
-                    i = 'implementation',
-                    r = 'references',
-                    t = 'type definition'
-                }
-            }, { mode = "n", prefix = "g" })
+            wk.add({
+                mode = { "n" },
+                { "gP", desc = "close lsp preview" },
+                { "gp", group = "Lsp Preview" },
+                { "gpd", desc = "definition" },
+                { "gpi", desc = "implementation" },
+                { "gpr", desc = "references" },
+                { "gpt", desc = "type definition" },
+            })
         end
     end
 

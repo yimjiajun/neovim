@@ -19,7 +19,7 @@ local function setup()
                 prefix = nil,
                 key = 'w',
                 func = [[<cmd> lua require('plugin.telescope').Buffer().buffer_with_del() <CR>]],
-                desc = 'buffer with delete',
+                desc = 'buffers',
                 support = true
             }, {
                 prefix = 'gg',
@@ -106,7 +106,7 @@ local function setup()
 
             if wk ~= nil then
                 wk = require("which-key")
-                wk.register({ [v.key] = v.desc }, { prefix = key(v.prefix) })
+                wk.add({ key(v.prefix, v.key), desc = v.desc, mode = "n" })
             end
             ::continue::
         end
@@ -329,12 +329,14 @@ local function telescope_buffer()
 end
 
 local function setup_extension_bookmarks()
-    vim.api.nvim_set_keymap('n', "<leader>vl", [[<cmd> Telescope bookmarks <cr>]],
-                            { silent = true, desc = 'open browser bookmarks' })
+    local key = "<leader>vl"
+    local desc = "Browser bookmarks"
+    vim.api.nvim_set_keymap('n', key, [[<cmd> Telescope bookmarks <cr>]],
+                            { silent = true, desc = desc })
 
     if pcall(require, "which-key") then
         local wk = require("which-key")
-        wk.register({ l = "browser bookmarks" }, { prefix = "<leader>v" })
+        wk.add({key, desc = desc, mode = "n"})
     end
 
     require('telescope').load_extension('bookmarks')

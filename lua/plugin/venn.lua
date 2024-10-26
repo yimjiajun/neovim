@@ -26,17 +26,13 @@ local function setup()
     local function setup_keymap()
         local keymap = vim.api.nvim_set_keymap
         local opts = { noremap = true, silent = true }
-        local prefix_key = "<leader>g"
+        local key = "<leader>gv"
 
-        keymap('n', prefix_key .. 'v', ":lua Toggle_venn()<CR>", opts)
+        keymap('n', key, ":lua Toggle_venn()<CR>", opts)
 
         if pcall(require, 'which-key') then
             local wk = require('which-key')
-
-            wk.register({ v = "Venn (toggle draw diagram)" }, {
-                mode = "n",
-                prefix = prefix_key
-            })
+            wk.add({ key, desc = "Venn (toggle draw diagram)", mode = "n" })
         end
     end
 

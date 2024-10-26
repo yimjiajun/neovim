@@ -22,29 +22,12 @@ local function setup()
         },
         -- add operators that will trigger motion and text object completion
         -- to enable all native operators, set the preset / operators plugin above
-        operators = { gc = "Comments" },
-        key_labels = {
-            -- override the label used to display some keys. It doesn't effect WK in any other way.
-            -- For example:
-            -- ["<space>"] = "SPC",
-            -- ["<cr>"] = "RET",
-            -- ["<tab>"] = "TAB",
-        },
         icons = {
             breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
             separator = "|", -- symbol used between a key and it's label
-            group = "+ " -- symbol prepended to a group
-        },
-        popup_mappings = {
-            scroll_down = '<c-d>', -- binding to scroll down inside the popup
-            scroll_up = '<c-u>' -- binding to scroll up inside the popup
-        },
-        window = {
-            border = "single", -- none, single, double, shadow
-            position = "bottom", -- bottom, top
-            margin = { 1, 15, 1, 15 }, -- extra window margin [top, right, bottom, left]
-            padding = { 2, 2, 2, 2 } -- extra window padding [top, right, bottom, left]
-            -- winblend = 20
+            group = "+ ", -- symbol prepended to a group
+            colors = false,
+            mappings = false, -- set to false to disable all mapping icons,
         },
         layout = {
             height = { min = 4, max = 20 }, -- min and max height of the columns
@@ -52,133 +35,154 @@ local function setup()
             spacing = 10, -- spacing between columns
             align = "center" -- align columns left, center or right
         },
-        ignore_missing = true, -- enable this to hide mappings for which you didn't specify a label
-        hidden = {
-            "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ "
-        }, -- hide mapping boilerplate
+        keys = {
+            scroll_down = "<c-d>", -- binding to scroll down inside the popup
+            scroll_up = "<c-u>", -- binding to scroll up inside the popup
+        },
+        replace = {
+            key = {
+                function(key)
+                    return require("which-key.view").format(key)
+                end,
+                -- { "<Space>", "SPC" },
+            },
+            desc = {
+                { "<Plug>%(?(.*)%)?", "%1" },
+                { "^%+", "" },
+                { "<[cC]md>", "" },
+                { "<[cC][rR]>", "" },
+                { "<[sS]ilent>", "" },
+                { "^lua%s+", "" },
+                { "^call%s+", "" },
+                { "^:%s*", "" },
+            },
+        },
         show_help = true, -- show help message on the command line when the popup is visible
-        triggers = "auto", -- automatically setup triggers
-        -- triggers = {"<leader>"} -- or specify a list manually
-        triggers_blacklist = {
-            -- list of mode / prefixes that should never be hooked by WhichKey
-            -- this is mostly relevant for key maps that start with a native binding
-            -- most people should not need to change this
-            i = { "j", "k" },
-            v = { "j", "k" },
-            -- customize
-            l = { "k", "j" }
-        }
+        triggers = {
+            { "<leader>", mode = "nv" },
+        },
+        -- triggers = {"<leader>"}, -- or specify a list manually
+      win = {
+        -- don't allow the popup to overlap with the cursor
+        no_overlap = true,
+        -- width = 1,
+        -- height = { min = 4, max = 25 },
+        -- col = 0,
+        -- row = math.huge,
+        border = "single", -- none, single, double, shadow
+        padding = { 1, 2 }, -- extra window padding [top/bottom, right/left]
+        title = false,
+        title_pos = "center",
+        zindex = 1000,
+        -- Additional vim.wo and vim.bo options
+        bo = {},
+        wo = {
+          -- winblend = 10, -- value between 0-100 0 for fully opaque and 100 for fully transparent
+        },
+      },
     })
 
     local wk = require("which-key")
-
-    wk.register({
-        w = 'buffer',
-        q = 'marks',
-        h = 'jumplist',
-        r = 'registers',
-        e = 'explorer',
-        E = 'explorer File',
-        b = 'build',
-        B = 'build latest',
-        c = 'quickfix',
-        d = 'Debugger',
-        s = {
-            name = 'Save',
-            m = 'mark (buffer)',
-            M = 'mark (local)',
-            b = 'bookmarks',
-            B = 'bookmarks (rename)',
-            t = 'todo lists'
-        },
-        S = {
-            name = 'Unload',
-            m = 'mark (buffer)',
-            M = 'mark (local)',
-            u = 'mark (buffers)',
-            U = 'mark (universal)',
-            b = 'bookmarks',
-            B = 'bookmarks (cwd)'
-        },
-        o = {
-            name = 'Open',
-            m = 'mark (buffer)',
-            u = 'mark (sort buffer)',
-            M = 'mark (local)',
-            U = 'mark (universal)',
-            b = 'bookmarks',
-            B = 'bookmarks (all)',
-            t = 'todo lists',
-            s = 'session',
-            S = 'session (selection)'
-        },
-        v = {
-            name = 'View',
-            s = { name = 'System', b = 'battery' },
-            c = { name = 'Calendar', i = 'interactive' }
-        },
-        f = {
-            name = 'Find',
-            s = 'setup search (legacy)',
-            f = 'file',
-            w = 'word',
-            c = 'c',
-            C = 'c, cpp, h',
-            h = 'h',
-            d = 'dts{i}',
-            A = 'all (usr input)',
-            a = 'all',
-            q = 'customize search word',
-            k = 'conf',
-            K = 'Kconfig',
-            m = 'CMakeLists',
-            v = 'Vimgrep',
-            V = 'Vimgrep - complete word'
-        },
-        g = {
-            name = 'Global Plug',
-            g = {
-                name = 'Git',
-                l = 'log Graph',
-                L = 'log',
-                H = 'log patch',
-                C = 'commit count',
-                d = 'diff',
-                D = 'diff previous',
-                h = 'diff staging',
-                s = 'status',
-                S = 'status short',
-                w = 'white space check',
-                p = 'add patch',
-                a = 'add',
-                A = 'add all',
-                c = 'commit'
-            }
-        },
-        t = {
-            name = 'Toggle',
-            f = 'terminal',
-            F = 'scp send',
-            s = 'terminal split',
-            v = 'terminal vsplit',
-            c = 'ctags generator',
-            e = 'file format',
-            S = '+ Secure Shell Protocol',
-            w = {
-                name = 'working directory',
-                w = 'chg & save current path',
-                s = 'save current path',
-                r = 'restore from saved path',
-                c = 'clear saved path'
-            }
-        }
-    }, { mode = "n", prefix = "<leader>" })
-
-    wk.register({ g = { name = 'Global Plug' } }, {
-        mode = 'v',
-        prefix = "<leader>"
+    wk.add({
+        { "<leader><BS>", desc ='kill Buffers' },
+        { "<leader>w", desc ='buffer' },
+        { "<leader>q", desc ='marks' },
+        { "<leader>h", desc ='jumplist' },
+        { "<leader>r", desc ='registers' },
+        { "<leader>e", desc ='explorer' },
+        { "<leader>E", desc ='explorer File' },
+        { "<leader>b", desc ='build' },
+        { "<leader>B", desc ='build latest' },
+        { "<leader>c", desc ='quickfix' },
+        { "<leader>d", desc ='Debugger' },
+        { "<leader>B", desc = "build latest" },
+        { "<leader>B", desc = "build latest" },
+        { "<leader>E", desc = "explorer File" },
+        { "<leader>S", group = "Unload" },
+        { "<leader>SB", desc = "bookmarks (cwd)" },
+        { "<leader>SM", desc = "mark (local)" },
+        { "<leader>SU", desc = "mark (universal)" },
+        { "<leader>Sb", desc = "bookmarks" },
+        { "<leader>Sm", desc = "mark (buffer)" },
+        { "<leader>Su", desc = "mark (buffers)" },
+        { "<leader>b", desc = "build" },
+        { "<leader>c", desc = "quickfix" },
+        { "<leader>d", desc = "Debugger" },
+        { "<leader>e", desc = "explorer" },
+        { "<leader>f", group = "Find" },
+        { "<leader>fA", desc = "all (usr input)" },
+        { "<leader>fC", desc = "c, cpp, h" },
+        { "<leader>fK", desc = "Kconfig" },
+        { "<leader>fV", desc = "Vimgrep - complete word" },
+        { "<leader>fa", desc = "all" },
+        { "<leader>fc", desc = "c" },
+        { "<leader>fd", desc = "dts{i}" },
+        { "<leader>ff", desc = "file" },
+        { "<leader>fh", desc = "h" },
+        { "<leader>fk", desc = "conf" },
+        { "<leader>fm", desc = "CMakeLists" },
+        { "<leader>fq", desc = "customize search word" },
+        { "<leader>fs", desc = "setup search (legacy)" },
+        { "<leader>fv", desc = "Vimgrep" },
+        { "<leader>fw", desc = "word" },
+        { "<leader>g", group = "Global Plug" },
+        { "<leader>gg", group = "Git" },
+        { "<leader>ggA", desc = "add all" },
+        { "<leader>ggC", desc = "commit count" },
+        { "<leader>ggD", desc = "diff previous" },
+        { "<leader>ggH", desc = "log patch" },
+        { "<leader>ggL", desc = "log" },
+        { "<leader>ggS", desc = "status short" },
+        { "<leader>gga", desc = "add" },
+        { "<leader>ggc", desc = "commit" },
+        { "<leader>ggd", desc = "diff" },
+        { "<leader>ggh", desc = "diff staging" },
+        { "<leader>ggl", desc = "log Graph" },
+        { "<leader>ggp", desc = "add patch" },
+        { "<leader>ggs", desc = "status" },
+        { "<leader>ggw", desc = "white space check" },
+        { "<leader>h", desc = "jumplist" },
+        { "<leader>o", group = "Open" },
+        { "<leader>oB", desc = "bookmarks (all)" },
+        { "<leader>oM", desc = "mark (local)" },
+        { "<leader>oS", desc = "session (selection)" },
+        { "<leader>oU", desc = "mark (universal)" },
+        { "<leader>ob", desc = "bookmarks" },
+        { "<leader>om", desc = "mark (buffer)" },
+        { "<leader>os", desc = "session" },
+        { "<leader>ot", desc = "todo lists" },
+        { "<leader>ou", desc = "mark (sort buffer)" },
+        { "<leader>q", desc = "marks" },
+        { "<leader>r", desc = "registers" },
+        { "<leader>s", group = "Save" },
+        { "<leader>sB", desc = "bookmarks (rename)" },
+        { "<leader>sM", desc = "mark (local)" },
+        { "<leader>sb", desc = "bookmarks" },
+        { "<leader>sm", desc = "mark (buffer)" },
+        { "<leader>st", desc = "todo lists" },
+        { "<leader>t", group = "Toggle" },
+        { "<leader>tF", desc = "scp send" },
+        { "<leader>tS", desc = "+ Secure Shell Protocol" },
+        { "<leader>tc", desc = "ctags generator" },
+        { "<leader>te", desc = "file format" },
+        { "<leader>tf", desc = "terminal" },
+        { "<leader>ts", desc = "terminal split" },
+        { "<leader>tv", desc = "terminal vsplit" },
+        { "<leader>tw", group = "working directory" },
+        { "<leader>twc", desc = "clear saved path" },
+        { "<leader>twr", desc = "restore from saved path" },
+        { "<leader>tws", desc = "save current path" },
+        { "<leader>tww", desc = "chg & save current path" },
+        { "<leader>v", group = "View" },
+        { "<leader>vc", group = "Calendar" },
+        { "<leader>vci", desc = "interactive" },
+        { "<leader>vs", group = "System" },
+        { "<leader>vsb", desc = "battery" },
+        { "<leader>w", desc = "buffer" },
+    }, { mode = "n" })
+    wk.add({ mode = { "v" },
+        { "<leader>g", group = "Global Plug" }
     })
-
     vim.cmd("highlight default link WhichKeyFloat Normal")
 end
 

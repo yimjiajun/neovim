@@ -4,35 +4,30 @@ local function setup()
 
         if pcall(require, 'which-key') then
             local wk = require("which-key")
-
-            wk.register({
-                D = 'lsp declartion',
-                d = 'lsp definition',
-                i = 'lsp implementation',
-                r = 'lsp references',
-                t = "type definition"
-            }, { mode = "n", prefix = "g" })
-
-            wk.register({
-                l = {
-                    name = "Lsp",
-                    w = {
-                        name = "Worksapce",
-                        a = "add folder",
-                        r = "remove folder",
-                        l = "list folder"
-                    },
-                    r = "rename",
-                    c = "code action",
-                    f = "formatting",
-                    Q = "diagnostic lists",
-                    q = "diagnostic float"
-                }
-            }, { mode = "n", prefix = "<leader>" })
-
-            wk.register({
-                l = { name = "Lsp", c = "code action", f = "formatting" }
-            }, { mode = "v", prefix = "<leader>" })
+            wk.add({
+                mode = { "n" },
+                { "gD", desc = "lsp declartion" },
+                { "gd", desc = "lsp definition" },
+                { "gi", desc = "lsp implementation" },
+                { "gr", desc = "lsp references" },
+                { "gt", desc = "type definition" },
+                { "<leader>l", group = "Lsp" },
+                { "<leader>lQ", desc = "diagnostic lists" },
+                { "<leader>lc", desc = "code action" },
+                { "<leader>lf", desc = "formatting" },
+                { "<leader>lq", desc = "diagnostic float" },
+                { "<leader>lr", desc = "rename" },
+                { "<leader>lw", group = "Worksapce" },
+                { "<leader>lwa", desc = "add folder" },
+                { "<leader>lwl", desc = "list folder" },
+                { "<leader>lwr", desc = "remove folder" },
+            })
+            wk.add({
+                mode = { "v" },
+                { "<leader>l", group = "Lsp" },
+                { "<leader>lc", desc = "code action" },
+                { "<leader>lf", desc = "formatting" },
+            })
         end
     end
     -- See `:help vim.diagnostic.*` for documentation on any of the below functions

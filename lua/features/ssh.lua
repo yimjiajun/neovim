@@ -257,10 +257,6 @@ end
 -- @usage: lua require('features.ssh').ssh_setting()
 local function ssh_keymap_setting()
     local wk = (pcall(require, "which-key") == true) and require("which-key") or nil
-    local prefix = "<leader>tS"
-    local key = function(key)
-        return prefix .. key
-    end
     local keymap_opts = function(desc)
         return {
             noremap = true,
@@ -270,42 +266,42 @@ local function ssh_keymap_setting()
     end
     local keymap_setup = {
         {
-            key = "s",
+            key = "<leader>tSs",
             func = [[<cmd> lua require('features.ssh').SshRun() <CR> ]],
             desc = "ssh connect",
             support = true
         }, {
-            key = "f",
+            key = "<leader>tSf",
             func = [[<cmd> lua require('features.ssh').SshCopy() <CR> ]],
             desc = "secure copy",
             support = (vim.fn.executable('scp') == 1)
         }, {
-            key = "v",
+            key = "<leader>tSv",
             func = [[<cmd> lua require('features.ssh').SshList(true) <CR> ]],
             desc = "ssh list",
             support = true
         }, {
-            key = "P",
+            key = "<leader>tSP",
             func = [[<cmd> lua require('features.ssh').SshTogglePwrsh() <CR> ]],
             desc = "toggle powershell/WSL",
             support = (vim.fn.isdirectory('/run/WSL') == 1)
         }, {
-            key = "p",
+            key = "<leader>tSp",
             func = [[<cmd> lua require('features.ssh').SshToggleSshpass() <CR> ]],
             desc = "toggle sshpass",
             support = (vim.fn.executable('sshpass') == 1)
         }, {
-            key = "r",
+            key = "<leader>tSr",
             func = [[<cmd> lua require('features.ssh').SshReq() <CR> ]],
             desc = "ssh connect request",
             support = true
         }, {
-            key = "F",
+            key = "<leader>tSF",
             func = [[<cmd> lua require('features.ssh').SshSftp() <CR> ]],
             desc = "secret file transfer",
             support = (vim.fn.executable('sftp') == 1)
         }, {
-            key = "d",
+            key = "<leader>tSd",
             func = [[<cmd> lua require('features.ssh').SshDesktop() <CR> ]],
             desc = "remote desktop",
             support = true
@@ -317,10 +313,10 @@ local function ssh_keymap_setting()
             goto continue
         end
 
-        vim.api.nvim_set_keymap("n", key(v.key), v.func, keymap_opts(v.desc))
+        vim.api.nvim_set_keymap("n", v.key, v.func, keymap_opts(v.desc))
 
         if wk ~= nil then
-            wk.register({ [v.key] = v.desc }, { mode = "n", prefix = prefix })
+            wk.add({ mode = { "n" }, { v.key, desc = v.desc }})
         end
         ::continue::
     end
