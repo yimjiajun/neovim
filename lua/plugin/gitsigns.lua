@@ -12,36 +12,20 @@ end
 local function setup()
     require('gitsigns').setup {
         signs = {
-            add = {
-                hl = 'GitSignsAdd',
-                text = '│',
-                numhl = 'GitSignsAddNr',
-                linehl = 'GitSignsAddLn'
-            },
-            change = {
-                hl = 'GitSignsChange',
-                text = '│',
-                numhl = 'GitSignsChangeNr',
-                linehl = 'GitSignsChangeLn'
-            },
-            delete = {
-                hl = 'GitSignsDelete',
-                text = '_',
-                numhl = 'GitSignsDeleteNr',
-                linehl = 'GitSignsDeleteLn'
-            },
-            topdelete = {
-                hl = 'GitSignsDelete',
-                text = '‾',
-                numhl = 'GitSignsDeleteNr',
-                linehl = 'GitSignsDeleteLn'
-            },
-            changedelete = {
-                hl = 'GitSignsChange',
-                text = '~',
-                numhl = 'GitSignsChangeNr',
-                linehl = 'GitSignsChangeLn'
-            }
+            add = { text = '┃' },
+            change = { text = '┃' },
+            delete = { text = '_' },
+            topdelete = { text = '‾' },
+            changedelete = { text = '~' },
+            untracked = { text = '┆' }
+        },
+        signs_staged = {
+            add = { text = '┃' },
+            change = { text = '┃' },
+            delete = { text = '_' },
+            topdelete = { text = '‾' },
+            changedelete = { text = '~' },
+            untracked = { text = '┆' }
         },
         signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
         numhl = true, -- Toggle with `:Gitsigns toggle_numhl`
@@ -69,10 +53,8 @@ local function setup()
             row = 0,
             col = 1
         },
-        yadm = { enable = false },
-
         on_attach = function(bufnr)
-            local gs = package.loaded.gitsigns
+            local gitsigns = require('gitsigns')
 
             local function map(mode, l, r, opts)
                 opts = opts or {}
@@ -83,46 +65,46 @@ local function setup()
             -- Navigation
             map('n', ']c', function()
                 if vim.wo.diff then
-                    return ']c'
+                    vim.cmd.normal({ ']c', bang = true })
+                else
+                    gitsigns.nav_hunk('next')
                 end
-                vim.schedule(function()
-                    gs.next_hunk()
-                end)
-                return '<Ignore>'
-            end, { expr = true })
+            end)
 
             map('n', '[c', function()
                 if vim.wo.diff then
-                    return '[c'
+                    vim.cmd.normal({ '[c', bang = true })
+                else
+                    gitsigns.nav_hunk('prev')
                 end
-                vim.schedule(function()
-                    gs.prev_hunk()
-                end)
-                return '<Ignore>'
-            end, { expr = true })
+            end)
 
             -- Actions
-            map('n', '<leader>gGn', gs.next_hunk)
-            map('n', '<leader>gGp', gs.prev_hunk)
-            map({ 'n', 'v' }, '<leader>gGss', ':Gitsigns stage_hunk<CR>')
-            map({ 'n', 'v' }, '<leader>gGsr', ':Gitsigns reset_hunk<CR>')
-            map('n', '<leader>gGsS', gs.stage_buffer)
-            map('n', '<leader>gGsu', gs.undo_stage_hunk)
-            map('n', '<leader>gGsR', gs.reset_buffer)
-            map('n', '<leader>gGsp', gs.preview_hunk)
+            map('n', '<leader>gGn', gitsigns.next_hunk)
+            map('n', '<leader>gGp', gitsigns.prev_hunk)
+            map({ 'n', 'v' }, '<leader>gGss', function()
+                gitsigns.stage_hunk { vim.fn.line('.'), vim.fn.line('v') }
+            end)
+            map({ 'n', 'v' }, '<leader>gGsr', function()
+                gitsigns.reset_hunk { vim.fn.line('.'), vim.fn.line('v') }
+            end)
+            map('n', '<leader>gGsS', gitsigns.stage_buffer)
+            map('n', '<leader>gGsu', gitsigns.undo_stage_hunk)
+            map('n', '<leader>gGsR', gitsigns.reset_buffer)
+            map('n', '<leader>gGsp', gitsigns.preview_hunk)
             map('n', '<leader>gGba', function()
-                gs.blame_line { full = true }
+                gitsigns.blame_line { full = true }
             end)
-            map('n', '<leader>gGbb', gs.toggle_current_line_blame)
-            map('n', '<leader>gGdd', gs.diffthis)
+            map('n', '<leader>gGbb', gitsigns.toggle_current_line_blame)
+            map('n', '<leader>gGdd', gitsigns.diffthis)
             map('n', '<leader>gGdp', function()
-                gs.diffthis('~')
+                gitsigns.diffthis('~')
             end)
-            map('n', '<leader>gGtd', gs.toggle_deleted)
-            map('n', '<leader>gGtw', gs.toggle_word_diff)
-            map('n', '<leader>gGts', gs.toggle_signs)
-            map('n', '<leader>gGtl', gs.toggle_linehl)
-            map('n', '<leader>gGtn', gs.toggle_numhl)
+            map('n', '<leader>gGtd', gitsigns.toggle_deleted)
+            map('n', '<leader>gGtw', gitsigns.toggle_word_diff)
+            map('n', '<leader>gGts', gitsigns.toggle_signs)
+            map('n', '<leader>gGtl', gitsigns.toggle_linehl)
+            map('n', '<leader>gGtn', gitsigns.toggle_numhl)
 
             -- Text object
             map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
@@ -131,43 +113,31 @@ local function setup()
 
     if pcall(require, "which-key") then
         local wk = require("which-key")
-        wk.register({
-            G = {
-                name = "GitSign",
-                p = 'previous hunk',
-                n = 'next hunk',
-                s = {
-                    name = "Stage",
-                    s = 'hunk',
-                    r = 'reset',
-                    S = 'buffer',
-                    u = 'undo',
-                    R = 'reset buffer',
-                    p = 'preview hunk'
-                },
-                b = {
-                    name = "Blame",
-                    a = 'line',
-                    b = 'toggle current line blame'
-                },
-                d = { name = "Diff", d = 'diffthis', p = 'diffthis ~' },
-                t = {
-                    name = "Toggle",
-                    d = 'toggle deleted',
-                    w = 'toggle word diff',
-                    s = 'toggle signs',
-                    l = 'toggle linehl',
-                    n = 'toggle numhl'
-                }
-            }
-        }, { prefix = "<leader>g" })
-
-        wk.register({
-            G = {
-                name = "GitSign",
-                s = { name = "Stage", s = 'hunk', r = 'reset' }
-            }
-        }, { mode = 'v', prefix = "<leader>g" })
+        wk.add({
+            mode = { "n" },
+            { "<leader>gG", group = "GitSign" },
+            { "<leader>gGb", group = "Blame" },
+            { "<leader>gGba", desc = "line" },
+            { "<leader>gGbb", desc = "toggle current line blame" },
+            { "<leader>gGd", group = "Diff" },
+            { "<leader>gGdd", desc = "diffthis" },
+            { "<leader>gGdp", desc = "diffthis ~" },
+            { "<leader>gGn", desc = "next hunk" },
+            { "<leader>gGp", desc = "previous hunk" },
+            { "<leader>gGs", group = "Stage", mode = { "n", "v" } },
+            { "<leader>gGsR", desc = "reset buffer" },
+            { "<leader>gGsS", desc = "buffer" },
+            { "<leader>gGsp", desc = "preview hunk" },
+            { "<leader>gGsr", desc = "reset", mode = { "n", "v" } },
+            { "<leader>gGss", desc = "hunk", mode = { "n", "v" } },
+            { "<leader>gGsu", desc = "undo" },
+            { "<leader>gGt", group = "Toggle" },
+            { "<leader>gGtd", desc = "toggle deleted" },
+            { "<leader>gGtl", desc = "toggle linehl" },
+            { "<leader>gGtn", desc = "toggle numhl" },
+            { "<leader>gGts", desc = "toggle signs" },
+            { "<leader>gGtw", desc = "toggle word diff" }
+        })
     end
 
     setup_highlight()
