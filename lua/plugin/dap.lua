@@ -5,21 +5,19 @@ local function setup_keymap()
     local opts = { noremap = true, silent = true }
 
     local function dap_python_keymap()
-        keymap('n', '<leader>dpm', '<cmd>lua require"dap-python".test_method()<CR>', opts)
-        keymap('n', '<leader>dpc', '<cmd>lua require"dap-python".test_class()<CR>', opts)
-        keymap('v', '<leader>dps', '<cmd>lua require"dap-python".debug_selection()<CR>', opts)
+        keymap('n', '<leader>dPm', '<cmd>lua require"dap-python".test_method()<CR>', opts)
+        keymap('n', '<leader>dPc', '<cmd>lua require"dap-python".test_class()<CR>', opts)
+        keymap('v', '<leader>dPs', '<cmd>lua require"dap-python".debug_selection()<CR>', opts)
 
         if pcall(require, 'which-key') then
             local wk = require('which-key')
-
-            wk.register({
-                p = { name = 'Python', m = 'test method', c = 'test class' }
-            }, { mode = 'n', prefix = '<leader>d' })
-
-            wk.register({ p = { name = 'Python', s = 'debug selection' } }, {
-                mode = 'v',
-                prefix = '<leader>d'
-            })
+            local k = {
+                { "<leader>dP", group = "Python" },
+                { "<leader>dPm", desc = "test method" },
+                { "<leader>dPc", desc = "test class" },
+                { "<leader>dPs", desc = "debug selection", mode = { 'v' } }
+            }
+            wk.add(k)
         end
     end
 
