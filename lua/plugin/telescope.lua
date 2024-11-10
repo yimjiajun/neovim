@@ -159,12 +159,14 @@ local function setup()
                 return 'buku'
             elseif vim.fn.executable("chrome") == 1 then
                 return 'chrome'
+            elseif vim.fn.executable("chromium-browser") == 1 then
+                return 'chromium-browser'
+            elseif vim.fn.executable("firefox") == 1 then
+                return 'firefox'
             elseif vim.fn.executable("msedge.exe") == 1 then
                 return 'edge'
             elseif vim.fn.executable("safari") == 1 then
                 return 'safari'
-            elseif vim.fn.executable("firefox") == 1 then
-                return 'firefox'
             else
                 return nil
             end
