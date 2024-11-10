@@ -98,11 +98,17 @@ end
 
 local function setup()
     vim.opt.compatible = false
-    Setting_view()
-    Setting_editor()
-    Setting_buffer()
-    Setting_netrw()
-    Setting_colorscheme()
+    local Settings = {
+        Setting_view,
+        Setting_editor,
+        Setting_buffer,
+        Setting_netrw,
+        Setting_colorscheme
+    }
+
+    for _, setting in ipairs(Settings) do
+        setting()
+    end
 
     if vim.fn.isdirectory(vim.fn.stdpath('config') .. '/doc') then
         vim.cmd('helptags ALL')
