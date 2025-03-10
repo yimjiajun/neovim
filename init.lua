@@ -1,6 +1,6 @@
 local lsp = {
     "bashls", "clangd", "cmake", "lua_ls", "marksman", "pyright",
-    "rust_analyzer", "ruff_lsp"
+    "rust_analyzer", "ruff"
 }
 local config_path = vim.fn.stdpath("config")
 local config_dir = { "config", "features", "usr" }
