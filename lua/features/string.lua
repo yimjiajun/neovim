@@ -100,8 +100,9 @@ local function search_pattern_async(key, opts)
     end
 
     local cmd = 'rg'
-    local cmd_args = vim.split(string.format('--vimgrep --no-ignore %s --regexp %s --glob %s', options, key, extension),
-                               "%s+")
+    local cmd_args = (extension == '*') and
+        vim.split(string.format('--vimgrep --no-ignore %s --regexp %s', options, key), "%s+") or
+        vim.split(string.format('--vimgrep --no-ignore %s --regexp %s --glob %s', options, key, extension), "%s+")
 
     -- @brief Callback function to handle the exit of the process
     -- @param _ Exit code (0 for success, non-zero for failure)
