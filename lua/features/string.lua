@@ -57,7 +57,9 @@ local function search_pattern_async(key, opts)
         smart_case = (opts.smart_case == nil) and search_options.smart_case or opts.smart_case,
         case_sensitive = (opts.case_sensitive == nil) and search_options.case_sensitive or opts.case_sensitive,
         ignore_case = (opts.ignore_case == nil) and search_options.ignore_case or opts.ignore_case,
-        extension = (opts.extension == nil) and '*' or opts.extension
+        extension = (opts.extension == nil) and '*' or opts.extension,
+        extension_is_regexp_path = (opts.extension_is_regexp_path == nil) and false or opts.extension_is_regexp_path,
+        vimgrep = (opts.vimgrep == nil) and false or opts.vimgrep
     }
     local extension = (opts.extension == '') and
                           vim.fn.input('Enter file extension: ', string.format("*.%s", vim.fn.expand('%:e'))) or
@@ -89,7 +91,7 @@ local function search_pattern_async(key, opts)
     vim.fn.setreg('e', tostring(extension))
     vim.fn.setreg('o', tostring(options))
 
-    if vim.fn.executable('rg') == 0 then
+    if vim.fn.executable('rg') == 0 or opts.vimgrep == true then
         local cmd = string.format("silent! vimgrep /%s/gj ./**/%s", vim.fn.getreg('/'), vim.fn.getreg('e'))
         vim.cmd(string.format("silent! %s | silent! +copen 5", cmd))
         vim.fn.setqflist({}, 'r', {
@@ -100,9 +102,15 @@ local function search_pattern_async(key, opts)
     end
 
     local cmd = 'rg'
-    local cmd_args = (extension == '*') and
-        vim.split(string.format('--vimgrep --no-ignore %s --regexp %s', options, key), "%s+") or
-        vim.split(string.format('--vimgrep --no-ignore %s --regexp %s --glob %s', options, key, extension), "%s+")
+    local cmd_args = nil
+
+    if opts.extension_is_regexp_path == true then
+        cmd_args = vim.split(string.format('--vimgrep --no-ignore %s --regexp %s %s', options, key, extension), "%s+")
+    elseif (extension == '*') then
+        cmd_args = vim.split(string.format('--vimgrep --no-ignore %s --regexp %s', options, key), "%s+")
+    else
+        cmd_args = vim.split(string.format('--vimgrep --no-ignore %s --regexp %s --glob %s', options, key, extension), "%s+")
+    end
 
     -- @brief Callback function to handle the exit of the process
     -- @param _ Exit code (0 for success, non-zero for failure)

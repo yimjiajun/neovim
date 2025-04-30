@@ -112,7 +112,7 @@ local function setting_key_search()
     keymap('n', '<Leader>fC',
            [[<cmd> lua require("features.string").Search(nil, {extension = "{*.c,*.h,*.cpp}"}) <CR>]], opts)
     keymap('n', '<Leader>fh', [[<cmd> lua require("features.string").Search(nil, {extension = "*.h"}) <CR>]], opts)
-    keymap('n', '<Leader>fd', [[<cmd> lua require("features.string").Search(nil, {extension = "{*.dts,*.dtsi}"}) <CR>]],
+    keymap('n', '<Leader>fD', [[<cmd> lua require("features.string").Search(nil, {extension = "{*.dts,*.dtsi}"}) <CR>]],
            opts)
     keymap('n', '<Leader>fK', [[<cmd> lua require("features.string").Search(nil, {extension = "Kconfig"}) <CR>]], opts)
     keymap('n', '<Leader>fk', [[<cmd> lua require("features.string").Search(nil, {extension = "*.conf"}) <CR>]], opts)
@@ -124,6 +124,10 @@ local function setting_key_search()
     keymap('n', '<Leader>fV',
            [[<cmd> lua require("features.string").Search(nil, {extension='',case_sensitive = true}) <CR>]], opts)
     keymap('n', '<Leader>fb', [[<cmd> lua require("features.string").SearchByBuffer() <CR>]], opts)
+    keymap('n', '<Leader>fd', (vim.fn.executable('rg') == 0) and
+            [[<cmd> lua require("features.string").Search(nil, { extension = string.format("%s/../**/*", vim.fn.expand('%:h')), vimgrep = true }) <CR>]] or
+            [[<cmd> lua require("features.string").Search(nil, {extension = string.format("%s/../", vim.fn.expand('%:h')), extension_is_regexp_path = true }) <CR>]],
+        opts)
     if vim.version().major < 1 or vim.version().minor < 10 then
         keymap('n', 'gcc', [[<cmd> lua require("features.string").ToggleComment() <CR>]], opts)
         keymap('v', 'gcc', [[<ESC> | gv | <cmd> lua require("features.string").ToggleComment() <CR> | <ESC>]], opts)
