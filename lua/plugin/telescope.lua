@@ -288,11 +288,18 @@ local function setup_extension_live_grep_args()
         desc = '.config'
     })
 
-    keymap('n', "<leader>fd", [[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args(]] ..
+    keymap('n', "<leader>fD", [[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args(]] ..
                [[{prompt_title='dts, dtsi', default_text='"' .. vim.fn.expand('<cword>')  .. '"' ..]] ..
                [[" --glob '!{.*,  tags}' --glob '{*.dts,*.dtsi}'"})<CR>]], {
         silent = true,
         desc = 'dts & dtsi'
+    })
+
+    keymap('n', "<leader>fd", [[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args(]] ..
+               [[{prompt_title='dts, dtsi', default_text='"' .. vim.fn.expand('<cword>')  .. '"' ..]] ..
+               [[" " .. vim.fn.expand("%:h") .. "/../"})<CR>]], {
+        silent = true,
+        desc = 'Backward Directory Search'
     })
 
     keymap('n', "<leader>fm", [[<cmd> lua require('telescope').extensions.live_grep_args.live_grep_args(]] ..

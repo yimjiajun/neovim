@@ -103,7 +103,7 @@ local function setup()
         { "<leader>fV", desc = "Vimgrep - complete word" },
         { "<leader>fa", desc = "all" }, { "<leader>fc", desc = "c" },
         { "<leader>fD", desc = "dts{i}" }, { "<leader>ff", desc = "file" },
-        { "<leader>fh", desc = "h" }, { "<leader>fk", desc = "conf" },
+        { "<leader>fh", desc = "header file" }, { "<leader>fk", desc = "conf" },
         { "<leader>fm", desc = "CMakeLists" },
         { "<leader>fq", desc = "customize search word" },
         { "<leader>fs", desc = "setup search (legacy)" },
