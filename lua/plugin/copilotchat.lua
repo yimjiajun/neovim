@@ -15,7 +15,7 @@ local config =  {
             context = 'git:staged',
         },
         ImproveGrammer = {
-            prompt = vim.fn.getreg('*') .. [[Improve above english grammar without display prompt.]],
+            prompt = vim.fn.getreg('+') .. string.format("\n%s", "Improve above english grammar without display prompt"),
             system_prompt = 'You are a helpful assistant that improves English grammar',
             mapping = prefix_key .. 'I',
             description = 'Improve English Grammer (clipboard)'
