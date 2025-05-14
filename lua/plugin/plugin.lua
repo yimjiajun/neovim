@@ -58,7 +58,7 @@ local function setup()
                 build = function()
                     require('nvim-treesitter.install').update({ with_sync = true })
                     require("plugin.treesitter")
-                    vim.cmd([[TSUpdateSync]])
+                    -- vim.cmd([[TSUpdateSync]])
                 end,
                 config = function()
                     require("plugin.treesitter").Setup()
