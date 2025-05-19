@@ -34,6 +34,10 @@ if pcall(require, 'features.git') then
     require('features.git').DownloadVimDataRepo()
 end
 
+if vim.g.neovide ~= nil then
+    require('plugin.neovide').Setup()
+end
+
 for _, dir in ipairs(config_dir) do
     local lua_config_path = config_path .. "/lua/" .. dir
     local lua_files = vim.fn.glob(lua_config_path .. "/*.lua", false, true)
