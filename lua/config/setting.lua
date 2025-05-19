@@ -55,6 +55,16 @@ local function Setting_editor()
     vim.opt.expandtab = true
     vim.opt.clipboard = "unnamedplus"
 
+    for _, opt in ipairs({
+        'pbcopy', 'clip', 'xclip', 'xsel'
+    }) do
+        if vim.fn.executable(opt) == 1 then
+            opt = vim.fn.fnamemodify(opt, ':r')
+            vim.g.clipboard = opt
+            break
+        end
+    end
+
     if vim.opt.undodir == "" then
         local local_share_path = vim.fn.stdpath('data')
         local local_undodir = local_share_path .. '/undo'
