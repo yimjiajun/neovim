@@ -3,6 +3,7 @@ local path = vim.fn.stdpath('data') .. d .. 'sessions'
 local session_name = vim.fn.substitute(vim.fn.expand(vim.fn.getcwd()), d, '_', 'g') .. ".vim"
 local src = path .. d .. session_name
 local json_file = path .. d .. "sessions.json"
+local working_directory_json_file = path .. d .. "working_directory.json"
 local uv = vim.loop
 local work_dirs = { uv.cwd() }
 
@@ -81,6 +82,7 @@ local function change_and_save_working_directory()
     save_session()
     vim.cmd('cd ' .. current_file_dir)
     table.insert(work_dirs, current_file_dir)
+    require('features.files').SetJson(work_dirs, working_directory_json_file)
 end
 
 local function save_current_working_directory()
@@ -90,6 +92,7 @@ local function save_current_working_directory()
     vim.api.nvim_echo({ { current_file_dir, "WarningMsg" } }, true, {})
     save_session()
     table.insert(work_dirs, current_file_dir)
+    require('features.files').SetJson(work_dirs, working_directory_json_file)
 end
 
 local function select_working_directory()
@@ -114,11 +117,15 @@ local function clear_working_directory_history()
 end
 
 local function setup()
-    work_dirs = { uv.cwd() }
-
     if vim.fn.isdirectory(path) == 0 then
         vim.fn.mkdir(path, "p")
     end
+
+    if vim.fn.filereadable(working_directory_json_file) == 0 then
+        vim.fn.writefile({}, working_directory_json_file)
+    end
+
+    work_dirs = require('features.files').GetJson(working_directory_json_file) or { uv.cwd() }
 end
 
 return {
