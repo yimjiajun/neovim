@@ -81,6 +81,13 @@ local function change_and_save_working_directory()
     vim.api.nvim_echo({ { current_file_dir, "WarningMsg" } }, true, {})
     save_session()
     vim.cmd('cd ' .. current_file_dir)
+
+    for i, v in ipairs(work_dirs) do
+        if v == current_file_dir then
+            table.remove(work_dirs, i)
+        end
+    end
+
     table.insert(work_dirs, current_file_dir)
     require('features.files').SetJson(work_dirs, working_directory_json_file)
 end
@@ -91,6 +98,13 @@ local function save_current_working_directory()
     vim.api.nvim_echo({ { 'save working directory: ', "None" } }, true, {})
     vim.api.nvim_echo({ { current_file_dir, "WarningMsg" } }, true, {})
     save_session()
+
+    for i, v in ipairs(work_dirs) do
+        if v == current_file_dir then
+            table.remove(work_dirs, i)
+        end
+    end
+
     table.insert(work_dirs, current_file_dir)
     require('features.files').SetJson(work_dirs, working_directory_json_file)
 end
