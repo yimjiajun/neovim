@@ -7,7 +7,7 @@ local function setup()
             end
 
             require("oil").open(vim.fn.getcwd())
-        end, { silent = true })
+        end, { silent = true, desc = "file explore" })
 
         vim.keymap.set('n', '<leader>E', function()
             if vim.bo.filetype == "oil" then
@@ -16,7 +16,7 @@ local function setup()
             end
 
             require("oil").open()
-        end, { silent = true })
+        end, { silent = true, desc = "file explore (from file directory)" })
     end
 
     require("oil").setup()

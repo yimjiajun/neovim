@@ -96,7 +96,7 @@ local function select_working_directory()
     local lists = {}
 
     for i, v in ipairs(work_dirs) do
-        lists[i] = string.format("%s", v)
+        lists[i] = string.format("%2d: %s", i, v)
     end
 
     local chg_work_dir = require('features.common').TableSelection(work_dirs, lists, "Change Working Directory")

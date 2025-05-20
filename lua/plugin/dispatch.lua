@@ -24,10 +24,12 @@ end
 local function setup()
     local function setup_keymap()
         local keymap = vim.api.nvim_set_keymap
-        local opts = { noremap = true, silent = true }
+        local opts = function(desc)
+            return { noremap = true, silent = true, desc = desc }
+        end
 
-        keymap('n', '<leader>b', [[<cmd> lua require('plugin.dispatch').Build() <CR>]], opts)
-        keymap('n', '<leader>B', [[<cmd> lua require('plugin.dispatch').Build("latest") <CR>]], opts)
+        keymap('n', '<leader>b', [[<cmd> lua require('plugin.dispatch').Build() <CR>]], opts("build"))
+        keymap('n', '<leader>B', [[<cmd> lua require('plugin.dispatch').Build("latest") <CR>]], opts("build all"))
     end
 
     setup_keymap()
