@@ -130,6 +130,29 @@ local function clear_working_directory_history()
     work_dirs = { uv.cwd() }
 end
 
+local function delete_working_directory_history()
+    local lists = {}
+
+    for i, v in ipairs(work_dirs) do
+        lists[i] = string.format("%2d: %s", i, v)
+    end
+
+    local chg_work_dir = require('features.common').TableSelection(work_dirs, lists, "Remove Working Directory")
+
+    if chg_work_dir == nil then
+        return
+    end
+
+    for i, v in ipairs(work_dirs) do
+        if v == chg_work_dir then
+            table.remove(work_dirs, i)
+            break
+        end
+    end
+
+    require('features.files').SetJson(work_dirs, working_directory_json_file)
+end
+
 local function setup()
     if vim.fn.isdirectory(path) == 0 then
         vim.fn.mkdir(path, "p")
@@ -150,5 +173,6 @@ return {
     SaveWD = save_current_working_directory,
     SelWD = select_working_directory,
     ClrWD = clear_working_directory_history,
+    DelWD = delete_working_directory_history,
     Setup = setup
 }

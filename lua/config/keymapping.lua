@@ -292,6 +292,8 @@ local function setting_key_working_directory()
            { silent = true, desc = 'selection of saved working directory' })
     keymap('n', '<leader>twC', [[<cmd> lua require('features.session').ClrWD() <CR>]],
            { silent = true, desc = 'clear all the saved working directory' })
+    keymap('n', '<leader>twd', [[<cmd> lua require('features.session').DelWD() <CR>]],
+           { silent = true, desc = 'Delete saved working directory' })
 end
 
 local function setting_key_system()
