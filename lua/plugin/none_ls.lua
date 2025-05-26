@@ -8,9 +8,18 @@ local function setup()
 
     null_ls.setup({
         sources = {
-            f.clang_format, f.cmake_format, f.prettier, f.stylua, d.cmake_lint,
-            d.pylint, c.tags, a.gitsigns, a.gitrebase, h.dictionary, h.printenv
-        }
+            f.clang_format,
+            f.cmake_format,
+            f.prettier,
+            f.stylua,
+            d.cmake_lint,
+            d.pylint,
+            c.tags,
+            a.gitsigns,
+            a.gitrebase,
+            h.dictionary,
+            h.printenv,
+        },
     })
 end
 

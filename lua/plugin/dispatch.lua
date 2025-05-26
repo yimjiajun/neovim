@@ -1,5 +1,5 @@
 local function dispatch_build(mode)
-    local compiler = require('features.compiler')
+    local compiler = require("features.compiler")
     local status
 
     if mode == "latest" then
@@ -28,8 +28,18 @@ local function setup()
             return { noremap = true, silent = true, desc = desc }
         end
 
-        keymap('n', '<leader>b', [[<cmd> lua require('plugin.dispatch').Build() <CR>]], opts("build"))
-        keymap('n', '<leader>B', [[<cmd> lua require('plugin.dispatch').Build("latest") <CR>]], opts("build all"))
+        keymap(
+            "n",
+            "<leader>b",
+            [[<cmd> lua require('plugin.dispatch').Build() <CR>]],
+            opts("build")
+        )
+        keymap(
+            "n",
+            "<leader>B",
+            [[<cmd> lua require('plugin.dispatch').Build("latest") <CR>]],
+            opts("build all")
+        )
     end
 
     setup_keymap()

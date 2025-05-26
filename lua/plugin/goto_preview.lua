@@ -10,12 +10,12 @@ local function setup()
                 { "gpd", desc = "definition" },
                 { "gpi", desc = "implementation" },
                 { "gpr", desc = "references" },
-                { "gpt", desc = "type definition" }
+                { "gpt", desc = "type definition" },
             })
         end
     end
 
-    require('goto-preview').setup {
+    require("goto-preview").setup({
         width = 120, -- Width of the floating window
         height = 15, -- Height of the floating window
         border = { "↖", "─", "┐", "│", "┘", "─", "└", "│" }, -- Border characters of the floating window
@@ -31,9 +31,9 @@ local function setup()
                 borderchars = {
                     prompt = { " ", " ", " ", " ", " ", " ", " ", " " },
                     results = { " ", " ", " ", " ", " ", " ", " ", " " },
-                    preview = { " ", " ", " ", " ", " ", " ", " ", " " }
-                }
-            })
+                    preview = { " ", " ", " ", " ", " ", " ", " ", " " },
+                },
+            }),
         },
 
         focus_on_open = true, -- Focus the floating window when opening it.
@@ -42,8 +42,8 @@ local function setup()
         bufhidden = "wipe", -- the bufhidden option to set on the floating window. See :h bufhidden
         stack_floating_preview_windows = true, -- Whether to nest floating windows
         -- Whether to set the preview window title as the filename
-        preview_window_title = { enable = true, position = "left" }
-    }
+        preview_window_title = { enable = true, position = "left" },
+    })
 
     setup_keymap()
 end

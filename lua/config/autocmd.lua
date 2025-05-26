@@ -7,7 +7,7 @@ local function session()
         pattern = "*.*",
         callback = function()
             require("features.session").Save()
-        end
+        end,
     })
 end
 
@@ -19,8 +19,8 @@ local function statusline()
         group = "statusline",
         pattern = "*",
         callback = function()
-            require('config.function').SetStatusline()
-        end
+            require("config.function").SetStatusline()
+        end,
     })
 end
 
@@ -32,16 +32,18 @@ local function format()
         group = "format",
         pattern = "*",
         callback = function()
-            if vim.fn.expand('%:p') == '' or vim.bo.filetype == '' then
+            if vim.fn.expand("%:p") == "" or vim.bo.filetype == "" then
                 return
             end
 
             vim.cmd([[s/\s\+$//e]])
-            vim.fn.setpos('.', {
-                0, vim.api.nvim_win_get_cursor(0)[1],
-                vim.api.nvim_win_get_cursor(0)[2] + 1, 0
+            vim.fn.setpos(".", {
+                0,
+                vim.api.nvim_win_get_cursor(0)[1],
+                vim.api.nvim_win_get_cursor(0)[2] + 1,
+                0,
             })
-        end
+        end,
     })
 
     vim.api.nvim_create_autocmd("BufWritePre", {
@@ -49,12 +51,12 @@ local function format()
         group = "format",
         pattern = "*",
         callback = function()
-            if vim.fn.expand('%:p') == '' or vim.bo.filetype == '' then
+            if vim.fn.expand("%:p") == "" or vim.bo.filetype == "" then
                 return
             end
 
             vim.cmd([[%s/\r\+$//e]])
-        end
+        end,
     })
 end
 
@@ -66,8 +68,8 @@ local function cursor()
         group = "cursor",
         pattern = "*",
         callback = function()
-            vim.cmd('set cursorline')
-        end
+            vim.cmd("set cursorline")
+        end,
     })
 
     vim.api.nvim_create_autocmd("InsertLeave", {
@@ -75,8 +77,8 @@ local function cursor()
         group = "cursor",
         pattern = "*",
         callback = function()
-            vim.cmd('set cursorline')
-        end
+            vim.cmd("set cursorline")
+        end,
     })
 
     vim.api.nvim_create_autocmd("WinEnter", {
@@ -84,8 +86,8 @@ local function cursor()
         group = "cursor",
         pattern = "*",
         callback = function()
-            vim.cmd('set cursorline')
-        end
+            vim.cmd("set cursorline")
+        end,
     })
 
     vim.api.nvim_create_autocmd("InsertEnter", {
@@ -93,8 +95,8 @@ local function cursor()
         group = "cursor",
         pattern = "*",
         callback = function()
-            vim.cmd('set nocursorline')
-        end
+            vim.cmd("set nocursorline")
+        end,
     })
 
     vim.api.nvim_create_autocmd("WinLeave", {
@@ -102,17 +104,17 @@ local function cursor()
         group = "cursor",
         pattern = "*",
         callback = function()
-            vim.cmd('set nocursorline')
-        end
+            vim.cmd("set nocursorline")
+        end,
     })
 
-    vim.api.nvim_create_autocmd('TextYankPost', {
+    vim.api.nvim_create_autocmd("TextYankPost", {
         desc = "Flash the part being yank",
         group = "cursor",
         pattern = "*",
         callback = function()
-            vim.highlight.on_yank({ higroup = 'Visual' })
-        end
+            vim.highlight.on_yank({ higroup = "Visual" })
+        end,
     })
 
     vim.api.nvim_create_autocmd("FileType", {
@@ -120,11 +122,11 @@ local function cursor()
         group = "cursor",
         pattern = "qf",
         callback = function()
-            vim.api.nvim_buf_set_keymap(0, 'n', '<CR>', '<CR>', {
+            vim.api.nvim_buf_set_keymap(0, "n", "<CR>", "<CR>", {
                 noremap = true,
-                silent = true
+                silent = true,
             })
-        end
+        end,
     })
 end
 
@@ -135,12 +137,12 @@ local function programming()
         group = "programming",
         pattern = "c",
         callback = function()
-            vim.cmd('setlocal cindent')
-            vim.cmd('setlocal softtabstop=4')
-            vim.cmd('setlocal tabstop=4')
-            vim.cmd('setlocal shiftwidth=4')
-            vim.cmd('setlocal noexpandtab')
-        end
+            vim.cmd("setlocal cindent")
+            vim.cmd("setlocal softtabstop=4")
+            vim.cmd("setlocal tabstop=4")
+            vim.cmd("setlocal shiftwidth=4")
+            vim.cmd("setlocal noexpandtab")
+        end,
     })
 
     vim.api.nvim_create_autocmd("FileType", {
@@ -148,12 +150,12 @@ local function programming()
         group = "programming",
         pattern = "cpp",
         callback = function()
-            vim.cmd('setlocal cindent')
-            vim.cmd('setlocal softtabstop=4')
-            vim.cmd('setlocal tabstop=4')
-            vim.cmd('setlocal shiftwidth=4')
-            vim.cmd('setlocal noexpandtab')
-        end
+            vim.cmd("setlocal cindent")
+            vim.cmd("setlocal softtabstop=4")
+            vim.cmd("setlocal tabstop=4")
+            vim.cmd("setlocal shiftwidth=4")
+            vim.cmd("setlocal noexpandtab")
+        end,
     })
 
     vim.api.nvim_create_autocmd("FileType", {
@@ -161,12 +163,12 @@ local function programming()
         group = "programming",
         pattern = "markdown",
         callback = function()
-            vim.cmd('setlocal softtabstop=2')
-            vim.cmd('setlocal tabstop=2')
-            vim.cmd('setlocal shiftwidth=2')
-            vim.cmd('setlocal expandtab')
-            vim.cmd('setlocal spell')
-        end
+            vim.cmd("setlocal softtabstop=2")
+            vim.cmd("setlocal tabstop=2")
+            vim.cmd("setlocal shiftwidth=2")
+            vim.cmd("setlocal expandtab")
+            vim.cmd("setlocal spell")
+        end,
     })
 
     vim.api.nvim_create_autocmd("FileType", {
@@ -174,11 +176,11 @@ local function programming()
         group = "programming",
         pattern = "py",
         callback = function()
-            vim.cmd('setlocal softtabstop=2')
-            vim.cmd('setlocal tabstop=2')
-            vim.cmd('setlocal shiftwidth=2')
-            vim.cmd('setlocal expandtab')
-        end
+            vim.cmd("setlocal softtabstop=2")
+            vim.cmd("setlocal tabstop=2")
+            vim.cmd("setlocal shiftwidth=2")
+            vim.cmd("setlocal expandtab")
+        end,
     })
 
     vim.api.nvim_create_autocmd("FileType", {
@@ -186,11 +188,11 @@ local function programming()
         group = "programming",
         pattern = "lua",
         callback = function()
-            vim.cmd('setlocal softtabstop=2')
-            vim.cmd('setlocal tabstop=2')
-            vim.cmd('setlocal shiftwidth=4')
-            vim.cmd('setlocal expandtab')
-        end
+            vim.cmd("setlocal softtabstop=2")
+            vim.cmd("setlocal tabstop=2")
+            vim.cmd("setlocal shiftwidth=4")
+            vim.cmd("setlocal expandtab")
+        end,
     })
 
     vim.api.nvim_create_autocmd("FileType", {
@@ -198,11 +200,11 @@ local function programming()
         group = "programming",
         pattern = "sh",
         callback = function()
-            vim.cmd('setlocal softtabstop=4')
-            vim.cmd('setlocal tabstop=4')
-            vim.cmd('setlocal shiftwidth=4')
-            vim.cmd('setlocal expandtab')
-        end
+            vim.cmd("setlocal softtabstop=4")
+            vim.cmd("setlocal tabstop=4")
+            vim.cmd("setlocal shiftwidth=4")
+            vim.cmd("setlocal expandtab")
+        end,
     })
 end
 
@@ -213,9 +215,9 @@ local function terminal()
         desc = "Terminal",
         group = "terminal",
         callback = function()
-            vim.cmd('setlocal nonumber')
-            vim.cmd('setlocal norelativenumber')
-        end
+            vim.cmd("setlocal nonumber")
+            vim.cmd("setlocal norelativenumber")
+        end,
     })
 end
 
@@ -274,7 +276,7 @@ local function package()
             else
                 vim.g.vim_git = "git"
             end
-        end
+        end,
     })
 end
 
@@ -295,14 +297,21 @@ local function highlight()
             for n, c in pairs(h) do
                 vim.api.nvim_set_hl(0, tostring(n), c)
             end
-        end
+        end,
     })
 end
 
 local function setup()
     local setups = {
-        session, statusline, format, cursor, programming, terminal, file,
-        package, highlight
+        session,
+        statusline,
+        format,
+        cursor,
+        programming,
+        terminal,
+        file,
+        package,
+        highlight,
     }
 
     for _, exec in ipairs(setups) do
@@ -319,5 +328,5 @@ return {
     Programming = programming,
     Terminal = terminal,
     File = file,
-    Package = package
+    Package = package,
 }

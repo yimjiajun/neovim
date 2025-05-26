@@ -2,12 +2,12 @@
 -- @description Update the dashboard with the current time, date, and khal
 -- every specified time interval
 local function update_dashboard()
-    if vim.bo.filetype ~= 'alpha' then
+    if vim.bo.filetype ~= "alpha" then
         return
     end
 
     vim.defer_fn(function()
-        require('plugin.alphas').Setup()
+        require("plugin.alphas").Setup()
         vim.cmd("AlphaRedraw")
         update_dashboard()
     end, 250)
@@ -23,7 +23,8 @@ local function get_display()
     local display
     local ascii = {
         ["work"] = {
-            [[ ]], [[ ]],
+            [[ ]],
+            [[ ]],
             [[     ███████╗  ███╗   ███╗ ██╗            ███████╗  ██████╗]],
             [[     ╚═════██╗ ████╗ ████║ ██║            ██╔════╝ ██╔════╝]],
             [[     ████████║ ██╔████╔██║ ██║ █████████╗ █████╗   ██║]],
@@ -41,7 +42,7 @@ local function get_display()
             [[ ████████║ ██║ ██║      ██████████║ ████████║ ████████║ ██║   ██║]],
             [[ ██╔═██╔═╝ ██║ ██║      ██╔═════██║ ██╔═══██║ ██╔═██╔═╝ ██║   ██║]],
             [[ ██║ ████╗ ██║ ╚██████╗ ██║     ██║ ██║   ██║ ██║ ████╗ ███████╔╝]],
-            [[ ╚═╝ ╚═══╝ ╚═╝  ╚═════╝ ╚═╝     ╚═╝ ╚═╝   ╚═╝ ╚═╝ ╚═══╝ ╚══════╝]]
+            [[ ╚═╝ ╚═══╝ ╚═╝  ╚═════╝ ╚═╝     ╚═╝ ╚═╝   ╚═╝ ╚═╝ ╚═══╝ ╚══════╝]],
         },
         ["work_on_mstf"] = {
             [[ ]],
@@ -61,10 +62,11 @@ local function get_display()
             [[╞╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒[]],
             [[╞╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒[]],
             [[╞╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢╢  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒[]],
-            [[╞▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ╡]]
+            [[╞▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑÑ╡]],
         },
         ["home"] = {
-            [[ ]], [[ ]],
+            [[ ]],
+            [[ ]],
             [[ ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗]],
             [[ ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║]],
             [[ ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║]],
@@ -82,10 +84,11 @@ local function get_display()
             [[      ██║██║███████║          ██║██║   ██║██╔██╗ ██║]],
             [[ ██   ██║██║██╔══██║     ██   ██║██║   ██║██║╚██╗██║]],
             [[ ╚█████╔╝██║██║  ██║     ╚█████╔╝╚██████╔╝██║ ╚████║]],
-            [[ ╚════╝ ╚═╝╚═╝  ╚═╝      ╚════╝  ╚═════╝ ╚═╝  ╚═══╝]]
+            [[ ╚════╝ ╚═╝╚═╝  ╚═╝      ╚════╝  ╚═════╝ ╚═╝  ╚═══╝]],
         },
         ["free"] = {
-            [[ ]], [[ ]],
+            [[ ]],
+            [[ ]],
             [[|  \    /  \      \  \     /  \       |     \      \/      \        |     \  \  |  \  \  |  \]],
             [[ \▓▓\  /  ▓▓\▓▓▓▓▓▓ ▓▓\   /  ▓▓        \▓▓▓▓▓\▓▓▓▓▓▓  ▓▓▓▓▓▓\        \▓▓▓▓▓ ▓▓  | ▓▓ ▓▓\ | ▓▓]],
             [[  \▓▓\/  ▓▓  | ▓▓ | ▓▓▓\ /  ▓▓▓          | ▓▓ | ▓▓ | ▓▓__| ▓▓          | ▓▓ ▓▓  | ▓▓ ▓▓▓\| ▓▓]],
@@ -93,17 +96,18 @@ local function get_display()
             [[    \▓▓▓▓    | ▓▓ | ▓▓\▓▓ ▓▓ ▓▓    |  \  | ▓▓ | ▓▓ | ▓▓▓▓▓▓▓▓    |  \  | ▓▓ ▓▓  | ▓▓ ▓▓\▓▓ ▓▓]],
             [[    | ▓▓    _| ▓▓_| ▓▓ \▓▓▓| ▓▓    | ▓▓__| ▓▓_| ▓▓_| ▓▓  | ▓▓    | ▓▓__| ▓▓ ▓▓__/ ▓▓ ▓▓ \▓▓▓▓]],
             [[    | ▓▓   |   ▓▓ \ ▓▓  \▓ | ▓▓     \▓▓    ▓▓   ▓▓ \ ▓▓  | ▓▓     \▓▓    ▓▓\▓▓    ▓▓ ▓▓  \▓▓▓]],
-            [[     \▓▓    \▓▓▓▓▓▓\▓▓      \▓▓      \▓▓▓▓▓▓ \▓▓▓▓▓▓\▓▓   \▓▓      \▓▓▓▓▓▓  \▓▓▓▓▓▓ \▓▓   \▓▓]]
+            [[     \▓▓    \▓▓▓▓▓▓\▓▓      \▓▓      \▓▓▓▓▓▓ \▓▓▓▓▓▓\▓▓   \▓▓      \▓▓▓▓▓▓  \▓▓▓▓▓▓ \▓▓   \▓▓]],
         },
         ["sleep"] = {
-            [[ ]], [[ ]],
+            [[ ]],
+            [[ ]],
             [[███████╗██╗     ███████╗███████╗██████╗           ]],
             [[██╔════╝██║     ██╔════╝██╔════╝██╔══██╗          ]],
             [[███████╗██║     █████╗  █████╗  ██████╔╝          ]],
             [[╚════██║██║     ██╔══╝  ██╔══╝  ██╔═══╝           ]],
             [[███████║███████╗███████╗███████╗██║      ██╗██╗██╗]],
-            [[╚══════╝╚══════╝╚══════╝╚══════╝╚═╝      ╚═╝╚═╝╚═╝]]
-        }
+            [[╚══════╝╚══════╝╚══════╝╚══════╝╚═╝      ╚═╝╚═╝╚═╝]],
+        },
     }
 
     if hour > 8 and hour < 17 then
@@ -134,29 +138,32 @@ local function setup()
         command = nil,
         width = 69,
         height = 8,
-        opts = { redraw = true, window_config = {} }
+        opts = { redraw = true, window_config = {} },
     }
     local default_header = {
         type = "text",
         val = get_display(),
         opts = {
             position = "center",
-            hl = "Type"
+            hl = "Type",
             -- wrap = "overflow";
-        }
+        },
     }
 
     local footer_value = os.date("%d %b %Y \t\t %A \t\t %H:%M:%S") .. "\n"
 
-    if vim.fn.executable('khal') == 1 then
-        footer_value = footer_value .. "\n \n" ..
-                           vim.fn.system("khal list now --format '\t{start-time} {end-time} \t {title}'")
+    if vim.fn.executable("khal") == 1 then
+        footer_value = footer_value
+            .. "\n \n"
+            .. vim.fn.system(
+                "khal list now --format '\t{start-time} {end-time} \t {title}'"
+            )
     end
 
     local footer = {
         type = "text",
         val = footer_value,
-        opts = { position = "center", hl = "Define" }
+        opts = { position = "center", hl = "Define" },
     }
 
     local leader = "SPC"
@@ -174,19 +181,24 @@ local function setup()
             cursor = 5,
             width = 50,
             align_shortcut = "right",
-            hl_shortcut = "Keyword"
+            hl_shortcut = "Keyword",
         }
         if keybind then
             keybind_opts = if_nil(keybind_opts, {
                 noremap = true,
                 silent = true,
-                nowait = true
+                nowait = true,
             })
             opts.keymap = { "n", sc_, keybind, keybind_opts }
         end
 
         local function on_press()
-            local key = vim.api.nvim_replace_termcodes(keybind or sc_ .. "<Ignore>", true, false, true)
+            local key = vim.api.nvim_replace_termcodes(
+                keybind or sc_ .. "<Ignore>",
+                true,
+                false,
+                true
+            )
             vim.api.nvim_feedkeys(key, "tx", false)
         end
 
@@ -199,22 +211,25 @@ local function setup()
         terminal = default_terminal,
         header = default_header,
         buttons = buttons,
-        footer = footer
+        footer = footer,
     }
 
     local config = {
         layout = {
-            { type = "padding", val = 2 }, section.header,
-            { type = "padding", val = 2 }, section.buttons, section.footer
+            { type = "padding", val = 2 },
+            section.header,
+            { type = "padding", val = 2 },
+            section.buttons,
+            section.footer,
         },
-        opts = { margin = 5 }
+        opts = { margin = 5 },
     }
 
-    vim.cmd [[
+    vim.cmd([[
       autocmd FileType * setlocal laststatus=2 noruler
       autocmd FileType alpha setlocal laststatus=0
       autocmd FileType alpha :AlphaUpdate
-  ]]
+  ]])
 
     local settings = {
         button = button,
@@ -223,11 +238,13 @@ local function setup()
         -- theme config
         leader = leader,
         -- deprecated
-        opts = config
+        opts = config,
     }
 
-    require('alpha').setup(settings.config)
-    vim.cmd("command! -nargs=0 AlphaUpdate lua require('plugin.alphas').AlphaUpdate()")
+    require("alpha").setup(settings.config)
+    vim.cmd(
+        "command! -nargs=0 AlphaUpdate lua require('plugin.alphas').AlphaUpdate()"
+    )
 end
 
 return { AlphaUpdate = update_dashboard, Setup = setup }

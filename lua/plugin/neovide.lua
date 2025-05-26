@@ -16,7 +16,7 @@ local adjust_scale_factor = function(value)
 end
 
 local function setup()
-    local prefix_key = '<leader>gn'
+    local prefix_key = "<leader>gn"
     local keymap = vim.keymap.set
     local keymap_options = function(desc)
         return { noremap = true, silent = true, desc = desc }
@@ -40,40 +40,40 @@ local function setup()
     vim.opt.title = true
     vim.opt.titlestring = "JunVim" .. "@" .. vim.fn.getcwd()
 
-    for _, mode in ipairs({ 'n', 'v' }) do
-        keymap(mode, prefix_key .. '+', function()
+    for _, mode in ipairs({ "n", "v" }) do
+        keymap(mode, prefix_key .. "+", function()
             adjust_scale_factor(0.2)
-        end, keymap_options('Increase scale'))
+        end, keymap_options("Increase scale"))
 
-        keymap(mode, prefix_key .. '-', function()
+        keymap(mode, prefix_key .. "-", function()
             adjust_scale_factor(-0.2)
-        end, keymap_options('Decrease scale'))
+        end, keymap_options("Decrease scale"))
 
-        keymap(mode, prefix_key .. '=', function()
+        keymap(mode, prefix_key .. "=", function()
             adjust_scale_factor(0.0)
-        end, keymap_options('Restore scale'))
+        end, keymap_options("Restore scale"))
 
-        keymap(mode, prefix_key .. 'f', function()
-            if (vim.g.neovide_fullscreen == true) then
+        keymap(mode, prefix_key .. "f", function()
+            if vim.g.neovide_fullscreen == true then
                 vim.g.neovide_fullscreen = false
             else
                 vim.g.neovide_fullscreen = true
             end
-        end, keymap_options('Toggle fullscreen'))
+        end, keymap_options("Toggle fullscreen"))
 
-        keymap(mode, prefix_key .. 'c', function()
-            if (vim.g.neovide_cursor_animate_command_line == true) then
+        keymap(mode, prefix_key .. "c", function()
+            if vim.g.neovide_cursor_animate_command_line == true then
                 vim.g.neovide_cursor_animate_command_line = false
             else
                 vim.g.neovide_cursor_animate_command_line = true
             end
-        end, keymap_options('Toggle command line anime'))
+        end, keymap_options("Toggle command line anime"))
     end
 
-    if pcall(require, 'which-key') then
-        local wk = require('which-key')
+    if pcall(require, "which-key") then
+        local wk = require("which-key")
         wk.add({
-            { prefix_key , group = "Neovide" },
+            { prefix_key, group = "Neovide" },
         })
     end
 end

@@ -1,11 +1,11 @@
 -- Compiler directory should be in the $HOME/.local/share/nvim/[compilers|compiler]
 -- 1. it will read the json file in the compiler directory
 --    the lua file will be used as callback function in the json file (optional)
-local delim = vim.fn.has('win32') == 1 and '\\' or '/'
+local delim = vim.fn.has("win32") == 1 and "\\" or "/"
 local common = require("features.common")
 local display_title = common.DisplayTitle
 local group_selection = common.GroupSelection
-local compiler_data_dir = vim.fn.stdpath('data') .. delim .. 'compilers'
+local compiler_data_dir = vim.fn.stdpath("data") .. delim .. "compilers"
 
 -- define compiler data
 -- @field name string tittle of build
@@ -34,14 +34,23 @@ local function compiler_insert_info(name, cmd, desc, ext, type, grp, efm)
         ext = ext,
         type = type,
         group = grp,
-        efm = efm
+        efm = efm,
     }
 
     table.insert(data, info)
     compiler_build_data = data
 end
 
-local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp, efm, opts)
+local function compiler_insert_info_permanent(
+    name,
+    cmd,
+    desc,
+    ext,
+    type,
+    grp,
+    efm,
+    opts
+)
     local data = vim.g.compiler_data
     local info = {
         name = name,
@@ -51,7 +60,7 @@ local function compiler_insert_info_permanent(name, cmd, desc, ext, type, grp, e
         type = type,
         group = grp,
         efm = efm,
-        opts = opts
+        opts = opts,
     }
 
     table.insert(data, info)
@@ -72,12 +81,12 @@ local function check_git_remote_url_exists(remote, url)
                 break
             end
 
-            for _, local_remote in pairs(require('features.git').Remote().Get()) do
+            for _, local_remote in pairs(require("features.git").Remote().Get()) do
                 if local_remote ~= r then
                     goto continue_remote_get
                 end
 
-                local local_url = require('features.git').Remote().GetUrl(r)
+                local local_url = require("features.git").Remote().GetUrl(r)
 
                 if local_url == nil or vim.fn.len(local_url) == 0 then
                     break
@@ -102,11 +111,12 @@ local function compiler_read_json()
         return false
     end
 
-    local compiler_data_files = require('features.files').RecurSearch(compiler_data_dir, "*.json")
+    local compiler_data_files =
+        require("features.files").RecurSearch(compiler_data_dir, "*.json")
     local compiler_data = {}
 
     for _, f in ipairs(compiler_data_files) do
-        local info = require('features.files').GetJson(f)
+        local info = require("features.files").GetJson(f)
 
         if info == nil then
             goto continue
@@ -119,12 +129,13 @@ local function compiler_read_json()
     for _, grp in pairs(compiler_data) do
         for grp_name, grp_info in pairs(grp) do
             for _, i in pairs(grp_info) do
-
                 if i["directory"] ~= nil then
                     local directory = i["directory"]
-                    local compare_directory = (type(directory) == "table") and directory or {
-                        directory
-                    }
+                    local compare_directory = (type(directory) == "table")
+                            and directory
+                        or {
+                            directory,
+                        }
 
                     for _, d in pairs(compare_directory) do
                         if vim.fn.isdirectory(d) > 0 then
@@ -133,15 +144,33 @@ local function compiler_read_json()
                     end
                 end
 
-                if (i["git"] ~= nil) and (i["git"]["remote"] ~= nil) and (i["git"]["url"] ~= nil) and
-                    (check_git_remote_url_exists(i["git"]["remote"], i["git"]["url"]) == true) then
+                if
+                    (i["git"] ~= nil)
+                    and (i["git"]["remote"] ~= nil)
+                    and (i["git"]["url"] ~= nil)
+                    and (
+                        check_git_remote_url_exists(
+                            i["git"]["remote"],
+                            i["git"]["url"]
+                        ) == true
+                    )
+                then
                     goto setup_current_compiler
                 end
 
                 goto next_compiler
 
                 ::setup_current_compiler::
-                compiler_insert_info_permanent(i.name, i.cmd, i.desc, i.ext, i.type, grp_name, i.efm, i.opts)
+                compiler_insert_info_permanent(
+                    i.name,
+                    i.cmd,
+                    i.desc,
+                    i.ext,
+                    i.type,
+                    grp_name,
+                    i.efm,
+                    i.opts
+                )
 
                 ::next_compiler::
             end
@@ -152,44 +181,100 @@ local function compiler_read_json()
 end
 
 local function setup_c()
-    compiler_insert_info("gcc build", [[gcc % -o %:t:r ]], "gcc build c source", "c", "make", "build")
-    compiler_insert_info("gcc run", [[./%:t:r]], "gcc run executable source", "c", "make", "build")
-    compiler_insert_info("gcc build & run", [[gcc % -o %:t:r && ./%:t:r && rm %:t:r]], "gcc build and run c source",
-                         "c", "make", "build")
+    compiler_insert_info(
+        "gcc build",
+        [[gcc % -o %:t:r ]],
+        "gcc build c source",
+        "c",
+        "make",
+        "build"
+    )
+    compiler_insert_info(
+        "gcc run",
+        [[./%:t:r]],
+        "gcc run executable source",
+        "c",
+        "make",
+        "build"
+    )
+    compiler_insert_info(
+        "gcc build & run",
+        [[gcc % -o %:t:r && ./%:t:r && rm %:t:r]],
+        "gcc build and run c source",
+        "c",
+        "make",
+        "build"
+    )
 end
 
 local function setup_markdown()
-    if io.open(string.lower('book.toml')) then
+    if io.open(string.lower("book.toml")) then
         local cmd
 
-        if vim.fn.executable('xdg-open') == 2 then
-            cmd = 'xdg-open'
-        elseif vim.fn.executable('wslview') == 1 then
-            cmd = 'wslview'
-        elseif vim.fn.executable('open') == 1 then
-            cmd = 'open'
+        if vim.fn.executable("xdg-open") == 2 then
+            cmd = "xdg-open"
+        elseif vim.fn.executable("wslview") == 1 then
+            cmd = "wslview"
+        elseif vim.fn.executable("open") == 1 then
+            cmd = "open"
         else
             return nil
         end
 
-        cmd = "if [[ ! -d book ]];then mdbook build;fi;" .. cmd .. " http://localhost:3000 && mdbook serve"
+        cmd = "if [[ ! -d book ]];then mdbook build;fi;"
+            .. cmd
+            .. " http://localhost:3000 && mdbook serve"
 
-        compiler_insert_info("mdbook", cmd, "open mdbook for markdown", "markdown", "make", "build")
+        compiler_insert_info(
+            "mdbook",
+            cmd,
+            "open mdbook for markdown",
+            "markdown",
+            "make",
+            "build"
+        )
     end
 end
 
 local function setup_rust()
-    if vim.fn.executable('rustc') == 0 then
+    if vim.fn.executable("rustc") == 0 then
         return
     end
 
-    compiler_insert_info("build rust", "rustc % --out-dir %:h ", "build current rust file", "rust", "make", "build")
-    compiler_insert_info("run rust", "./" .. vim.fn.expand("%:r"), "run current executable rust file", "rust", "make",
-                         "build")
+    compiler_insert_info(
+        "build rust",
+        "rustc % --out-dir %:h ",
+        "build current rust file",
+        "rust",
+        "make",
+        "build"
+    )
+    compiler_insert_info(
+        "run rust",
+        "./" .. vim.fn.expand("%:r"),
+        "run current executable rust file",
+        "rust",
+        "make",
+        "build"
+    )
 
-    if io.open(string.lower('Cargo.toml')) then
-        compiler_insert_info("cargo build", [[cargo build]], "build with cargo", "rust", "make", "build")
-        compiler_insert_info("cargo run", [[cargo run]], "run with cargo", "rust", "make", "build")
+    if io.open(string.lower("Cargo.toml")) then
+        compiler_insert_info(
+            "cargo build",
+            [[cargo build]],
+            "build with cargo",
+            "rust",
+            "make",
+            "build"
+        )
+        compiler_insert_info(
+            "cargo run",
+            [[cargo run]],
+            "run with cargo",
+            "rust",
+            "make",
+            "build"
+        )
     end
 end
 
@@ -209,14 +294,40 @@ local function get_compiler_build_data()
     elseif check_current_filetype("markdown") then
         setup_markdown()
     elseif check_current_filetype("python") then
-        compiler_insert_info("run script", "python3 %" .. ";read;exit", "run current python file", "python", "make",
-                             "build")
-        compiler_insert_info("select script and run", "python3 " .. vim.fn.expand("%"), "run specific python file",
-                             "python", "make", "build")
+        compiler_insert_info(
+            "run script",
+            "python3 %" .. ";read;exit",
+            "run current python file",
+            "python",
+            "make",
+            "build"
+        )
+        compiler_insert_info(
+            "select script and run",
+            "python3 " .. vim.fn.expand("%"),
+            "run specific python file",
+            "python",
+            "make",
+            "build"
+        )
     elseif check_current_filetype("sh") then
-        compiler_insert_info("run script", [[./%]], "run current buffer bash script", "sh", "make", "build")
+        compiler_insert_info(
+            "run script",
+            [[./%]],
+            "run current buffer bash script",
+            "sh",
+            "make",
+            "build"
+        )
     elseif check_current_filetype("perl") then
-        compiler_insert_info("run script", [[perl %]], "run current buffer perl script", "perl", "make", "build")
+        compiler_insert_info(
+            "run script",
+            [[perl %]],
+            "run current buffer perl script",
+            "perl",
+            "make",
+            "build"
+        )
     elseif check_current_filetype("rs") then
         setup_rust()
     end
@@ -235,7 +346,12 @@ local function get_compiler_build_data()
 end
 
 local function compiler_optional_setup(tbl)
-    if tbl == nil or tbl.opts == nil or tbl.opts.callback == nil or tbl.opts.dofile == nil then
+    if
+        tbl == nil
+        or tbl.opts == nil
+        or tbl.opts.callback == nil
+        or tbl.opts.dofile == nil
+    then
         return nil
     end
 
@@ -273,7 +389,11 @@ local function compiler_tbl_makeprg_setup(tbl)
 
     if tbl.opts ~= nil then
         if compiler_optional_setup(tbl) == false then
-            vim.api.nvim_echo({ { "compiler callback error", "ErrorMsg" } }, true, {})
+            vim.api.nvim_echo(
+                { { "compiler callback error", "ErrorMsg" } },
+                true,
+                {}
+            )
             return false
         end
     end
@@ -310,10 +430,10 @@ local function compiler_tbl_makeprg_setup(tbl)
         return true
     end
 
-    vim.api.nvim_set_option_value('makeprg', tbl.cmd, {})
+    vim.api.nvim_set_option_value("makeprg", tbl.cmd, {})
 
     if tbl.efm ~= nil then
-        vim.api.nvim_set_option_value('errorformat', tbl.efm, {})
+        vim.api.nvim_set_option_value("errorformat", tbl.efm, {})
     end
 
     return true
@@ -326,12 +446,20 @@ local function compiler_latest_makeprg_setup()
 
     local tbl = compiler_latest_build_data
 
-    if (tbl.ext ~= nil) and (tbl.ext ~= 'any') and (tbl.ext ~= vim.bo.filetype) then
+    if
+        (tbl.ext ~= nil)
+        and (tbl.ext ~= "any")
+        and (tbl.ext ~= vim.bo.filetype)
+    then
         return false
     end
 
     if (tbl.opt ~= nil) and (compiler_optional_setup(tbl) == false) then
-        vim.api.nvim_echo({ { "compiler callback error", "ErrorMsg" } }, true, {})
+        vim.api.nvim_echo(
+            { { "compiler callback error", "ErrorMsg" } },
+            true,
+            {}
+        )
         return false
     end
 
@@ -358,11 +486,15 @@ local function compiler_build_setup_selection()
     local msg = {}
 
     for _, info in ipairs(tbl) do
-        if (info.ext ~= nil) and (info.ext ~= 'any') and (info.ext ~= vim.bo.filetype) then
+        if
+            (info.ext ~= nil)
+            and (info.ext ~= "any")
+            and (info.ext ~= vim.bo.filetype)
+        then
             goto continue
         end
 
-        if (info.group ~= grp) then
+        if info.group ~= grp then
             goto continue
         end
 
@@ -380,18 +512,24 @@ local function compiler_build_setup_selection()
 
     local msg_max_length = {
         name = vim.fn.strlen("name"),
-        description = vim.fn.strlen("description")
+        description = vim.fn.strlen("description"),
     }
 
     for _, t in ipairs(target_tbl) do
         msg_max_length = {
             name = math.max(msg_max_length.name, vim.fn.strlen(t.name)),
-            description = math.max(msg_max_length.description, vim.fn.strlen(t.desc))
+            description = math.max(
+                msg_max_length.description,
+                vim.fn.strlen(t.desc)
+            ),
         }
     end
 
-    local msg_format = string.format("%%3s | %%-%ds | %%-s", msg_max_length.name)
-    local msg_total_length = msg_max_length.name + msg_max_length.description + 10 -- pad index 3 digits, '|', space
+    local msg_format =
+        string.format("%%3s | %%-%ds | %%-s", msg_max_length.name)
+    local msg_total_length = msg_max_length.name
+        + msg_max_length.description
+        + 10 -- pad index 3 digits, '|', space
     local separator = string.rep("=", msg_total_length)
 
     for i, t in ipairs(target_tbl) do
@@ -413,9 +551,9 @@ local function compiler_build_setup_selection()
 end
 
 local function setup()
-    local compiler_dir = vim.fn.stdpath('data') .. delim
+    local compiler_dir = vim.fn.stdpath("data") .. delim
 
-    for _, dir in ipairs({ 'compiler', 'compilers' }) do
+    for _, dir in ipairs({ "compiler", "compilers" }) do
         if vim.fn.isdirectory(compiler_dir .. dir) == 1 then
             compiler_data_dir = compiler_dir .. dir
             break
@@ -431,5 +569,5 @@ return {
     Setup = setup,
     Selection = compiler_build_setup_selection,
     LastSelect = compiler_latest_makeprg_setup,
-    InsertInfo = compiler_insert_info_permanent
+    InsertInfo = compiler_insert_info_permanent,
 }

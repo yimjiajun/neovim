@@ -1,10 +1,21 @@
 local install_pkgs = {
-    "c", "cpp", "cmake", "bash", "lua", "perl", "make", "markdown",
-    "markdown_inline", "python", "yaml", "vim", "vimdoc"
+    "c",
+    "cpp",
+    "cmake",
+    "bash",
+    "lua",
+    "perl",
+    "make",
+    "markdown",
+    "markdown_inline",
+    "python",
+    "yaml",
+    "vim",
+    "vimdoc",
 }
 
 local function setup()
-    require'nvim-treesitter.configs'.setup {
+    require("nvim-treesitter.configs").setup({
         -- A list of parser names, or "all"
         ensure_installed = install_pkgs,
         -- Install parsers synchronously (only applied to `ensure_installed`)
@@ -21,14 +32,15 @@ local function setup()
             enable = true,
             disable = function(_lang, buf)
                 local max_filesize = 100 * 1024 -- 100 KB
-                local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+                local ok, stats =
+                    pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
                 if ok and stats and stats.size > max_filesize then
                     return true
                 end
-            end
+            end,
         },
-        indent = { enable = true }
-    }
+        indent = { enable = true },
+    })
 end
 
 return { Setup = setup }

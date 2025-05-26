@@ -1,6 +1,6 @@
 local function setup()
     local function setup_keymapping()
-        vim.keymap.set('n', '<leader>e', function()
+        vim.keymap.set("n", "<leader>e", function()
             if vim.bo.filetype == "oil" then
                 require("oil").close()
                 return
@@ -9,14 +9,17 @@ local function setup()
             require("oil").open(vim.fn.getcwd())
         end, { silent = true, desc = "file explore" })
 
-        vim.keymap.set('n', '<leader>E', function()
+        vim.keymap.set("n", "<leader>E", function()
             if vim.bo.filetype == "oil" then
                 require("oil").close()
                 return
             end
 
             require("oil").open()
-        end, { silent = true, desc = "file explore (from file directory)" })
+        end, {
+            silent = true,
+            desc = "file explore (from file directory)",
+        })
     end
 
     require("oil").setup()

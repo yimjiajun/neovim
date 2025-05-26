@@ -1,24 +1,24 @@
 local function get_dir()
-    local current_file_dir = vim.fn.expand('%:p:h')
-    vim.fn.setreg('+', tostring(current_file_dir))
+    local current_file_dir = vim.fn.expand("%:p:h")
+    vim.fn.setreg("+", tostring(current_file_dir))
     return current_file_dir
 end
 
 local function get_name()
-    local current_file_name = vim.fn.expand('%:t')
-    vim.fn.setreg('+', tostring(current_file_name))
+    local current_file_name = vim.fn.expand("%:t")
+    vim.fn.setreg("+", tostring(current_file_name))
     return current_file_name
 end
 
 local function get_full_path()
-    local path = vim.fn.expand('%:p')
-    vim.fn.setreg('+', tostring(path))
+    local path = vim.fn.expand("%:p")
+    vim.fn.setreg("+", tostring(path))
     return path
 end
 
 local function get_path()
-    local path = vim.fn.expand('%')
-    vim.fn.setreg('+', tostring(path))
+    local path = vim.fn.expand("%")
+    vim.fn.setreg("+", tostring(path))
     return path
 end
 
@@ -55,7 +55,13 @@ local function recursive_file_search(dir, file_pattern)
         file_pattern = "*"
     end
 
-    local cmd = "find " .. dir .. " -type f -name " .. '"' .. file_pattern .. '"' .. " -print"
+    local cmd = "find "
+        .. dir
+        .. " -type f -name "
+        .. '"'
+        .. file_pattern
+        .. '"'
+        .. " -print"
     local result = vim.fn.system(vim.fn.expand(cmd))
     local files = vim.split(result, "\n")
     table.remove(files, #files)
@@ -67,7 +73,11 @@ local function check_extension_file_exist(extension)
         extension = vim.fn.expand("%:e")
     end
 
-    local cmd = "find . -type f -name " .. '"*.' .. extension .. '"' .. " -print -quit | wc -l"
+    local cmd = "find . -type f -name "
+        .. '"*.'
+        .. extension
+        .. '"'
+        .. " -print -quit | wc -l"
     local result = tonumber(vim.fn.system(cmd))
 
     return result
@@ -89,16 +99,16 @@ local function search_file()
     end
 
     local items = {}
-    local std_item = { filename = nil, text = nil, type = 'f', bufnr = nil }
+    local std_item = { filename = nil, text = nil, type = "f", bufnr = nil }
 
     for _, file in ipairs(files) do
         local item = vim.deepcopy(std_item)
         item.filename = file
-        item.text = string.format("[%s]", vim.fn.fnamemodify(file, ':t'))
+        item.text = string.format("[%s]", vim.fn.fnamemodify(file, ":t"))
         table.insert(items, item)
     end
 
-    vim.fn.setqflist({}, ' ', { title = "Find Files", items = items })
+    vim.fn.setqflist({}, " ", { title = "Find Files", items = items })
     vim.api.nvim_echo({ { msg, "MoreMsg" } }, false, {})
     vim.cmd("silent! copen")
 end
@@ -110,7 +120,11 @@ local function json_write(tbl, path)
     end
 
     if path == nil or #path == 0 then
-        vim.api.nvim_echo({ { "file path is empty ...", "ErrorMsg" } }, false, {})
+        vim.api.nvim_echo(
+            { { "file path is empty ...", "ErrorMsg" } },
+            false,
+            {}
+        )
         return false
     end
 
@@ -130,7 +144,11 @@ end
 
 local function json_read(path)
     if path == nil then
-        vim.api.nvim_echo({ { "file path is empty ...", "ErrorMsg" } }, false, {})
+        vim.api.nvim_echo(
+            { { "file path is empty ...", "ErrorMsg" } },
+            false,
+            {}
+        )
         return {}
     end
 
@@ -171,9 +189,9 @@ local function save_command_message_to_file(cmd)
 end
 
 local function setup()
-    local skip_functions = { '^Setup$', '^.*Json$' }
+    local skip_functions = { "^Setup$", "^.*Json$" }
 
-    for name in pairs(require('features.files')) do
+    for name in pairs(require("features.files")) do
         for _, skip in ipairs(skip_functions) do
             if name:match(skip) ~= nil then
                 goto continue
@@ -181,11 +199,20 @@ local function setup()
         end
 
         local callback = "require('features.files')." .. name .. "()"
-        vim.cmd("command! -nargs=0 -bang " .. "File" .. name .. " lua print(" .. callback .. ")")
+        vim.cmd(
+            "command! -nargs=0 -bang "
+                .. "File"
+                .. name
+                .. " lua print("
+                .. callback
+                .. ")"
+        )
         ::continue::
     end
 
-    vim.cmd("command! -nargs=1 -bang FileSaveCmdMsgInput lua require('features.files').SaveCmdMsg(<f-args>)")
+    vim.cmd(
+        "command! -nargs=1 -bang FileSaveCmdMsgInput lua require('features.files').SaveCmdMsg(<f-args>)"
+    )
 end
 
 return {
@@ -200,5 +227,5 @@ return {
     SetJson = json_write,
     GetJson = json_read,
     SaveCmdMsg = save_command_message_to_file,
-    Setup = setup
+    Setup = setup,
 }

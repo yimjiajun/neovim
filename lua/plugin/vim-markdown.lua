@@ -8,9 +8,21 @@ local function setup_vim_markdown()
     vim.g.vim_markdown_follow_anchor = 1
     vim.g.vim_markdown_toc_autofit = 1
     vim.g.vim_markdown_fenced_languages = {
-        "bash=sh", "c", "cpp", "css", "dockerfile", "html", "java",
-        "javascript", "js=javascript", "json", "lua", "python", "sh", "vim",
-        "yaml"
+        "bash=sh",
+        "c",
+        "cpp",
+        "css",
+        "dockerfile",
+        "html",
+        "java",
+        "javascript",
+        "js=javascript",
+        "json",
+        "lua",
+        "python",
+        "sh",
+        "vim",
+        "yaml",
     }
 end
 

@@ -13,7 +13,7 @@ local function setup()
                 vim.cmd("setlocal noexpandtab")
                 vim.cmd("setlocal norelativenumber")
                 vim.cmd("setlocal nonumber")
-            end
+            end,
         })
 
         vim.api.nvim_create_autocmd("FileType", {
@@ -24,7 +24,7 @@ local function setup()
                 vim.cmd("setlocal nowrap")
                 vim.cmd("setlocal norelativenumber")
                 vim.cmd("setlocal nonumber")
-            end
+            end,
         })
     end
 

@@ -5,7 +5,7 @@ local function setup()
             registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
             spelling = {
                 enabled = false, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
-                suggestions = 20 -- how many suggestions should be shown in the list?
+                suggestions = 20, -- how many suggestions should be shown in the list?
             },
             -- the presets plugin, adds help for a bunch of default keybindings in Neovim
             -- No actual key bindings are created
@@ -17,8 +17,8 @@ local function setup()
                 windows = true, -- default bindings on <c-w>
                 nav = true, -- misc bindings to work with windows
                 z = true, -- bindings for folds, spelling and others prefixed with z
-                g = true -- bindings for prefixed with g
-            }
+                g = true, -- bindings for prefixed with g
+            },
         },
         -- add operators that will trigger motion and text object completion
         -- to enable all native operators, set the preset / operators plugin above
@@ -27,30 +27,35 @@ local function setup()
             separator = "|", -- symbol used between a key and it's label
             group = "+ ", -- symbol prepended to a group
             colors = false,
-            mappings = false -- set to false to disable all mapping icons,
+            mappings = false, -- set to false to disable all mapping icons,
         },
         layout = {
             height = { min = 4, max = 20 }, -- min and max height of the columns
             width = { min = 10, max = 40 }, -- min and max width of the columns
             spacing = 10, -- spacing between columns
-            align = "center" -- align columns left, center or right
+            align = "center", -- align columns left, center or right
         },
         keys = {
             scroll_down = "<c-d>", -- binding to scroll down inside the popup
-            scroll_up = "<c-u>" -- binding to scroll up inside the popup
+            scroll_up = "<c-u>", -- binding to scroll up inside the popup
         },
         replace = {
             key = {
                 function(key)
                     return require("which-key.view").format(key)
-                end
+                end,
                 -- { "<Space>", "SPC" },
             },
             desc = {
-                { "<Plug>%(?(.*)%)?", "%1" }, { "^%+", "" }, { "<[cC]md>", "" },
-                { "<[cC][rR]>", "" }, { "<[sS]ilent>", "" }, { "^lua%s+", "" },
-                { "^call%s+", "" }, { "^:%s*", "" }
-            }
+                { "<Plug>%(?(.*)%)?", "%1" },
+                { "^%+", "" },
+                { "<[cC]md>", "" },
+                { "<[cC][rR]>", "" },
+                { "<[sS]ilent>", "" },
+                { "^lua%s+", "" },
+                { "^call%s+", "" },
+                { "^:%s*", "" },
+            },
         },
         show_help = true, -- show help message on the command line when the popup is visible
         triggers = { { "<leader>", mode = "nv" } },
@@ -71,8 +76,8 @@ local function setup()
             bo = {},
             wo = {
                 -- winblend = 10, -- value between 0-100 0 for fully opaque and 100 for fully transparent
-            }
-        }
+            },
+        },
     })
 
     local wk = require("which-key")

@@ -1,11 +1,11 @@
 local function Setting_view()
     vim.opt.background = "dark"
 
-    if vim.fn.trim(vim.fn.execute('colorscheme')) == 'default' then
+    if vim.fn.trim(vim.fn.execute("colorscheme")) == "default" then
         if vim.version().major < 1 and vim.version().minor < 10 then
-            vim.cmd('colorscheme habamax')
+            vim.cmd("colorscheme habamax")
         else
-            vim.cmd('colorscheme retrobox')
+            vim.cmd("colorscheme retrobox")
         end
     end
 
@@ -31,7 +31,7 @@ local function Setting_view()
         trail = "·",
         extends = "…",
         precedes = "…",
-        nbsp = "␣"
+        nbsp = "␣",
     }
     vim.opt.list = true
 
@@ -39,7 +39,7 @@ local function Setting_view()
         vim.opt.termguicolors = true
     end
 
-    require('config.function').SetStatusline()
+    require("config.function").SetStatusline()
 end
 
 local function Setting_editor()
@@ -56,18 +56,21 @@ local function Setting_editor()
     vim.opt.clipboard = "unnamedplus"
 
     for _, opt in ipairs({
-        'pbcopy', 'clip', 'xclip', 'xsel'
+        "pbcopy",
+        "clip",
+        "xclip",
+        "xsel",
     }) do
         if vim.fn.executable(opt) == 1 then
-            opt = vim.fn.fnamemodify(opt, ':r')
+            opt = vim.fn.fnamemodify(opt, ":r")
             vim.g.clipboard = opt
             break
         end
     end
 
     if vim.opt.undodir == "" then
-        local local_share_path = vim.fn.stdpath('data')
-        local local_undodir = local_share_path .. '/undo'
+        local local_share_path = vim.fn.stdpath("data")
+        local local_undodir = local_share_path .. "/undo"
 
         if vim.fn.isdirectory(local_undodir) == 0 then
             vim.fn.mkdir(local_undodir, "p")
@@ -93,16 +96,16 @@ local function Setting_netrw()
 end
 
 local function Setting_colorscheme()
-    local c = vim.fn.trim(vim.fn.execute('colorscheme'))
+    local c = vim.fn.trim(vim.fn.execute("colorscheme"))
 
-    if c == 'habamax' then
-        vim.cmd('highlight DiffAdd guifg=#ffffff')
-        vim.cmd('highlight DiffText guifg=#ffffff')
+    if c == "habamax" then
+        vim.cmd("highlight DiffAdd guifg=#ffffff")
+        vim.cmd("highlight DiffText guifg=#ffffff")
     end
 
-    if c == 'habamax' or c == 'retrobox' then
-        vim.cmd('highlight StatusLine guibg=#303030 guifg=#afaf87')
-        vim.cmd('highlight link NormalFloat Normal')
+    if c == "habamax" or c == "retrobox" then
+        vim.cmd("highlight StatusLine guibg=#303030 guifg=#afaf87")
+        vim.cmd("highlight link NormalFloat Normal")
     end
 end
 
@@ -113,15 +116,15 @@ local function setup()
         Setting_editor,
         Setting_buffer,
         Setting_netrw,
-        Setting_colorscheme
+        Setting_colorscheme,
     }
 
     for _, setting in ipairs(Settings) do
         setting()
     end
 
-    if vim.fn.isdirectory(vim.fn.stdpath('config') .. '/doc') then
-        vim.cmd('helptags ALL')
+    if vim.fn.isdirectory(vim.fn.stdpath("config") .. "/doc") then
+        vim.cmd("helptags ALL")
     end
 end
 

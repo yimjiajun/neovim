@@ -59,7 +59,11 @@ local function group_selection(tbl)
         return nil
     end
 
-    vim.api.nvim_echo({ { "\t[ " .. group_list[sel] .. " ]\n", "WarningMsg" } }, false, {})
+    vim.api.nvim_echo(
+        { { "\t[ " .. group_list[sel] .. " ]\n", "WarningMsg" } },
+        false,
+        {}
+    )
     return group_list[sel]
 end
 
@@ -74,7 +78,11 @@ local function table_selection(tbl, display_lists, name)
 
     local sel_tbl = tbl[s]
 
-    vim.api.nvim_echo({ { "\t[ " .. sel_tbl .. " ]\n", "WarningMsg" } }, false, {})
+    vim.api.nvim_echo(
+        { { "\t[ " .. sel_tbl .. " ]\n", "WarningMsg" } },
+        false,
+        {}
+    )
 
     return sel_tbl
 end
@@ -96,20 +104,30 @@ local function async_command(args)
     local commands = (args.commands == nil) and nil or args.commands
 
     if commands == nil then
-        vim.api.nvim_err_writeln("Not command is providing on AsyncCommand : { commands = <command> }")
+        vim.api.nvim_err_writeln(
+            "Not command is providing on AsyncCommand : { commands = <command> }"
+        )
         return
     end
 
-    commands = (type(commands) == "table") and commands or ((type(commands) == "string") and {
-        commands
-    } or { string.format("%s", commands) })
+    commands = (type(commands) == "table") and commands
+        or (
+            (type(commands) == "string")
+                and {
+                    commands,
+                }
+            or { string.format("%s", commands) }
+        )
     local timeout = (opts.timeout == nil) and 30000 or (opts.timeout * 1000) -- default 30 seconds
     local handle = nil
 
     local function strip_quotes(s) -- Function to strip surrounding quotes from a string
-        return
-            ((s:sub(1, 1) == '"' and s:sub(-1) == '"') or (s:sub(1, 1) == "'" and s:sub(-1) == "'")) and s:sub(2, -2) or
-                s
+        return (
+            (s:sub(1, 1) == '"' and s:sub(-1) == '"')
+            or (s:sub(1, 1) == "'" and s:sub(-1) == "'")
+        )
+                and s:sub(2, -2)
+            or s
     end
     local parts = vim.split(strip_quotes(commands[1]), "%s+") -- Split the command string into parts
     local cmd = table.remove(parts, 1) -- Extract the command (first element)
@@ -130,8 +148,14 @@ local function async_command(args)
     local stderr = vim.loop.new_pipe(false)
     -- Define the on_exit callback
     local function on_exit(code, _)
-        output_message(string.format("%-10s [ %s ] (Exit Code: %d)", (code == 0) and "Success" or "Failed", commands[1],
-                                     code))
+        output_message(
+            string.format(
+                "%-10s [ %s ] (Exit Code: %d)",
+                (code == 0) and "Success" or "Failed",
+                commands[1],
+                code
+            )
+        )
 
         if stdout and not stdout:is_closing() then
             stdout:close()
@@ -149,14 +173,20 @@ local function async_command(args)
             table.remove(commands, 1)
         end
 
-        if (#commands > 0) and (code == 0 or ((opts.allow_fail == nil) and false or opts.allow_fail)) then
+        if
+            (#commands > 0)
+            and (
+                code == 0
+                or ((opts.allow_fail == nil) and false or opts.allow_fail)
+            )
+        then
             async_command({ commands = commands, opts = opts })
         end
     end
     -- Spawn the process
     handle = vim.loop.spawn(cmd, {
         args = cmd_args,
-        stdio = { nil, stdout, stderr }
+        stdio = { nil, stdout, stderr },
     }, vim.schedule_wrap(on_exit))
 
     output_message(string.format("%-10s [ %s ]", "Execute", commands[1]))
@@ -181,18 +211,22 @@ local function async_command(args)
         end
 
         if handle and not handle:is_closing() then
-            handle:kill('sigterm')
+            handle:kill("sigterm")
             handle:close()
             -- cmd being nil when exited from running
             if #commands > 0 then
-                output_message(string.format("%-10s [ %s ]", "TimeOut", commands[1]))
+                output_message(
+                    string.format("%-10s [ %s ]", "TimeOut", commands[1])
+                )
             end
         end
     end, timeout)
 end
 
 local function setup()
-    vim.cmd("command! -nargs=+ AsyncCmd lua require('features.common').AsyncCommand(<f-args>)")
+    vim.cmd(
+        "command! -nargs=+ AsyncCmd lua require('features.common').AsyncCommand(<f-args>)"
+    )
     return nil
 end
 
@@ -201,5 +235,5 @@ return {
     GroupSelection = group_selection,
     TableSelection = table_selection,
     AsyncCommand = async_command,
-    Setup = setup
+    Setup = setup,
 }

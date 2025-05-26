@@ -4,7 +4,8 @@ local function terminal(mode)
     elseif mode == "vertical" then
         vim.cmd("vs | term")
     elseif mode == "selection" then
-        local shell = vim.fn.input("Select shell (bash, sh, zsh, powershell.exe): ")
+        local shell =
+            vim.fn.input("Select shell (bash, sh, zsh, powershell.exe): ")
         vim.cmd("tabnew | term " .. shell)
     else
         vim.cmd("tabnew | term")
@@ -31,10 +32,13 @@ local function set_statusline(mode)
     if mode == "ascii" then
         vim.o.statusline = " %<%f%h%m%r%=%b\\ 0x%B\\ \\ %l,%c%V\\ %P"
     elseif mode == "byte" then
-        vim.o.statusline = " %<%f%=\\ [%1*%M%*%n%R%H]\\ %-19(%3l,%02c%03V%)%O'%02b'"
+        vim.o.statusline =
+            " %<%f%=\\ [%1*%M%*%n%R%H]\\ %-19(%3l,%02c%03V%)%O'%02b'"
     else
-        local git_branch = require('features.git').Branch().Get()
-        vim.o.statusline = " %<%t [" .. git_branch .. "] %h%m%r%w%= / %Y / 0x%02B / %-10.(%l,%c%V%) / %-4P"
+        local git_branch = require("features.git").Branch().Get()
+        vim.o.statusline = " %<%t ["
+            .. git_branch
+            .. "] %h%m%r%w%= / %Y / 0x%02B / %-10.(%l,%c%V%) / %-4P"
         vim.o.statusline = vim.o.statusline .. "/ %{strftime('%b %d / %H:%M')} "
     end
 end
@@ -45,14 +49,14 @@ local function create_ctags()
         return
     end
 
-    require('features.common').AsyncCommand({
-        commands = { 'ctags -R .', 'sort -u -o tags tags' },
-        opts = { timeout = 300 }
+    require("features.common").AsyncCommand({
+        commands = { "ctags -R .", "sort -u -o tags tags" },
+        opts = { timeout = 300 },
     })
 end
 
 local function build(mode)
-    local compiler = require('features.compiler')
+    local compiler = require("features.compiler")
     local status
 
     if mode == "latest" then
@@ -80,25 +84,29 @@ local function build(mode)
 end
 
 local function setup_file_format()
-    vim.api.nvim_echo({ { "Setup File Format: " .. vim.bo.filetype, "Normal" } }, false, {})
+    vim.api.nvim_echo(
+        { { "Setup File Format: " .. vim.bo.filetype, "Normal" } },
+        false,
+        {}
+    )
 
     if vim.bo.filetype == "c" or vim.bo.filetype == "cpp" then
-        vim.cmd('setlocal cindent')
-        vim.cmd('setlocal softtabstop=4')
-        vim.cmd('setlocal tabstop=4')
-        vim.cmd('setlocal shiftwidth=4')
-        vim.cmd('setlocal noexpandtab')
+        vim.cmd("setlocal cindent")
+        vim.cmd("setlocal softtabstop=4")
+        vim.cmd("setlocal tabstop=4")
+        vim.cmd("setlocal shiftwidth=4")
+        vim.cmd("setlocal noexpandtab")
     elseif vim.bo.filetype == "markdown" then
-        vim.cmd('setlocal softtabstop=2')
-        vim.cmd('setlocal tabstop=2')
-        vim.cmd('setlocal shiftwidth=2')
-        vim.cmd('setlocal expandtab')
-        vim.cmd('setlocal spell')
+        vim.cmd("setlocal softtabstop=2")
+        vim.cmd("setlocal tabstop=2")
+        vim.cmd("setlocal shiftwidth=2")
+        vim.cmd("setlocal expandtab")
+        vim.cmd("setlocal spell")
     elseif vim.bo.filetype == "py" or vim.bo.filetype == "python" then
-        vim.cmd('setlocal softtabstop=2')
-        vim.cmd('setlocal tabstop=2')
-        vim.cmd('setlocal shiftwidth=2')
-        vim.cmd('setlocal expandtab')
+        vim.cmd("setlocal softtabstop=2")
+        vim.cmd("setlocal tabstop=2")
+        vim.cmd("setlocal shiftwidth=2")
+        vim.cmd("setlocal expandtab")
     elseif vim.bo.filetype == "bin" then
         vim.cmd([[
 		augroup Binary
@@ -113,10 +121,10 @@ local function setup_file_format()
 		augroup END
 		]])
     else
-        vim.cmd('setlocal softtabstop=4')
-        vim.cmd('setlocal tabstop=4')
-        vim.cmd('setlocal shiftwidth=4')
-        vim.cmd('setlocal noexpandtab')
+        vim.cmd("setlocal softtabstop=4")
+        vim.cmd("setlocal tabstop=4")
+        vim.cmd("setlocal shiftwidth=4")
+        vim.cmd("setlocal noexpandtab")
     end
 
     vim.cmd([[setlocal expandtab? |
@@ -133,8 +141,8 @@ local function check_quickfix_win_exists()
 
     for _, win in ipairs(windows) do
         local buf = vim.api.nvim_win_get_buf(win)
-        local buftype = vim.api.nvim_buf_get_option(buf, 'buftype')
-        if buftype == 'quickfix' then
+        local buftype = vim.api.nvim_buf_get_option(buf, "buftype")
+        if buftype == "quickfix" then
             return true
         end
     end
@@ -144,9 +152,9 @@ end
 
 local function toggle_quickfix()
     if check_quickfix_win_exists() then
-        vim.cmd('silent! cclose')
+        vim.cmd("silent! cclose")
     else
-        vim.cmd('silent! copen')
+        vim.cmd("silent! copen")
     end
 end
 
@@ -159,7 +167,7 @@ local function list_functions()
         { ft = "sh", regex = [[^\w.*()\|^function\ ]] },
         { ft = "python", regex = [[\<def .*(.*):]] },
         { ft = "markdown", regex = [[^#\+]] },
-        { ft = "yaml", regex = [[^\w.*:\|-.*:]] }
+        { ft = "yaml", regex = [[^\w.*:\|-.*:]] },
     }
 
     for _, v in ipairs(info) do
@@ -170,16 +178,20 @@ local function list_functions()
     end
 
     if regex ~= "" then
-        vim.fn.setreg('/', regex)
+        vim.fn.setreg("/", regex)
         vim.cmd("vimgrep /" .. regex .. "/j " .. vim.fn.expand("%"))
         vim.cmd("silent! copen")
     else
-        vim.api.nvim_echo({ { "not supporting in " .. vim.bo.filetype } }, false, {})
+        vim.api.nvim_echo(
+            { { "not supporting in " .. vim.bo.filetype } },
+            false,
+            {}
+        )
     end
 end
 
 local function setup()
-    for name in pairs(require('config.function')) do
+    for name in pairs(require("config.function")) do
         local callback = "require('config.function')." .. name .. "()"
         callback = "lua print(" .. callback .. ")"
         vim.cmd("command! -nargs=0 -bang " .. name .. " " .. callback)
@@ -198,5 +210,5 @@ return {
     CreateCtags = create_ctags,
     Build = build,
     ToggleQuickFix = toggle_quickfix,
-    ListFunctions = list_functions
+    ListFunctions = list_functions,
 }

@@ -17,7 +17,7 @@ local function run_git_cmd(args)
 end
 
 local function check_repo_exists()
-    vim.fn.system('git rev-parse --is-inside-work-tree')
+    vim.fn.system("git rev-parse --is-inside-work-tree")
 
     if vim.v.shell_error ~= 0 then
         return false
@@ -29,12 +29,12 @@ end
 local function branch()
     local function lists()
         if check_repo_exists() == false then
-            return ''
+            return ""
         end
 
         local b = vim.fn.system("git branch --show-current")
 
-        if b ~= '' then
+        if b ~= "" then
             return vim.fn.trim(b)
         end
 
@@ -57,20 +57,22 @@ end
 local function remote()
     local function get_url(remote_name)
         if check_repo_exists() == false then
-            return ''
+            return ""
         end
 
-        return vim.fn.trim(vim.fn.system('git config --get remote.' .. remote_name .. '.url'))
+        return vim.fn.trim(
+            vim.fn.system("git config --get remote." .. remote_name .. ".url")
+        )
     end
 
     local function get_remote()
         local remotes = vim.fn.system("git remote")
 
-        if remotes == '' then
+        if remotes == "" then
             return {}
         end
 
-        return vim.fn.split(remotes, '\n')
+        return vim.fn.split(remotes, "\n")
     end
 
     local function default()
@@ -90,22 +92,34 @@ local function diff()
     end
 
     local function staged_extension()
-        local extension = vim.fn.input("Enter extension to git diff (staged): ", vim.fn.expand("%:e"))
+        local extension = vim.fn.input(
+            "Enter extension to git diff (staged): ",
+            vim.fn.expand("%:e")
+        )
         run_git_cmd("diff ./**/*." .. extension)
     end
 
     local function working_directory_extension()
-        local extension = vim.fn.input("Enter extension to git diff (working directory): ", vim.fn.expand("%:e"))
+        local extension = vim.fn.input(
+            "Enter extension to git diff (working directory): ",
+            vim.fn.expand("%:e")
+        )
         run_git_cmd("diff ./**/*." .. extension)
     end
 
     local function working_directory_file()
-        local file = vim.fn.input("Enter file to git diff (working directory): ", vim.fn.expand("%:t"))
+        local file = vim.fn.input(
+            "Enter file to git diff (working directory): ",
+            vim.fn.expand("%:t")
+        )
         run_git_cmd("diff ./**/" .. file)
     end
 
     local function staged_file()
-        local file = vim.fn.input("Enter file to git diff (staged): ", vim.fn.expand("%:t"))
+        local file = vim.fn.input(
+            "Enter file to git diff (staged): ",
+            vim.fn.expand("%:t")
+        )
         run_git_cmd("diff ./**/" .. file)
     end
 
@@ -120,7 +134,7 @@ local function diff()
         WExt = working_directory_extension,
         SFile = staged_file,
         WFile = working_directory_file,
-        Default = default
+        Default = default,
     }
 end
 
@@ -150,7 +164,7 @@ local function log()
         CommitCount = commit_count,
         Patch = content_change,
         Stat = file_change,
-        Default = default
+        Default = default,
     }
 end
 
@@ -160,8 +174,15 @@ local function status()
     end
 
     local function check_whitespace()
-        local commit = vim.fn.system('git hash-object -t tree /dev/null')
-        run_git_cmd(string.format("%s %s %s", "diff-tree --check", vim.fn.trim(commit), "HEAD"))
+        local commit = vim.fn.system("git hash-object -t tree /dev/null")
+        run_git_cmd(
+            string.format(
+                "%s %s %s",
+                "diff-tree --check",
+                vim.fn.trim(commit),
+                "HEAD"
+            )
+        )
     end
 
     local function default()
@@ -210,26 +231,30 @@ end
 --                  - If the repo exists, pull the repo from the url
 --                  - If the url or reopo is empty, skip the repo
 local function download_vim_data_repo()
-    local repo = require('features.files').GetJson(vim.fn.stdpath('config') .. '/repo.json')
+    local repo = require("features.files").GetJson(
+        vim.fn.stdpath("config") .. "/repo.json"
+    )
 
     if repo == nil or #repo == 0 then
         goto download_vim_data_repo_end
     end
 
     for _, v in ipairs(repo) do
-        local path = vim.fn.stdpath('data') .. '/' .. v.name
+        local path = vim.fn.stdpath("data") .. "/" .. v.name
 
-        if v.url == nil or v.url == '' then
+        if v.url == nil or v.url == "" then
             goto continue
         end
 
-        local cmd = (vim.fn.isdirectory(path .. '/.git') > 0) and {
-            'git -C ' .. path .. ' pull --rebase'
-        } or { 'git clone ' .. v.url .. ' ' .. path, 'mkdir -p ' .. path }
+        local cmd = (vim.fn.isdirectory(path .. "/.git") > 0)
+                and {
+                    "git -C " .. path .. " pull --rebase",
+                }
+            or { "git clone " .. v.url .. " " .. path, "mkdir -p " .. path }
 
-        require('features.common').AsyncCommand({
+        require("features.common").AsyncCommand({
             commands = cmd,
-            opts = { timeout = 30, allow_fail = true, silent = true }
+            opts = { timeout = 30, allow_fail = true, silent = true },
         })
 
         ::continue::
@@ -239,8 +264,7 @@ local function download_vim_data_repo()
 end
 
 -- @brief setup 'Git' module before use it's APIs
-local function setup()
-end
+local function setup() end
 
 -- Update vim data repo
 -- @description Update vim data repo depending on "name" parameter
@@ -249,10 +273,14 @@ end
 -- @param name string
 -- @return boolean (true if success, false if failed)
 local function update_vim_data_repo(name, opts)
-    opts = (opts == nil or type(opts) ~= 'table') and {} or opts
+    opts = (opts == nil or type(opts) ~= "table") and {} or opts
 
-    local repo = require('features.files').GetJson(vim.fn.stdpath('config') .. '/repo.json')
-    local commit_msg = (opts.commit_msg == nil or opts.commit_msg == '') and 'Update by Neovim' or opts.commit_msg
+    local repo = require("features.files").GetJson(
+        vim.fn.stdpath("config") .. "/repo.json"
+    )
+    local commit_msg = (opts.commit_msg == nil or opts.commit_msg == "")
+            and "Update by Neovim"
+        or opts.commit_msg
 
     if repo == nil or #repo == 0 then
         return false
@@ -263,28 +291,32 @@ local function update_vim_data_repo(name, opts)
             goto vim_data_repo_skip
         end
 
-        local path = vim.fn.stdpath('data') .. '/' .. v.name
+        local path = vim.fn.stdpath("data") .. "/" .. v.name
 
-        if v.url == nil or v.url == '' then
-            vim.api.nvim_err_writeln('URL is empty from updating vim data repo: ' .. v.name)
+        if v.url == nil or v.url == "" then
+            vim.api.nvim_err_writeln(
+                "URL is empty from updating vim data repo: " .. v.name
+            )
             return false
         end
 
         if vim.fn.isdirectory(path) == 0 then
-            vim.api.nvim_err_writeln('Path does not exists from updating vim data repo: ' .. path)
+            vim.api.nvim_err_writeln(
+                "Path does not exists from updating vim data repo: " .. path
+            )
             return false
         end
 
-        local commit_msg_file = vim.fn.stdpath('cache') .. '/commit_msg.txt'
+        local commit_msg_file = vim.fn.stdpath("cache") .. "/commit_msg.txt"
         vim.fn.writefile({ commit_msg }, commit_msg_file)
 
-        require('features.common').AsyncCommand({
+        require("features.common").AsyncCommand({
             commands = {
-                'git -C ' .. path .. ' add ' .. path .. '/*',
-                'git -C ' .. path .. ' commit --file=' .. commit_msg_file,
-                'git -C ' .. path .. ' push'
+                "git -C " .. path .. " add " .. path .. "/*",
+                "git -C " .. path .. " commit --file=" .. commit_msg_file,
+                "git -C " .. path .. " push",
             },
-            timeout = 30
+            timeout = 30,
         })
 
         ::vim_data_repo_skip::
@@ -304,5 +336,5 @@ return {
     Commit = commit,
     UpdateVimDataRepo = update_vim_data_repo,
     DownloadVimDataRepo = download_vim_data_repo,
-    Setup = setup
+    Setup = setup,
 }

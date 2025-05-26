@@ -1,5 +1,5 @@
 local function setup()
-    if pcall(require, 'dapui') == 0 or pcall(require, 'dap') == 0 then
+    if pcall(require, "dapui") == 0 or pcall(require, "dap") == 0 then
         return
     end
 
