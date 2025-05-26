@@ -102,7 +102,7 @@ local function search_pattern_async(key, opts)
     end
 
     local cmd = 'rg'
-    local cmd_args = nil
+    local cmd_args
 
     if opts.extension_is_regexp_path == true then
         cmd_args = vim.split(string.format('--vimgrep --no-ignore %s --regexp %s %s', options, key, extension), "%s+")

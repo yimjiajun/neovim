@@ -1,7 +1,4 @@
 local prefix_key = '<leader>gc'
-local function get_config()
-    print('get_config')
-end
 local config =  {
     model = "gpt-4", -- :CoplotChatModels
     prompts = {

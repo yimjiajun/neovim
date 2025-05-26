@@ -158,7 +158,7 @@ local function setting_key_search()
             [[<cmd> lua require("features.string").Search(nil, {extension = string.format("%s/../", vim.fn.expand('%:h')), extension_is_regexp_path = true }) <CR>]],
         opts('find word start from previous directory'))
     if vim.version().major < 1 or vim.version().minor < 10 then
-        keymap('n', 'gcc', [[<cmd> lua require("features.string").ToggleComment() <CR>]], 
+        keymap('n', 'gcc', [[<cmd> lua require("features.string").ToggleComment() <CR>]],
             opts('comment a line'))
         keymap('v', 'gcc', [[<ESC> | gv | <cmd> lua require("features.string").ToggleComment() <CR> | <ESC>]],
             opts('comment selected lines'))
@@ -244,7 +244,7 @@ local function setting_key_features()
     keymap('n', '<M-p>', [[<cmd> lua require("features.bookmarks").Prev() <CR>zz]],
         opts('jump backwrd to bookmark'))
 
-    keymap('n', '<leader>ot', [[<cmd> lua require("features.todo").Get() <CR>]], 
+    keymap('n', '<leader>ot', [[<cmd> lua require("features.todo").Get() <CR>]],
         opts('open todo list'))
     keymap('n', '<leader>st', [[<cmd> lua require("features.todo").Add() <CR>]],
         opts('create new todo list'))
