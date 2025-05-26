@@ -22,9 +22,9 @@ else
   files=$(git diff --diff-filter=ACM --name-only)
 fi
 
-lua_tool_cmd=("lua-format" "luacheck")
+lua_tool_cmd=("stylua" "luacheck")
 lua_tool_install_cmd=(
-  "cd ~ && luarocks install --local --server=https://luarocks.org/dev luaformatter && cd -"
+  "cargo install stylua --features lua54"
   "luarocks install luacheck")
 idx=0
 title="Syntax Check"
@@ -52,18 +52,16 @@ for cmd in ${lua_tool_cmd[@]}; do
   idx=$((idx + 1))
 done
 
-if ! command -v lua-format &>/dev/null; then
-  echo -e "\033[0;31mError: lua-format not found\033[0m"
-  exit 1
-fi
-
 for f in $files; do
   if [[ $f == *.lua ]]; then
-    if ! lua-format --column-limit=120 --column-table-limit=80 \
-      --no-keep-simple-control-block-one-line --no-keep-simple-function-one-line \
-      --spaces-inside-table-braces --spaces-around-equals-in-field --break-after-table-lb --break-before-table-rb --align-table-field \
-      --in-place $f; then
-      echo -e "\033[0;31mError: lua-format $f failed\033[0m"
+    lua_fmt_cmd="stylua"
+    if ! command -v ${lua_fmt_cmd} &>/dev/null; then
+      echo -e "\033[0;31mError: ${lua_fmt_cmd} not found\033[0m"
+      exit 1
+    fi
+
+    if ! ${lua_fmt_cmd} $f; then
+      echo -e "\033[0;31mError: ${lua_fmt_cmd} $f failed\033[0m"
       exit 1
     fi
 
