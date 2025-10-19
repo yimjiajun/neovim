@@ -1,4 +1,5 @@
 local function python_setup()
+    local lspconfig = vim.lsp.config
     local on_attach = function(client, _)
         if client.name == "ruff" then
             -- Disable hover in favor of Pyright
@@ -8,7 +9,7 @@ local function python_setup()
     -- Configure `ruff-lsp`.
     -- See: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ruff_lsp
     -- For the default config, along with instructions on how to customize the settings
-    require("lspconfig").ruff.setup({
+    lspconfig("ruff", {
         on_attach = on_attach,
         init_options = {
             settings = {
@@ -17,7 +18,7 @@ local function python_setup()
             },
         },
     })
-    require("lspconfig").pyright.setup({
+    lspconfig("pyright", {
         settings = {
             pyright = {
                 -- Using Ruff's import organizer
@@ -35,28 +36,29 @@ end
 
 local function setup()
     -- Add additional capabilities supported by nvim-cmp
+    -- see: https://github.com/neovim/nvim-lspconfig/tree/master/lsp
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
-    local lspconfig = require("lspconfig")
+    local lspconfig = vim.lsp.config
 
     -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
     local servers = vim.g.custom.lsp
     for _, lsp in ipairs(servers) do
-        lspconfig[lsp].setup({ capabilities = capabilities })
+        lspconfig(lsp, { capabilities = capabilities })
     end
 
-    lspconfig.clangd.setup({
+    lspconfig("clangd", {
         capabilities = capabilities,
         cmd = { "clangd" },
         filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
-        root_dir = lspconfig.util.root_pattern(
+        root_markers = {
             ".clangd",
             ".clang-tidy",
             ".clang-format",
             "compile_commands.json",
             "compile_flags.txt",
-            "configure.ac",
-            ".git"
-        ),
+            "configure.ac", -- AutoTools
+            ".git",
+        },
         single_file = true,
         init_options = {
             clangdFileStatus = true,
