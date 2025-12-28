@@ -15,7 +15,7 @@ local install_pkgs = {
 }
 
 local function setup()
-    require("nvim-treesitter.configs").setup({
+    require'nvim-treesitter'.setup({
         -- A list of parser names, or "all"
         ensure_installed = install_pkgs,
         -- Install parsers synchronously (only applied to `ensure_installed`)

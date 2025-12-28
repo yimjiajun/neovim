@@ -1,6 +1,6 @@
 local prefix_key = "<leader>gc"
 local config = {
-    model = "gpt-4", -- :CoplotChatModels
+    model = "gpt-4.1", -- :CoplotChatModels
     prompts = {
         CommitStaged = {
             prompt = [[Write commit message for the change with commitizen convention.]]
