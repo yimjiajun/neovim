@@ -765,6 +765,8 @@ local function connect_ssh_desktop(data)
                 .. data.password
                 .. "' "
                 .. desktop_remote_setup[tool].cmd
+        else
+            cmd = desktop_remote_setup[tool].cmd
         end
 
         cmd = cmd
