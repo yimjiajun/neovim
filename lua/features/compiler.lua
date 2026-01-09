@@ -311,6 +311,18 @@ local function setup_restructuredtext()
         "make",
         "build"
     )
+
+    cmd = (vim.fn.exists("win32") == 1) and "make.bat clean" or "make clean"
+    cmd = cmd .. " -C " .. vim.fn.fnamemodify(makefile, ":h")
+
+    compiler_insert_info(
+        "sphinx - Cleanup",
+        cmd,
+        "Clean sphinx build files",
+        "rst",
+        "term",
+        "build"
+    )
 end
 
 local function setup_rust()
