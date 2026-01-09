@@ -236,6 +236,83 @@ local function setup_markdown()
     end
 end
 
+local function setup_restructuredtext()
+    if vim.fn.executable("sphinx-quickstart") == 0 then
+        return
+    end
+
+    local cwd = vim.fn.getcwd()
+    local makefile = "Makefile"
+    local sphinx_build = false
+    local cmd
+
+    if vim.fn.exists("win32") == 1 then
+        makefile = "Makefile.bat"
+    end
+
+    if vim.fn.filereadable(makefile) == 0 then
+        makefile = vim.fn.fnamemodify(cwd, ":p:h:h") .. delim .. makefile
+        if vim.fn.filereadable(makefile) == 0 then
+            return nil
+        end
+    end
+
+    for line in io.lines(makefile) do
+        if string.find(line, "SPHINXBUILD") then
+            sphinx_build = true
+            break
+        end
+    end
+
+    if sphinx_build == false then
+        return nil
+    end
+
+    cmd = (vim.fn.exists("win32") == 1) and "make.bat html" or "make html"
+    cmd = cmd .. " -C " .. vim.fn.fnamemodify(makefile, ":h")
+
+    compiler_insert_info(
+        "sphinx - html",
+        cmd,
+        "Generate html with sphinx",
+        "rst",
+        "make",
+        "build"
+    )
+
+    cmd = (vim.fn.exists("win32") == 1) and "start" or "open"
+    cmd = cmd
+        .. " "
+        .. vim.fn.fnamemodify(
+            vim.fn.fnamemodify(makefile, ":h")
+                .. delim
+                .. "build/html/index.html",
+            ":p"
+        )
+
+    compiler_insert_info(
+        "sphinx - Open html",
+        cmd,
+        "Open sphinx generated html via browser",
+        "rst",
+        "term",
+        "build"
+    )
+
+    cmd = (vim.fn.exists("win32") == 1) and "make.bat latexpdf"
+        or "make latexpdf"
+    cmd = cmd .. " -C " .. vim.fn.fnamemodify(makefile, ":h")
+
+    compiler_insert_info(
+        "sphinx - pdf",
+        cmd,
+        "Generate pdf with sphinx by latex",
+        "rst",
+        "make",
+        "build"
+    )
+end
+
 local function setup_rust()
     if vim.fn.executable("rustc") == 0 then
         return
@@ -293,6 +370,8 @@ local function get_compiler_build_data()
         setup_c()
     elseif check_current_filetype("markdown") then
         setup_markdown()
+    elseif check_current_filetype("rst") then
+        setup_restructuredtext()
     elseif check_current_filetype("python") then
         compiler_insert_info(
             "run script",
