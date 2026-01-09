@@ -2,15 +2,6 @@ local prefix_key = "<leader>gc"
 local config = {
     model = "gpt-4.1", -- :CoplotChatModels
     prompts = {
-        CommitStaged = {
-            prompt = [[Write commit message for the change with commitizen convention.]]
-                .. [[Make sure the title has maximum 50 characters and message is wrapped at 72 characters.]]
-                .. [[Wrap the whole message in code block with language gitcommit.]],
-            system_prompt = "Commitizen is a tool that helps you write better commit messages",
-            mapping = prefix_key .. "s",
-            description = "Commit staged changes",
-            context = "git:staged",
-        },
         ImproveGrammer = {
             prompt = vim.fn.getreg("+")
                 .. string.format(
@@ -65,6 +56,8 @@ local function setup()
         local keys = {
             -- default CopilotChat commands
             { "<leader>gc", group = "CopilotChat" },
+            { "<leader>gcs", ":CopilotChatCommit<CR>", desc = "Commit" },
+            { "<leader>gcp", ":CopilotChatPrompt<CR>", desc = "Prompt" },
             { "<leader>gcC", ":CopilotChatToggle<CR>", desc = "Open" },
             { "<leader>gcd", ":CopilotChatDocs<CR>", desc = "Docs" },
             { "<leader>gce", ":CopilotChatExplain<CR>", desc = "Explain" },
