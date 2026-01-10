@@ -243,7 +243,8 @@ local function setup_restructuredtext()
 
     local cwd = vim.fn.getcwd()
     local makefile = "Makefile"
-    local sphinx_build = false
+    local sphinx_build_dir = nil
+    local is_sphinx_makefile = false
     local cmd
 
     if vim.fn.exists("win32") == 1 then
@@ -259,12 +260,18 @@ local function setup_restructuredtext()
 
     for line in io.lines(makefile) do
         if string.find(line, "SPHINXBUILD") then
-            sphinx_build = true
-            break
+            is_sphinx_makefile = true
+        elseif string.find(line, "BUILDDIR") then
+            local _, _, build_dir = string.find(line, "BUILDDIR%s*=%s*(%S+)")
+            sphinx_build_dir = build_dir
+
+            if is_sphinx_makefile == true then
+                break
+            end
         end
     end
 
-    if sphinx_build == false then
+    if sphinx_build_dir == nil or is_sphinx_makefile == false then
         return nil
     end
 
@@ -286,7 +293,9 @@ local function setup_restructuredtext()
         .. vim.fn.fnamemodify(
             vim.fn.fnamemodify(makefile, ":h")
                 .. delim
-                .. "build/html/index.html",
+                .. sphinx_build_dir
+                .. delim
+                .. "html/index.html",
             ":p"
         )
 
