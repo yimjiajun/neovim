@@ -180,6 +180,27 @@ local function compiler_read_json()
     return true
 end
 
+-- @brief: get_open_file_cmd
+-- @description: get system open file command
+-- @retun: command open file string or nil
+local function get_open_file_cmd()
+    local cmd
+
+    if vim.fn.executable("xdg-open") == 2 then
+        cmd = "xdg-open"
+    elseif vim.fn.executable("wslview") == 1 then
+        cmd = "wslview"
+    elseif vim.fn.executable("open") == 1 then
+        cmd = "open"
+    elseif vim.fn.executable("start") == 1 then
+        cmd = "start"
+    else
+        return nil
+    end
+
+    return cmd
+end
+
 local function setup_c()
     compiler_insert_info(
         "gcc build",
@@ -209,20 +230,15 @@ end
 
 local function setup_markdown()
     if io.open(string.lower("book.toml")) then
+        local open_file_cmd = get_open_file_cmd()
         local cmd
 
-        if vim.fn.executable("xdg-open") == 2 then
-            cmd = "xdg-open"
-        elseif vim.fn.executable("wslview") == 1 then
-            cmd = "wslview"
-        elseif vim.fn.executable("open") == 1 then
-            cmd = "open"
-        else
-            return nil
+        if open_file_cmd == nil then
+            return
         end
 
         cmd = "if [[ ! -d book ]];then mdbook build;fi;"
-            .. cmd
+            .. open_file_cmd
             .. " http://localhost:3000 && mdbook serve"
 
         compiler_insert_info(
@@ -240,7 +256,7 @@ local function setup_restructuredtext()
     if vim.fn.executable("sphinx-quickstart") == 0 then
         return
     end
-
+    local open_file_cmd = get_open_file_cmd()
     local cwd = vim.fn.getcwd()
     local makefile = "Makefile"
     local sphinx_build_dir = nil
@@ -287,8 +303,7 @@ local function setup_restructuredtext()
         "build"
     )
 
-    cmd = (vim.fn.exists("win32") == 1) and "start" or "open"
-    cmd = cmd
+    cmd = open_file_cmd
         .. " "
         .. vim.fn.fnamemodify(
             vim.fn.fnamemodify(makefile, ":h")
@@ -318,6 +333,27 @@ local function setup_restructuredtext()
         "Generate pdf with sphinx by latex",
         "rst",
         "make",
+        "build"
+    )
+
+    cmd = open_file_cmd
+    cmd = cmd
+        .. " "
+        .. vim.fn.fnamemodify(
+            vim.fn.fnamemodify(makefile, ":h")
+                .. delim
+                .. sphinx_build_dir
+                .. delim
+                .. "latex/*.pdf",
+            ":p"
+        )
+
+    compiler_insert_info(
+        "sphinx - Open PDF",
+        cmd,
+        "Open sphinx generated PDF via latex",
+        "rst",
+        "term",
         "build"
     )
 
