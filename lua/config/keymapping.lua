@@ -115,6 +115,10 @@ end
 
 local function setting_key_edit()
     keymap("i", "zxc", "<ESC>", opts("escape insert mode"))
+    keymap("i", "lkj", "<ESC>", opts("escape insert mode"))
+    keymap("i", "jkl", "<ESC>", opts("escape insert mode"))
+    keymap("c", "lkj", "<ESC>", opts("escape insert mode"))
+    keymap("c", "jkl", "<ESC>", opts("escape insert mode"))
     keymap("i", "cxz", "<ESC><cmd>bp<CR>", opts("switch to previous buffer"))
     keymap("t", "zxc", "<C-\\><C-n>", opts("escape insert mode from terminal"))
     keymap(
