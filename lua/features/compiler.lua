@@ -320,7 +320,7 @@ local function setup_restructuredtext()
         "Open sphinx generated html via browser",
         "rst",
         "term",
-        "build"
+        "tool"
     )
 
     cmd = (vim.fn.exists("win32") == 1) and "make.bat latexpdf"
@@ -349,12 +349,12 @@ local function setup_restructuredtext()
         )
 
     compiler_insert_info(
-        "sphinx - Open PDF",
+        "sphinx - Open pdf",
         cmd,
         "Open sphinx generated PDF via latex",
         "rst",
         "term",
-        "build"
+        "tool"
     )
 
     cmd = (vim.fn.exists("win32") == 1) and "make.bat clean" or "make clean"
