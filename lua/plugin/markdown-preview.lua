@@ -11,10 +11,7 @@ local function setup_browser()
 
     for _, v in pairs(info) do
         if vim.fn.has(v.os) == 1 then
-            if
-                vim.fn.executable(v.browser) == 1
-                and vim.fn.executable(v.browser) == 1
-            then
+            if vim.fn.executable(v.browser) == 1 then
                 vim.g.mkdp_browser = v.browser
                 return
             end

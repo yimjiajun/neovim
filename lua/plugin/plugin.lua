@@ -223,7 +223,7 @@ local function setup()
             {
                 "iamcco/markdown-preview.nvim",
                 ft = { "markdown" },
-                build = "cd app && npm install",
+                build = function() vim.fn["mkdp#util#install"]() end,
                 config = function()
                     require("plugin.markdown-preview").Setup()
                 end,
