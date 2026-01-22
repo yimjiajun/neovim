@@ -263,8 +263,19 @@ local function download_vim_data_repo()
     ::download_vim_data_repo_end::
 end
 
+local function input(args)
+    local cmd = "!git " .. args
+    vim.cmd(string.format(cmd))
+end
+
 -- @brief setup 'Git' module before use it's APIs
-local function setup() end
+local function setup()
+    if vim.fn.exists(":Git") == 0 then
+        vim.cmd(
+            "command! -nargs=1 -bang Git lua require('features.git').Input(<f-args>)"
+        )
+    end
+end
 
 -- Update vim data repo
 -- @description Update vim data repo depending on "name" parameter
@@ -336,5 +347,6 @@ return {
     Commit = commit,
     UpdateVimDataRepo = update_vim_data_repo,
     DownloadVimDataRepo = download_vim_data_repo,
+    Input = input,
     Setup = setup,
 }
